@@ -1,0 +1,4 @@
+.horizontal {
+    display: flex;
+    align-items: column;
+}
