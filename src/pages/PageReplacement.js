@@ -1,31 +1,39 @@
 import React, { useState } from 'react'
+import clsx from 'clsx';
 import Header from "../componenets/layout/header"
 import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import { grey, orange} from '@material-ui/core/colors';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    display: 'flex'
   },
   paper: {
-    padding: theme.spacing(5),
+    padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    height: '100%'
+    height: "50%"    
   },
+  button: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+
 }));
 
 export default function PageReplacement() {
   const classes = useStyles();
-
-
-
   const [frames, setframes] = useState(2);
   const [input, setinput] = useState([]);
   const [displayBoolean, setDisplayBoolean] = useState(false);
@@ -348,63 +356,87 @@ export default function PageReplacement() {
   const handleChange = (event) => {
     settype(event.target.value);
   };
+  const theme = createMuiTheme({
+    palette:{
+      primary:{
+        main: grey[900],
+      }
+    }
+  })
   return (
-    <>
-      <Header  >
-        <Paper className={classes.paper}>
-          <h1> Page Replacement </h1>
-          <Grid>
-            <form noValidate autoComplete="off">
-              <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                  <TextField id="outlined-size-normal" variant="outlined" label="Frames" onChange={(e) => { setframes(e.target.value) }} />
-                  <TextField id="outlined-size-normal" variant="outlined" label="Reference String " onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }} />
-                  <h3>Algorithm Select</h3>
-
-
-
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={type}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
-
-                    <MenuItem value={'lru'} onClick={() => { settype("lru"); console.log("Selected: lru"); }}>LRU</MenuItem>
-
-                    <MenuItem value={'opt'} onClick={() => { settype("opt"); console.log("Selected: opt"); }}>OPT</MenuItem>
-
-
-
-                  </Select>
-
-                </Paper>
-
-              </Grid >
-            </form>
-            <Button variant="contained" color="primary" onClick={renderPageReplacement}>Run Page Replacement</Button>
-            {displayBoolean ? <>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-
-                <table
-                >
-                  <tr>{tableHeader}</tr>
-                  {displayTable}
-                </table>
-
-              </div>
-
-              <Typography variant="h5" gutterBottom>
-                Page Faults: {faultCount}
-              </Typography>
-            </> : null}
+    <Header>
+    <ThemeProvider theme = {theme}>
+    <Grid container direction = "column">
+      <Grid item>Header</Grid>
+      <Grid item container spacing = {1}>
+          <Grid item xs = {3}>
+          <Grid container direction = "column">
+            <Paper className={classes.buttons}>
+              <Grid container spacing = {1}>
+                <Grid item xs = {4}>
+                <Button variant="contained" color = "primary">FIFO</Button>
+                </Grid>
+                <Grid item xs = {4}>
+                <Button variant="contained" color = "primary">OPT</Button>
+                </Grid>
+                <Grid item xs = {4}>
+                <Button variant="contained" color = "primary">LRU</Button>
+                </Grid>
+                <Grid item xs = {12}>
+                  <h1>
+                  </h1>
+                </Grid>
+                <Grid item xs = {7}>
+                <Button variant="contained" color = "primary">Insert</Button>
+                </Grid>
+                <Grid item xs = {3}>
+                <Button variant="contained" color = "primary">Reset</Button>
+                </Grid>
+              </Grid>
+            </Paper>
+            </Grid>
+            <h2>
+            </h2>
+            <Paper className={classes.code}>
+              <h3>
+                CODE
+              </h3>
+              <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </Paper>
           </Grid>
-
-
-
-        </Paper>
+          <Grid item xs = {9}>
+          <Paper className={classes.paper}>
+            <h1>
+              Page Replacement
+            </h1>
+          </Paper>
+          <h1>
+          </h1>
+          <Grid item xs = {12}>
+          <Paper className={classes.fields}>
+            <Grid container>
+            <Grid item xs = {1}>
+              </Grid>
+                <Grid item xs = {5}>
+                  <TextField id="outlined-size-normal" variant="filled" label="Reference String"/>
+              </Grid>
+              <Grid item xs = {5}>
+              < TextField id="outlined-size-normal" variant="filled" label="Frame" color = "black"/>
+              </Grid>
+            </Grid>
+          </Paper>
+          </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      </ThemeProvider>
       </Header>
-    </>
-  )
+  );
+ 
 }
