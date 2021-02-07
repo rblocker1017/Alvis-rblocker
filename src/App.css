@@ -27,7 +27,7 @@
 .App-link {
   color: #61dafb;
 }
-
+/*
 #root {
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@
   text-align: center;
   box-sizing: border-box;
 }
-
+*/
 
 path {
   stroke-linejoin: round;
