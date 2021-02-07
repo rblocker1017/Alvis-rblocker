@@ -24,7 +24,9 @@ import Box from '@material-ui/core/Box';
 import SaveIcon from '@material-ui/icons/Save';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import NatureIcon from '@material-ui/icons/Nature';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 
 const drawerWidth = 250;
 
@@ -101,10 +103,10 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-  //const CSC130 = [{name:"Bubble Sort", url : "/bubblesort" , logo:DashboardIcon}
-    //              ,{name:"Quick Sort", url : "/quickSort", logo:DashboardIcon}
-  // ]
-                   // a decision was made to not do csc130 I have left theses routes in case you want to in the future. 
+  const CSC130 = [{name:"Binary Tree Traversal", url : "/treeViewer" , logo:NatureIcon}
+                  ,{name:"Graphing", url : "/quickSort", logo:TrendingUpIcon},
+                  {name: "Sorting", url: "/sorting", logo:AssessmentIcon}
+                ]
 
   const CSC139 = [{name:"CPU Scheduling ", url : "/CpuScheduling", logo:ScheduleIcon}
                   ,{name: "Page Replacement", url:"/PageReplacement", logo:ScheduleIcon},
@@ -150,7 +152,7 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         </div>
         <Divider />
-        { /*
+        
         <p>CSC 130</p>
         <List>
           {CSC130.map((obj, index) => (
@@ -159,7 +161,7 @@ export default function PersistentDrawerLeft(props) {
               <ListItemText primary={obj.name} />
             </ListItem></Link>
           ))}
-        </List>  */}
+        </List>  
         <Divider />
         <p>CSC 139</p>
         <List>

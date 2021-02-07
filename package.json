@@ -9,13 +9,15 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "d3": "5.12.0",
+    "fontsource-roboto": "^4.0.0",
     "react": "^16.13.0",
     "react-d3-tree": "^1.16.1",
     "react-dom": "^16.13.0",
     "react-google-charts": "^3.0.15",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "resize-observer-polyfill": "^1.5.1"
+    "resize-observer-polyfill": "^1.5.1",
+    "source-sans-pro": "^3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",

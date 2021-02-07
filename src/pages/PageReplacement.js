@@ -16,20 +16,39 @@ import { grey, orange} from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex'
+    flexGrow: 1,
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    height: "50%"    
+    height: 600,
+    width: 1400
   },
-  button: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
+  buttons:
+  {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: 150
   },
-
+  code:
+  {
+    
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: 600
+  },
+  fields:
+  {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: 100
+  }
 }));
 
 export default function PageReplacement() {
@@ -365,49 +384,49 @@ export default function PageReplacement() {
   })
   return (
     <Header>
-    <ThemeProvider theme = {theme}>
-    <Grid container direction = "column">
-      <Grid item>Header</Grid>
-      <Grid item container spacing = {1}>
-          <Grid item xs = {3}>
-          <Grid container direction = "column">
-            <Paper className={classes.buttons}>
-              <Grid container spacing = {1}>
+      <ThemeProvider theme = {theme}>
+        <Grid container direction = "column">
+          <Grid item></Grid>
+          <Grid item container spacing = {1}>
+            <Grid item xs = {3}>
+              <Grid container direction = "column">
+                <Paper className={classes.buttons}>
+                <Grid container spacing = {0}>
                 <Grid item xs = {4}>
-                <Button variant="contained" color = "primary">FIFO</Button>
+                 <Button variant="contained" color = "primary">FIFO</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                <Button variant="contained" color = "primary">OPT</Button>
+                  <Button variant="contained" color = "primary">OPT</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                <Button variant="contained" color = "primary">LRU</Button>
+                  <Button variant="contained" color = "primary">LRU</Button>
                 </Grid>
                 <Grid item xs = {12}>
                   <h1>
                   </h1>
                 </Grid>
                 <Grid item xs = {7}>
-                <Button variant="contained" color = "primary">Insert</Button>
+                  <Button variant="contained" color = "primary">Insert</Button>
                 </Grid>
                 <Grid item xs = {3}>
-                <Button variant="contained" color = "primary">Reset</Button>
+                  <Button variant="contained" color = "primary">Reset</Button>
                 </Grid>
               </Grid>
-            </Paper>
+              </Paper>
             </Grid>
-            <h2>
-            </h2>
+              <h2>
+              </h2>
             <Paper className={classes.code}>
               <h3>
                 CODE
               </h3>
-              <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
+                <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
             </Paper>
           </Grid>
           <Grid item xs = {9}>
@@ -416,27 +435,28 @@ export default function PageReplacement() {
               Page Replacement
             </h1>
           </Paper>
-          <h1>
-          </h1>
+            <h1>
+            </h1>
           <Grid item xs = {12}>
-          <Paper className={classes.fields}>
-            <Grid container>
-            <Grid item xs = {1}>
+          <form noValidate autoComplete="off">
+            <Paper className={classes.fields}>
+              <Grid container>
+                <Grid item xs = {1}>
               </Grid>
                 <Grid item xs = {5}>
                   <TextField id="outlined-size-normal" variant="filled" label="Reference String"/>
-              </Grid>
+                </Grid>
               <Grid item xs = {5}>
-              < TextField id="outlined-size-normal" variant="filled" label="Frame" color = "black"/>
+                < TextField id="outlined-size-normal" variant="filled" label="Frame" color = "black"/>
               </Grid>
-            </Grid>
-          </Paper>
+              </Grid>
+            </Paper>
+            </form>
           </Grid>
           </Grid>
         </Grid>
-      </Grid>
+        </Grid>
       </ThemeProvider>
-      </Header>
+    </Header>     
   );
- 
 }
