@@ -10,6 +10,7 @@ import RoundRobin from "./pages/roundRobin"
 import Tree from "./pages/treeViewer";
 import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
+import GraphingAlgorithm from "./pages/GraphingAlgorithm";
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
       <Route path="/CpuScheduling" exact component={CPUScheduling}/>
       <Route path="/tree" exact component={Tree}/>
       <Route path="/PageReplacement" exact component={PageReplacement}/>
+      <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
+
 
       <Route path="/RoundRobin" exact component={RoundRobin}/>
       <Route path="/FCFSDisk" exact component={DiskScheduling}/>

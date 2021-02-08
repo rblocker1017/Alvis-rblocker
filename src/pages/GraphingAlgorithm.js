@@ -1,0 +1,218 @@
+﻿import React, { useState } from 'react'
+import Header from "../componenets/layout/header"
+import { Button, Grid, Paper } from "@material-ui/core"
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { grey, orange } from '@material-ui/core/colors';
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "125%",
+        width: "100%"
+    },
+    buttons:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: "100%",
+        height: "100%"
+    },
+    button:
+    {
+        width: "90%"
+    },
+    code:
+    {
+
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "115%"
+    },
+    fields:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "100%"
+    },
+    current:
+    {
+        algorithm: "Prim"
+    }
+}));
+
+export default function GraphingAlgorithm() {
+    const classes = useStyles();
+    const [frames, setframes] = useState(2);
+    const [input, setinput] = useState([]);
+    const [displayBoolean, setDisplayBoolean] = useState(false);
+    const [answer, setAnswer] = useState([]);
+    const [type, settype] = useState("Prim")
+    //const [name, setName] = useState("test");
+    let name = "test";
+    const changePrim = () => settype("Prim");
+    const changeDij = () => settype("Dijkstras");
+    const changeKruskal = () => settype("Kruskal");
+
+
+    function renderGraphingAlgorithm(type) {
+        switch (type) {
+            case "fcfs":
+                break;
+            case "lru":
+                break;
+            case "opt":
+                break;
+            default:
+                break;
+        }
+    }
+    const [faultCount, setFaultcount] = useState(0);
+
+    
+    const takeInput = () => {
+        //setAnswer(fcfsGraphingAlgorithm(input, frames));
+        setDisplayBoolean(true);
+        console.log(answer.toString());
+
+
+
+    }
+
+
+    const tableHeader = input.map((page) => {
+        return (
+            <th style={{ color: 'Green', fontSize: "30px" }} >{page}</th>
+
+
+        );
+
+
+
+    })
+
+    const displayTable = answer.map((ans) => {
+        return (<>
+
+            <td>
+                {ans.column.map((page) =>
+                    <tr style={{ color: 'Black', fontSize: "30px" }} >{JSON.stringify(page)}</tr>
+                )}
+                <p>{ans.fault}</p>
+            </td>
+
+
+        </>
+
+        );
+
+    })
+    //const handleChange = (event) => {
+        //settype(event.target.value);
+    //};
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: grey[900],
+            }
+        }
+    })
+    return (
+        <Header>
+            <ThemeProvider theme={theme}>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePrim}>Prim</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeDij}>Dijkstras</Button>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeKruskal}>Kruskal</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary">Insert</Button>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary">Reset</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <h2>
+                            </h2>
+                            <Paper className={classes.code}>
+                                <h3>
+                                    CODE
+              </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Paper className={classes.paper}>
+                                <h1>
+                                    Graphing Algorithm: {type}
+            </h1>
+                            </Paper>
+                            <h1>
+                            </h1>
+                            <Grid item xs={12}>
+                                <form noValidate autoComplete="off">
+                                    <Paper className={classes.fields}>
+                                        <Grid container spacing={1}>
+                                            <Grid item xs={1}>
+                                            </Grid>
+                                            <Grid item >
+                                                <Button variant="contained" color="primary">Step Back</Button>
+                                            </Grid>
+                                            <Grid item >
+                                                <Button variant="contained" color="primary">Pause</Button>
+                                            </Grid>
+                                            <Grid item >
+                                                <Button variant="contained" color="primary">Step Forward</Button>
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button variant="contained" color="primary">Set Start</Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button variant="contained" color="primary">Set End</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Paper>
+                                </form>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </ThemeProvider>
+        </Header>
+    );
+}
