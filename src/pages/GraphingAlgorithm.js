@@ -44,82 +44,19 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
         height: "100%"
-    },
-    current:
-    {
-        algorithm: "Prim"
     }
 }));
 
 export default function GraphingAlgorithm() {
     const classes = useStyles();
-    const [frames, setframes] = useState(2);
-    const [input, setinput] = useState([]);
-    const [displayBoolean, setDisplayBoolean] = useState(false);
-    const [answer, setAnswer] = useState([]);
     const [type, settype] = useState("Prim")
-    //const [name, setName] = useState("test");
+
     let name = "test";
+
     const changePrim = () => settype("Prim");
     const changeDij = () => settype("Dijkstras");
     const changeKruskal = () => settype("Kruskal");
 
-
-    function renderGraphingAlgorithm(type) {
-        switch (type) {
-            case "fcfs":
-                break;
-            case "lru":
-                break;
-            case "opt":
-                break;
-            default:
-                break;
-        }
-    }
-    const [faultCount, setFaultcount] = useState(0);
-
-    
-    const takeInput = () => {
-        //setAnswer(fcfsGraphingAlgorithm(input, frames));
-        setDisplayBoolean(true);
-        console.log(answer.toString());
-
-
-
-    }
-
-
-    const tableHeader = input.map((page) => {
-        return (
-            <th style={{ color: 'Green', fontSize: "30px" }} >{page}</th>
-
-
-        );
-
-
-
-    })
-
-    const displayTable = answer.map((ans) => {
-        return (<>
-
-            <td>
-                {ans.column.map((page) =>
-                    <tr style={{ color: 'Black', fontSize: "30px" }} >{JSON.stringify(page)}</tr>
-                )}
-                <p>{ans.fault}</p>
-            </td>
-
-
-        </>
-
-        );
-
-    })
-    //const handleChange = (event) => {
-        //settype(event.target.value);
-    //};
     const theme = createMuiTheme({
         palette: {
             primary: {
