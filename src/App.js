@@ -11,6 +11,7 @@ import Tree from "./pages/treeViewer";
 import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
+import Welcome from "./pages/Welcome";
 
 
 function App() {
@@ -20,13 +21,12 @@ function App() {
 
       <Route path="/bubblesort" exact  component={BubbleSort} />
       <Route path="/Home" exact component={PageReplacement} />
-      <Route path="/" exact component={PageReplacement} />
+      <Route path="/" exact component={Welcome} />
       <Route path="/CpuScheduling" exact component={CPUScheduling}/>
       <Route path="/tree" exact component={Tree}/>
       <Route path="/PageReplacement" exact component={PageReplacement}/>
       <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
-
-
+    
       <Route path="/RoundRobin" exact component={RoundRobin}/>
       <Route path="/FCFSDisk" exact component={DiskScheduling}/>
 
