@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase } from '@material-ui/core';
+import { Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Button, withTheme } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -11,6 +11,7 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import NatureIcon from '@material-ui/icons/Nature';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import LinkRoute from 'react-router-dom/Link';
+import trophy from '../../awesome-trophy.png';
 
 const drawerWidth = 250;
 
@@ -70,6 +71,10 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
+  achievementButton: {
+    marginLeft: 'auto',
+    textTransform: 'none',
+  },
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -121,7 +126,10 @@ export default function PersistentDrawerLeft(props) {
                           Alvis Algorithm Visualizer
                    </Typography>
                   </ButtonBase>
+                  
+            <Button color="inherit" className={classes.achievementButton}><img src={trophy}/>Achievements</Button>
         </Toolbar>
+        
       </AppBar>
       <Drawer
         className={classes.drawer}
