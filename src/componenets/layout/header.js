@@ -1,32 +1,16 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
+import { Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import { Link, Container } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
 import SaveIcon from '@material-ui/icons/Save';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import NatureIcon from '@material-ui/icons/Nature';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import LinkRoute from 'react-router-dom/Link';
 
 const drawerWidth = 250;
 
@@ -131,10 +115,12 @@ export default function PersistentDrawerLeft(props) {
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
-          </IconButton>
-          <Typography variant="h5" noWrap align="center">
-          Alvis Algorithm Visualizer
-          </Typography>
+                  </IconButton>
+                  <ButtonBase component={ LinkRoute } to="/" >
+                  <Typography variant="h5" noWrap align="center">
+                          Alvis Algorithm Visualizer
+                   </Typography>
+                  </ButtonBase>
         </Toolbar>
       </AppBar>
       <Drawer
