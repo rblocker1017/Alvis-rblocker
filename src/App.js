@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import Header from './componenets/layout/header'
-
 import { BrowserRouter, Route} from "react-router-dom";
 import  BubbleSort  from "./pages/bubbleSort";
 import Home from './pages/Home'
@@ -13,6 +12,8 @@ import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
 import Welcome from "./pages/Welcome";
 import Achievements from "./pages/Achievements"
+import Sorting from "./pages/Sorting"
+import BinaryTreeTraversal from "./pages/BinaryTreeTraversal"
 
 function App() {
   return (
@@ -27,12 +28,12 @@ function App() {
       <Route path="/PageReplacement" exact component={PageReplacement}/>
       <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
       <Route path="/Achievements" exact component={Achievements} />
+      <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
+      <Route path="/Sorting" exact component={Sorting}/>
       <Route path="/RoundRobin" exact component={RoundRobin}/>
       <Route path="/FCFSDisk" exact component={DiskScheduling}/>
 
     </BrowserRouter>
-
-
     </div>
   );
 }
