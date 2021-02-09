@@ -654,67 +654,6 @@ export default function CpuScheduling(props) {
 
         <Header>
             <h1>CPU Scheduling</h1>
-            
-            <ThemeProvider theme={theme}>
-                <Grid container direction="column">
-                    <Grid item></Grid>
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={classes.buttons}>
-                                    <Grid container spacing={0}>
-                                        <Grid item  xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
-                                        </Grid>
-                                        <Grid item xs ={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
-                                        </Grid>
-                                        <Grid item item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <Button variant="contained" color="primary">Insert</Button>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button variant="contained" color="primary">Reset</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <h2>
-                            </h2>
-                            <Paper className={classes.code}>
-                                <h3>
-                                    CODE
-              </h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-                            </Paper>
-                        </Grid>
-                      
-
-            
-
-
             <Grid >
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
@@ -804,7 +743,61 @@ export default function CpuScheduling(props) {
 
             <p>List of Processes: </p>
             {showProceses}
-                
+            <ThemeProvider theme={theme}>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
+                                        </Grid>
+                                        <Grid item xs ={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary">Insert</Button>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary">Reset</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <h2>
+                            </h2>
+                            <Paper className={classes.code}>
+                                <h3>
+                                    CODE
+              </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                            </Paper>
+                        </Grid>   
                     
                     </Grid>
                 </Grid>
