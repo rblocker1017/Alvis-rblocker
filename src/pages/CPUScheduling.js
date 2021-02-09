@@ -12,6 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
+import { Button, Grid, Paper } from "@material-ui/core"
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { grey, orange } from '@material-ui/core/colors';
+
 import { tree } from 'd3';
 
 
@@ -21,12 +25,42 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     paper: {
-        padding: theme.spacing(5),
+        padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        height: "125%",
+        width: "100%"
     },
-}));
+    buttons:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: "100%",
+        height: "100%"
+    },
+    button:
+    {
+        width: "90%"
+    },
+    code:
+    {
 
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "115%"
+    },
+    fields:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "100%"
+    }
+}));
 
 export default function CpuScheduling(props) {
     const classes = useStyles();
