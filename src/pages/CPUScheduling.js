@@ -639,9 +639,43 @@ export default function CpuScheduling(props) {
 
             <h1>CPU Scheduling</h1>
 
-
             <Grid >
                 <Grid item xs={12}>
+                    <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeIns}>Insertion</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSel}>Selection</Button>
+                                        </Grid>
+                                        <Grid item item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeQui}>Quick</Button>
+                                        </Grid>
+                                        <Grid item xs ={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeBub}>Bubble</Button>
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeHea}>Heap</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeShe}>Shell</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary">Insert</Button>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary">Reset</Button>
+                                        </Grid>
+
                     <Paper className={classes.paper}>
                         <form noValidate autoComplete="on">
                             <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
