@@ -66,6 +66,23 @@ export default function CpuScheduling(props) {
     const [type, settype] = useState("fcfs")
     const [checked, setChecked] = useState(false)
 
+    let name = "test";
+
+    const changeFCFS = () => settype("FCFS");
+    const changeSJF = () => settype("SJF");
+    const changeRR = () => settype("RR");
+    const changeSRTF = () => settype("SRTF");
+    const changePri = () => settype("Priority");
+    
+
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: grey[900],
+            }
+        }
+    })
+
     function fcfs(processes) {
         let timeCounter = 0;
         let totalWaiting = 0;
@@ -645,26 +662,23 @@ export default function CpuScheduling(props) {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item  xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeIns}>Insertion</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSel}>Selection</Button>
-                                        </Grid>
-                                        <Grid item item  xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeQui}>Quick</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
                                         </Grid>
                                         <Grid item xs ={12}>
                                             <h1>
                                             </h1>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeBub}>Bubble</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
                                         </Grid>
                                         <Grid item item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeHea}>Heap</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeShe}>Shell</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
