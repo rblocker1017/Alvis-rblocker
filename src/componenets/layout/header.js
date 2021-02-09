@@ -40,6 +40,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 
+
 const drawerWidth = 250;
 
 const useStyles = makeStyles(theme => ({
@@ -126,7 +127,7 @@ export default function PersistentDrawerLeft(props) {
                 ]
   
   return (
-    <div className={classes.root}>
+        <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -164,7 +165,25 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         </div>
         <Divider />
-        
+        <List>
+          {CSC130.map((obj, index) => (
+            <Link href={obj.url} ><ListItem button key={obj.name}>
+              <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem></Link>
+          ))}
+        </List>  
+        <Divider />
+        <p>CSC 139</p>
+        <List>
+          {CSC139.map((obj, index) => (
+           <Link href={obj.url}> <ListItem button key={obj.name}>
+              <ListItemIcon><obj.logo/></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem> </Link>
+          ))}
+        </List>
+
         <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -213,6 +232,7 @@ export default function PersistentDrawerLeft(props) {
       </Accordion>         
         <Divider />
 
+
         <Divider />                
         <Accordion>
         <AccordionSummary
@@ -258,7 +278,8 @@ export default function PersistentDrawerLeft(props) {
       </Collapse>
           </Typography>
         </AccordionDetails>
-      </Accordion>         
+      </Accordion>
+         
         <Divider />
         
       </Drawer>
