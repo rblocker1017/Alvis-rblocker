@@ -792,7 +792,12 @@ export default function CpuScheduling(props) {
 
             <p>List of Processes: </p>
             {showProceses}
-
+                
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </ThemeProvider>
         </Header>
     )
 }
+
