@@ -213,7 +213,6 @@ export default function PersistentDrawerLeft(props) {
       </Accordion>         
         <Divider />
 
-
         <Divider />                
         <Accordion>
         <AccordionSummary
@@ -259,8 +258,7 @@ export default function PersistentDrawerLeft(props) {
       </Collapse>
           </Typography>
         </AccordionDetails>
-      </Accordion>
-         
+      </Accordion>         
         <Divider />
         
       </Drawer>
