@@ -85,10 +85,10 @@ export default function Sorting() {
                                         <Grid item className={classes.button} xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSel}>Selection</Button>
                                         </Grid>
-                                        <Grid item item  xs={2}>
+                                        <Grid item item  xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeQui}>Quick</Button>
                                         </Grid>
-                                        <Grid item className={classes.button} xs={4}>
+                                        <Grid item className={classes.button} xs={2}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeBub}>Bubble</Button>
                                         </Grid>
                                         <Grid item item  xs={2}>
