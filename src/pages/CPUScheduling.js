@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -75,6 +75,13 @@ export default function CpuScheduling(props) {
     const changePri = () => settype("Priority");
     
 
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: grey[900],
+            }
+        }
+    })
 
     function fcfs(processes) {
         let timeCounter = 0;
@@ -671,7 +678,7 @@ export default function CpuScheduling(props) {
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Prio</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
