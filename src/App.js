@@ -26,7 +26,7 @@ function App() {
       <Route path="/PageReplacement" exact component={PageReplacement}/>
       <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
 
-
+      <Route path="/Sorting" exact component={Sorting}/>
       <Route path="/RoundRobin" exact component={RoundRobin}/>
       <Route path="/FCFSDisk" exact component={DiskScheduling}/>
 
