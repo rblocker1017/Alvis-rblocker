@@ -678,7 +678,7 @@ export default function CpuScheduling(props) {
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Prio</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
