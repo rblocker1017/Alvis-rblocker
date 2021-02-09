@@ -653,6 +653,8 @@ export default function CpuScheduling(props) {
     return (
 
         <Header>
+            <h1>CPU Scheduling</h1>
+            
             <ThemeProvider theme={theme}>
                 <Grid container direction="column">
                     <Grid item></Grid>
@@ -709,8 +711,8 @@ export default function CpuScheduling(props) {
                             </Paper>
                         </Grid>
                       
-                      
-            <h1>CPU Scheduling</h1>
+
+            
 
 
             <Grid >
