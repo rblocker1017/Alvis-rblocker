@@ -139,13 +139,13 @@ export default function Sorting() {
                                         <Grid container spacing={1}>
                                             <Grid item xs={1}>
                                             </Grid>
-                                            <Grid item xs={7}>
+                                            <Grid item xs={2}>
                                                 <Button variant="contained" color="primary">Step Back</Button>
                                             </Grid>
-                                            <Grid item xs={7}>
+                                            <Grid item xs={2}>
                                                 <Button variant="contained" color="primary">Pause</Button>
                                             </Grid>
-                                            <Grid item xs={7}>
+                                            <Grid item xs={2}>
                                                 <Button variant="contained" color="primary">Step Forward</Button>
                                             </Grid>
                                             <Grid item xs={2}>
