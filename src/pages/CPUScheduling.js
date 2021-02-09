@@ -772,7 +772,7 @@ export default function CpuScheduling(props) {
 
                 </Grid>
 
-
+                List of Processes:
             </Grid>
             {displayBoolean ?
                 <>
@@ -803,7 +803,7 @@ export default function CpuScheduling(props) {
                 : null}
 
             
-            <p>List of Processes: </p>
+            
             {showProceses}
                 
                     
