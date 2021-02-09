@@ -11,6 +11,7 @@ import Tree from "./pages/treeViewer";
 import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
+import Sorting from "d:/test2/fall2020_buzzdev/src/pages/Sorting";
 
 
 function App() {
