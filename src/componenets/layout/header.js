@@ -40,7 +40,6 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 
-
 const drawerWidth = 250;
 
 const useStyles = makeStyles(theme => ({
@@ -127,7 +126,7 @@ export default function PersistentDrawerLeft(props) {
                 ]
   
   return (
-        <div className={classes.root}>
+    <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -164,8 +163,8 @@ export default function PersistentDrawerLeft(props) {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
-        <Divider />        
-
+        <Divider />
+        
         <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -197,6 +196,7 @@ export default function PersistentDrawerLeft(props) {
           </ListItem>
         </List>
       </Collapse>
+
       
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
