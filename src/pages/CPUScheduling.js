@@ -653,7 +653,7 @@ export default function CpuScheduling(props) {
     return (
 
         <Header>
-            <h1>CPU Scheduling</h1>
+            
             
             <ThemeProvider theme={theme}>
                 <Grid container direction="column">
@@ -717,6 +717,7 @@ export default function CpuScheduling(props) {
 
             <Grid >
                 <Grid item xs={12}>
+                <h1>CPU Scheduling</h1>
                     <Paper className={classes.paper}>
                         <form noValidate autoComplete="on">
                             <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
