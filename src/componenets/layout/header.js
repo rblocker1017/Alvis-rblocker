@@ -103,7 +103,7 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-  const CSC130 = [{name:"Binary Tree Traversal", url : "/treeViewer" , logo:NatureIcon}
+  const CSC130 = [{name:"Binary Tree Traversal", url : "/BinaryTreeTraversal" , logo:NatureIcon}
                   ,{name:"Graphing", url : "/GraphingAlgorithm", logo:TrendingUpIcon},
                   {name: "Sorting", url: "/sorting", logo:AssessmentIcon}
                 ]

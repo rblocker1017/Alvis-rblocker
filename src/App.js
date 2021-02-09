@@ -11,7 +11,11 @@ import Tree from "./pages/treeViewer";
 import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
+<<<<<<< HEAD
 import Sorting from "./pages/Sorting"
+=======
+import BinaryTreeTraversal from "./pages/BinaryTreeTraversal"
+>>>>>>> 64ff54191179e9efe319f0d154dfaf86a359e124
 
 
 function App() {
@@ -26,6 +30,8 @@ function App() {
       <Route path="/tree" exact component={Tree}/>
       <Route path="/PageReplacement" exact component={PageReplacement}/>
       <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
+      <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
+      
 
       <Route path="/Sorting" exact component={Sorting}/>
       <Route path="/RoundRobin" exact component={RoundRobin}/>
