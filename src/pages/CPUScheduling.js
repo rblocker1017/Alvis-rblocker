@@ -708,7 +708,8 @@ export default function CpuScheduling(props) {
                 </p>
                             </Paper>
                         </Grid>
-                    
+                      
+                      
             <h1>CPU Scheduling</h1>
 
 
