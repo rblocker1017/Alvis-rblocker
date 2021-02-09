@@ -76,9 +76,9 @@ export default function BinaryTreeTraversal() {
 
   let name = "test";
 
-  const changePreorder = () => settype("Preorder");
-  const changeInorder = () => settype("Inorder");
-  const changePostorder = () => settype("Postorder");
+  const changePreorder = () => {settype("Preorder"); handleClick1();}
+  const changeInorder = () => {settype("Inorder"); handleClick2();}
+  const changePostorder = () => {settype("Postorder"); handleClick3();}
   const theme = createMuiTheme({
     palette: {
       primary: {
@@ -103,7 +103,6 @@ export default function BinaryTreeTraversal() {
                       <Button
                         variant="contained"
                         onClick={changePreorder}
-                        onClick={handleClick1}
                         color={flag1 ? "primary" : "secondary"}
                         className={classes.button}
                       >
@@ -113,8 +112,7 @@ export default function BinaryTreeTraversal() {
                     <Grid item className={classes.button} xs={4}>
                       <Button
                         variant="contained"
-                        onClick={changePreorder}
-                        onClick={handleClick2}
+                        onClick={changeInorder}
                         color={flag2 ? "primary" : "secondary"}
                         className={classes.button}
                       >
@@ -124,8 +122,7 @@ export default function BinaryTreeTraversal() {
                     <Grid item xs={4}>
                       <Button
                         variant="contained"
-                        onClick={changePreorder}
-                        onClick={handleClick3}
+                        onClick={changePostorder}
                         color={flag3 ? "primary" : "secondary"}
                         className={classes.button}
                       >

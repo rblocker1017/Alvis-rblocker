@@ -11,11 +11,8 @@ import Tree from "./pages/treeViewer";
 import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
-<<<<<<< HEAD
 import Sorting from "./pages/Sorting"
-=======
 import BinaryTreeTraversal from "./pages/BinaryTreeTraversal"
->>>>>>> 64ff54191179e9efe319f0d154dfaf86a359e124
 
 
 function App() {
