@@ -127,7 +127,7 @@ export default function PersistentDrawerLeft(props) {
                    </Typography>
                   </ButtonBase>
                   
-            <Button color="inherit" className={classes.achievementButton}><img src={trophy}/>Achievements</Button>
+            <Button component={ LinkRoute } to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy}/>Achievements</Button>
         </Toolbar>
         
       </AppBar>

@@ -12,7 +12,7 @@ import PageReplacement from "./pages/PageReplacement";
 import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
 import Welcome from "./pages/Welcome";
-
+import Achievements from "./pages/Achievements"
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
       <Route path="/tree" exact component={Tree}/>
       <Route path="/PageReplacement" exact component={PageReplacement}/>
       <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
-    
+      <Route path="/Achievements" exact component={Achievements} />
       <Route path="/RoundRobin" exact component={RoundRobin}/>
       <Route path="/FCFSDisk" exact component={DiskScheduling}/>
 
