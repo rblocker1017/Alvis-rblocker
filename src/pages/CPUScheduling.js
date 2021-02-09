@@ -636,12 +636,13 @@ export default function CpuScheduling(props) {
     return (
 
         <Header>
-
-            <h1>CPU Scheduling</h1>
-
-            <Grid >
-                <Grid item xs={12}>
-                    <Paper className={classes.buttons}>
+            <ThemeProvider theme={theme}>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item  xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeIns}>Insertion</Button>
@@ -675,7 +676,35 @@ export default function CpuScheduling(props) {
                                         <Grid item xs={3}>
                                             <Button variant="contained" color="primary">Reset</Button>
                                         </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <h2>
+                            </h2>
+                            <Paper className={classes.code}>
+                                <h3>
+                                    CODE
+              </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Paper className={classes.paper}>
+                                <h1>
+                                    Sorting: {type}
+            </h1>
+                            </Paper>
+            <h1>CPU Scheduling</h1>
 
+
+            <Grid >
+                <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <form noValidate autoComplete="on">
                             <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
