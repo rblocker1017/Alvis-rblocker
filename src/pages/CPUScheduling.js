@@ -7,11 +7,12 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
+import { grey, orange } from '@material-ui/core/colors';
 import { tree } from 'd3';
 
 
@@ -21,12 +22,42 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     paper: {
-        padding: theme.spacing(5),
+        padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        height: "125%",
+        width: "100%"
     },
-}));
+    buttons:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: "100%",
+        height: "100%"
+    },
+    button:
+    {
+        width: "90%"
+    },
+    code:
+    {
 
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "115%"
+    },
+    fields:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: "100%"
+    }
+}));
 
 export default function CpuScheduling(props) {
     const classes = useStyles();
@@ -34,6 +65,23 @@ export default function CpuScheduling(props) {
     const [quantum, setQuantum] = useState();
     const [type, settype] = useState("fcfs")
     const [checked, setChecked] = useState(false)
+
+    let name = "test";
+
+    const changeFCFS = () => settype("FCFS");
+    const changeSJF = () => settype("SJF");
+    const changeRR = () => settype("RR");
+    const changeSRTF = () => settype("SRTF");
+    const changePri = () => settype("Priority");
+    
+
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: grey[900],
+            }
+        }
+    })
 
     function fcfs(processes) {
         let timeCounter = 0;
@@ -605,8 +653,66 @@ export default function CpuScheduling(props) {
     return (
 
         <Header>
-
             <h1>CPU Scheduling</h1>
+            
+            <ThemeProvider theme={theme}>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
+                                        </Grid>
+                                        <Grid item xs ={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary">Insert</Button>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary">Reset</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <h2>
+                            </h2>
+                            <Paper className={classes.code}>
+                                <h3>
+                                    CODE
+              </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                            </Paper>
+                        </Grid>
+                      
+                      
+            
 
 
             <Grid >
@@ -696,9 +802,15 @@ export default function CpuScheduling(props) {
                 </>
                 : null}
 
+            
             <p>List of Processes: </p>
             {showProceses}
-
+                
+                    
+                    </Grid>
+                </Grid>
+            </ThemeProvider>
         </Header>
     )
 }
+
