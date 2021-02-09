@@ -802,10 +802,10 @@ export default function CpuScheduling(props) {
                 </>
                 : null}
 
-            <Grid> item xs={2}
+            
             <p>List of Processes: </p>
             {showProceses}
-            </Grid> 
+                
                     
                     </Grid>
                 </Grid>
