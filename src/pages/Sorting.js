@@ -150,12 +150,6 @@ export default function Sorting() {
                                             </Grid>
                                             <Grid item xs={2}>
                                             </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary">Set Start</Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary">Set End</Button>
-                                            </Grid>
                                         </Grid>
                                     </Paper>
                                 </form>
