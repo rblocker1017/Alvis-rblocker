@@ -88,13 +88,13 @@ export default function Sorting() {
                                         <Grid item item  xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeQui}>Quick</Button>
                                         </Grid>
-                                        <Grid item className={classes.button} sm={3} xs={4}>
+                                        <Grid item className={classes.button} sm={4} xs={3}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeBub}>Bubble</Button>
                                         </Grid>
-                                        <Grid item item  sm={3} xs={4}>
+                                        <Grid item item  sm={4} xs={3}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeHea}>Heap</Button>
                                         </Grid>
-                                        <Grid item className={classes.button} sm={3} s={4}>
+                                        <Grid item className={classes.button} sm={4} s={3}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeShe}>Shell</Button>
                                         </Grid>
                                         <Grid item xs={12}>
