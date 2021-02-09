@@ -802,6 +802,7 @@ export default function CpuScheduling(props) {
                 </>
                 : null}
 
+            <p></p>
             <p>List of Processes: </p>
             {showProceses}
                 
