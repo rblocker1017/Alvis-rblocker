@@ -164,25 +164,7 @@ export default function PersistentDrawerLeft(props) {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
-        <Divider />
-        <List>
-          {CSC130.map((obj, index) => (
-            <Link href={obj.url} ><ListItem button key={obj.name}>
-              <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
-              <ListItemText primary={obj.name} />
-            </ListItem></Link>
-          ))}
-        </List>  
-        <Divider />
-        <p>CSC 139</p>
-        <List>
-          {CSC139.map((obj, index) => (
-           <Link href={obj.url}> <ListItem button key={obj.name}>
-              <ListItemIcon><obj.logo/></ListItemIcon>
-              <ListItemText primary={obj.name} />
-            </ListItem> </Link>
-          ))}
-        </List>
+        <Divider />        
 
         <Accordion>
         <AccordionSummary
