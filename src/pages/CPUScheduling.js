@@ -708,12 +708,7 @@ export default function CpuScheduling(props) {
                 </p>
                             </Paper>
                         </Grid>
-                        <Grid item xs={9}>
-                            <Paper className={classes.paper}>
-                                <h1>
-                                    Sorting: {type}
-            </h1>
-                            </Paper>
+                    
             <h1>CPU Scheduling</h1>
 
 
@@ -807,7 +802,7 @@ export default function CpuScheduling(props) {
             <p>List of Processes: </p>
             {showProceses}
                 
-                        </Grid>
+                    
                     </Grid>
                 </Grid>
             </ThemeProvider>
