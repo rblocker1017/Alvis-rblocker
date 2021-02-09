@@ -28,6 +28,18 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import NatureIcon from '@material-ui/icons/Nature';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Collapse from '@material-ui/core/Collapse';
+
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+
 const drawerWidth = 250;
 
 const useStyles = makeStyles(theme => ({
@@ -153,25 +165,104 @@ export default function PersistentDrawerLeft(props) {
         </div>
         <Divider />
         
-        <p>CSC 130</p>
-        <List>
-          {CSC130.map((obj, index) => (
-            <Link href={obj.url} ><ListItem button key={obj.name}>
-              <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
-              <ListItemText primary={obj.name} />
-            </ListItem></Link>
-          ))}
-        </List>  
-        <Divider />
-        <p>CSC 139</p>
-        <List>
-          {CSC139.map((obj, index) => (
-           <Link href={obj.url}> <ListItem button key={obj.name}>
-              <ListItemIcon><obj.logo/></ListItemIcon>
-              <ListItemText primary={obj.name} />
-            </ListItem> </Link>
-          ))}
+        <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>CSC 130</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <NatureIcon />
+            </ListItemIcon>
+            <ListItemText primary="Binary Tree Traversal" />
+          </ListItem>
         </List>
+
+      </Collapse>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <TrendingUpIcon />
+            </ListItemIcon>
+            <ListItemText primary="Graphing" />
+          </ListItem>
+        </List>
+      </Collapse>
+      
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <AssessmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Sorting" />
+          </ListItem>
+        </List>
+      </Collapse>
+
+          </Typography>
+        </AccordionDetails>        
+      </Accordion>         
+        <Divider />
+
+
+        <Divider />                
+        <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2a-content"
+          id="panel2a-header"
+        >          
+          <Typography className={classes.heading}>CSC 139</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+           <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <ScheduleIcon />
+            </ListItemIcon>
+            <ListItemText primary="CPU Scheduling" />
+          </ListItem>
+        </List>
+
+      </Collapse>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <ScheduleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Page Replacement" />
+          </ListItem>
+        </List>
+      </Collapse>
+      
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <SaveIcon />
+            </ListItemIcon>
+            <ListItemText primary="Disk Scheduling" />
+          </ListItem>
+        </List>
+      </Collapse>
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+         
+        <Divider />
+        
       </Drawer>
       <main
         className={clsx(classes.content, {
