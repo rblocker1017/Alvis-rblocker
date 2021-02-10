@@ -4,7 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { grey, orange } from '@material-ui/core/colors';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -21,10 +22,36 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    height: "125%",
+    width: "100%"
   },
+  buttons:
+  {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: "100%"
+  },
+  code:
+  {
+    
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: "115%"
+  },
+  fields:
+  {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: "100%"
+  }
 }));
 
 export default function FCFSDisk() {
@@ -367,77 +394,95 @@ export default function FCFSDisk() {
   const handleChangeDirection = (event) => {
     setdirection(event.target.value);
   };
-
+  const theme = createMuiTheme({
+    palette:{
+      primary:{
+        main: grey[900],
+      }
+    }
+  })
   return (
-    <div>
-      <Header>
-        <Paper className={classes.paper}>
-          <h2>Disk Scheduling</h2>
-
-          <TextField id="outlined-size-normal" variant="outlined" label="Disk Size" onChange={(e) => { setdiskSize(e.target.value) }} />
-          <TextField id="outlined-size-normal" variant="outlined" label="Initial Position" onChange={(e) => { setstarting(parseInt(e.target.value)) }} />
-          <TextField id="outlined-size-normal" variant="outlined" label="Request sequence " onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }} />
-          {type === 'scan' || type === 'look' || type === 'cscan'|| type ==='clook' ? <>
-
-            <br></br> <h2>Direction</h2>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={direction}
-              onChange={handleChangeDirection}
-            >
-              <MenuItem value={'outward'} onChange={() => { setdirection("outward"); console.log("Selected: outward"); }}>Outwards</MenuItem>
-
-              <MenuItem value={'inward'} onClick={() => { setdirection("inward"); console.log("Selected: inward"); }}>Inwards</MenuItem>
-           
-            </Select>
-            
-            {type =='cscan' || type =='clook' ? <> <h2>"Giant Leap"<Checkbox
-        checked={checked}
-        name="checkedB"
-        onChange={handleChangeCheck}
-        inputProps={{ 'aria-label': 'primary checkbox' }}
-      /> </h2>
-      </> : null}
-      
-      <br></br> </> : null}
-
-          <h2>Algorithm Select</h2>
-
-
-
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={type}
-            onChange={handleChange}
-          >
-            <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
-
-            <MenuItem value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }}>SSTF</MenuItem>
-
-            <MenuItem value={'scan'} onClick={() => { settype("scan"); console.log("Selected: SCAN"); }}>SCAN</MenuItem>
-            <MenuItem value={'cscan'} onClick={() => { settype("cscan"); console.log("Selected: cscan"); }}>C-scan</MenuItem>
-            <MenuItem value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }}>LOOK</MenuItem>
-            <MenuItem value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }}>c-look</MenuItem>
-
-          </Select>
-         
-
+    <Header>
+      <ThemeProvider theme = {theme}>
+        <Grid container direction = "column">
+          <Grid item></Grid>
+          <Grid item container spacing = {1}>
+            <Grid item xs = {3}>
+              <Grid container direction = "column">
+                <Paper className={classes.buttons}>
+                <Grid container spacing = {0}>
+                <Grid item xs = {4}>
+                 <Button variant="contained" color = "primary">SCAN</Button>
+                </Grid>
+                <Grid item xs = {4}>
+                  <Button variant="contained" color = "primary">LOOK</Button>
+                </Grid>
+                <Grid item xs = {4}>
+                  <Button variant="contained" color = "primary">CSCAN</Button>
+                </Grid>
+                <Grid item xs = {12}>
+                  <h1>
+                  </h1>
+                </Grid>
+                <Grid item xs = {4}>
+                  <Button variant="contained" color = "primary">CLOOK</Button>
+                </Grid>
+                <Grid item xs = {7}>
+                  <Button variant="contained" color = "primary">Insert</Button>
+                </Grid>
+                <Grid item xs = {3}>
+                  <Button variant="contained" color = "primary">Reset</Button>
+                </Grid>
+              </Grid>
+              </Paper>
+            </Grid>
+              <h2>
+              </h2>
+            <Paper className={classes.code}>
+              <h3>
+                CODE
+              </h3>
+                <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </Paper>
+          </Grid>
+          <Grid item xs = {9}>
           <Paper className={classes.paper}>
-            <Button variant="contained" color="primary" onClick={renderDiskGraph}>Run Page Replacement</Button>
+            <h1>
+              Page Replacement{type}
+            </h1>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+
+              </div>
+
           </Paper>
-          {displayBoolean ? <>
-          {/*<p>Seek Time = {seekTime}</p>*/}
-            <Paper className={classes.paper}>
-              <DiskGraph data={data} size={diskSize} > </DiskGraph> </Paper>
-
-              
-          </> : null}
-        </Paper>
-
-
-      </Header>
-    </div>
-  )
+            <h1>
+            </h1>
+          <Grid item xs = {12}>
+          <form noValidate autoComplete="off">
+            <Paper className={classes.fields}>
+              <Grid container>
+                <Grid item xs = {1}>
+              </Grid>
+                <Grid item xs = {5}>
+                  <TextField id="outlined-size-normal" variant="filled" label="Reference String"/>
+                </Grid>
+              <Grid item xs = {5}>
+                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black"/>
+              </Grid>
+              </Grid>
+            </Paper>
+            </form>
+          </Grid>
+          </Grid>
+        </Grid>
+        </Grid>
+      </ThemeProvider>
+    </Header>     
+  );
 }
