@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Header from "../componenets/layout/header"
-import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead,TableRow, TextField, MenuItem, InputLabel,FormControl,Select } from "@material-ui/core"
+import { Typography, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead,TableRow, TextField, MenuItem, InputLabel,FormControl,Select } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +30,17 @@ const useStyles = makeStyles((theme) => ({
     },
     tc: {
       border: '1px solid rgba(224, 224, 224, 1)'
+    },
+    button: {
+      marginLeft: 'auto',
+      textTransform: 'none',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 180,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
     },
 }));
 
@@ -66,23 +77,21 @@ export default function Achievements() {
             <ThemeProvider theme={theme}>
                 <Paper className={classes.paper}>
                     <Grid container alignItems={"center"} direction={"row"} justify={"center"} spacing={"5"}>
-                        <Grid item><h1>Achievements</h1></Grid>
+                        <Grid item> <h1>Achievements</h1></Grid>
                         <Grid item><TextField id="filled-basic" label="Search" variant="filled" /></Grid>
                         <Grid item>
                           <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="simple-select">Sort</InputLabel>
+                            <InputLabel id="simple-select">Sort by</InputLabel>
                             <Select
                               labelId="simple-select"
                               id="simple-select"
                               value={sort}
                               onChange={handleChange}
-                              label="Sort"
+                              label="Sort by"
                               >
-                              <MenuItem value="">
-                              </MenuItem>
                               <MenuItem value={1}>Achievement</MenuItem>
                               <MenuItem value={2}>Status</MenuItem>
-                              <MenuItem value={3}>Completition Date</MenuItem>
+                              <MenuItem value={3}>Completion Date</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
