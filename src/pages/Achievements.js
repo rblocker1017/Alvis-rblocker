@@ -65,7 +65,7 @@ export default function Achievements() {
         <Header>
             <ThemeProvider theme={theme}>
                 <Paper className={classes.paper}>
-                    <Grid container container spacing={4} alignItems={"center"} direction={"column"}>
+                    <Grid container alignItems={"center"} direction={"row"} justify={"center"} spacing={"5"}>
                         <Grid item><h1>Achievements</h1></Grid>
                         <Grid item><TextField id="filled-basic" label="Search" variant="filled" /></Grid>
                         <Grid item>
@@ -86,6 +86,8 @@ export default function Achievements() {
                             </Select>
                           </FormControl>
                         </Grid>
+                        </Grid>
+                        <Grid container alignItems={"center"} direction={"column"}>
                         <Grid item className={classes.divider}>
                             <Divider />
                         </Grid>
@@ -114,6 +116,7 @@ export default function Achievements() {
                           </TableContainer>
                         </Grid>
                     </Grid>
+                  
                 </Paper>
             </ThemeProvider>
         </Header>

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   button: {
-    width: "90%",
+    width: "105%",
   },
   code: {
     padding: theme.spacing(2),
@@ -76,9 +76,9 @@ export default function BinaryTreeTraversal() {
 
   let name = "test";
 
-  const changePreorder = () => settype("Preorder");
-  const changeInorder = () => settype("Inorder");
-  const changePostorder = () => settype("Postorder");
+  const changePreorder = () => {settype("Preorder"); handleClick1();}
+  const changeInorder = () => {settype("Inorder"); handleClick2();}
+  const changePostorder = () => {settype("Postorder"); handleClick3();}
   const theme = createMuiTheme({
     palette: {
       primary: {
@@ -98,12 +98,11 @@ export default function BinaryTreeTraversal() {
             <Grid item xs={3}>
               <Grid container direction="column">
                 <Paper className={classes.buttons}>
-                  <Grid container spacing={0}>
+                  <Grid container spacing={1}>
                     <Grid item xs={4}>
                       <Button
                         variant="contained"
                         onClick={changePreorder}
-                        onClick={handleClick1}
                         color={flag1 ? "primary" : "secondary"}
                         className={classes.button}
                       >
@@ -113,8 +112,7 @@ export default function BinaryTreeTraversal() {
                     <Grid item className={classes.button} xs={4}>
                       <Button
                         variant="contained"
-                        onClick={changePreorder}
-                        onClick={handleClick2}
+                        onClick={changeInorder}
                         color={flag2 ? "primary" : "secondary"}
                         className={classes.button}
                       >
@@ -124,8 +122,7 @@ export default function BinaryTreeTraversal() {
                     <Grid item xs={4}>
                       <Button
                         variant="contained"
-                        onClick={changePreorder}
-                        onClick={handleClick3}
+                        onClick={changePostorder}
                         color={flag3 ? "primary" : "secondary"}
                         className={classes.button}
                       >
