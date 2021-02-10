@@ -122,7 +122,7 @@ export default function PersistentDrawerLeft(props) {
                 >
                     <MenuIcon />            
                 </IconButton>
-                <Grid container alignItems={"center"} direction={"row"} justify={"space-between"}>
+                <Grid container alignItems={"center"} direction={"row"} justify={"space-between"} spacing={4}>
                     <Grid item>
                         <ButtonBase component={ LinkRoute } to="/" >
                             <Typography variant="h5" noWrap align="center">
