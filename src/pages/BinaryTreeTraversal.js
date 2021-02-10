@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   button: {
-    width: "90%",
+    width: "105%",
   },
   code: {
     padding: theme.spacing(2),
@@ -98,7 +98,7 @@ export default function BinaryTreeTraversal() {
             <Grid item xs={3}>
               <Grid container direction="column">
                 <Paper className={classes.buttons}>
-                  <Grid container spacing={0}>
+                  <Grid container spacing={1}>
                     <Grid item xs={4}>
                       <Button
                         variant="contained"
