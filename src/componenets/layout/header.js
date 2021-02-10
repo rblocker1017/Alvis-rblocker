@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid } from '@material-ui/core';
+import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid, Button } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -16,7 +16,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import trophy from '../../awesome-trophy.png';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -81,6 +81,11 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
+  achievementButton: {
+      marginLeft: 'auto',
+      marginRight: '1%',
+      textTransform: 'none',
+  }
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -135,6 +140,7 @@ export default function PersistentDrawerLeft(props) {
                             </Typography>
                         </ButtonBase>
                     </Grid>
+                      <Button component={LinkRoute} to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button> 
                     <Grid item>
                         <ButtonBase component={ LinkRoute } to="/Login">
                             <Typography variant="button" noWrap align="center">
