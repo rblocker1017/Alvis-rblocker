@@ -48,6 +48,11 @@ const rows = [
 export default function Achievements() {
     const classes = useStyles();
 
+    const [sort, setSort] = React.useState('');
+
+    const handleChange = (event) => {
+      setSort(event.target.value);
+    };
     const theme = createMuiTheme({
         palette: {
             primary: {
@@ -68,17 +73,16 @@ export default function Achievements() {
                             <InputLabel id="simple-select">Sort</InputLabel>
                             <Select
                               labelId="simple-select"
-                              id="demo-simple-select-outlined"
-                              // value={sort}
-                              // onChange={handleChange}
+                              id="simple-select"
+                              value={sort}
+                              onChange={handleChange}
                               label="Sort"
                               >
                               <MenuItem value="">
-                                <em>None</em>
                               </MenuItem>
-                              <MenuItem>Achievement</MenuItem>
-                              <MenuItem>Status</MenuItem>
-                              <MenuItem>Completition</MenuItem>
+                              <MenuItem value={1}>Achievement</MenuItem>
+                              <MenuItem value={2}>Status</MenuItem>
+                              <MenuItem value={3}>Completition Date</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
