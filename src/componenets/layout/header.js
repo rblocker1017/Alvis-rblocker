@@ -152,7 +152,6 @@ export default function PersistentDrawerLeft(props) {
         <Divider />
         
               <p>CSC 130</p>
-        <Collapse container>
         <List>
           {CSC130.map((obj, index) => (
             <Link href={obj.url} ><ListItem button key={obj.name}>
@@ -161,7 +160,6 @@ export default function PersistentDrawerLeft(props) {
             </ListItem></Link>
           ))}
                   </List>  
-        </Collapse>
         <Divider />
         <p>CSC 139</p>
         <List>
