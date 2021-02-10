@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from "../componenets/layout/header"
-import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead,TableRow } from "@material-ui/core"
+import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead,TableRow, TextField, MenuItem, InputLabel,FormControl,Select } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
 
@@ -60,11 +60,27 @@ export default function Achievements() {
         <Header>
             <ThemeProvider theme={theme}>
                 <Paper className={classes.paper}>
-                    <Grid container alignItems={"center"} direction={"column"}>
+                    <Grid container container spacing={4} alignItems={"center"} direction={"column"}>
+                        <Grid item><h1>Achievements</h1></Grid>
+                        <Grid item><TextField id="filled-basic" label="Search" variant="filled" /></Grid>
                         <Grid item>
-                            <h1>
-                                Achievements
-                            </h1>
+                          <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel id="simple-select">Sort</InputLabel>
+                            <Select
+                              labelId="simple-select"
+                              id="demo-simple-select-outlined"
+                              // value={sort}
+                              // onChange={handleChange}
+                              label="Sort"
+                              >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem>Achievement</MenuItem>
+                              <MenuItem>Status</MenuItem>
+                              <MenuItem>Completition</MenuItem>
+                            </Select>
+                          </FormControl>
                         </Grid>
                         <Grid item className={classes.divider}>
                             <Divider />
