@@ -59,6 +59,7 @@ export default function PageReplacement() {
     const [answer, setAnswer] = useState([]);
     const [type, settype] = useState("fcfs")
 
+
     function renderPageReplacement() {
         switch (type) {
             case "fcfs":
