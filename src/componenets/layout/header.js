@@ -164,12 +164,14 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         </div>
         <Divider />
+
         
         <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
-          id="panel1a-header"
+          id="panel1a-header"       
+        
         >
           <Typography className={classes.heading}>CSC 130</Typography>
         </AccordionSummary>
@@ -177,42 +179,20 @@ export default function PersistentDrawerLeft(props) {
           <Typography>
           <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <NatureIcon />
-            </ListItemIcon>
-            <ListItemText primary="Binary Tree Traversal" />
-          </ListItem>
-        </List>
-
-      </Collapse>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <TrendingUpIcon />
-            </ListItemIcon>
-            <ListItemText primary="Graphing" />
-          </ListItem>
-        </List>
-      </Collapse>
-
-      
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <AssessmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Sorting" />
-          </ListItem>
-        </List>
-      </Collapse>
-
+          
+        {CSC130.map((obj, index) => (
+            <Link href={obj.url} ><ListItem button key={obj.name}>
+              <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem></Link>
+          ))}
+        </List> 
+      </Collapse>   
           </Typography>
         </AccordionDetails>        
       </Accordion>         
         <Divider />
+
 
 
         <Divider />                
@@ -220,7 +200,8 @@ export default function PersistentDrawerLeft(props) {
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
-          id="panel2a-header"
+          id="panel2a-header"            
+                
         >          
           <Typography className={classes.heading}>CSC 139</Typography>
         </AccordionSummary>
@@ -228,40 +209,17 @@ export default function PersistentDrawerLeft(props) {
           <Typography>
            <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <ScheduleIcon />
-            </ListItemIcon>
-            <ListItemText primary="CPU Scheduling" />
-          </ListItem>
-        </List>
-
-      </Collapse>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <ScheduleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Page Replacement" />
-          </ListItem>
-        </List>
-      </Collapse>
-      
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <SaveIcon />
-            </ListItemIcon>
-            <ListItemText primary="Disk Scheduling" />
-          </ListItem>
-        </List>
+        {CSC139.map((obj, index) => (
+           <Link href={obj.url}> <ListItem button key={obj.name}>
+              <ListItemIcon><obj.logo/></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem> </Link>
+          ))}          
+        </List>      
       </Collapse>
           </Typography>
         </AccordionDetails>
-      </Accordion>
-         
+      </Accordion>         
         <Divider />
         
       </Drawer>
@@ -271,10 +229,7 @@ export default function PersistentDrawerLeft(props) {
         })}
       >
         <div className={classes.drawerHeader} />
-        {props.children}
-
-
-       
+        {props.children}       
 
       </main>
     </div>
