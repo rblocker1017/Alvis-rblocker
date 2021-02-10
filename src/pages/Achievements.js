@@ -3,6 +3,11 @@ import Header from "../componenets/layout/header"
 import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead,TableRow, TextField, MenuItem, InputLabel,FormControl,Select } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
+import MenuList from '@material-ui/core/MenuList';
+import PropTypes from 'prop-types';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import { useSpring, animated } from 'react-spring/web.cjs';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,14 +36,32 @@ const useStyles = makeStyles((theme) => ({
     tc: {
       border: '1px solid rgba(224, 224, 224, 1)'
     },
+    buttons: {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: "100%",
+        height: "100%"
+    },
+    button: {
+        width: "90%"
+    },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 }));
 
-function createData(name, status, date) {
-  return { name, status, date };
+
+
+function createData(name, status, date, details) {
+  return { name, status, date, details };
 }
 
 const rows = [
-  createData('Achievement1', 'Completed', 'Completed on X/X/XXXX'),
+  createData('Achievement1', 'Completed', 'Completed on X/X/XXXX', 'view'),
   createData('Achievement2', 'Incomplete'),
   createData('Achievement3', 'Incomplete'),
   createData('Achievement4', 'Incomplete'),
@@ -49,6 +72,37 @@ export default function Achievements() {
     const classes = useStyles();
 
     const [sort, setSort] = React.useState('');
+    
+    const Fade = React.forwardRef(function Fade(props, ref) {
+      const { in: open, children, onEnter, onExited, ...other } = props;
+      const style = useSpring({
+        from: { opacity: 0 },
+        to: { opacity: open ? 1 : 0 },
+        onStart: () => {
+          if (open && onEnter) {
+            onEnter();
+          }
+        },
+        onRest: () => {
+          if (!open && onExited) {
+            onExited();
+          }
+        },
+      });
+    
+      return (
+        <animated.div ref={ref} style={style} {...other}>
+          {children}
+        </animated.div>
+      );
+    });
+    
+    Fade.propTypes = {
+      children: PropTypes.element,
+      in: PropTypes.bool.isRequired,
+      onEnter: PropTypes.func,
+      onExited: PropTypes.func,
+    };
 
     const handleChange = (event) => {
       setSort(event.target.value);
@@ -83,6 +137,7 @@ export default function Achievements() {
                               <MenuItem value={1}>Achievement</MenuItem>
                               <MenuItem value={2}>Status</MenuItem>
                               <MenuItem value={3}>Completition Date</MenuItem>
+                              <MenuItem value={4}>Details</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
@@ -99,6 +154,7 @@ export default function Achievements() {
                                   <TableCell className={classes.th} align="center">Achievement</TableCell>
                                   <TableCell className={classes.th} align="center">Status</TableCell>
                                   <TableCell className={classes.th} align="center">Completion Date</TableCell>
+                                  <TableCell className={classes.th} align="center">Details</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -109,6 +165,13 @@ export default function Achievements() {
                                     </TableCell>
                                     <TableCell className={classes.tc} align="center">{row.status}</TableCell>
                                     <TableCell className={classes.tc} align="center">{row.date}</TableCell>
+                                    <TableCell className={classes.tc} align="center">{
+                                      <buttons className={classes.button}>
+                                      <MenuList>
+                                        <MenuItem align="center">View</MenuItem>
+                                      </MenuList>
+                                    </buttons>
+                                    }</TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
