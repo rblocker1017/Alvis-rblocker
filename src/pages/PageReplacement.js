@@ -57,19 +57,36 @@ export default function PageReplacement() {
     const [input, setinput] = useState([]);
     const [displayBoolean, setDisplayBoolean] = useState(false);
     const [answer, setAnswer] = useState([]);
-    const [type, settype] = useState("fcfs")
+    const [type, settype] = useState("")
+
+    function runFIFO(){
+      settype(": FIFO");
+      console.log("Selected: FIFO");
+      renderPageReplacement();
+    }
+    function runOPT(){
+      settype(": OPT");
+      console.log("Selected: OPT");
+      renderPageReplacement();
+    }
+
+    function runLRU(){
+      settype(": LRU");
+      console.log("Selected: LRU");
+      renderPageReplacement();
+    }
 
     function renderPageReplacement() {
         switch (type) {
-            case "fcfs":
+            case ": FIFO":
                 setAnswer(fcfsPageReplacement(input, frames));
                 setDisplayBoolean(true);
                 break;
-            case "lru":
+            case ": LRU":
                 setAnswer(lruPageReplacement(input, frames));
                 setDisplayBoolean(true);
                 break;
-            case "opt":
+            case ": OPT":
                 setAnswer(optPageReplacement(input, frames));
                 setDisplayBoolean(true);
                 break;
@@ -340,19 +357,14 @@ export default function PageReplacement() {
         setDisplayBoolean(true);
         console.log(answer.toString());
 
-
-
     }
 
 
     const tableHeader = input.map((page) => {
         return (
-            <th style={{ color: 'Green', fontSize: "30px" }} >{page}</th>
-
+            <th style={{ color: 'Green', fontSize: "30px", align: 'center' }} >{page}</th>
 
         );
-
-
 
     })
 
@@ -361,7 +373,7 @@ export default function PageReplacement() {
 
             <td>
                 {ans.column.map((page) =>
-                    <tr style={{ color: 'Black', fontSize: "30px" }} >{JSON.stringify(page)}</tr>
+                    <tr style={{ color: 'Black', fontSize: "30px", align: 'center' }} >{JSON.stringify(page)}</tr>
                 )}
                 <p>{ans.fault}</p>
             </td>
@@ -382,6 +394,7 @@ export default function PageReplacement() {
       }
     }
   })
+
   return (
     <Header>
       <ThemeProvider theme = {theme}>
@@ -393,13 +406,13 @@ export default function PageReplacement() {
                 <Paper className={classes.buttons}>
                 <Grid container spacing = {0}>
                 <Grid item xs = {4}>
-                 <Button variant="contained" color = "primary">FIFO</Button>
+                 <Button variant="contained" color = "primary" onClick = {()=>runFIFO()}>FIFO</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                  <Button variant="contained" color = "primary">OPT</Button>
+                  <Button variant="contained" color = "primary" onClick = {()=>runOPT()}>OPT</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                  <Button variant="contained" color = "primary">LRU</Button>
+                  <Button variant="contained" color = "primary"onClick = {()=>runLRU()}>LRU</Button>
                 </Grid>
                 <Grid item xs = {12}>
                   <h1>
@@ -432,8 +445,18 @@ export default function PageReplacement() {
           <Grid item xs = {9}>
           <Paper className={classes.paper}>
             <h1>
-              Page Replacement
+              Page Replacement{type}
             </h1>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+
+                <table
+                >
+                  <tr>{tableHeader}</tr>
+                  {displayTable}
+                </table>
+
+              </div>
+
           </Paper>
             <h1>
             </h1>
@@ -444,10 +467,10 @@ export default function PageReplacement() {
                 <Grid item xs = {1}>
               </Grid>
                 <Grid item xs = {5}>
-                  <TextField id="outlined-size-normal" variant="filled" label="Reference String"/>
+                  <TextField id="outlined-size-normal" variant="filled" label="Reference String" onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }}/>
                 </Grid>
               <Grid item xs = {5}>
-                < TextField id="outlined-size-normal" variant="filled" label="Frame" color = "black"/>
+                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black" onChange={(e) => { setframes(e.target.value) }} />
               </Grid>
               </Grid>
             </Paper>
