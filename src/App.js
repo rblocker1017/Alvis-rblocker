@@ -10,7 +10,8 @@ import DiskScheduling from "./pages/DiskScheduling";
 import GraphingAlgorithm from "./pages/GraphingAlgorithm";
 import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
-
+import Sorting from "./pages/Sorting"
+import BinaryTreeTraversal from "./pages/BinaryTreeTraversal"
 
 function App() {
   return (
@@ -24,8 +25,9 @@ function App() {
         <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
         <Route path="/RoundRobin" exact component={RoundRobin}/>
         <Route path="/FCFSDisk" exact component={DiskScheduling} />
-              <Route path="/Login" exact component={Login}/>
-
+        <Route path="/Login" exact component={Login}/>
+        <Route path="/Sorting" exact component={Sorting}/>
+        <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
     </BrowserRouter>
 
 
