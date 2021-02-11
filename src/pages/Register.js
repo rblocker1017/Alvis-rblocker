@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Login() {
+export default function Register() {
     const classes = useStyles();
     const theme = createMuiTheme({
         typography:
@@ -127,7 +127,7 @@ export default function Login() {
                                         <Box pt={2}>
                                             <Typography variant={"h6"}>
                                                 {"New User? "} 
-                                                <ButtonBase component={LinkRoute} to="/Register">
+                                                <ButtonBase component={ LinkRoute } to="/Register">
                                                     <Typography variant={"h6"} className={classes.link}>
                                                         Create an account!
                                                     </Typography>
