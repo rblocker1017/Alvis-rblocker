@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: "115%"
+        height: "100%"
     },
     fields:
     {
@@ -649,100 +649,169 @@ export default function CpuScheduling(props) {
         setChecked(!checked);
     };
 
+
     return (
+
         <Header>
-          <ThemeProvider theme = {theme}>
-            <Grid container direction = "column">
-              <Grid item></Grid>
-              <Grid item container spacing = {1}>
-                <Grid item xs = {3}>
-                  <Grid container direction = "column">
-                    <Paper className={classes.buttons}>
-                    <Grid container spacing = {0}>
-                    <Grid item xs = {4}>
-                     <Button variant="contained" color = "primary">FCFS</Button>
-                    </Grid>
-                    <Grid item xs = {4}>
-                      <Button variant="contained" color = "primary">SJF</Button>
-                    </Grid>
-                    <Grid item xs = {4}>
-                      <Button variant="contained" color = "primary">Priority</Button>
-                    </Grid>
-                    <Grid item xs = {12}>
-                      <h1>
-                      </h1>
-                    </Grid>
-                    <Grid item xs = {4}>
-                      <Button variant="contained" color = "primary">RR</Button>
-                    </Grid>
-                    <Grid item xs = {4}>
-                      <Button variant="contained" color = "primary">SRTF</Button>
-                    </Grid>
-                    <Grid item xs = {4}>
-                        <Checkbox
-                        value="checkedA"
-                        inputProps={{ 'aria-label': 'Checkbox A' }}
-                        /> 
-                    </Grid>
-                  </Grid>
-                  </Paper>
-                </Grid>
-                  <h2>
-                  </h2>
-                <Paper className={classes.code}>
-                  <h3>
-                    CODE
-                  </h3>
-                    <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                </Paper>
-              </Grid>
-              <Grid item xs = {9}>
-              <Paper className={classes.paper}>
-                <h1>
-                  CPU Scheduling
-                </h1>
-              </Paper>
-                <h1>
-                </h1>
-              <Grid item xs = {12}>
-              <form noValidate autoComplete="off">
-                    <Paper className={classes.fields}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={1}>
+            
+            
+            <ThemeProvider theme={theme}>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item  xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
+                                        </Grid>
+                                        <Grid item xs ={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary">Insert</Button>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary">Reset</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
                             </Grid>
-                            <Grid item >
-                                <Button variant="contained" color="primary">Step Back</Button>
-                            </Grid>
-                            <Grid item >
-                                <Button variant="contained" color="primary">Pause</Button>
-                            </Grid>
-                            <Grid item >
-                                <Button variant="contained" color="primary">Step Forward</Button>
-                            </Grid>
-                            <Grid item xs={2}>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary">Set Start</Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary">Set End</Button>
-                            </Grid>
+                            <h2>
+                            </h2>
+                            <Paper className={classes.code}>
+                                <h3>
+                                    CODE
+              </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                            </Paper>
                         </Grid>
+                      
+                      
+            
+
+
+            <Grid >
+                <Grid item xs={12}>
+                <h1>CPU Scheduling: {type} </h1>
+                    <Paper className={classes.paper}>
+                        <form noValidate autoComplete="on">
+                            <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
+                            <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
+                            <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
+
+
+                        </form>
+                        {type === "roundRobin" ? <form noValidate autoComplete="on">
+                            <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" onChange={(e) => { setQuantum(e.target.value) }} />
+                        </form>
+                            : null}
+                        {type === "priority" ? <form noValidate autoComplete="on">
+                            <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
+                        </form>
+                            : null}
+                        <h3>Algorithm Select</h3>
+                        {type === 'sjf' || type === 'priority' ? <> <h2>Preemptive<Checkbox
+                            checked={checked}
+                            name="checkedB"
+                            onChange={handleChangeCheck}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                        /> </h2>
+                        </> : null}
+
+                        {type === 'roundRobin' ? <> <h2>Preemptive<Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> </h2>
+                        </> : null}
+
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={type}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
+
+                            <MenuItem value={'roundRobin'} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>Round Robin</MenuItem>
+                            <MenuItem value={'sjf'} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</MenuItem>
+                            <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
+
+                        </Select>
                     </Paper>
-                </form>
-              </Grid>
-              </Grid>
+                </Grid>
+                <Grid item xs={12}>
+
+                    <Paper className={classes.paper}>
+
+                        <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                        <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
+
+                    </Paper>
+
+
+                </Grid>
+
+                List of Processes:
             </Grid>
-            </Grid>
-          </ThemeProvider>
-        </Header>     
-      );
-   
+            {displayBoolean ?
+                <>
+                    <p></p>
+                    <Chart
+                        width={'90%'}
+                        height={'400px'}
+                        chartType="Gantt"
+                        loader={<div>Loading Chart</div>}
+                        data={data}
+                        options={{
+                            height: 400,
+                            gantt: {
+                                trackHeight: 30,
+                                criticalPathEnabled: false,
+                                defaultStartDate: new Date(0, 0, 0, 0, 0, 0)
+                            },
+
+
+
+                        }}
+                        rootProps={{ 'data-testid': '1' }}
+
+                    />
+                    <h3>Average Waiting Time: {wairtingtime} </h3>
+                    <h3>Average turnaound Time: {turnaroundTime} </h3>
+                </>
+                : null}
+
+            
+            
+            {showProceses}
+                
+                    
+                    </Grid>
+                </Grid>
+            </ThemeProvider>
+        </Header>
+    )
 }
 
