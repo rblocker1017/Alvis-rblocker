@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Component } from 'react'
+import React, { useEffect, useState, useRef, Component} from 'react'
 import * as d3 from "d3";
 
 import { Chart } from "react-google-charts";
@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
+import { FormControlLabel } from '@material-ui/core';
 import { grey, orange } from '@material-ui/core/colors';
 import { tree } from 'd3';
 
@@ -40,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     button:
     {
         width: "90%"
+    },
+    chkbox:
+    {
+        width: "10%"
     },
     code:
     {
@@ -669,6 +674,9 @@ export default function CpuScheduling(props) {
                                         <Grid item className={classes.button} xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
                                         </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        </Grid>
                                         <Grid item xs ={12}>
                                             <h1>
                                             </h1>
@@ -679,8 +687,8 @@ export default function CpuScheduling(props) {
                                         <Grid item item xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        <Grid item>
+                                                    <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
@@ -756,6 +764,7 @@ export default function CpuScheduling(props) {
 
                             <MenuItem value={'roundRobin'} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>Round Robin</MenuItem>
                             <MenuItem value={'sjf'} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</MenuItem>
+                            
                             <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
 
                         </Select>

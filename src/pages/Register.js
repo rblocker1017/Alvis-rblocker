@@ -119,22 +119,11 @@ export default function Register() {
                                     <Grid item>
                                         <Box pt={5}>
                                             <Typography variant={"h2"}>
-                                                    Log In
+                                                    Create Account
                                             </Typography>
                                         </Box>
                                     </Grid>
-                                    <Grid item>
-                                        <Box pt={2}>
-                                            <Typography variant={"h6"}>
-                                                {"New User? "} 
-                                                <ButtonBase component={ LinkRoute } to="/Register">
-                                                    <Typography variant={"h6"} className={classes.link}>
-                                                        Create an account!
-                                                    </Typography>
-                                                </ButtonBase>
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
+                    
                                     <Grid item>
                                         <Box pt={2}>
                                             <TextField label="Your Name" variant="outlined" className={classes.input} />
