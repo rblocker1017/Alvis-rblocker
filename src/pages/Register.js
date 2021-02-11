@@ -85,7 +85,7 @@ export default function Register() {
             <Grid container direction={"row"} justify={"flex-start"}>
                 <Grid item>
                     <Box m={4}>
-                        <Button component={LinkRoute} to="/" variant="contained" className={classes.back}>
+                        <Button component={LinkRoute} to="/Login" variant="contained" className={classes.back}>
                             Back
                         </Button>
                     </Box>
@@ -119,7 +119,7 @@ export default function Register() {
                                     <Grid item>
                                         <Box pt={5}>
                                             <Typography variant={"h2"}>
-                                                    Create Account
+                                                    New Account
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -128,13 +128,13 @@ export default function Register() {
                                         <Box pt={2}>
                                             <TextField label="Your Name" variant="outlined" className={classes.input} />
                                         </Box>
-                                        <Box pt={1}>
+                                        <Box pt={2}>
                                             <TextField label="Your Email" variant="outlined" className={classes.input} />
                                         </Box>
-                                        <Box pt={1}>
+                                        <Box pt={2}>
                                             <TextField label="Password" variant="outlined" className={classes.input} />
                                         </Box>
-                                        <Box pt={1}>
+                                        <Box pt={2}>
                                             <TextField label="Repeat your Password" variant="outlined" className={classes.input} />
                                         </Box>
                                     </Grid>
@@ -142,10 +142,10 @@ export default function Register() {
                                          <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>} labelPlacement={"end"} />
                                     </Grid>
                                     <Grid item>
-                                        <Box>
+                                        <Box pt = {2}>
                                             <Button variant={"contained"} type={"submit"} className={classes.submit}>
                                                 <Typography variant={"h6"}>
-                                                    Signup
+                                                    Sign up
                                                 </Typography>
                                             </Button>
                                         </Box>
