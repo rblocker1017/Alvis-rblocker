@@ -8,6 +8,10 @@ import PropTypes from 'prop-types';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { useSpring, animated } from 'react-spring/web.cjs';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +62,12 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
 }));
 
 
@@ -66,20 +76,12 @@ function createData(name, status, date, details) {
   return { name, status, date, details };
 }
 
-function createDesc(icon, name, description, category, date) {
-  return { icon, name, description, category, date };
-}
-
 const rows = [
   createData('Achievement1', 'Completed', 'Completed on X/X/XXXX', 'view'),
   createData('Achievement2', 'Incomplete'),
   createData('Achievement3', 'Incomplete'),
   createData('Achievement4', 'Incomplete'),
   createData('Achievement5', 'Incomplete'),
-];
-
-const rows2 = [
-  createDesc('Refer Icon Here', 'Completed', 'Sample Desciption here', 'Sample Category', 'Completed on X/X/XXXX',),
 ];
 
 const Fade = React.forwardRef(function Fade(props, ref) {
@@ -188,6 +190,7 @@ export default function Achievements() {
                                     </TableCell>
                                     <TableCell className={classes.tc} align="center">{row.status}</TableCell>
                                     <TableCell className={classes.tc} align="center">{row.date}</TableCell>
+                                    {/* Below is view detailed achievements overlay---------------------------- */}
                                     <TableCell className={classes.tc} align="center">{
                                       <div>
                                         <buttons type="button" className={classes.button} onClick={handleOpen}>
@@ -210,13 +213,33 @@ export default function Achievements() {
                                             >
                                               <Fade in={open}>
                                                 <div className={classes.paperOverlay}>
-                                                  <h2 id="spring-modal-title">View Detailed Achievement</h2>
-                                                  <p id="spring-modal-description">Achievement will have details here.</p>
+                                                <Card className={classes.root}>
+                                                  <CardContent>
+                                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                                      Sample Icon
+                                                    </Typography>
+                                                    <Typography variant="h5" component="h2">
+                                                      Name: Sample Achievement
+                                                    </Typography>
+                                                    <Typography className={classes.pos} color="textSecondary">
+                                                      Description: A sample description of the achievement.
+                                                    </Typography>
+                                                    <Typography variant="body2" component="p">
+                                                      Date: Completed on X/X/XXXX
+                                                      <br />
+                                                      {'Category: A Sample Category for the achievement'}
+                                                    </Typography>
+                                                  </CardContent>
+                                                  <CardActions>
+                                                    <Button size="small">Learn More</Button>
+                                                  </CardActions>
+                                                </Card>
                                                 </div>
                                               </Fade>
                                           </Modal>
                                     </div>
                                     }</TableCell>
+                                    {/* END view detailed achievements overlay---------------------------- */}
                                   </TableRow>
                                 ))}
                               </TableBody>
