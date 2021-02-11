@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
         height: "100%",
         width: "100%"
     },
+    paperOverlay: {
+      backgroundColor: theme.palette.background.paper,
+      border: '2px solid #000',
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+    },
     divider: {
         width: "50%"
     },
@@ -60,6 +66,10 @@ function createData(name, status, date, details) {
   return { name, status, date, details };
 }
 
+function createDesc(icon, name, description, category, date) {
+  return { icon, name, description, category, date };
+}
+
 const rows = [
   createData('Achievement1', 'Completed', 'Completed on X/X/XXXX', 'view'),
   createData('Achievement2', 'Incomplete'),
@@ -68,45 +78,58 @@ const rows = [
   createData('Achievement5', 'Incomplete'),
 ];
 
+const rows2 = [
+  createDesc('Refer Icon Here', 'Completed', 'Sample Desciption here', 'Sample Category', 'Completed on X/X/XXXX',),
+];
+
+const Fade = React.forwardRef(function Fade(props, ref) {
+  const { in: open, children, onEnter, onExited, ...other } = props;
+  const style = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: open ? 1 : 0 },
+    onStart: () => {
+      if (open && onEnter) {
+        onEnter();
+      }
+    },
+    onRest: () => {
+      if (!open && onExited) {
+        onExited();
+      }
+    },
+  });
+
+  return (
+    <animated.div ref={ref} style={style} {...other}>
+      {children}
+    </animated.div>
+  );
+});
+
+Fade.propTypes = {
+  children: PropTypes.element,
+  in: PropTypes.bool.isRequired,
+  onEnter: PropTypes.func,
+  onExited: PropTypes.func,
+};
+
 export default function Achievements() {
     const classes = useStyles();
-
     const [sort, setSort] = React.useState('');
-    
-    const Fade = React.forwardRef(function Fade(props, ref) {
-      const { in: open, children, onEnter, onExited, ...other } = props;
-      const style = useSpring({
-        from: { opacity: 0 },
-        to: { opacity: open ? 1 : 0 },
-        onStart: () => {
-          if (open && onEnter) {
-            onEnter();
-          }
-        },
-        onRest: () => {
-          if (!open && onExited) {
-            onExited();
-          }
-        },
-      });
-    
-      return (
-        <animated.div ref={ref} style={style} {...other}>
-          {children}
-        </animated.div>
-      );
-    });
-    
-    Fade.propTypes = {
-      children: PropTypes.element,
-      in: PropTypes.bool.isRequired,
-      onEnter: PropTypes.func,
-      onExited: PropTypes.func,
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
     };
 
     const handleChange = (event) => {
       setSort(event.target.value);
     };
+
     const theme = createMuiTheme({
         palette: {
             primary: {
@@ -166,11 +189,33 @@ export default function Achievements() {
                                     <TableCell className={classes.tc} align="center">{row.status}</TableCell>
                                     <TableCell className={classes.tc} align="center">{row.date}</TableCell>
                                     <TableCell className={classes.tc} align="center">{
-                                      <buttons className={classes.button}>
-                                      <MenuList>
-                                        <MenuItem align="center">View</MenuItem>
-                                      </MenuList>
-                                    </buttons>
+                                      <div>
+                                        <buttons type="button" className={classes.button} onClick={handleOpen}>
+                                        
+                                        <MenuList>
+                                          <MenuItem align="center">View</MenuItem>
+                                        </MenuList>
+                                      </buttons>
+                                      <Modal
+                                              aria-labelledby="View Detailed Achievement"
+                                              aria-describedby="Achievement will have details here"
+                                              className={classes.modal}
+                                              open={open}
+                                              onClose={handleClose}
+                                              closeAfterTransition
+                                              BackdropComponent={Backdrop}
+                                              BackdropProps={{
+                                                timeout: 500,
+                                              }}
+                                            >
+                                              <Fade in={open}>
+                                                <div className={classes.paperOverlay}>
+                                                  <h2 id="spring-modal-title">View Detailed Achievement</h2>
+                                                  <p id="spring-modal-description">Achievement will have details here.</p>
+                                                </div>
+                                              </Fade>
+                                          </Modal>
+                                    </div>
                                     }</TableCell>
                                   </TableRow>
                                 ))}
