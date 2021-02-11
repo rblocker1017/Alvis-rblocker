@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         height: "100%"
     },
-    login:
+    Register:
     {
         width: "200%",
         height: "100%"
@@ -113,7 +113,7 @@ export default function Register() {
                 </Grid>
                 <Grid item >
                     <form onSubmit={handleSubmit}>
-                        <Paper elevation={10} className={classes.login}>
+                        <Paper elevation={10} className={classes.Register}>
                             <Box>
                                 <Grid container direction={"column"} justify={"center"}>
                                     <Grid item>
@@ -137,62 +137,26 @@ export default function Register() {
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
-                                            <TextField label="Email" variant="outlined" className={classes.input} />
+                                            <TextField label="Your Name" variant="outlined" className={classes.input} />
+                                        </Box>
+                                        <Box pt={1}>
+                                            <TextField label="Your Email" variant="outlined" className={classes.input} />
                                         </Box>
                                         <Box pt={1}>
                                             <TextField label="Password" variant="outlined" className={classes.input} />
                                         </Box>
-                                    </Grid>
-                                    <Grid item>
-                                        <Box pl={"20%"} pr={"20%"}>
-                                            <Grid container direction={"row"} justify={"space-around"} alignItems={"center"}>
-                                                <Grid item>
-                                                    <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>Remember Me</Typography>} labelPlacement={"end"} />
-                                                </Grid>
-                                                <Grid item>
-                                                    <ButtonBase>
-                                                        <Typography variant={"button"}>
-                                                            Forgot Password?
-                                                        </Typography>
-                                                    </ButtonBase>
-                                                </Grid>
-                                            </Grid>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item>
-                                        <Box>
-                                            <Button variant={"contained"} type={"submit"} className={classes.submit}>
-                                                <Typography variant={"h6"}>
-                                                    Log In
-                                                </Typography>
-                                            </Button>
-                                        </Box>
-                                        <Box pt={1} pb={1} pl={"25%"} pr={"25%"}>
-                                            <Grid container direction={"row"} alignItems={"center"} justify={"space-around"}>
-                                                <Grid item className={classes.logDivider}>
-                                                    <Divider />
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant={"subtitle1"}>
-                                                        Or
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item className={classes.logDivider}>
-                                                    <Divider />
-                                                </Grid>
-                                            </Grid>
-                                        </Box>
-                                        <Box>
-                                            <Button variant={"contained"} type={"submit"} className={classes.submit}>
-                                                <Typography variant={"h6"}>
-                                                    Continue with Google
-                                                </Typography>
-                                            </Button>
-                                        </Box>
                                         <Box pt={1}>
+                                            <TextField label="Repeat your Password" variant="outlined" className={classes.input} />
+                                        </Box>
+                                    </Grid>
+                                    <Grid item>
+                                         <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>} labelPlacement={"end"} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Box>
                                             <Button variant={"contained"} type={"submit"} className={classes.submit}>
                                                 <Typography variant={"h6"}>
-                                                    Continue with MySacState
+                                                    Signup
                                                 </Typography>
                                             </Button>
                                         </Box>
