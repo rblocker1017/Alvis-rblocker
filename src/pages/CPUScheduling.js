@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
+import { FormControlLabel } from '@material-ui/core';
 import { grey, orange } from '@material-ui/core/colors';
 import { tree } from 'd3';
 
@@ -41,13 +42,17 @@ const useStyles = makeStyles((theme) => ({
     {
         width: "90%"
     },
+    chkbox:
+    {
+        width: "10%"
+    },
     code:
     {
 
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: "100%"
+        height: "75%"
     },
     fields:
     {
@@ -73,7 +78,7 @@ export default function CpuScheduling(props) {
     const changeRR = () => settype("RR");
     const changeSRTF = () => settype("SRTF");
     const changePri = () => settype("Priority");
-    
+
 
     const theme = createMuiTheme({
         palette: {
@@ -653,8 +658,8 @@ export default function CpuScheduling(props) {
     return (
 
         <Header>
-            
-            
+
+
             <ThemeProvider theme={theme}>
                 <Grid container direction="column">
                     <Grid item></Grid>
@@ -663,13 +668,16 @@ export default function CpuScheduling(props) {
                             <Grid container direction="column">
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
-                                        <Grid item  xs={4}>
+                                        <Grid item xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
                                         </Grid>
-                                        <Grid item xs ={12}>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <h1>
                                             </h1>
                                         </Grid>
@@ -679,8 +687,8 @@ export default function CpuScheduling(props) {
                                         <Grid item item xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                        <Grid item>
+                                            <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
@@ -710,104 +718,91 @@ export default function CpuScheduling(props) {
                 </p>
                             </Paper>
                         </Grid>
-                      
-                      
-            
 
 
-            <Grid >
-                <Grid item xs={12}>
-                <h1>CPU Scheduling: {type} </h1>
-                    <Paper className={classes.paper}>
-                        <form noValidate autoComplete="on">
-                            <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
-                            <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
-                            <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
 
 
-                        </form>
-                        {type === "roundRobin" ? <form noValidate autoComplete="on">
-                            <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" onChange={(e) => { setQuantum(e.target.value) }} />
-                        </form>
-                            : null}
-                        {type === "priority" ? <form noValidate autoComplete="on">
-                            <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
-                        </form>
-                            : null}
-                        <h3>Algorithm Select</h3>
-                        {type === 'sjf' || type === 'priority' ? <> <h2>Preemptive<Checkbox
-                            checked={checked}
-                            name="checkedB"
-                            onChange={handleChangeCheck}
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        /> </h2>
-                        </> : null}
 
-                        {type === 'roundRobin' ? <> <h2>Preemptive<Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> </h2>
-                        </> : null}
-
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={type}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
-
-                            <MenuItem value={'roundRobin'} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>Round Robin</MenuItem>
-                            <MenuItem value={'sjf'} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</MenuItem>
-                            <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
-
-                        </Select>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12}>
-
-                    <Paper className={classes.paper}>
-
-                        <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
-                        <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
-
-                    </Paper>
+                        <Grid >
+                            <Grid item xs={12}>
+                                <h1>CPU Scheduling: {type} </h1>
+                                <Paper className={classes.paper}>
+                                    <form noValidate autoComplete="on">
+                                        <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
+                                        <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
+                                        <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
 
 
-                </Grid>
+                                    </form>
+                                    {type === "roundRobin" ? <form noValidate autoComplete="on">
+                                        <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" onChange={(e) => { setQuantum(e.target.value) }} />
+                                    </form>
+                                        : null}
+                                    {type === "priority" ? <form noValidate autoComplete="on">
+                                        <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
+                                    </form>
+                                        : null}
+                                    <h3>Algorithm Select</h3>
+                                    {type === 'sjf' || type === 'priority' ? <> <h2>Preemptive<Checkbox
+                                        checked={checked}
+                                        name="checkedB"
+                                        onChange={handleChangeCheck}
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                                    /> </h2>
+                                    </> : null}
+
+                                    {type === 'roundRobin' ? <> <h2>Preemptive<Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> </h2>
+                                    </> : null}
+
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={type}
+                                        onChange={handleChange}
+                                    >
+                                        <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
+
+                                        <MenuItem value={'roundRobin'} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>Round Robin</MenuItem>
+                                        <MenuItem value={'sjf'} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</MenuItem>
+
+                                        <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
+                                    </Select>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Paper className={classes.paper}>
+                                    <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                                    <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
+
+                                </Paper>
+                            </Grid>
 
                 List of Processes:
             </Grid>
-            {displayBoolean ?
-                <>
-                    <p></p>
-                    <Chart
-                        width={'90%'}
-                        height={'400px'}
-                        chartType="Gantt"
-                        loader={<div>Loading Chart</div>}
-                        data={data}
-                        options={{
-                            height: 400,
-                            gantt: {
-                                trackHeight: 30,
-                                criticalPathEnabled: false,
-                                defaultStartDate: new Date(0, 0, 0, 0, 0, 0)
-                            },
-
-
-
-                        }}
-                        rootProps={{ 'data-testid': '1' }}
-
-                    />
-                    <h3>Average Waiting Time: {wairtingtime} </h3>
-                    <h3>Average turnaound Time: {turnaroundTime} </h3>
-                </>
-                : null}
-
-            
-            
-            {showProceses}
-                
-                    
+                        {displayBoolean ?
+                            <>
+                                <p></p>
+                                <Chart
+                                    width={'90%'}
+                                    height={'400px'}
+                                    chartType="Gantt"
+                                    loader={<div>Loading Chart</div>}
+                                    data={data}
+                                    options={{
+                                        height: 400,
+                                        gantt: {
+                                            trackHeight: 30,
+                                            criticalPathEnabled: false,
+                                            defaultStartDate: new Date(0, 0, 0, 0, 0, 0)
+                                        },
+                                    }}
+                                    rootProps={{ 'data-testid': '1' }}
+                                />
+                                <h3>Average Waiting Time: {wairtingtime} </h3>
+                                <h3>Average turnaound Time: {turnaroundTime} </h3>
+                            </>
+                            : null}
+                        {showProceses}
                     </Grid>
                 </Grid>
             </ThemeProvider>
