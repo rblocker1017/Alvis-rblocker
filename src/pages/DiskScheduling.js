@@ -79,6 +79,7 @@ export default function FCFSDisk() {
   const [direction, setdirection] = useState("inward")
   const [checked, setChecked] = useState(true);
   const [seekTime, setseekTime] = useState(0)
+  
   function renderDiskGraph() {
     switch (type) {
       case "fcfs":
@@ -415,23 +416,33 @@ export default function FCFSDisk() {
                  <Button variant="contained" color = "primary">SCAN</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                  <Button variant="contained" color = "primary">LOOK</Button>
+                  <Button variant="contained" color = "primary">C-SCAN</Button>
                 </Grid>
                 <Grid item xs = {4}>
-                  <Button variant="contained" color = "primary">CSCAN</Button>
+                  <Button variant="contained" color = "primary">LOOK</Button>
                 </Grid>
                 <Grid item xs = {12}>
                   <h1>
                   </h1>
                 </Grid>
                 <Grid item xs = {4}>
-                  <Button variant="contained" color = "primary">CLOOK</Button>
+                  <Button variant="contained" color = "primary">C-LOOK</Button>
                 </Grid>
-                <Grid item xs = {7}>
-                  <Button variant="contained" color = "primary">Insert</Button>
+                <Grid item xs = {4}>
+                  <Button variant="contained" color = "primary">FCFS</Button>
                 </Grid>
-                <Grid item xs = {3}>
-                  <Button variant="contained" color = "primary">Reset</Button>
+                <Grid item xs = {4}>
+                  <Button variant="contained" color = "primary">SSTF</Button>
+                </Grid>
+                <Grid item xs = {12}>
+                  <h1>
+                  </h1>
+                </Grid>
+                <Grid item xs = {6}>
+                  <Button variant="contained" color = "primary">Inwards</Button>
+                </Grid>
+                <Grid item xs = {6}>
+                  <Button variant="contained" color = "primary">Outwards</Button>
                 </Grid>
               </Grid>
               </Paper>
@@ -454,7 +465,7 @@ export default function FCFSDisk() {
           <Grid item xs = {9}>
           <Paper className={classes.paper}>
             <h1>
-              Page Replacement{type}
+              Disk Scheduling
             </h1>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
 
@@ -467,13 +478,14 @@ export default function FCFSDisk() {
           <form noValidate autoComplete="off">
             <Paper className={classes.fields}>
               <Grid container>
-                <Grid item xs = {1}>
-              </Grid>
-                <Grid item xs = {5}>
-                  <TextField id="outlined-size-normal" variant="filled" label="Reference String"/>
+                <Grid item xs = {4}>
+                  <TextField id="outlined-size-normal" variant="filled" label="Disk Size"/>
                 </Grid>
-              <Grid item xs = {5}>
-                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black"/>
+              <Grid item xs = {4}>
+                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color = "black"/>
+              </Grid>
+              <Grid item xs = {4}>
+                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color = "black"/>
               </Grid>
               </Grid>
             </Paper>
