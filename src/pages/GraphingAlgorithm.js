@@ -3,6 +3,7 @@ import Header from "../componenets/layout/header"
 import { Button, Grid, Paper } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
+import { Stage, Layer, Rect, Circle } from 'react-konva';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: "125%",
+        //height: "125%",
         width: "100%"
     },
     buttons:
@@ -27,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
     },
     button:
     {
-        width: "90%"
+        width: "90%",
+        color: "#03b9ff"
     },
     code:
     {
@@ -114,7 +116,13 @@ export default function GraphingAlgorithm() {
                             <Paper className={classes.paper}>
                                 <h1>
                                     Graphing Algorithm: {type}
-            </h1>
+                                </h1>
+                                <Stage width={1000} height={450}>
+                                    <Layer>
+                                        <Rect width={50} height={50} fill="red" draggable/>
+                                        <Circle x={200} y={200} stroke="black" radius={50} draggable/>
+                                    </Layer>    
+                                </Stage>
                             </Paper>
                             <h1>
                             </h1>
