@@ -3,8 +3,12 @@ import Header from "../componenets/layout/header"
 import { Button, Grid, Paper } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
-import { Stage, Layer, Rect, Circle } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Star } from 'react-konva';
+import Konva from "konva";
 
+const WIDTH = 950;
+const HEIGHT = 450;
+let ID = 10;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     button:
     {
         width: "90%",
-        color: "#03b9ff"
+        //color: "#03b9ff"
     },
     code:
     {
@@ -48,15 +52,60 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+function generateShapes() {
+    return [...Array(10)].map((_, i) => ({
+        id: i.toString(),
+        x: Math.random() * WIDTH,
+        y: Math.random() * HEIGHT,
+        rotation: Math.random() * 180,
+        isDragging: false,
+    }));
+} 
+
+const INIT = generateShapes();
+
 export default function GraphingAlgorithm() {
     const classes = useStyles();
-    const [type, settype] = useState("Prim")
+    const [type, setType] = useState("Prim");
+    const [stars, setStars] = React.useState(INIT);
+    const [circles, setCircles] = useState(INIT);
+    const [idNum, setIdNum] = useState(0);
 
-    let name = "test";
+    const changePrim = () => setType("Prim");
+    const changeDij = () => setType("Dijkstras");
+    const changeKruskal = () => setType("Kruskal");
 
-    const changePrim = () => settype("Prim");
-    const changeDij = () => settype("Dijkstras");
-    const changeKruskal = () => settype("Kruskal");
+    const addCircle = (e) => {
+        ID++;
+        const newStars = stars.concat({
+            id: ID,
+            x: Math.random() * WIDTH,
+            y: Math.random() * HEIGHT
+        });
+        setStars(newStars);
+    };
+
+    const handleDragStart = (e) => {
+        const id = e.target.id();
+        setStars(
+            stars.map((star) => {
+                return {
+                    ...star,
+                    isDragging: star.id === id,
+                };
+            })
+        );
+    };
+    const handleDragEnd = (e) => {
+        setStars(
+            stars.map((star) => {
+                return {
+                    ...star,
+                    isDragging: false,
+                };
+            })
+        );
+    };
 
     const theme = createMuiTheme({
         palette: {
@@ -89,7 +138,7 @@ export default function GraphingAlgorithm() {
                                             </h1>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Button variant="contained" color="primary">Insert</Button>
+                                            <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
                                             <Button variant="contained" color="primary">Reset</Button>
@@ -117,10 +166,32 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
-                                <Stage width={1000} height={450}>
+                                <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
-                                        <Rect width={50} height={50} fill="red" draggable/>
-                                        <Circle x={200} y={200} stroke="black" radius={50} draggable/>
+                                        {stars.map((star) => (
+                                            <Star
+                                                key={star.id}
+                                                id={star.id}
+                                                x={star.x}
+                                                y={star.y}
+                                                numPoints={5}
+                                                innerRadius={20}
+                                                outerRadius={40}
+                                                fill="#89b717"
+                                                opacity={0.8}
+                                                draggable
+                                                rotation={star.rotation}
+                                                shadowColor="black"
+                                                shadowBlur={10}
+                                                shadowOpacity={0.6}
+                                                shadowOffsetX={star.isDragging ? 10 : 5}
+                                                shadowOffsetY={star.isDragging ? 10 : 5}
+                                                scaleX={star.isDragging ? 1.2 : 1}
+                                                scaleY={star.isDragging ? 1.2 : 1}
+                                                onDragStart={handleDragStart}
+                                                onDragEnd={handleDragEnd}
+                                            />
+                                        ))}
                                     </Layer>    
                                 </Stage>
                             </Paper>
