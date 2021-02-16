@@ -64,7 +64,9 @@ function generateShapes() {
             width: 100,
             height: 100,
             color: 'green',
-            isDragging: false
+            stroke: 'black',
+            strokeWidth: 5,
+            selected: false
         });
     }
     return circles;
@@ -155,6 +157,17 @@ export default function GraphingAlgorithm() {
             })
         );
     };
+    const selectCircle = (e) => {
+        const id = e.target.id();
+        setStars(
+            stars.map((star) => {
+                return {
+                    ...star,
+                    selected: star.id === id
+                };
+            })
+        );
+    }
 
     const theme = createMuiTheme({
         palette: {
@@ -225,12 +238,9 @@ export default function GraphingAlgorithm() {
                                                 y={star.y}
                                                 width={star.width}
                                                 height={star.height}
-                                                numPoints={5}
-                                                innerRadius={20}
-                                                outerRadius={40}
-                                                fill={star.isDragging ? 'red' : 'green'}
+                                                fill={'green'}
                                                 opacity={0.8}
-                                                draggable
+                                                stroke={star.selected ? 'red' : 'black'}
                                                 shadowColor="black"
                                                 shadowBlur={10}
                                                 shadowOpacity={0.6}
@@ -238,6 +248,7 @@ export default function GraphingAlgorithm() {
                                                 shadowOffsetY={star.isDragging ? 10 : 5}
                                                 scaleX={star.isDragging ? 1.2 : 1}
                                                 scaleY={star.isDragging ? 1.2 : 1}
+                                                onClick={selectCircle}
                                                 onDragStart={handleDragStart}
                                                 onDragEnd={handleDragEnd}
                                             />
