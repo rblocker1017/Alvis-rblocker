@@ -20,13 +20,14 @@ import {
 import Konva from "konva";
 import {
   generateCircles,
+  generateTree,
   generateConnectors,
   connectNode,
   getPoints
 } from "./Shapes/NodeGenerator";
 
-const WIDTH = 950;
-const HEIGHT = 450;
+const WIDTH = 1200;
+const HEIGHT = 400;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -65,7 +66,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const INIT = generateCircles(3, WIDTH, HEIGHT);
+const INIT = generateTree(3, WIDTH, HEIGHT);
 
 const CONNECT = generateConnectors(2, INIT);
 
