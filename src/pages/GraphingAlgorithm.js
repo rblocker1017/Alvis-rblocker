@@ -1,10 +1,11 @@
-﻿import React, { useState } from 'react'
-import Header from "../componenets/layout/header"
-import { Button, Grid, Paper } from "@material-ui/core"
+﻿import React, { useState } from 'react';
+import Header from "../componenets/layout/header";
+import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Star, Line } from 'react-konva';
 import Konva from "konva";
+import { generateCircles, generateConnectors, connectNode, getPoints } from "./Shapes/NodeGenerator"
 
 const WIDTH = 950;
 const HEIGHT = 450;
@@ -52,12 +53,25 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function generateShapes() {
-    const n = 5;
-    let circles = [];
+const INIT = generateCircles(4, WIDTH, HEIGHT);
 
-    while (circles.length < n) {
-        circles.push({
+const CONNECT = generateConnectors(6, INIT);
+
+export default function GraphingAlgorithm() {
+    const classes = useStyles();
+    const [type, setType] = useState("Prim");
+    const [circles, setCircles] = React.useState(INIT);
+    const [lines, setLines] = React.useState(CONNECT);
+    const [connecting, setConnecting] = React.useState(false);
+    const [fromCon, setFromCon] = React.useState({});
+
+    const changePrim = () => setType("Prim");
+    const changeDij = () => setType("Dijkstras");
+    const changeKruskal = () => setType("Kruskal");
+
+    const addCircle = (e) => {
+        ID++;
+        const newcircles = circles.concat({
             id: circles.length,
             x: (Math.random() * (WIDTH - 200)) + 100,
             y: (Math.random() * (HEIGHT - 200)) + 100,
@@ -66,108 +80,135 @@ function generateShapes() {
             color: 'green',
             stroke: 'black',
             strokeWidth: 5,
-            selected: false
+            selected: false,
+            connect: false
         });
-    }
-    return circles;
-}
-
-const INIT = generateShapes();
-
-function getPoints(to, from) {
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    console.log("test");
-    let angle = Math.atan2(-dy, dx);
-
-    const radius = 50
-
-    return [
-        from.x + -radius * Math.cos(angle + Math.PI),
-        from.y + radius * Math.sin(angle + Math.PI),
-        to.x + -radius * Math.cos(angle),
-        to.y + radius * Math.sin(angle)
-    ];
-}
-
-function generateConnectors() {
-    const num = 7;
-    let result = [];
-    while (result.length < num) {
-        let from = INIT[Math.floor(Math.random() * INIT.length)];
-        let to = INIT[Math.floor(Math.random() * INIT.length)];
-        console.log("created");
-        while (to === from) {
-            to = INIT[Math.floor(Math.random() * INIT.length)];
-        }
-        console.log("pushing");
-        result.push({
-            id: result.length,
-            points: getPoints(to, from)
-        });
-    }
-    return result;
-}
-
-const CONNECT = generateConnectors();
-
-
-export default function GraphingAlgorithm() {
-    const classes = useStyles();
-    const [type, setType] = useState("Prim");
-    const [stars, setStars] = React.useState(INIT);
-    const [lines, setLines] = React.useState(CONNECT);
-    const [circles, setCircles] = useState(INIT);
-    const [idNum, setIdNum] = useState(0);
-
-    const changePrim = () => setType("Prim");
-    const changeDij = () => setType("Dijkstras");
-    const changeKruskal = () => setType("Kruskal");
-
-    const addCircle = (e) => {
-        ID++;
-        const newStars = stars.concat({
-            id: ID,
-            x: Math.random() * WIDTH,
-            y: Math.random() * HEIGHT
-        });
-        setStars(newStars);
+        setCircles(newcircles);
     };
 
     const handleDragStart = (e) => {
         const id = e.target.id();
-        setStars(
-            stars.map((star) => {
+        setCircles(
+            circles.map((circle) => {
                 return {
-                    ...star,
-                    isDragging: star.id === id,
+                    ...circle,
+                    isDragging: circle.id === id,
                     color: 'red'
                 };
             })
         );
     };
     const handleDragEnd = (e) => {
-        setStars(
-            stars.map((star) => {
+        setCircles(
+            circles.map((circle) => {
                 return {
-                    ...star,
+                    ...circle, 
                     isDragging: false,
                     color: 'green'
                 };
             })
         );
     };
-    const selectCircle = (e) => {
+    const handleMove = (e) => {
         const id = e.target.id();
-        setStars(
-            stars.map((star) => {
-                return {
-                    ...star,
-                    selected: star.id === id
-                };
+        setCircles(
+            circles.map((circle) => {
+                if (id === circle.id) {
+                    return {
+                        ...circle,
+                        x: e.target.x(),
+                        y: e.target.y()
+                    };
+                }
+                return circle;
+            })
+        );
+        setLines(
+            lines.map((line) => {
+                if (line.to.id === id) {
+                    const to = circles.find(circle => circle.id === id);
+                    const points = getPoints(to, line.from);
+                    return {
+                        ...line,
+                        to: to,
+                        from: line.from,
+                        points: points
+                    };
+                }
+                else if (line.from.id === id) {
+                    const from = circles.find(circle => circle.id === id);
+                    const points = getPoints(line.to, from);
+                    return {
+                        ...line,
+                        to: line.to,
+                        from: from,
+                        points: points
+                    };
+                }
+                return line;
             })
         );
     }
+    const selectCircle = (e) => {
+        const id = e.target.id();
+        setCircles(
+            circles.map((circle) => {
+                return {
+                    ...circle,
+                    selected: circle.id === id
+                };
+            })
+        );
+    };
+
+    const initialConnect = (e) => {
+        const id = e.target.id();
+        setConnecting(!connecting);
+        setCircles(
+            circles.map((circle) => {
+                if (circle.id == id) {
+                    setFromCon(circle);
+                }
+                return {
+                    ...circle,
+                    connected: circle.id === id
+                }
+            })
+        );
+    };
+
+    const reset = (e) => {
+        setCircles(INIT);
+        setLines(CONNECT);
+    }
+
+    const finalConnect = (e) => {
+        const id = e.target.id();
+        let toCircle = {};
+        setCircles(
+            circles.map((circle) => {
+                if (circle.id === id) {
+                    toCircle = circle;
+                }
+                return {
+                    ...circle,
+                    connected: circle.id === id
+                }
+            })
+        );
+        const newConnect = lines.concat(connectNode(toCircle, fromCon, lines.length)); 
+        setLines(newConnect);
+        setCircles(
+            circles.map((circle) => {
+                return {
+                    ...circle,
+                    connected: false
+                }
+            })
+        );
+        setConnecting(!connecting);
+        setFromCon({});
+    };
 
     const theme = createMuiTheme({
         palette: {
@@ -203,7 +244,7 @@ export default function GraphingAlgorithm() {
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary">Reset</Button>
+                                            <Button variant="contained" color="primary" onClick={reset}>Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
@@ -230,27 +271,26 @@ export default function GraphingAlgorithm() {
                                 </h1>
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
-                                        {stars.map((star) => (
+                                        {circles.map((circle) => (
                                             <Circle
-                                                key={star.id}
-                                                id={star.id}
-                                                x={star.x}
-                                                y={star.y}
-                                                width={star.width}
-                                                height={star.height}
+                                                key={circle.id}
+                                                id={circle.id}
+                                                x={circle.x}
+                                                y={circle.y}
+                                                width={circle.width}
+                                                height={circle.height}
                                                 fill={'green'}
                                                 opacity={0.8}
-                                                stroke={star.selected ? 'red' : 'black'}
+                                                stroke={circle.connected ? 'red' : 'black'}
                                                 shadowColor="black"
                                                 shadowBlur={10}
                                                 shadowOpacity={0.6}
-                                                shadowOffsetX={star.isDragging ? 10 : 5}
-                                                shadowOffsetY={star.isDragging ? 10 : 5}
-                                                scaleX={star.isDragging ? 1.2 : 1}
-                                                scaleY={star.isDragging ? 1.2 : 1}
                                                 onClick={selectCircle}
+                                                onDblClick={connecting ? finalConnect : initialConnect}
                                                 onDragStart={handleDragStart}
                                                 onDragEnd={handleDragEnd}
+                                                onDragMove = { handleMove }
+                                                draggable
                                             />
                                         ))}
                                         {lines.map((line) => (
@@ -259,7 +299,6 @@ export default function GraphingAlgorithm() {
                                                 points={line.points}
                                                 stroke="black"
                                                 fill="black"
-
                                             />
                                         ))}
                                     </Layer>
