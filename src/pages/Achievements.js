@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import Header from "../componenets/layout/header"
+import React, { useState } from 'react';
+import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, MenuItem, InputLabel, FormControl, Select } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import MenuList from '@material-ui/core/MenuList';
 import PropTypes from 'prop-types';
 import Modal from '@material-ui/core/Modal';
@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import SearchBar from "material-ui-search-bar";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     },
     body: {
         width: "40%"
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 180,
     },
     table: {
         minWidth: 700,
@@ -76,7 +81,7 @@ function createData(name, status, date, details) {
     return { name, status, date, details };
 }
 
-const rows = [
+const originalRows = [
     createData('Achievement1', 'Completed', 'Completed on X/X/XXXX', 'view'),
     createData('Achievement2', 'Incomplete'),
     createData('Achievement3', 'Incomplete'),
@@ -117,8 +122,10 @@ Fade.propTypes = {
 
 export default function Achievements() {
     const classes = useStyles();
-    const [sort, setSort] = React.useState('');
-    const [open, setOpen] = React.useState(false);
+    const [sort, setSort] = useState('');
+    const [open, setOpen] = useState(false);
+    const [rows, setRows] = useState(originalRows);
+    const [searched, setSearched] = useState("");
 
     const handleOpen = () => {
         setOpen(true);
@@ -130,6 +137,18 @@ export default function Achievements() {
 
     const handleChange = (event) => {
         setSort(event.target.value);
+    };
+
+    const requestSearch = (searchedVal) => {
+        const filterRows = originalRows.filter((row) => {
+          return row.name.toLowerCase().includes(searchedVal.toLowerCase());
+        });
+        setRows(filterRows);
+      };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
     };
 
     const theme = createMuiTheme({
@@ -146,19 +165,19 @@ export default function Achievements() {
                 <Paper className={classes.paper}>
                     <Grid container alignItems={"center"} direction={"row"} justify={"center"} spacing={"5"}>
                         <Grid item><h1>Achievements</h1></Grid>
-                        <Grid item><TextField id="filled-basic" label="Search" variant="filled" /></Grid>
+                        <Grid item><SearchBar value={searched} 
+                                              onChange={(searchVal) => requestSearch(searchVal)} 
+                                              onCancelSearch={() => cancelSearch()} 
+                        /></Grid>
                         <Grid item>
                             <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="simple-select">Sort</InputLabel>
+                                <InputLabel>Sort by</InputLabel>
                                 <Select
                                     labelId="simple-select"
-                                    id="simple-select"
                                     value={sort}
                                     onChange={handleChange}
-                                    label="Sort"
+                                    label="Sort by"
                                 >
-                                    <MenuItem value="">
-                                    </MenuItem>
                                     <MenuItem value={1}>Achievement</MenuItem>
                                     <MenuItem value={2}>Status</MenuItem>
                                     <MenuItem value={3}>Completition Date</MenuItem>
