@@ -1,6 +1,7 @@
 import React from 'react';
 import { Circle } from 'react-konva';
 
+
 export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
     let circles = [];
 
@@ -14,7 +15,8 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
             color : 'green',
             stroke : 'black',
             strokeWidth : 5,
-            selected : false
+            selected: false,
+            connections: []
             });
     }
     return circles;
@@ -23,7 +25,6 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
 export function getPoints(to, from) {
     const dx = to.x - from.x;
     const dy = to.y - from.y;
-    console.log("test");
     let angle = Math.atan2(-dy, dx);
 
     const radius = 50
@@ -35,23 +36,56 @@ export function getPoints(to, from) {
         to.y + radius * Math.sin(angle)
     ];
 }
+
+const sortConnectors = (a, b) => {
+    if (a.id < b.id) {
+        return -1;
+    }
+    else if (a.id > b.id) {
+        return 1;
+    }
+    return 0;
+}
+
+//const compConnectors = (a, b) => {
+//}
+
 export function generateConnectors(numberConnectors, circles) {
-    const num = 7;
     let result = [];
-    while (result.length < num) {
-        let from = circles[Math.floor(Math.random() * circles.length)];
-        let to = circles[Math.floor(Math.random() * circles.length)];
-        console.log("created");
-        while (to === from) {
-            to = circles[Math.floor(Math.random() * circles.length)];
+    while (result.length < numberConnectors) {
+
+        let fromIndex = Math.floor(Math.random() * circles.length);
+        let toIndex = Math.floor(Math.random() * circles.length);
+        while (toIndex === fromIndex) {
+            toIndex = Math.floor(Math.random() * circles.length);
         }
-        console.log("pushing");
-        result.push({
+
+        const from = circles[fromIndex];
+        const to = circles[toIndex];
+
+        const newConnection = {
             id: result.length,
-            to: to,
-            from: from,
+            connections: [to, from],
             points: getPoints(to, from)
+        };
+        newConnection.connections.sort(sortConnectors);
+
+        let exists = false;
+
+        result.forEach(oldConnection => {
+            oldConnection.connections.sort(sortConnectors);
+            if (oldConnection.connections[0] === newConnection.connections[0] && oldConnection.connections[1] === newConnection.connections[1]) {
+                exists = true;
+                console.log("repeating");
+            }
         });
+
+        if (exists === true) {
+            continue;
+        }
+        circles[fromIndex].connections.push(result.length);
+        circles[toIndex].connections.push(result.length);
+        result.push(newConnection);
     }
     return result;
 }
@@ -59,8 +93,11 @@ export function generateConnectors(numberConnectors, circles) {
 export function connectNode(to, from, idNum) {
     return {
         id: idNum,
-        to: to,
-        from: from,
+        connections: [to, from],
         points: getPoints(to, from)
     };
+}
+
+export function buildGraph() {
+
 }

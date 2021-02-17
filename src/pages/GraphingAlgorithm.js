@@ -9,7 +9,6 @@ import { generateCircles, generateConnectors, connectNode, getPoints } from "./S
 
 const WIDTH = 950;
 const HEIGHT = 450;
-let ID = 10;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        //height: "125%",
         width: "100%"
     },
     buttons:
@@ -34,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     button:
     {
         width: "90%",
-        //color: "#03b9ff"
     },
     code:
     {
@@ -53,9 +50,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const INIT = generateCircles(4, WIDTH, HEIGHT);
+const INIT = generateCircles(3, WIDTH, HEIGHT);
 
-const CONNECT = generateConnectors(6, INIT);
+const CONNECT = generateConnectors(2, INIT);
 
 export default function GraphingAlgorithm() {
     const classes = useStyles();
@@ -70,7 +67,6 @@ export default function GraphingAlgorithm() {
     const changeKruskal = () => setType("Kruskal");
 
     const addCircle = (e) => {
-        ID++;
         const newcircles = circles.concat({
             id: circles.length,
             x: (Math.random() * (WIDTH - 200)) + 100,
@@ -81,7 +77,8 @@ export default function GraphingAlgorithm() {
             stroke: 'black',
             strokeWidth: 5,
             selected: false,
-            connect: false
+            connect: false,
+            connections: []
         });
         setCircles(newcircles);
     };
@@ -93,7 +90,6 @@ export default function GraphingAlgorithm() {
                 return {
                     ...circle,
                     isDragging: circle.id === id,
-                    color: 'red'
                 };
             })
         );
@@ -104,51 +100,38 @@ export default function GraphingAlgorithm() {
                 return {
                     ...circle, 
                     isDragging: false,
-                    color: 'green'
                 };
             })
         );
     };
     const handleMove = (e) => {
-        const id = e.target.id();
+        const tempCircle = circles.find(circle => circle.id === e.target.id());
+        const tempLines = lines;
         setCircles(
             circles.map((circle) => {
-                if (id === circle.id) {
-                    return {
+                if (tempCircle === circle) {
+                    const newCircle = {
                         ...circle,
                         x: e.target.x(),
                         y: e.target.y()
-                    };
+                    }
+                    circle.connections.forEach(connection => {
+                        const other = tempLines[connection].connections.filter(otherCircle => otherCircle.id != tempCircle.id);
+                        const points = getPoints(newCircle, other[0]);
+                        tempLines[connection] = {
+                            id: tempLines[connection].id,
+                            connections: [newCircle, other[0]],
+                            points: points
+                        }
+                        setLines(tempLines);
+                    });
+                    return newCircle;
                 }
                 return circle;
             })
         );
-        setLines(
-            lines.map((line) => {
-                if (line.to.id === id) {
-                    const to = circles.find(circle => circle.id === id);
-                    const points = getPoints(to, line.from);
-                    return {
-                        ...line,
-                        to: to,
-                        from: line.from,
-                        points: points
-                    };
-                }
-                else if (line.from.id === id) {
-                    const from = circles.find(circle => circle.id === id);
-                    const points = getPoints(line.to, from);
-                    return {
-                        ...line,
-                        to: line.to,
-                        from: from,
-                        points: points
-                    };
-                }
-                return line;
-            })
-        );
     }
+
     const selectCircle = (e) => {
         const id = e.target.id();
         setCircles(
@@ -187,25 +170,25 @@ export default function GraphingAlgorithm() {
         let toCircle = {};
         setCircles(
             circles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                        connections: circle.connections.concat(lines.length)
+                    };
+                }
                 if (circle.id === id) {
                     toCircle = circle;
+                    return {
+                        ...circle,
+                        connections: circle.connections.concat(lines.length)
+                    };
                 }
-                return {
-                    ...circle,
-                    connected: circle.id === id
-                }
+                return circle;
             })
         );
         const newConnect = lines.concat(connectNode(toCircle, fromCon, lines.length)); 
         setLines(newConnect);
-        setCircles(
-            circles.map((circle) => {
-                return {
-                    ...circle,
-                    connected: false
-                }
-            })
-        );
         setConnecting(!connecting);
         setFromCon({});
     };
