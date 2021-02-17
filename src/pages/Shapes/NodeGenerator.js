@@ -6,6 +6,7 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
     let circles = [];
 
     while (circles.length < numberCircles) {
+        const value = Math.floor(Math.random() * 100);
         circles.push({
             id: circles.length,
             x : (Math.random() * (canvasWidth - 200)) + 100,
@@ -16,7 +17,8 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
             stroke : 'black',
             strokeWidth : 5,
             selected: false,
-            connections: []
+            connections: [],
+            value: value
             });
     }
     return circles;
@@ -47,13 +49,10 @@ const sortConnectors = (a, b) => {
     return 0;
 }
 
-//const compConnectors = (a, b) => {
-//}
-
 export function generateConnectors(numberConnectors, circles) {
     let result = [];
     while (result.length < numberConnectors) {
-
+        const value = Math.floor(Math.random() * 100);
         let fromIndex = Math.floor(Math.random() * circles.length);
         let toIndex = Math.floor(Math.random() * circles.length);
         while (toIndex === fromIndex) {
@@ -66,7 +65,8 @@ export function generateConnectors(numberConnectors, circles) {
         const newConnection = {
             id: result.length,
             connections: [to, from],
-            points: getPoints(to, from)
+            points: getPoints(to, from),
+            value: value
         };
         newConnection.connections.sort(sortConnectors);
 
@@ -91,10 +91,12 @@ export function generateConnectors(numberConnectors, circles) {
 }
 
 export function connectNode(to, from, idNum) {
+    const value = Math.floor(Math.random() * 100);
     return {
         id: idNum,
         connections: [to, from],
-        points: getPoints(to, from)
+        points: getPoints(to, from),
+        value: value
     };
 }
 

@@ -3,7 +3,7 @@ import Header from "../componenets/layout/header";
 import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
-import { Stage, Layer, Rect, Circle, Star, Line } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
 import Konva from "konva";
 import { generateCircles, generateConnectors, connectNode, getPoints } from "./Shapes/NodeGenerator"
 
@@ -61,12 +61,14 @@ export default function GraphingAlgorithm() {
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
     const [fromCon, setFromCon] = React.useState({});
+    const [tags, setTags] = React.useState({});
 
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
 
     const addCircle = (e) => {
+        const value = Math.floor(Math.random() * 100);
         const newcircles = circles.concat({
             id: circles.length,
             x: (Math.random() * (WIDTH - 200)) + 100,
@@ -78,7 +80,8 @@ export default function GraphingAlgorithm() {
             strokeWidth: 5,
             selected: false,
             connect: false,
-            connections: []
+            connections: [],
+            value: value
         });
         setCircles(newcircles);
     };
@@ -121,7 +124,8 @@ export default function GraphingAlgorithm() {
                         tempLines[connection] = {
                             id: tempLines[connection].id,
                             connections: [newCircle, other[0]],
-                            points: points
+                            points: points,
+                            value: tempLines[connection].value
                         }
                         setLines(tempLines);
                     });
@@ -252,37 +256,61 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
+
                                 <Stage width={WIDTH} height={HEIGHT}>
+
                                     <Layer>
                                         {circles.map((circle) => (
-                                            <Circle
-                                                key={circle.id}
-                                                id={circle.id}
-                                                x={circle.x}
-                                                y={circle.y}
-                                                width={circle.width}
-                                                height={circle.height}
-                                                fill={'green'}
-                                                opacity={0.8}
-                                                stroke={circle.connected ? 'red' : 'black'}
-                                                shadowColor="black"
-                                                shadowBlur={10}
-                                                shadowOpacity={0.6}
-                                                onClick={selectCircle}
-                                                onDblClick={connecting ? finalConnect : initialConnect}
-                                                onDragStart={handleDragStart}
-                                                onDragEnd={handleDragEnd}
-                                                onDragMove = { handleMove }
-                                                draggable
-                                            />
+                                            <React.Fragment>
+                                                <Circle
+                                                    key={circle.id}
+                                                    id={circle.id}
+                                                    x={circle.x}
+                                                    y={circle.y}
+                                                    width={circle.width}
+                                                    height={circle.height}
+                                                    fill={'green'}
+                                                    opacity={0.8}
+                                                    stroke={circle.connected ? 'red' : 'black'}
+                                                    shadowColor="black"
+                                                    shadowBlur={10}
+                                                    shadowOpacity={0.6}
+                                                    onClick={selectCircle}
+                                                    onDblClick={connecting ? finalConnect : initialConnect}
+                                                    onDragStart={handleDragStart}
+                                                    onDragEnd={handleDragEnd}
+                                                    onDragMove={handleMove}
+                                                    draggable
+                                                />
+                                                <Text
+                                                    text={circle.value}
+                                                    x={circle.x}
+                                                    y={circle.y}
+                                                />
+                                            </React.Fragment>
                                         ))}
                                         {lines.map((line) => (
-                                            <Line
-                                                id={line.id}
-                                                points={line.points}
-                                                stroke="black"
-                                                fill="black"
-                                            />
+                                            <React.Fragment>
+                                                <Line
+                                                    id={line.id}
+                                                    points={line.points}
+                                                    stroke="black"
+                                                    fill="black"
+                                                />
+                                                <Label
+                                                    x={(line.points[0] + line.points[2]) / 2}
+                                                    y={(line.points[1] + line.points[3]) / 2}
+                                                >
+                                                    <Tag
+                                                        fill={"white"}
+                                                    />
+                                                    <Text
+                                                        text={line.value}
+                                                        fill="black"
+                                                    />
+
+                                                </Label>
+                                            </React.Fragment>
                                         ))}
                                     </Layer>
                                 </Stage>
