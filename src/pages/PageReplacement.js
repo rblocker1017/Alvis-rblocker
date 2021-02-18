@@ -11,19 +11,26 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey, green } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  table: {
+    backgroundColor: green[900],
+    color: grey[200],
+    textAlign: 'center',
+    padding: theme.spacing(1)
+  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
     height: "125%",
-    width: "100%"
+    width: "100%",
+    fixed: true
   },
   buttons:
   {
@@ -34,8 +41,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%"
   },
   code:
-  {
-    
+  {   
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
@@ -57,7 +63,7 @@ export default function PageReplacement() {
     const [input, setinput] = useState([]);
     const [displayBoolean, setDisplayBoolean] = useState(false);
     const [answer, setAnswer] = useState([]);
-    const [type, settype] = useState("")
+    const [type, settype] = useState(": FIFO")
 
     function runFIFO(){
       settype(": FIFO");
@@ -316,8 +322,6 @@ export default function PageReplacement() {
                     }
                     console.log("VAL after for: " + val)
 
-
-
                     s.delete(val);
                     s.add(pages[i])
                     console.log(prevStruct)
@@ -356,13 +360,12 @@ export default function PageReplacement() {
         setAnswer(fcfsPageReplacement(input, frames));
         setDisplayBoolean(true);
         console.log(answer.toString());
-
     }
 
 
     const tableHeader = input.map((page) => {
         return (
-            <th style={{ color: 'Green', fontSize: "30px", align: 'center' }} >{page}</th>
+            <th style={{ color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
 
         );
 
@@ -370,17 +373,13 @@ export default function PageReplacement() {
 
     const displayTable = answer.map((ans) => {
         return (<>
-
             <td>
                 {ans.column.map((page) =>
-                    <tr style={{ color: 'Black', fontSize: "30px", align: 'center' }} >{JSON.stringify(page)}</tr>
+                    <tr style={{ backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</tr>
                 )}
                 <p>{ans.fault}</p>
             </td>
-
-
         </>
-
         );
 
   })
@@ -391,6 +390,9 @@ export default function PageReplacement() {
     palette:{
       primary:{
         main: grey[900],
+      },
+      secondary:{
+        main: green[900]
       }
     }
   })
@@ -448,15 +450,20 @@ export default function PageReplacement() {
               Page Replacement{type}
             </h1>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-
-                <table
-                >
+                <table>
                   <tr>{tableHeader}</tr>
                   {displayTable}
                 </table>
-
               </div>
 
+              <Grid item container>
+                <Grid item xs = {5}></Grid>
+                <Grid item xs = {2}>
+                  <Typography className={classes.table} variant="h5" gutterBottom>
+                    Page Faults = {faultCount}
+                  </Typography>
+                </Grid>
+              </Grid>
           </Paper>
             <h1>
             </h1>
