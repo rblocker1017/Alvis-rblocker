@@ -5,7 +5,8 @@ import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/sty
 import { grey, orange } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
 import Konva from "konva";
-import { generateCircles, generateConnectors, connectNode, getPoints } from "./Shapes/NodeGenerator"
+import { generateCircles, generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
+import { select } from 'd3';
 
 const WIDTH = 950;
 const HEIGHT = 450;
@@ -50,9 +51,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const INIT = generateCircles(3, WIDTH, HEIGHT);
+const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
 
 const CONNECT = generateConnectors(2, INIT);
+
+function pointValues(circle) {
+    if (circle.start) {
+        return "START NODE"
+    }
+    else if (circle.end) {
+        return "END NODE"
+    }
+    return "";
+}
 
 export default function GraphingAlgorithm() {
     const classes = useStyles();
@@ -60,12 +71,16 @@ export default function GraphingAlgorithm() {
     const [circles, setCircles] = React.useState(INIT);
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
-    const [fromCon, setFromCon] = React.useState({});
-    const [tags, setTags] = React.useState({});
+    const [selected, setSelected] = React.useState({});
+
 
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
+
+    //const setStart = (e) => {
+
+    //}
 
     const addCircle = (e) => {
         const value = Math.floor(Math.random() * 100);
@@ -85,6 +100,8 @@ export default function GraphingAlgorithm() {
         });
         setCircles(newcircles);
     };
+
+
 
     const handleDragStart = (e) => {
         const id = e.target.id();
@@ -138,23 +155,11 @@ export default function GraphingAlgorithm() {
 
     const selectCircle = (e) => {
         const id = e.target.id();
-        setCircles(
-            circles.map((circle) => {
-                return {
-                    ...circle,
-                    selected: circle.id === id
-                };
-            })
-        );
-    };
-
-    const initialConnect = (e) => {
-        const id = e.target.id();
-        setConnecting(!connecting);
+        setConnecting(true);
         setCircles(
             circles.map((circle) => {
                 if (circle.id == id) {
-                    setFromCon(circle);
+                    setSelected(circle);
                 }
                 return {
                     ...circle,
@@ -164,6 +169,84 @@ export default function GraphingAlgorithm() {
         );
     };
 
+    const setStart = (e) => {
+        let tempCircles = []; 
+        if (connecting && !selected.end) {
+            tempCircles = circles.map(circle => {
+                if (selected.id === circle.id) {
+                    return {
+                        ...circle,
+                        start: true
+                    };
+                }
+                if (circle.start) {
+                    return {
+                        ...circle,
+                        start: false
+                    };
+                }
+                return circle;
+            })
+        }
+        else {
+            tempCircles = circles;
+        }
+        setCircles(
+            tempCircles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                    };
+                }
+                return circle;
+            })
+        );
+        setConnecting(!connecting);
+        setSelected({});
+    }
+
+    const setEnd = (e) => {
+        let tempCircles = [];
+        if (connecting && !selected.start) {
+            tempCircles = circles.map(circle => {
+                if (selected.id === circle.id) {
+                    return {
+                        ...circle,
+                        end: true
+                    };
+                }
+                if (circle.end) {
+                    return {
+                        ...circle,
+                        end: false
+                    };
+                }
+                return circle;
+            })
+        }
+        else {
+            tempCircles = circles;
+        }
+        setCircles(
+            tempCircles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                    };
+                }
+                return circle;
+            })
+        );
+        setConnecting(!connecting);
+        setSelected({});
+    }
+
+    const initialConnect = (e) => {
+
+    };
+
     const reset = (e) => {
         setCircles(INIT);
         setLines(CONNECT);
@@ -171,6 +254,7 @@ export default function GraphingAlgorithm() {
 
     const finalConnect = (e) => {
         const id = e.target.id();
+        const oldCircles = circles;
         let toCircle = {};
         setCircles(
             circles.map((circle) => {
@@ -191,10 +275,27 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
-        const newConnect = lines.concat(connectNode(toCircle, fromCon, lines.length)); 
-        setLines(newConnect);
+        const newLine = connectNode(toCircle, selected, lines.length);
+        if (JSON.stringify(toCircle) !== '{}') {
+            setLines(lines.concat(newLine));
+
+        }
+        else {
+            setLines(lines);
+            setCircles(
+                circles.map((circle) => {
+                    if (circle.connected) {
+                        return {
+                            ...circle,
+                            connected: false,
+                        };
+                    }
+                    return circle;
+                })
+            );
+        }
         setConnecting(!connecting);
-        setFromCon({});
+        setSelected({});
     };
 
     const theme = createMuiTheme({
@@ -256,12 +357,31 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
-
                                 <Stage width={WIDTH} height={HEIGHT}>
-
                                     <Layer>
                                         {circles.map((circle) => (
                                             <React.Fragment>
+                                                <Label
+                                                    x={circle.x}
+                                                    y={circle.y - 50}
+
+                                                >
+                                                    <Tag
+                                                        //width={100}
+                                                        pointerDirection="down"
+                                                        fill={circle.start || circle.end ? "green" : ""}
+                                                        pointerWidth={25}
+                                                        pointerHeight={10}
+                                                        stroke={circle.start || circle.end ? "black" : ""}
+                                                    />
+                                                    <Text
+                                                        align="center"
+                                                        text={pointValues(circle)}
+                                                        fill={"white"}
+                                                        width={75}
+                                                    />
+
+                                                </Label>
                                                 <Circle
                                                     key={circle.id}
                                                     id={circle.id}
@@ -275,8 +395,8 @@ export default function GraphingAlgorithm() {
                                                     shadowColor="black"
                                                     shadowBlur={10}
                                                     shadowOpacity={0.6}
-                                                    onClick={selectCircle}
-                                                    onDblClick={connecting ? finalConnect : initialConnect}
+                                                    onClick={connecting ? finalConnect : selectCircle}
+                                                    //onDblClick={connecting ? finalConnect : initialConnect}
                                                     onDragStart={handleDragStart}
                                                     onDragEnd={handleDragEnd}
                                                     onDragMove={handleMove}
@@ -286,6 +406,7 @@ export default function GraphingAlgorithm() {
                                                     text={circle.value}
                                                     x={circle.x}
                                                     y={circle.y}
+                                                    fill="white"
                                                 />
                                             </React.Fragment>
                                         ))}
@@ -335,10 +456,10 @@ export default function GraphingAlgorithm() {
                                             <Grid item xs={2}>
                                             </Grid>
                                             <Grid item>
-                                                <Button variant="contained" color="primary">Set Start</Button>
+                                                <Button variant="contained" color="primary" onClick={setStart}>Set Start</Button>
                                             </Grid>
                                             <Grid item>
-                                                <Button variant="contained" color="primary">Set End</Button>
+                                                <Button variant="contained" color="primary" onClick={setEnd}>Set End</Button>
                                             </Grid>
                                         </Grid>
                                     </Paper>

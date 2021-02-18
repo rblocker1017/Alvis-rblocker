@@ -1,7 +1,6 @@
 import React from 'react';
 import { Circle } from 'react-konva';
 
-
 export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
     let circles = [];
 
@@ -20,6 +19,44 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
             connections: [],
             value: value
             });
+    }
+    return circles;
+}
+
+export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight) {
+    let circles = [];
+
+    while (circles.length < numberCircles) {
+        const value = Math.floor(Math.random() * 100);
+        let circle = {
+            id: circles.length,
+            x: (Math.random() * (canvasWidth - 200)) + 100,
+            y: (Math.random() * (canvasHeight - 200)) + 100,
+            width: 100,
+            height: 100,
+            color: 'green',
+            stroke: 'black',
+            strokeWidth: 5,
+            selected: false,
+            connect: false,
+            connections: [],
+            value: value,
+            start: false,
+            end: false
+        }
+        if (circles.length === 0) {
+            circle = {
+                ...circle,
+                start: true
+            };
+        }
+        if (circles.length === numberCircles -1 ) {
+            circle = {
+                ...circle,
+                end: true
+            };
+        }
+        circles.push(circle);
     }
     return circles;
 }
@@ -80,7 +117,7 @@ export function generateConnectors(numberConnectors, circles) {
             }
         });
 
-        if (exists === true) {
+        if (exists) {
             continue;
         }
         circles[fromIndex].connections.push(result.length);
@@ -100,6 +137,12 @@ export function connectNode(to, from, idNum) {
     };
 }
 
-export function buildGraph() {
-
+export function setStroke(circle) {
+    if (circle.connect) {
+        return "red";
+    }
+    else if (circle.selected) {
+        return "yellow";
+    }
+    return "black";
 }

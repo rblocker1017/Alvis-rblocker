@@ -4,8 +4,9 @@
     "\\src",
     "\\src\\componenets",
     "\\src\\componenets\\layout",
-    "\\src\\pages"
+    "\\src\\pages",
+    "\\src\\pages\\Shapes"
   ],
-  "SelectedNode": "\\src\\pages\\BinaryTreeTraversal.js",
+  "SelectedNode": "\\src\\pages\\Shapes\\NodeGenerator.js",
   "PreviewInSolutionExplorer": false
 }
