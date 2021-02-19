@@ -66,9 +66,6 @@ export default function PageReplacement() {
     const [input, setinput] = useState([]);
     const [value, setValue] = useState("");
 
-    
-
-
 
     function runFIFO(){
       settype(": FIFO");
@@ -139,9 +136,6 @@ export default function PageReplacement() {
                     indexes.push(pages[i]);
                     continue;
                 }
-
-
-
             } else {
 
                 if (!s.has(pages[i])) {
@@ -381,7 +375,7 @@ export default function PageReplacement() {
 
     const tableHeader = input.map((page) => {
         return (
-            <th style={{ color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
+            <th style={{ border: "1px solid black", width: "45px", color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
 
         );
 
@@ -391,7 +385,10 @@ export default function PageReplacement() {
         return (<>
             <td>
                 {ans.column.map((page) =>
-                    <tr style={{ backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</tr>
+                    
+                    <tr>
+                      <td style={{ border: "1px solid black", width: "50px",backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
+                    </tr>
                 )}
                 <p>{ans.fault}</p>
             </td>
@@ -466,7 +463,8 @@ export default function PageReplacement() {
             </h1>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <table>
-                  <tr>{tableHeader}</tr>
+                  <tr>{
+                  tableHeader}</tr>
                   {displayTable}
                 </table>
               </div>
