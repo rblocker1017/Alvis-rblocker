@@ -8,9 +8,11 @@ import Konva from "konva";
 import { generateCircles, generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
 
+// Define width and height of the of the webapp canvas
 const WIDTH = 950;
 const HEIGHT = 450;
 
+// Generate styles for React objects
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -50,11 +52,13 @@ const useStyles = makeStyles((theme) => ({
         height: "100%"
     }
 }));
-
+// Generate initial connectors and circles
 const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
-
 const CONNECT = generateConnectors(2, INIT);
 
+// function to return if the circle lable should display START NODE or END NODE on its label
+// circle - the circle you want to label
+// return - label string
 function pointValues(circle) {
     if (circle.start) {
         return "START NODE"
@@ -65,21 +69,29 @@ function pointValues(circle) {
     return "";
 }
 
+// Main function that keeps track of, displays and calculates the graphing functions
 export default function GraphingAlgorithm() {
+    // store styles
     const classes = useStyles();
+
+    // generate function states
     const [type, setType] = useState("Prim");
     const [circles, setCircles] = React.useState(INIT);
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
     const [selected, setSelected] = React.useState({});
 
-
+    // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
 
+    // Adds a circle to the canvas. It is not attached to any connectors.
+    // e - event listener
     const addCircle = (e) => {
+        // calculate value
         const value = Math.floor(Math.random() * 100);
+        // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
             id: circles.length,
             x: (Math.random() * (WIDTH - 200)) + 100,
@@ -94,11 +106,12 @@ export default function GraphingAlgorithm() {
             connections: [],
             value: value
         });
+        // set circle array state to the new concatinated array
         setCircles(newcircles);
     };
 
-
-
+    // circle being dragged has variable isDragging set to true.
+    // e - event listener
     const handleDragStart = (e) => {
         const id = e.target.id();
         setCircles(
@@ -110,6 +123,9 @@ export default function GraphingAlgorithm() {
             })
         );
     };
+
+    // Once circle is finished being dragged, isDragging is set to false
+    // e - event listener
     const handleDragEnd = (e) => {
         setCircles(
             circles.map((circle) => {
@@ -120,18 +136,28 @@ export default function GraphingAlgorithm() {
             })
         );
     };
+
+    // while being dragged, the circle x and y co-ordinates are updated 
+    // and its connectors positions are updated to follow the circle
+    // e - event listener
     const handleMove = (e) => {
+        // find circle being dragged and sets it to temporary value
         const tempCircle = circles.find(circle => circle.id === e.target.id());
         const tempLines = lines;
+        // set circle to a remapped array with the updated circle values
         setCircles(
+            // remap the circle being dragged's values
             circles.map((circle) => {
                 if (tempCircle === circle) {
+                    // update coordinates
                     const newCircle = {
                         ...circle,
                         x: e.target.x(),
                         y: e.target.y()
                     }
+                    // update circle's connector's point values
                     circle.connections.forEach(connection => {
+                        // gets other circle needed to calculate the line's position
                         const other = tempLines[connection].connections.filter(otherCircle => otherCircle.id != tempCircle.id);
                         const points = getPoints(newCircle, other[0]);
                         tempLines[connection] = {
@@ -140,6 +166,7 @@ export default function GraphingAlgorithm() {
                             points: points,
                             value: tempLines[connection].value
                         }
+                        // update lines
                         setLines(tempLines);
                     });
                     return newCircle;
@@ -149,8 +176,11 @@ export default function GraphingAlgorithm() {
         );
     }
 
+    // sets clicked circle to selected
+    // e - event listener
     const selectCircle = (e) => {
         const id = e.target.id();
+        // set connecting state to true
         setConnecting(true);
         setCircles(
             circles.map((circle) => {
@@ -165,9 +195,12 @@ export default function GraphingAlgorithm() {
         );
     };
 
+    // Sets the starting point for the algorithm
     const setStart = (e) => {
+        // create a temporary array to keep track of the array changes
         let tempCircles = []; 
-        if (connecting && !selected.end) {
+        // checks if something is selected as well as if the selected node is not the end node
+        if (connecting && !selected.end && !selected.start) {
             tempCircles = circles.map(circle => {
                 if (selected.id === circle.id) {
                     return {
@@ -184,9 +217,11 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         }
+        // otherwise, set tempCircles to regular circle
         else {
             tempCircles = circles;
         }
+        // sets selected circled false and sets the new array to the circles state
         setCircles(
             tempCircles.map((circle) => {
                 if (circle.connected) {
@@ -198,12 +233,16 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
+        // sets connecting to false and selected to empty
         setConnecting(!connecting);
         setSelected({});
     }
 
+    // Sets the ending point for the algorithm
     const setEnd = (e) => {
+        // create a temporary array to keep track of the array changes
         let tempCircles = [];
+        // checks if something is selected as well as if the selected node is not the end node
         if (connecting && !selected.start) {
             tempCircles = circles.map(circle => {
                 if (selected.id === circle.id) {
@@ -221,9 +260,11 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         }
+        // otherwise, set tempCircles to regular circle
         else {
             tempCircles = circles;
         }
+        // sets selected circled false and sets the new array to the circles state
         setCircles(
             tempCircles.map((circle) => {
                 if (circle.connected) {
@@ -235,23 +276,18 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
+        // sets connecting to false and selected to empty
         setConnecting(!connecting);
         setSelected({});
     }
 
-    const initialConnect = (e) => {
-
-    };
-
-    const reset = (e) => {
-        setCircles(INIT);
-        setLines(CONNECT);
-    }
-
+    // makes a connector between the selected node and the next selected node
+    // the connecting node's value is randomly generated
     const finalConnect = (e) => {
         const id = e.target.id();
-        const oldCircles = circles;
+        // creates a temporary circle object
         let toCircle = {};
+        // concatinates the connector of the two circle objects to their connections variable
         setCircles(
             circles.map((circle) => {
                 if (circle.connected) {
@@ -271,11 +307,13 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
+        // creates a temporary new line
         const newLine = connectNode(toCircle, selected, lines.length);
+        // if the line isn't just connecting to itself, add it to the connector state array
         if (JSON.stringify(toCircle) !== '{}') {
             setLines(lines.concat(newLine));
-
         }
+        // otherwise clear connected nodes
         else {
             setLines(lines);
             setCircles(
@@ -290,6 +328,7 @@ export default function GraphingAlgorithm() {
                 })
             );
         }
+        // clear connecting and selected states
         setConnecting(!connecting);
         setSelected({});
     };
@@ -301,6 +340,7 @@ export default function GraphingAlgorithm() {
             }
         }
     })
+    // return object to be rendered
     return (
         <Header>
             <ThemeProvider theme={theme}>
@@ -328,7 +368,7 @@ export default function GraphingAlgorithm() {
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={reset}>Reset</Button>
+                                            <Button variant="contained" color="primary" >Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
