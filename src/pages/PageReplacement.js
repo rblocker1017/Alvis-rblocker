@@ -114,6 +114,7 @@ export default function PageReplacement() {
         let indexes = []
         let page_faults = 0;
         let prevStruct = []
+        let filler = []
         for (let i = 0; i < pages.length; i++) {
             //prev struct keeps the order of the numbers correct. Set has unpredictable order.
 
@@ -124,14 +125,22 @@ export default function PageReplacement() {
                     s.add(pages[i]);
                     prevStruct = [...s]
                     page_faults += 1;
+                    filler = [];
+                    for(let j = i; j < frames-1; j++)
+                    {
+                      filler.push("");
+                    }
                     let arr = {
                         column: [...s],
                         fault: "Fault"
                     }
-                    answer.push({                   
-                        column: [...s],
+                    answer.push({              
+                        column: [...s,...filler],
                         fault: "❌"
-                    });
+                        
+                    }); 
+
+                    
                     console.log("Set: " + arr.toString())
                     indexes.push(pages[i]);
                     continue;
@@ -382,18 +391,20 @@ export default function PageReplacement() {
     })
 
     const displayTable = answer.map((ans) => {
-        return (<>
+        console.log(ans)
+        return (
             <td>
                 {ans.column.map((page) =>
-                    
                     <tr>
                       <td style={{ border: "1px solid black", width: "50px",backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
-                    </tr>
+                    </tr>         
                 )}
+
                 <p>{ans.fault}</p>
             </td>
-        </>
+
         );
+                
 
   })
 
@@ -433,7 +444,7 @@ export default function PageReplacement() {
                   </h1>
                 </Grid>
                 <Grid item xs = {7}>
-                  <Button variant="contained" color = "primary">Insert</Button>
+                  <Button variant="contained" color = "primary"onClick = {()=>console.log(answer)}>Insert</Button>
                 </Grid>
                 <Grid item xs = {3}>
                   <Button variant="contained" color = "primary"onClick = {()=>reset()}>Reset</Button>
@@ -475,6 +486,7 @@ export default function PageReplacement() {
                   <Typography className={classes.table} variant="h5" gutterBottom>
                     Page Faults = {faultCount}
                   </Typography>
+                  
                 </Grid>
               </Grid>
           </Paper>
