@@ -128,7 +128,7 @@ export default function PageReplacement() {
                         column: [...s],
                         fault: "Fault"
                     }
-                    answer.push({
+                    answer.push({                   
                         column: [...s],
                         fault: "❌"
                     });
