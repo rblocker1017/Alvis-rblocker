@@ -17,7 +17,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import trophy from '../../awesome-trophy.png';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -83,9 +83,16 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 0,
   },
   achievementButton: {
+<<<<<<< HEAD
     marginLeft: 'auto',
     textTransform: 'none',
   },
+=======
+      marginLeft: 'auto',
+      marginRight: '1%',
+      textTransform: 'none',
+  }
+>>>>>>> dev
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -140,7 +147,11 @@ export default function PersistentDrawerLeft(props) {
                             </Typography>
                         </ButtonBase>
                     </Grid>
+<<<<<<< HEAD
                     <Button component={ LinkRoute } to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy}/>Achievements</Button> 
+=======
+                      <Button component={LinkRoute} to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button> 
+>>>>>>> dev
                     <Grid item>
                         <ButtonBase component={ LinkRoute } to="/Login">
                             <Typography variant="button" noWrap align="center">
