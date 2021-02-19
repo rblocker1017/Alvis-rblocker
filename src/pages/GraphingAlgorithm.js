@@ -78,10 +78,6 @@ export default function GraphingAlgorithm() {
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
 
-    //const setStart = (e) => {
-
-    //}
-
     const addCircle = (e) => {
         const value = Math.floor(Math.random() * 100);
         const newcircles = circles.concat({
