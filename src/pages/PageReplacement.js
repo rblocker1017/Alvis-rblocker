@@ -59,11 +59,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PageReplacement() {
     const classes = useStyles();
-    const [frames, setframes] = useState(2);
-    const [input, setinput] = useState([]);
     const [displayBoolean, setDisplayBoolean] = useState(false);
     const [answer, setAnswer] = useState([]);
     const [type, settype] = useState(": FIFO")
+    const [frames, setframes] = useState([]);
+    const [input, setinput] = useState([]);
+    const [value, setValue] = useState("");
+
+    
+
+
 
     function runFIFO(){
       settype(": FIFO");
@@ -101,7 +106,6 @@ export default function PageReplacement() {
         }
 
     }
-
 
     const [faultCount, setFaultcount] = useState(0);
 
@@ -264,6 +268,7 @@ export default function PageReplacement() {
         return answer
 
     }
+
     function optPageReplacement(pages, frames) {
         console.log("OPT ran.");
 
@@ -354,6 +359,17 @@ export default function PageReplacement() {
         setFaultcount(page_faults);
         return answer
 
+    }
+    function reset()
+    {
+      setValue("");
+      setinput(value.split(',').map(Number)) 
+      setAnswer(fcfsPageReplacement(0, 0));
+      setDisplayBoolean(false);
+
+      Array.from(document.querySelectorAll("input")).forEach(
+        input => (input.value = "")
+      );
 
     }
     const takeInput = () => {
@@ -383,9 +399,8 @@ export default function PageReplacement() {
         );
 
   })
-  const handleChange = (event) => {
-    settype(event.target.value);
-  };
+
+
   const theme = createMuiTheme({
     palette:{
       primary:{
@@ -424,7 +439,7 @@ export default function PageReplacement() {
                   <Button variant="contained" color = "primary">Insert</Button>
                 </Grid>
                 <Grid item xs = {3}>
-                  <Button variant="contained" color = "primary">Reset</Button>
+                  <Button variant="contained" color = "primary"onClick = {()=>reset()}>Reset</Button>
                 </Grid>
               </Grid>
               </Paper>
@@ -474,10 +489,14 @@ export default function PageReplacement() {
                 <Grid item xs = {1}>
               </Grid>
                 <Grid item xs = {5}>
-                  <TextField id="outlined-size-normal" variant="filled" label="Reference String" onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }}/>
+                  <TextField id="outlined-size-normal" variant="filled" label="Reference String" 
+                    onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }}
+                    />
                 </Grid>
               <Grid item xs = {5}>
-                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black" onChange={(e) => { setframes(e.target.value) }} />
+                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black" 
+                  onChange= {(e) => { setframes(e.target.value) }}
+                />
               </Grid>
               </Grid>
             </Paper>
