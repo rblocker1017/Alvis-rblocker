@@ -100,6 +100,7 @@ const sortConnectors = (a, b) => {
 // circles - array of circles to put connectors
 export function generateConnectors(numberConnectors, circles) {
     let result = [];
+    let connections = [];
     while (result.length < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
         const value = Math.floor(Math.random() * 100);
@@ -108,6 +109,13 @@ export function generateConnectors(numberConnectors, circles) {
         while (toIndex === fromIndex) {
             toIndex = Math.floor(Math.random() * circles.length);
         }
+        // create an id with the sorted indexes of the two circles
+        let id = "";
+        toIndex < fromIndex ? id = toIndex + "" + fromIndex : id = fromIndex + "" + toIndex;
+        if (connections.includes(id)) {
+            continue;
+        }
+        connections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];
 
@@ -120,41 +128,35 @@ export function generateConnectors(numberConnectors, circles) {
         };
         newConnection.connections.sort(sortConnectors);
 
-        // creates variable to show if a connector exists
-        let exists = false;
-
-        // checks if connector exists
-        result.forEach(oldConnection => {
-            oldConnection.connections.sort(sortConnectors);
-            if (oldConnection.connections[0] === newConnection.connections[0] && oldConnection.connections[1] === newConnection.connections[1]) {
-                exists = true;
-                console.log("repeating");
-            }
-        });
-
-        // if it exists, then restart the loop
-        if (exists) {
-            continue;
-        }
-
         // push connector id to the connecting circles and current connectors
         circles[fromIndex].connections.push(result.length);
         circles[toIndex].connections.push(result.length);
         result.push(newConnection);
     }
-    return result;
+    console.log(connections);
+    return [result, connections];
 }
 
 // connects the to and from node
 // to - circle connecting to
 // from - circle connecting from
 // idNum - id number of the connector
-export function connectNode(to, from, idNum) {
-    const value = Math.floor(Math.random() * 100);
-    return {
-        id: idNum,
-        connections: [to, from],
-        points: getPoints(to, from),
-        value: value
-    };
+export function connectNode(to, from, connections) {
+    let id = "";
+    console.log(to.id);
+    console.log(from.id);
+    to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
+    console.log(id === undefined);
+    if (!connections.includes(id) && JSON.stringify(to) !== '{}') {
+        const value = Math.floor(Math.random() * 100);
+        connections.push(id);
+        return [{
+            id: id,
+            connections: [to, from],
+            points: getPoints(to, from),
+            value: value
+        },
+        connections];
+    }
+    return {};
 }

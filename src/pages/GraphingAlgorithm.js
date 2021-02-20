@@ -5,7 +5,7 @@ import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/sty
 import { grey, orange } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
 import Konva from "konva";
-import { generateCircles, generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
+import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
 
 // Define width and height of the of the webapp canvas
@@ -54,7 +54,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 // Generate initial connectors and circles
 const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
-const CONNECT = generateConnectors(2, INIT);
+const CON_GEN = generateConnectors(2, INIT)
+console.log(CON_GEN);
+const CONNECT = CON_GEN[0];
+const CURRENT_CON = CON_GEN[1];
 
 // function to return if the circle lable should display START NODE or END NODE on its label
 // circle - the circle you want to label
@@ -80,6 +83,7 @@ export default function GraphingAlgorithm() {
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
     const [selected, setSelected] = React.useState({});
+    const [connections, setConnections] = React.useState(CURRENT_CON);
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
@@ -144,6 +148,7 @@ export default function GraphingAlgorithm() {
         // find circle being dragged and sets it to temporary value
         const tempCircle = circles.find(circle => circle.id === e.target.id());
         const tempLines = lines;
+        console.log(connections);
         // set circle to a remapped array with the updated circle values
         setCircles(
             // remap the circle being dragged's values
@@ -180,8 +185,10 @@ export default function GraphingAlgorithm() {
     // e - event listener
     const selectCircle = (e) => {
         const id = e.target.id();
+        console.log(e.target.id());
         // set connecting state to true
         setConnecting(true);
+
         setCircles(
             circles.map((circle) => {
                 if (circle.id == id) {
@@ -308,11 +315,29 @@ export default function GraphingAlgorithm() {
             })
         );
         // creates a temporary new line
-        const newLine = connectNode(toCircle, selected, lines.length);
+        const connectBundle = connectNode(toCircle, selected, connections);
+        console.log(connectBundle);
         // if the line isn't just connecting to itself, add it to the connector state array
-        if (JSON.stringify(toCircle) !== '{}') {
-            setLines(lines.concat(newLine));
+        if (JSON.stringify(connectBundle) === '{}') {
+            console.log("test");
+            setLines(lines);
+            setCircles(
+                circles.map((circle) => {
+                    if (circle.connected) {
+                        return {
+                            ...circle,
+                            connected: false,
+                        };
+                    }
+                    return circle;
+                })
+            );
         }
+        else {
+            setLines(lines.concat(connectBundle[0]));
+            setConnections(connectBundle[1]);
+        }
+        /*
         // otherwise clear connected nodes
         else {
             setLines(lines);
@@ -327,7 +352,7 @@ export default function GraphingAlgorithm() {
                     return circle;
                 })
             );
-        }
+        }*/
         // clear connecting and selected states
         setConnecting(!connecting);
         setSelected({});
