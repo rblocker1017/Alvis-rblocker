@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 // Generate initial connectors and circles
 const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
 const CON_GEN = generateConnectors(2, INIT)
-console.log(CON_GEN);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
 
@@ -93,8 +92,6 @@ export default function GraphingAlgorithm() {
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
     const addCircle = (e) => {
-        // calculate value
-        const value = Math.floor(Math.random() * 100);
         // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
             id: circles.length,
@@ -108,7 +105,6 @@ export default function GraphingAlgorithm() {
             selected: false,
             connect: false,
             connections: [],
-            value: value
         });
         // set circle array state to the new concatinated array
         setCircles(newcircles);
@@ -148,7 +144,6 @@ export default function GraphingAlgorithm() {
         // find circle being dragged and sets it to temporary value
         const tempCircle = circles.find(circle => circle.id === e.target.id());
         const tempLines = lines;
-        console.log(connections);
         // set circle to a remapped array with the updated circle values
         setCircles(
             // remap the circle being dragged's values
@@ -161,7 +156,7 @@ export default function GraphingAlgorithm() {
                         y: e.target.y()
                     }
                     // update circle's connector's point values
-                    circle.connections.forEach(connection => {
+                    circle.connections.map(connection => {
                         // gets other circle needed to calculate the line's position
                         const other = tempLines[connection].connections.filter(otherCircle => otherCircle.id != tempCircle.id);
                         const points = getPoints(newCircle, other[0]);
@@ -169,7 +164,8 @@ export default function GraphingAlgorithm() {
                             id: tempLines[connection].id,
                             connections: [newCircle, other[0]],
                             points: points,
-                            value: tempLines[connection].value
+                            value: tempLines[connection].value,
+                            connected: tempLines[connection].connected
                         }
                         // update lines
                         setLines(tempLines);
@@ -185,7 +181,6 @@ export default function GraphingAlgorithm() {
     // e - event listener
     const selectCircle = (e) => {
         const id = e.target.id();
-        console.log(e.target.id());
         // set connecting state to true
         setConnecting(true);
 
@@ -197,6 +192,21 @@ export default function GraphingAlgorithm() {
                 return {
                     ...circle,
                     connected: circle.id === id
+                }
+            })
+        );
+    };
+
+    // sets clicked to selected
+    // e - event listener
+    const selectLine = (e) => {
+        const id = e.target.id();
+        // set connecting state to true
+        setLines(
+            lines.map((line) => {
+                return {
+                    ...line,
+                    connected: line.id === id
                 }
             })
         );
@@ -316,10 +326,8 @@ export default function GraphingAlgorithm() {
         );
         // creates a temporary new line
         const connectBundle = connectNode(toCircle, selected, connections);
-        console.log(connectBundle);
         // if the line isn't just connecting to itself, add it to the connector state array
         if (JSON.stringify(connectBundle) === '{}') {
-            console.log("test");
             setLines(lines);
             setCircles(
                 circles.map((circle) => {
@@ -337,22 +345,6 @@ export default function GraphingAlgorithm() {
             setLines(lines.concat(connectBundle[0]));
             setConnections(connectBundle[1]);
         }
-        /*
-        // otherwise clear connected nodes
-        else {
-            setLines(lines);
-            setCircles(
-                circles.map((circle) => {
-                    if (circle.connected) {
-                        return {
-                            ...circle,
-                            connected: false,
-                        };
-                    }
-                    return circle;
-                })
-            );
-        }*/
         // clear connecting and selected states
         setConnecting(!connecting);
         setSelected({});
@@ -457,14 +449,13 @@ export default function GraphingAlgorithm() {
                                                     shadowBlur={10}
                                                     shadowOpacity={0.6}
                                                     onClick={connecting ? finalConnect : selectCircle}
-                                                    //onDblClick={connecting ? finalConnect : initialConnect}
                                                     onDragStart={handleDragStart}
                                                     onDragEnd={handleDragEnd}
                                                     onDragMove={handleMove}
                                                     draggable
                                                 />
                                                 <Text
-                                                    text={circle.value}
+                                                    text={circle.id}
                                                     x={circle.x}
                                                     y={circle.y}
                                                     fill="white"
@@ -476,8 +467,9 @@ export default function GraphingAlgorithm() {
                                                 <Line
                                                     id={line.id}
                                                     points={line.points}
-                                                    stroke="black"
-                                                    fill="black"
+                                                    stroke={line.connected ? "red" : "black"}
+                                                    fill={"black"}
+                                                    onClick={selectLine}
                                                 />
                                                 <Label
                                                     x={(line.points[0] + line.points[2]) / 2}

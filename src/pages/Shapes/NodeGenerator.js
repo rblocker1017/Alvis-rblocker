@@ -32,7 +32,6 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
     let circles = [];
 
     while (circles.length < numberCircles) {
-        const value = Math.floor(Math.random() * 100);
         let circle = {
             id: circles.length,
             x: (Math.random() * (canvasWidth - 200)) + 100,
@@ -45,7 +44,6 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
             selected: false,
             connect: false,
             connections: [],
-            value: value,
             start: false,
             end: false
         }
@@ -124,7 +122,8 @@ export function generateConnectors(numberConnectors, circles) {
             id: result.length,
             connections: [to, from],
             points: getPoints(to, from),
-            value: value
+            value: value,
+            connected: false
         };
         newConnection.connections.sort(sortConnectors);
 
@@ -133,7 +132,6 @@ export function generateConnectors(numberConnectors, circles) {
         circles[toIndex].connections.push(result.length);
         result.push(newConnection);
     }
-    console.log(connections);
     return [result, connections];
 }
 
@@ -143,10 +141,7 @@ export function generateConnectors(numberConnectors, circles) {
 // idNum - id number of the connector
 export function connectNode(to, from, connections) {
     let id = "";
-    console.log(to.id);
-    console.log(from.id);
     to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
-    console.log(id === undefined);
     if (!connections.includes(id) && JSON.stringify(to) !== '{}') {
         const value = Math.floor(Math.random() * 100);
         connections.push(id);
@@ -154,7 +149,8 @@ export function connectNode(to, from, connections) {
             id: id,
             connections: [to, from],
             points: getPoints(to, from),
-            value: value
+            value: value,
+            connected: false
         },
         connections];
     }
