@@ -113,6 +113,7 @@ export function generateConnectors(numberConnectors, circles) {
         if (connections.includes(id)) {
             continue;
         }
+        console.log(id);
         connections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];

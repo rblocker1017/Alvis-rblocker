@@ -19,7 +19,7 @@ import {
 } from "react-konva";
 import Konva from "konva";
 import {
-  generateCircles,
+    generateCirclesGraphing,
   generateConnectors,
   connectNode,
   getPoints
@@ -65,9 +65,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const INIT = generateCircles(3, WIDTH, HEIGHT);
-
-const CONNECT = generateConnectors(2, INIT);
+const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
+const CON_GEN = generateConnectors(2, INIT)
+const CONNECT = CON_GEN[0];
+const CURRENT_CON = CON_GEN[1];
 
 export default function BinaryTreeTraversal() {
   const classes = useStyles();
@@ -76,7 +77,8 @@ export default function BinaryTreeTraversal() {
   const [flag2, setFlag2] = useState(true);
   const [flag3, setFlag3] = useState(true);
   const [circles, setCircles] = React.useState(INIT);
-  const [lines, setLines] = React.useState(CONNECT);
+    const [lines, setLines] = React.useState(CONNECT);
+    const [conenctions, setConnections] = React.useState(CURRENT_CON);
   const [connecting, setConnecting] = React.useState(false);
   const [fromCon, setFromCon] = React.useState({});
   const [tags, setTags] = React.useState({});
