@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid, Button } from '@material-ui/core';
+import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -12,16 +12,6 @@ import NatureIcon from '@material-ui/icons/Nature';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import LinkRoute from 'react-router-dom/Link';
 import { Route, Switch } from 'react-router-dom';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import trophy from '../../awesome-trophy.png';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
-
 
 const drawerWidth = 250;
 
@@ -81,11 +71,6 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
-  achievementButton: {
-      marginLeft: 'auto',
-      marginRight: '1%',
-      textTransform: 'none',
-  }
 }));
 
 export default function PersistentDrawerLeft(props) {
@@ -140,7 +125,6 @@ export default function PersistentDrawerLeft(props) {
                             </Typography>
                         </ButtonBase>
                     </Grid>
-                      <Button component={LinkRoute} to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button> 
                     <Grid item>
                         <ButtonBase component={ LinkRoute } to="/Login">
                             <Typography variant="button" noWrap align="center">
@@ -151,81 +135,42 @@ export default function PersistentDrawerLeft(props) {
                 </Grid>
         </Toolbar>
       </AppBar>
-          <Drawer
-              className={classes.drawer}
-              variant="persistent"
-              anchor="left"
-              open={open}
-              classes={{
-                  paper: classes.drawerPaper,
-              }}
-          >
-              <div className={classes.drawerHeader}>
-                  <IconButton onClick={handleDrawerClose}>
-                      {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                  </IconButton>
-              </div>
-              <Divider />
-
-
-              <Accordion>
-                  <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-
-                  >
-                      <Typography className={classes.heading}>CSC 130</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                      <Typography>
-                          <Collapse in={open} timeout="auto" unmountOnExit>
-                              <List component="div" disablePadding>
-
-                                  {CSC130.map((obj, index) => (
-                                      <Link href={obj.url} ><ListItem button key={obj.name}>
-                                          <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
-                                          <ListItemText primary={obj.name} />
-                                      </ListItem></Link>
-                                  ))}
-                              </List>
-                          </Collapse>
-                      </Typography>
-                  </AccordionDetails>
-              </Accordion>
-              <Divider />
-
-
-
-              <Divider />
-              <Accordion>
-                  <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel2a-content"
-                      id="panel2a-header"
-
-                  >
-                      <Typography className={classes.heading}>CSC 139</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                      <Typography>
-                          <Collapse in={open} timeout="auto" unmountOnExit>
-                              <List component="div" disablePadding>
-                                  {CSC139.map((obj, index) => (
-                                      <Link href={obj.url}> <ListItem button key={obj.name}>
-                                          <ListItemIcon><obj.logo /></ListItemIcon>
-                                          <ListItemText primary={obj.name} />
-                                      </ListItem> </Link>
-                                  ))}
-                              </List>
-                          </Collapse>
-                      </Typography>
-                  </AccordionDetails>
-              </Accordion>
-              <Divider />
-
-          </Drawer>
-
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        
+              <p>CSC 130</p>
+        <List>
+          {CSC130.map((obj, index) => (
+            <Link href={obj.url} ><ListItem button key={obj.name}>
+              <ListItemIcon> <obj.logo></obj.logo></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem></Link>
+          ))}
+                  </List>  
+        <Divider />
+        <p>CSC 139</p>
+        <List>
+          {CSC139.map((obj, index) => (
+           <Link href={obj.url}> <ListItem button key={obj.name}>
+              <ListItemIcon><obj.logo/></ListItemIcon>
+              <ListItemText primary={obj.name} />
+            </ListItem> </Link>
+          ))}
+        </List>
+      </Drawer>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

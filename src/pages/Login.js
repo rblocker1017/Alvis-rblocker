@@ -127,7 +127,7 @@ export default function Login() {
                                         <Box pt={2}>
                                             <Typography variant={"h6"}>
                                                 {"New User? "} 
-                                                <ButtonBase component={LinkRoute} to="/Register">
+                                                <ButtonBase>
                                                     <Typography variant={"h6"} className={classes.link}>
                                                         Create an account!
                                                     </Typography>
