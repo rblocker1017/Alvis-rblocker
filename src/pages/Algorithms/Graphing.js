@@ -80,16 +80,34 @@ const sortLines = (a, b) => {
     return 0;
 }
 
-export function kruskalAlgorithm(lines) {
+function hasPath(currentNode, end, connections, pathsUsed) {
+    let exists = false;
+    for (let i = 0; i < connections.length; i++) {
+        if (connections[i].includes(currentNode) && !pathsUsed.includes(connections[i])) {
+            if (connections[i].includes(end)) {
+                return true;
+            }
+            pathsUsed.push(connections[i]);
+            exists = hasPath(connections[i].replace(currentNode, ''), end, connections, pathsUsed);
+        }
+    }
+    return exists;
+}
+
+export function kruskalAlgorithm(start, end, lines, connections) {
     let displayArray = [];
     const tempLines = lines;
     let currentConnections = [];
-    let reached = false;
     tempLines.sort(sortLines);
     for (let i = 0; i < tempLines.length; i++) {
-        console.log(tempLines[i]);
+        displayArray.push(tempLines[i].id);
+        currentConnections.push(tempLines[i].id);
+        let pathsUsed = [];
+        if (hasPath(JSON.stringify(start.id), JSON.stringify(end.id), currentConnections, pathsUsed)) {
+            return displayArray;
+        }
     }
-
+    return -1;
 }
 
 

@@ -9,7 +9,7 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
         const value = Math.floor(Math.random() * 100);
         circles.push({
             id: circles.length,
-            x : (Math.random() * (canvasWidth - 200)) + 100,
+            x : canvasWidth / 2,
             y : (Math.random() * (canvasHeight - 200)) + 100,
             width : 100,
             height : 100,
@@ -32,7 +32,6 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
     let circles = [];
 
     while (circles.length < numberCircles) {
-        const value = Math.floor(Math.random() * 100);
         let circle = {
             id: circles.length,
             x: (Math.random() * (canvasWidth - 200)) + 100,
@@ -45,7 +44,6 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
             selected: false,
             connect: false,
             connections: [],
-            value: value,
             start: false,
             end: false
         }
@@ -115,13 +113,14 @@ export function generateConnectors(numberConnectors, circles) {
         if (connections.includes(id)) {
             continue;
         }
+        console.log(id);
         connections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];
 
         // creates new connection between to and from circles and sorts the connectors
         const newConnection = {
-            id: result.length,
+            id: id,
             connections: [to, from],
             points: getPoints(to, from),
             value: value,
@@ -130,8 +129,8 @@ export function generateConnectors(numberConnectors, circles) {
         newConnection.connections.sort(sortConnectors);
 
         // push connector id to the connecting circles and current connectors
-        circles[fromIndex].connections.push(result.length);
-        circles[toIndex].connections.push(result.length);
+        circles[fromIndex].connections.push(id);
+        circles[toIndex].connections.push(id);
         result.push(newConnection);
     }
     return [result, connections];
