@@ -1,14 +1,14 @@
-﻿import React, { useState } from 'react'
-import Header from "../componenets/layout/header"
-import { Button, Grid, Paper } from "@material-ui/core"
+﻿import React, { useState } from 'react';
+import Header from "../componenets/layout/header";
+import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
-import { Stage, Layer, Rect, Circle, Star } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
 import Konva from "konva";
+import { generateCircles, generateConnectors, connectNode, getPoints } from "./Shapes/NodeGenerator"
 
 const WIDTH = 950;
 const HEIGHT = 450;
-let ID = 10;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        //height: "125%",
         width: "100%"
     },
     buttons:
@@ -33,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     button:
     {
         width: "90%",
-        //color: "#03b9ff"
     },
     code:
     {
@@ -52,59 +50,151 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function generateShapes() {
-    return [...Array(10)].map((_, i) => ({
-        id: i.toString(),
-        x: Math.random() * WIDTH,
-        y: Math.random() * HEIGHT,
-        rotation: Math.random() * 180,
-        isDragging: false,
-    }));
-} 
+const INIT = generateCircles(3, WIDTH, HEIGHT);
 
-const INIT = generateShapes();
+const CONNECT = generateConnectors(2, INIT);
 
 export default function GraphingAlgorithm() {
     const classes = useStyles();
     const [type, setType] = useState("Prim");
-    const [stars, setStars] = React.useState(INIT);
-    const [circles, setCircles] = useState(INIT);
-    const [idNum, setIdNum] = useState(0);
+    const [circles, setCircles] = React.useState(INIT);
+    const [lines, setLines] = React.useState(CONNECT);
+    const [connecting, setConnecting] = React.useState(false);
+    const [fromCon, setFromCon] = React.useState({});
+    const [tags, setTags] = React.useState({});
 
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
 
     const addCircle = (e) => {
-        ID++;
-        const newStars = stars.concat({
-            id: ID,
-            x: Math.random() * WIDTH,
-            y: Math.random() * HEIGHT
+        const value = Math.floor(Math.random() * 100);
+        const newcircles = circles.concat({
+            id: circles.length,
+            x: (Math.random() * (WIDTH - 200)) + 100,
+            y: (Math.random() * (HEIGHT - 200)) + 100,
+            width: 100,
+            height: 100,
+            color: 'green',
+            stroke: 'black',
+            strokeWidth: 5,
+            selected: false,
+            connect: false,
+            connections: [],
+            value: value
         });
-        setStars(newStars);
+        setCircles(newcircles);
     };
 
     const handleDragStart = (e) => {
         const id = e.target.id();
-        setStars(
-            stars.map((star) => {
+        setCircles(
+            circles.map((circle) => {
                 return {
-                    ...star,
-                    isDragging: star.id === id,
+                    ...circle,
+                    isDragging: circle.id === id,
                 };
             })
         );
     };
     const handleDragEnd = (e) => {
-        setStars(
-            stars.map((star) => {
+        setCircles(
+            circles.map((circle) => {
                 return {
-                    ...star,
+                    ...circle, 
                     isDragging: false,
                 };
             })
         );
+    };
+    const handleMove = (e) => {
+        const tempCircle = circles.find(circle => circle.id === e.target.id());
+        const tempLines = lines;
+        setCircles(
+            circles.map((circle) => {
+                if (tempCircle === circle) {
+                    const newCircle = {
+                        ...circle,
+                        x: e.target.x(),
+                        y: e.target.y()
+                    }
+                    circle.connections.forEach(connection => {
+                        const other = tempLines[connection].connections.filter(otherCircle => otherCircle.id != tempCircle.id);
+                        const points = getPoints(newCircle, other[0]);
+                        tempLines[connection] = {
+                            id: tempLines[connection].id,
+                            connections: [newCircle, other[0]],
+                            points: points,
+                            value: tempLines[connection].value
+                        }
+                        setLines(tempLines);
+                    });
+                    return newCircle;
+                }
+                return circle;
+            })
+        );
+    }
+
+    const selectCircle = (e) => {
+        const id = e.target.id();
+        setCircles(
+            circles.map((circle) => {
+                return {
+                    ...circle,
+                    selected: circle.id === id
+                };
+            })
+        );
+    };
+
+    const initialConnect = (e) => {
+        const id = e.target.id();
+        setConnecting(!connecting);
+        setCircles(
+            circles.map((circle) => {
+                if (circle.id == id) {
+                    setFromCon(circle);
+                }
+                return {
+                    ...circle,
+                    connected: circle.id === id
+                }
+            })
+        );
+    };
+
+    const reset = (e) => {
+        setCircles(INIT);
+        setLines(CONNECT);
+    }
+
+    const finalConnect = (e) => {
+        const id = e.target.id();
+        let toCircle = {};
+        setCircles(
+            circles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                        connections: circle.connections.concat(lines.length)
+                    };
+                }
+                if (circle.id === id) {
+                    toCircle = circle;
+                    return {
+                        ...circle,
+                        connections: circle.connections.concat(lines.length)
+                    };
+                }
+                return circle;
+            })
+        );
+        const newConnect = lines.concat(connectNode(toCircle, fromCon, lines.length)); 
+        setLines(newConnect);
+        setConnecting(!connecting);
+        setFromCon({});
     };
 
     const theme = createMuiTheme({
@@ -124,7 +214,7 @@ export default function GraphingAlgorithm() {
                             <Grid container direction="column">
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
-                                        <Grid item  xs={4}>
+                                        <Grid item xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changePrim}>Prim</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
@@ -141,7 +231,7 @@ export default function GraphingAlgorithm() {
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary">Reset</Button>
+                                            <Button variant="contained" color="primary" onClick={reset}>Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
@@ -166,33 +256,63 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
+
                                 <Stage width={WIDTH} height={HEIGHT}>
+
                                     <Layer>
-                                        {stars.map((star) => (
-                                            <Star
-                                                key={star.id}
-                                                id={star.id}
-                                                x={star.x}
-                                                y={star.y}
-                                                numPoints={5}
-                                                innerRadius={20}
-                                                outerRadius={40}
-                                                fill="#89b717"
-                                                opacity={0.8}
-                                                draggable
-                                                rotation={star.rotation}
-                                                shadowColor="black"
-                                                shadowBlur={10}
-                                                shadowOpacity={0.6}
-                                                shadowOffsetX={star.isDragging ? 10 : 5}
-                                                shadowOffsetY={star.isDragging ? 10 : 5}
-                                                scaleX={star.isDragging ? 1.2 : 1}
-                                                scaleY={star.isDragging ? 1.2 : 1}
-                                                onDragStart={handleDragStart}
-                                                onDragEnd={handleDragEnd}
-                                            />
+                                        {circles.map((circle) => (
+                                            <React.Fragment>
+                                                <Circle
+                                                    key={circle.id}
+                                                    id={circle.id}
+                                                    x={circle.x}
+                                                    y={circle.y}
+                                                    width={circle.width}
+                                                    height={circle.height}
+                                                    fill={'green'}
+                                                    opacity={0.8}
+                                                    stroke={circle.connected ? 'red' : 'black'}
+                                                    shadowColor="black"
+                                                    shadowBlur={10}
+                                                    shadowOpacity={0.6}
+                                                    onClick={selectCircle}
+                                                    onDblClick={connecting ? finalConnect : initialConnect}
+                                                    onDragStart={handleDragStart}
+                                                    onDragEnd={handleDragEnd}
+                                                    onDragMove={handleMove}
+                                                    draggable
+                                                />
+                                                <Text
+                                                    text={circle.value}
+                                                    x={circle.x}
+                                                    y={circle.y}
+                                                />
+                                            </React.Fragment>
                                         ))}
-                                    </Layer>    
+                                        {lines.map((line) => (
+                                            <React.Fragment>
+                                                <Line
+                                                    id={line.id}
+                                                    points={line.points}
+                                                    stroke="black"
+                                                    fill="black"
+                                                />
+                                                <Label
+                                                    x={(line.points[0] + line.points[2]) / 2}
+                                                    y={(line.points[1] + line.points[3]) / 2}
+                                                >
+                                                    <Tag
+                                                        fill={"white"}
+                                                    />
+                                                    <Text
+                                                        text={line.value}
+                                                        fill="black"
+                                                    />
+
+                                                </Label>
+                                            </React.Fragment>
+                                        ))}
+                                    </Layer>
                                 </Stage>
                             </Paper>
                             <h1>
