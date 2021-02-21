@@ -13,7 +13,6 @@ import Achievements from "./pages/Achievements"
 import Login from "./pages/Login";
 import Sorting from "./pages/Sorting"
 import BinaryTreeTraversal from "./pages/BinaryTreeTraversal";
-import Achievements from "./pages/Achievements";
 import Register from "./pages/Register";
 
 function App() {
@@ -32,10 +31,6 @@ function App() {
         <Route path="/Sorting" exact component={Sorting}/>
         <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
         <Route path="/Achievements" exact component={Achievements} />
-<<<<<<< HEAD
-=======
-        <Route path="/Register" exact component={Register} />
->>>>>>> dev
     </BrowserRouter>
     </div>
   );

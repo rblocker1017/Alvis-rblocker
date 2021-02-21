@@ -18,11 +18,7 @@
     "react-google-charts": "^3.0.15",
     "react-konva": "16.13.0-0",
     "react-router-dom": "^5.1.2",
-<<<<<<< HEAD
-    "react-scripts": "^3.4.4",
-=======
     "react-scripts": "3.4.0",
->>>>>>> dev
     "react-spring": "^8.0.27",
     "resize-observer-polyfill": "^1.5.1",
     "source-sans-pro": "^3.6.0"
