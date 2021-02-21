@@ -92,6 +92,8 @@ export default function GraphingAlgorithm() {
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
     const addCircle = (e) => {
+        // calculate value
+        const value = Math.floor(Math.random() * 100);
         // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
             id: circles.length,
@@ -105,6 +107,7 @@ export default function GraphingAlgorithm() {
             selected: false,
             connect: false,
             connections: [],
+            value: value
         });
         // set circle array state to the new concatinated array
         setCircles(newcircles);
@@ -175,6 +178,38 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
+    /*
+     * Work in progress code
+     * 
+tempCircles.map(circle => {
+if (circle.id === tempCircle.id) {
+    const newCircle = {
+        ...circle,
+        x: e.target.x(),
+        y: e.target.y()
+    }
+    tempLines.map(line => {
+        let tempLine = line;
+        if (circle.connections.includes(line.id)) {
+            const other = line.connections.filter(otherCircle => otherCircle.id != tempCircle.id);
+            const points = getPoints(newCircle, other[0]);
+            tempLine = {
+                ...line,
+                connections: [newCircle, other],
+                points: points
+            };
+        }
+        console.log(tempLine);
+
+        return tempLine;
+    });
+    return newCircle
+}
+return circle;
+});
+setLines(tempLines);
+setCircles(tempCircles);
+*/
     }
 
     // sets clicked circle to selected
@@ -455,7 +490,7 @@ export default function GraphingAlgorithm() {
                                                     draggable
                                                 />
                                                 <Text
-                                                    text={circle.id}
+                                                    text={circle.value}
                                                     x={circle.x}
                                                     y={circle.y}
                                                     fill="white"

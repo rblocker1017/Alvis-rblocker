@@ -32,6 +32,7 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
     let circles = [];
 
     while (circles.length < numberCircles) {
+        const value = Math.floor(Math.random() * 100);
         let circle = {
             id: circles.length,
             x: (Math.random() * (canvasWidth - 200)) + 100,
@@ -44,6 +45,7 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
             selected: false,
             connect: false,
             connections: [],
+            value: value,
             start: false,
             end: false
         }
@@ -113,7 +115,6 @@ export function generateConnectors(numberConnectors, circles) {
         if (connections.includes(id)) {
             continue;
         }
-        console.log(id);
         connections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];
