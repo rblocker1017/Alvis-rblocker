@@ -359,7 +359,21 @@ export default function BinaryTreeTraversal() {
                           onDragMove={handleMove}
                           draggable
                         />
-                        <Text text={circle.value} x={circle.x} y={circle.y} />
+                            <Text text={circle.value} x={circle.x} y={circle.y} />
+                            <Circle
+                                x={circle.x + 40}
+                                y={circle.y + 40}
+                                stroke="black"
+                                width={circle.width / 10}
+                                height={ circle.height / 10}
+                            />
+                            <Circle
+                                x={circle.x - 40}
+                                y={circle.y + 40}
+                                stroke="black"
+                                width={circle.width / 10}
+                                height={circle.height / 10}
+                            />
                       </React.Fragment>
                     ))}
                     {lines.map(line => (
