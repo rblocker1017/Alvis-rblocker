@@ -93,19 +93,16 @@ export default function GraphingAlgorithm() {
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => {
         setType("Kruskal");
-        let tempLines = lines;
-        let clearLines = tempLines.map(line => {
-            if (algoArray.includes(line.id)) {
-                return {
-                    ...line,
-                    stroke: "black"
-                };
-            }
-            return line;
+        let newAlgo = kruskalAlgorithm(startNode, endNode, lines, connections);
+        let clearLines = lines.map(line => {
+            return {
+                ...line,
+                stroke: "black"
+            };
         });
         setLines(
             clearLines.map(line => {
-                if (algoArray.includes(line.id)) {
+                if (newAlgo.includes(line.id)) {
                     return {
                         ...line,
                         stroke: "red"
@@ -114,6 +111,7 @@ export default function GraphingAlgorithm() {
                 return line;
             })
         );
+        setAlgoArray(newAlgo);
     }
 
     // Adds a circle to the canvas. It is not attached to any connectors.
@@ -222,7 +220,6 @@ export default function GraphingAlgorithm() {
                 }
             })
         );
-        console.log(algoArray);
     };
 
     // sets clicked to selected
@@ -379,7 +376,6 @@ export default function GraphingAlgorithm() {
             newLines = lines.concat(connectBundle[0]);
             setLines(newLines);
             setConnections(connectBundle[1]);
-            console.log(newLines);
             setAlgoArray(kruskalAlgorithm(startNode, endNode, newLines, connectBundle[1]));
         }
         // clear connecting and selected states

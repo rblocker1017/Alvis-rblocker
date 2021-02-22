@@ -102,6 +102,11 @@ export function kruskalAlgorithm(start, end, lines, connections) {
     let currentConnections = [];
     tempLines.sort(sortLines);
     for (let i = 0; i < tempLines.length; i++) {
+        for (let j = 0; j < tempLines.length; j++) {
+            if (tempLines[i].value === tempLines[j].value && tempLines[i].id !== tempLines[j].id) {
+                displayArray.push(tempLines[j].id);
+            }
+        }
         displayArray.push(tempLines[i].id);
         currentConnections.push(tempLines[i].id);
         let pathsUsed = [];
