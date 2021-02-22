@@ -1,6 +1,6 @@
+/* Placeholder Dijkstras by Alex
 function DijkstraAlgorithm(start, lines) {
     const numberOfVertices = edges.length;
-
     const minDistances = [];
 
     for (let currentVertex = 0; currentVertex < numberOfVertices; currentVertex++) {
@@ -69,7 +69,9 @@ let edges = [
     ],
     [],
 ];
-
+*/
+// Sorting function for line objects to sort by value
+// @return: if value of a < value of b return -1, > return 1, equal 0
 const sortLines = (a, b) => {
     if (a.value < b.value) {
         return -1;
@@ -109,5 +111,3 @@ export function kruskalAlgorithm(start, end, lines, connections) {
     }
     return -1;
 }
-
-

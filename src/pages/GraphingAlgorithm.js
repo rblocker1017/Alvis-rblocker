@@ -86,14 +86,34 @@ export default function GraphingAlgorithm() {
     const [connections, setConnections] = React.useState(CURRENT_CON);
     const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
     const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
-    const [algoArray, setAlgoArray] = React.useState([]);
+    const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => {
         setType("Kruskal");
-        setAlgoArray(kruskalAlgorithm(startNode, endNode, lines, connections));
+        let tempLines = lines;
+        let clearLines = tempLines.map(line => {
+            if (algoArray.includes(line.id)) {
+                return {
+                    ...line,
+                    stroke: "black"
+                };
+            }
+            return line;
+        });
+        setLines(
+            clearLines.map(line => {
+                if (algoArray.includes(line.id)) {
+                    return {
+                        ...line,
+                        stroke: "red"
+                    };
+                }
+                return line;
+            })
+        );
     }
 
     // Adds a circle to the canvas. It is not attached to any connectors.
@@ -313,6 +333,7 @@ export default function GraphingAlgorithm() {
     const finalConnect = (e) => {
         const id = e.target.id();
         let conId = "";
+        let newLines = [];
         id < selected.id ? conId = id + "" + selected.id : conId = selected.id + "" + id;
 
         // creates a temporary circle object
@@ -355,8 +376,11 @@ export default function GraphingAlgorithm() {
             );
         }
         else {
-            setLines(lines.concat(connectBundle[0]));
+            newLines = lines.concat(connectBundle[0]);
+            setLines(newLines);
             setConnections(connectBundle[1]);
+            console.log(newLines);
+            setAlgoArray(kruskalAlgorithm(startNode, endNode, newLines, connectBundle[1]));
         }
         // clear connecting and selected states
         setConnecting(!connecting);
@@ -480,7 +504,7 @@ export default function GraphingAlgorithm() {
                                                 <Line
                                                     id={line.id}
                                                     points={line.points}
-                                                    stroke={line.connected ? "red" : "black"}
+                                                    stroke={line.stroke}
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />

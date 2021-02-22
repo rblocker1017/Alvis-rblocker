@@ -124,6 +124,7 @@ export function generateConnectors(numberConnectors, circles) {
             connections: [to, from],
             points: getPoints(to, from),
             value: value,
+            stroke: "black",
             connected: false
         };
         newConnection.connections.sort(sortConnectors);
@@ -151,6 +152,7 @@ export function connectNode(to, from, connections) {
             connections: [to, from],
             points: getPoints(to, from),
             value: value,
+            stroke: "black",
             connected: false
         },
         connections];
