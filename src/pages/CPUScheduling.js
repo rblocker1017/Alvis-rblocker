@@ -38,7 +38,15 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         margin: 'auto',
         height: "125%",
-        width: "100%"
+        width: "80%"
+    },
+    popup: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        margin: 'auto',
+        height: "150%",
+        width: 500
     },
     buttons:
     {
@@ -71,7 +79,8 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: "100%"
+        height: "100%",
+        width: "80%"
     }
 }));
 
@@ -121,6 +130,7 @@ export default function CpuScheduling(props) {
     const changeRR = () => settype("RR");
     const changeSRTF = () => settype("SRTF");
     const changePri = () => settype("Priority");
+
     
 
     const theme = createMuiTheme({
@@ -134,6 +144,7 @@ export default function CpuScheduling(props) {
     function fcfs(processes) {
         let timeCounter = 0;
         let totalWaiting = 0;
+        let totalResponse = 0;
         let totalTat = 0;
         let procId = 0;
         let answer = [[
@@ -165,6 +176,7 @@ export default function CpuScheduling(props) {
             if (i.arrivalTime > timeCounter) {
                 timeCounter = i.arrivalTime;
             }
+            totalResponse += timeCounter;
             totalTat += timeCounter + i.burstTime - i.arrivalTime;
             totalWaiting += timeCounter - i.arrivalTime
             answer.push([procId++, i.name, i.name, new Date(0, 0, 0, 0, 0, timeCounter), new Date(0, 0, 0, 0, 0, timeCounter + i.burstTime), null, 100, null])
@@ -173,6 +185,7 @@ export default function CpuScheduling(props) {
         })
 
         setTurnaroundTime((totalTat / processList.length).toFixed(2))
+        //setResponseTime((totalResponse / processList.length).toFixed(2))
         setWaitingTime((totalWaiting / processList.length).toFixed(2))
 
 
@@ -608,6 +621,7 @@ export default function CpuScheduling(props) {
     };
 
 
+
     const [formProcess, setformProcess] = useState()
     const [formArrival, setformArrival] = useState()
     const [formBurst, setformBurst] = useState()
@@ -681,7 +695,6 @@ export default function CpuScheduling(props) {
         }
 
         data.forEach(i => { console.log("Data stream: " + i) })
-
     }
 
     const handleAddProc = () => {
@@ -717,29 +730,30 @@ export default function CpuScheduling(props) {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item  xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeFCFS}>FCFS</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSJF}>SJF</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePri}>Priority</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</Button>
                                         </Grid>
                                         <Grid item xs ={12}>
-                                            <h1>
-                                            </h1>
+                                            <h1></h1>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeRR}>RR</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>RR</Button>
                                         </Grid>
                                         <Grid item item xs={4}>
                                             <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
                                         </Grid>
                                         <Grid item>
-                                             <FormControlLabel control={<Checkbox checked={checked}
+                                             <FormControlLabel control={<Checkbox 
+                                                checked={checked}
                                                 name="checkedB"
                                                 onChange={handleChangeCheck}
-                                                inputProps={{ 'aria-label': 'primary checkbox' }}color={"#000000"} />} 
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                                color={"#000000"} />} 
                                                 label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -765,7 +779,7 @@ export default function CpuScheduling(props) {
                                                   
                                               <Grid> 
                                                    <Grid item xs={12}> 
-                                                        <Paper className={classes.paper}>
+                                                        <Paper className={classes.popup}>
                                                              <h1>CPU Scheduling: {type} </h1>
                                                         
                                                             <form noValidate autoComplete="on">
@@ -784,18 +798,6 @@ export default function CpuScheduling(props) {
                                                             </form>
                                                                 : null}
                                                             <h3>Algorithm Select</h3>
-                                                            {type === 'sjf' || type === 'priority' ? <> 
-                                                            <h2>Preemptive<Checkbox
-                                                                checked={checked}
-                                                                name="checkedB"
-                                                                onChange={handleChangeCheck}
-                                                                inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                            /> </h2>
-                                                            </> : null}
-
-                                                            {type === 'roundRobin' ? <> <h2>Preemptive<Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> </h2>
-                                                            </> : null}
-
                                                             <Select
                                                                 labelId="demo-simple-select-label"
                                                                 id="demo-simple-select"
@@ -808,32 +810,25 @@ export default function CpuScheduling(props) {
                                                                 <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
 
                                                             </Select>
+
+                                                            <Grid item xs={12}>
+                                                                <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                                                             </Grid>
                                                         </Paper>
                                                     </Grid>
-                                                    <Grid item xs={12}>
-                                                        <Paper className={classes.paper}>
-                                                            <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
-                                                            
-                                                        </Paper>
-                                                    </Grid>
-                                                    
                                                 </Grid>
-                                                       
-                                                    
-                                                </Fade>
-                                            </Modal>
-                                        </div>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
-        
-                                            
-                                        </Grid>
-                                        <Grid>
-                                        <Button variant="contained" color="primary">Reset</Button>
-                                        </Grid>
+                                            </Fade>
+                                        </Modal>
+                                    </div>
+                                     <Grid item xs={4}>
+                                        <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
                                     </Grid>
-                                </Paper>
-                            </Grid>
+                                    <Grid>
+                                        <Button variant="contained" color="primary">Reset</Button>
+                                    </Grid>
+                                </Grid>
+                             </Paper>
+                          </Grid>
                             <h2>
                             </h2>
                             <Paper className={classes.code}>
@@ -849,44 +844,63 @@ export default function CpuScheduling(props) {
                                  </p>
                             </Paper>
                         </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={8} container direction="row" justify="flex-start" alignItems="stretch">
                             <Paper className={classes.paper}>
                                 <h1>CPU Scheduling: {type}</h1>
-
                                 {displayBoolean ?
-                                            <>
-                                                <p></p>
-                                                <Chart
-                                                    width={'90%'}
-                                                    height={'400px'}
-                                                    chartType="Gantt"
-                                                    loader={<div>Loading Chart</div>}
-                                                    data={data}
-                                                    options={{
-                                                        height: 400,
-                                                        gantt: {
-                                                            trackHeight: 30,
-                                                            criticalPathEnabled: false,
-                                                            defaultStartDate: new Date(0, 0, 0, 0, 0, 0)
+                                    <>
+                                        <p></p>
+                                        <Chart
+                                            width={'90%'}
+                                            height={'400px'}
+                                            chartType="Gantt"
+                                            loader={<div>Loading Chart</div>}
+                                            data={data}
+                                            options={{
+                                                height: 400,
+                                                gantt: {
+                                                    trackHeight: 30,
+                                                    criticalPathEnabled: false,
+                                                    defaultStartDate: new Date(0, 0, 0, 0, 0, 0),
+                                                    animation: 
+                                                        {
+                                                            startup: true,
+                                                            easing: 'linear',
+                                                            duration: 1500,
                                                         },
-                                                    }}
-                                                    rootProps={{ 'data-testid': '1' }}
-                                                />
-                                                <h3>Average Waiting Time: {waitingtime} </h3>
-                                                <h3>Average turnaound Time: {turnaroundTime} </h3>
-                                            </>
-                                            : null}                                
-                                        
-                                            List of Processes:
-                                            {showProceses}
-                                        
-                                        
+                                                    enableInteractivity: false,
+                                                },
+                                            }}
+                                            chartEvents={[
+                                                {
+                                                    eventName: 'animationfinish',
+                                                    callback: () => {
+                                                    console.log('Animation Finished')
+                                                    },
+                                                },
+                                                ]}
 
+                                            rootProps={{ 'data-testid': '1' }}
+                                        />
+                                        
+                                    </>
+                                    : null}                                
+                                        
+                                          
                             </Paper>
-                            <h1></h1>
+                            <Grid>
+                                <form noValidate autoComplete="off">
+                                    <h2>List of Processes:</h2> 
+                                    {showProceses}
+                                        
+                                </form>
+                                
+                                <h3>  Average Waiting Time: {waitingtime} </h3>
+                                <h3> Average turnaound Time: {turnaroundTime} </h3>
+                               
+                            </Grid>    
                             <Grid item xs={12}>
                                 <form noValidate autoComplete="off">
-                                ``
                                     <Paper className={classes.fields}>
                                         <Grid container spacing={1}>
                                         <Grid item xs={2}></Grid>
