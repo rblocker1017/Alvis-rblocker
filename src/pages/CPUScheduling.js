@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
+import {GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@material-ui/core';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
@@ -23,7 +24,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { useSpring, animated } from 'react-spring/web.cjs';
 
 import { FormControlLabel } from '@material-ui/core';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey, green } from '@material-ui/core/colors';
 import { tree } from 'd3';
 
 
@@ -48,6 +49,17 @@ const useStyles = makeStyles((theme) => ({
         height: "150%",
         width: 500
     },
+
+    paperOverlay: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        textAlign: 'center',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        width: 500
+    },
+    
+
     buttons:
     {
         backgroundColor: grey[200],
@@ -80,7 +92,17 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
         height: "100%",
-        width: "80%"
+        width: "200%"
+    },
+
+    table: {
+        maxWidth: 250,
+    },
+    th: {
+        fontWeight: 'bold'
+    },
+    tc: {
+        border: '1px solid rgba(224, 224, 224, 1)'
     }
 }));
 
@@ -120,7 +142,7 @@ export default function CpuScheduling(props) {
     const [open, setOpen] = React.useState(false);
     const [processes, setprocesses] = useState([])
     const [quantum, setQuantum] = useState();
-    const [type, settype] = useState("FCFS")
+    const [type, settype] = useState("")
     const [checked, setChecked] = useState(false)
 
     let name = "test";
@@ -136,7 +158,7 @@ export default function CpuScheduling(props) {
     const theme = createMuiTheme({
         palette: {
             primary: {
-                main: grey[900],
+                main: green[900],
             }
         }
     })
@@ -475,6 +497,8 @@ export default function CpuScheduling(props) {
             }
         }
 
+    
+
         let answer = [[
             { type: 'string', label: 'Task ID' },
             { type: 'string', label: 'Task Name' },
@@ -504,6 +528,8 @@ export default function CpuScheduling(props) {
         return answer;
 
     }
+
+ 
 
     function sjfFuncPreemptive(processes) {
         let timeCounter = 0;
@@ -608,6 +634,15 @@ export default function CpuScheduling(props) {
 
     }
 
+    function reset()
+    {
+        setDisplayBoolean(false);
+        setTurnaroundTime(0);
+        setWaitingTime(0);
+        let empty = [];
+        setprocesses(empty);
+    }
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -629,6 +664,14 @@ export default function CpuScheduling(props) {
     const [waitingtime, setWaitingTime] = useState();
     const [turnaroundTime, setTurnaroundTime] = useState();
     const [priority, setpriority] = useState(0)
+
+    function createData(procName, arrivalTime, burstTime) {
+        return { procName, arrivalTime, burstTime};
+    }
+
+    const rows = [
+        createData('Process Name', 'Arrival Time', 'Burst Time'),
+    ]
 
 
 
@@ -659,39 +702,55 @@ export default function CpuScheduling(props) {
 
     console.log("Data : " + data)
     const clickInput = () => {
-
-        switch (type) {
-            case 'fcfs':
-                setData(fcfs(processes));
-                setDisplayBoolean(true);
-                break;
-            case 'sjf':
-                if (!checked) {
-                    setData(sjf(processes));
+        if (!checked){
+            switch (type) {
+                case 'First Come First Serve':
+                    setData(fcfs(processes));
                     setDisplayBoolean(true);
-                } else {
-                    setData(sjfFuncPreemptive(processes));
+                    break;
+                case 'Shortest Job First':
+                        setData(sjf(processes));
+                        setDisplayBoolean(true);
+                    break;
+                case 'Round Robin':
+                    setData(roundRobin(processes));
                     setDisplayBoolean(true);
-                }
-                break;
-            case 'roundRobin':
-                setData(roundRobin(processes));
-                setDisplayBoolean(true);
-                break;
-            case 'priority':
-                if (!checked) {
+                    break;
+                case 'Priority':
                     setData(priorityFunc(processes));
                     setDisplayBoolean(true);
-                }
-                else {
+                    break;
+                case 'Shortest Remaining Job First':
+                    setData(sjfFuncPreemptive(processes));
+                    setDisplayBoolean(true);
+                default:
+                    break;
+            }
+        }
+        else {
+            switch (type) {
+                case 'First Come First Serve':
+                    setData(fcfs(processes));
+                    setDisplayBoolean(true);
+                    break;
+                case 'Shortest Job First':
+                    setData(sjf(processes));
+                    setDisplayBoolean(true);
+                    break;
+                case 'Round Robin':
+                    setData(roundRobin(processes));
+                    setDisplayBoolean(true);
+                    break;
+                case 'Preemptive Priority':
                     setData(priorityFuncPreemptive(processes));
                     setDisplayBoolean(true);
-                }
-                break;
-
-
-            default:
-                break;
+                    break;
+                case 'Shortest Remaining Job First':
+                        setData(sjfFuncPreemptive(processes));
+                        setDisplayBoolean(true);
+                default:
+                    break;
+            }
         }
 
         data.forEach(i => { console.log("Data stream: " + i) })
@@ -705,9 +764,26 @@ export default function CpuScheduling(props) {
         console.log(temp);
         setDisplayBoolean(false);
     }
-    const showProceses = processes.map((proc) => {
-        return (<>
 
+    function addRow (table,procName,arrivalTime,burstTime){
+        var newdata = {procName,arrivalTime,burstTime}    
+        table.concat(newdata); 
+        return table;
+    }
+
+    const addRowRR = () => {
+
+    }
+
+    const addRowPriority = () => {
+
+    }
+
+
+    const showProceses = processes.map((proc) => {
+        return (
+        addRow(proc.name,proc.arrivalTime,proc.BurstTime),
+        <>
             <p>Process: {proc.name} Arrival Time: {proc.arrivalTime} Burst Time: {proc.burstTime} {type === 'priority' ? <>Priority: {proc.priority}</> : null}</p>
         </>
         );
@@ -717,6 +793,8 @@ export default function CpuScheduling(props) {
     const handleChangeCheck = (event) => {
         setChecked(!checked);
     };
+
+    
 
 
     return (
@@ -730,22 +808,32 @@ export default function CpuScheduling(props) {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item  xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); }}>FCFS
+                                               {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
+                                            </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); }}>SJF
+                                               
+                                            </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); }}>Priority
+                                               
+                                            </Button>
                                         </Grid>
                                         <Grid item xs ={12}>
                                             <h1></h1>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>RR</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); }}>RR
+                                               
+                                            </Button>
                                         </Grid>
                                         <Grid item item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeSRTF}>SRTF</Button>
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); }}>SRTF
+                                               
+                                            </Button>
                                         </Grid>
                                         <Grid item>
                                              <FormControlLabel control={<Checkbox 
@@ -779,7 +867,7 @@ export default function CpuScheduling(props) {
                                                   
                                               <Grid> 
                                                    <Grid item xs={12}> 
-                                                        <Paper className={classes.popup}>
+                                                        <Paper className={classes.paperOverlay}>
                                                              <h1>CPU Scheduling: {type} </h1>
                                                         
                                                             <form noValidate autoComplete="on">
@@ -797,19 +885,6 @@ export default function CpuScheduling(props) {
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
                                                             </form>
                                                                 : null}
-                                                            <h3>Algorithm Select</h3>
-                                                            <Select
-                                                                labelId="demo-simple-select-label"
-                                                                id="demo-simple-select"
-                                                                value={type}
-                                                                onChange={handleChange}
-                                                            >
-                                                                <MenuItem value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }}>FCFS</MenuItem>
-                                                                <MenuItem value={'roundRobin'} onClick={() => { settype("roundRobin"); console.log("Selected: RR"); }}>Round Robin</MenuItem>
-                                                                <MenuItem value={'sjf'} onClick={() => { settype("sjf"); console.log("Selected: SJF"); }}>SJF</MenuItem>
-                                                                <MenuItem value={'priority'} onClick={() => { settype("priority"); console.log("Selected: priority"); }}>Priority</MenuItem>
-
-                                                            </Select>
 
                                                             <Grid item xs={12}>
                                                                 <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
@@ -824,7 +899,7 @@ export default function CpuScheduling(props) {
                                         <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
                                     </Grid>
                                     <Grid>
-                                        <Button variant="contained" color="primary">Reset</Button>
+                                        <Button variant="contained" color="primary" onClick = {()=>reset()}>Reset</Button>
                                     </Grid>
                                 </Grid>
                              </Paper>
@@ -844,7 +919,7 @@ export default function CpuScheduling(props) {
                                  </p>
                             </Paper>
                         </Grid>
-                        <Grid item xs={8} container direction="row" justify="flex-start" alignItems="stretch">
+                        <Grid item xs={8} container direction="column" justify="flex-start" alignItems="stretch">
                             <Paper className={classes.paper}>
                                 <h1>CPU Scheduling: {type}</h1>
                                 {displayBoolean ?
@@ -884,22 +959,48 @@ export default function CpuScheduling(props) {
                                         />
                                         
                                     </>
-                                    : null}                                
+                                    : null}
+                                    <h3>  Average Waiting Time: {waitingtime} </h3>
+                                    <h3> Average turnaound Time: {turnaroundTime} </h3>                                
                                         
                                           
                             </Paper>
-                            <Grid>
+                                            
+
+                            <Grid container direction="column" justify="flex-start" alignItems="stretch">
+                                <TableContainer componenet = {Grid}>
+                                    <Table className = {classes.table} aria-label = "simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell className={classes.th} align="center">Process Name</TableCell>
+                                            <TableCell className={classes.th} align="center">Arrival Time</TableCell>
+                                            <TableCell className={classes.th} align="center">Burst Time</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map((row) => (
+                                            <TableRow key={row.name}>
+                                                <TableCell className={classes.tc} align="center" component="th" scope="row">
+                                                    {row.processName}
+                                                </TableCell>        
+                                                <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
+                                                <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+
+                               
+                                           
+                                    </Table>
+                                </TableContainer>  
                                 <form noValidate autoComplete="off">
                                     <h2>List of Processes:</h2> 
-                                    {showProceses}
-                                        
+                                    {showProceses}     
                                 </form>
-                                
-                                <h3>  Average Waiting Time: {waitingtime} </h3>
-                                <h3> Average turnaound Time: {turnaroundTime} </h3>
-                               
                             </Grid>    
-                            <Grid item xs={12}>
+                            
+                         </Grid>
+                         <Grid item xs = {10} container direction="row" justify="center">
                                 <form noValidate autoComplete="off">
                                     <Paper className={classes.fields}>
                                         <Grid container spacing={1}>
@@ -925,7 +1026,6 @@ export default function CpuScheduling(props) {
                                     </Paper>
                                 </form>
                             </Grid>
-                         </Grid>
                     </Grid>
                 </Grid>
             </ThemeProvider>

@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import SaveIcon from '@material-ui/icons/Save';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import NatureIcon from '@material-ui/icons/Nature';
@@ -94,7 +95,7 @@ export default function PersistentDrawerLeft(props) {
                 ]
 
   const CSC139 = [{name:"CPU Scheduling ", url : "/CpuScheduling", logo:ScheduleIcon}
-                  ,{name: "Page Replacement", url:"/PageReplacement", logo:ScheduleIcon},
+                  ,{name: "Page Replacement", url:"/PageReplacement", logo:FileCopyIcon},
                   {name: "Disk Scheduling", url:"/FCFSDisk", logo:SaveIcon}
                 ]
   
