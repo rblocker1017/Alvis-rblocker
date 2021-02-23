@@ -9,6 +9,9 @@ import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/sty
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { grey, green } from '@material-ui/core/colors';
@@ -54,7 +57,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
     height: "100%"
-  }
+  },
+  formControl: {
+    minWidth: 120
+  },
 }));
 
 export default function PageReplacement() {
@@ -150,7 +156,6 @@ export default function PageReplacement() {
                 if (!s.has(pages[i])) {
                     let val = indexes.shift();
 
-
                     s.delete(val);
                     s.add(pages[i])
                     console.log(prevStruct)
@@ -194,6 +199,7 @@ export default function PageReplacement() {
         let page_faults = 0;
         let lruArr = [];
         let prevStruct = []
+        let filler = []
 
         for (let i = 0; i < pages.length; i++) {
             console.log("For Loop");
@@ -203,12 +209,17 @@ export default function PageReplacement() {
                     s.add(pages[i]);
                     prevStruct = [...s]
                     page_faults += 1;
+                    filler = [];
+                    for(let j = i; j < frames-1; j++)
+                    {
+                      filler.push("");
+                    }
                     let arr = {
                         column: [...s],
                         fault: "Fault"
                     }
                     answer.push({
-                        column: [...s],
+                        column: [...s,...filler],
                         fault: "❌"
                     });
 
@@ -280,6 +291,7 @@ export default function PageReplacement() {
         let indexes = []
         let page_faults = 0;
         let prevStruct = []
+        let filler = [];
         for (let i = 0; i < pages.length; i++) {
             //prev struct keeps the order of the numbers correct. Set has unpredictable order.
 
@@ -290,12 +302,17 @@ export default function PageReplacement() {
                     s.add(pages[i]);
                     prevStruct = [...s]
                     page_faults += 1;
+                    filler = [];
+                    for(let j = i; j < frames-1; j++)
+                    {
+                      filler.push("");
+                    }
                     let arr = {
                         column: [...s],
                         fault: "Fault"
                     }
                     answer.push({
-                        column: [...s],
+                        column: [...s,...filler],
                         fault: "❌"
                     });
                     console.log("Set: " + arr.toString())
@@ -412,7 +429,7 @@ export default function PageReplacement() {
   const theme = createMuiTheme({
     palette:{
       primary:{
-        main: grey[900],
+        main: green[900],
       },
       secondary:{
         main: green[900]
@@ -504,9 +521,24 @@ export default function PageReplacement() {
                     />
                 </Grid>
               <Grid item xs = {5}>
-                < TextField id="outlined-size-normal" variant="filled" label="Frames" color = "black" 
+              <FormControl variant = "filled" className={classes.formControl}>
+               <InputLabel id="demo-simple-select-label">Frames</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
                   onChange= {(e) => { setframes(e.target.value) }}
-                />
+                >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={6}>6</MenuItem>
+                <MenuItem value={7}>7</MenuItem>
+                <MenuItem value={8}>8</MenuItem>
+                <MenuItem value={9}>9</MenuItem>
+                </Select>
+               </FormControl>
               </Grid>
               </Grid>
             </Paper>
