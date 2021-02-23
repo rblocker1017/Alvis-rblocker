@@ -11,9 +11,7 @@ import GraphingAlgorithm from "./pages/GraphingAlgorithm";
 import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
 import Sorting from "./pages/Sorting"
-import BinaryTreeTraversal from "./pages/BinaryTreeTraversal";
-import Achievements from "./pages/Achievements";
-import Register from "./pages/Register";
+import BinaryTreeTraversal from "./pages/BinaryTreeTraversal"
 
 function App() {
   return (
@@ -30,10 +28,10 @@ function App() {
         <Route path="/Login" exact component={Login}/>
         <Route path="/Sorting" exact component={Sorting}/>
         <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
-        <Route path="/Achievements" exact component={Achievements} />
-        <Route path="/Register" exact component={Register} />
     </BrowserRouter>
-  </div>
+
+
+    </div>
   );
 }
 
