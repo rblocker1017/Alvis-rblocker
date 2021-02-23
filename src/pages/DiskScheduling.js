@@ -125,6 +125,12 @@ export default function FCFSDisk() {
     }
 
     // all the functions
+    function resetDiskGraph() {
+        let answer = [[0, 0],[0, 1]];
+        setdata(answer);
+        setdisplayBoolean(true);
+    }
+
     function fcfsFunction() {
         let answer = [];
         answer.push(['x', 'Path'])
@@ -500,7 +506,7 @@ export default function FCFSDisk() {
                                             <Grid item xs={12}>
                                             <h1>
                                             </h1>
-                                                <Button variant="contained" color="primary" onClick={renderDiskGraph}>Reset</Button>
+                                                <Button variant="contained" color="primary" onClick={resetDiskGraph}>Reset</Button>
                                             </Grid>
                                         </Grid>
                                     </Paper>
