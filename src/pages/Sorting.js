@@ -3,8 +3,9 @@ import clsx from "clsx";
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { grey, orange } from "@material-ui/core/colors";
+import { grey, green, orange } from "@material-ui/core/colors";
 import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
+import { Update } from '@material-ui/icons';
 
 
 function Sort(a)
@@ -69,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function Sorting() {
   const classes = useStyles();
   const [type, settype] = useState("Insertion");
@@ -81,7 +83,6 @@ export default function Sorting() {
 
     const current = [4, 5, 7, 2, 6, 12, 8]
     const arraysOfArrays = Sort(current)
-    const array=[];
     var [stepCount, setStepCount] = useState(0);
     var [stepInfo, setStepInfo] = useState();
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
@@ -153,9 +154,8 @@ export default function Sorting() {
             setswap2(arraysOfArrays[stepCount].swappedValue2);
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
         }
-
-
     }
+    
     function stepBack() {
 
         if (stepCount > 1) {
@@ -170,8 +170,6 @@ export default function Sorting() {
     const svgRef = useRef();
 
 
-
-
     const listCurrent = arraysOfArrays.map((value, index) =>
         <div><p> </p>
             <p>Step :{++index} Array= {value.data}</p>
@@ -179,8 +177,6 @@ export default function Sorting() {
 
         </div>
     );
-
-
 
     useEffect(() => {
         let x = Math.max(...data)
@@ -281,10 +277,10 @@ export default function Sorting() {
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: grey[900],
+        main: green[900],
       },
       secondary: {
-        main: grey[700],
+        main: green[700],
       },
     },
   });
@@ -365,7 +361,7 @@ export default function Sorting() {
                       <h1></h1>
                     </Grid>
                     <Grid item xs={7}>
-                      <Button variant="contained" color="primary" onClick={Sort}>
+                      <Button variant="contained" color="primary">
                         Insert
                       </Button>
                     </Grid>
