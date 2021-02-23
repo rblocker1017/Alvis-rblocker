@@ -497,6 +497,11 @@ export default function FCFSDisk() {
                                             </h1>
                                                 <Button variant="contained" color="primary" onClick={renderDiskGraph}>Run Disk Scheduling</Button>
                                             </Grid>
+                                            <Grid item xs={12}>
+                                            <h1>
+                                            </h1>
+                                                <Button variant="contained" color="primary" onClick={renderDiskGraph}>Reset</Button>
+                                            </Grid>
                                         </Grid>
                                     </Paper>
                                 </form>
