@@ -1,14 +1,8 @@
-//sorting
-
 import React, { useRef, useState, useEffect } from 'react';
 import clsx from "clsx";
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper } from "@material-ui/core";
-import {
-  makeStyles,
-  ThemeProvider,
-  createMuiTheme,
-} from "@material-ui/core/styles";
+import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { grey, orange } from "@material-ui/core/colors";
 import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
 
@@ -31,17 +25,12 @@ function Sort(a)
                 answer.push({data: array.toString(),
                             swappedValue1: j,
                             swappedValue2: j+1
-                
                 });
             }
          }
     }
     return answer;
-
-   
 }
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,9 +77,11 @@ export default function Sorting() {
   const [flag3, setFlag3] = useState(true);
   const [flag4, setFlag4] = useState(true);
   const [flag5, setFlag5] = useState(true);
-    const [flag6, setFlag6] = useState(true);
+  const [flag6, setFlag6] = useState(true);
+
     const current = [4, 5, 7, 2, 6, 12, 8]
     const arraysOfArrays = Sort(current)
+    const array=[];
     var [stepCount, setStepCount] = useState(0);
     var [stepInfo, setStepInfo] = useState();
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
@@ -175,10 +166,10 @@ export default function Sorting() {
             setswap2(arraysOfArrays[stepCount].swappedValue2);
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
         }
-
-
     }
     const svgRef = useRef();
+
+
 
 
     const listCurrent = arraysOfArrays.map((value, index) =>
@@ -196,15 +187,12 @@ export default function Sorting() {
         const svg = select(svgRef.current);
         const xScale = scaleBand()
             .domain(data.map((value, index) => index))
-            .range([0, 300])
+            .range([-200, 300])
             .padding(0.5);
-
-
-
 
         const yScale = scaleLinear()
             .domain([0, x])
-            .range([150, 0]);
+            .range([370, 5]);
 
         const colorScale = scaleLinear()
             .domain([75, 100, 150])
@@ -215,13 +203,13 @@ export default function Sorting() {
 
         svg
             .select(".x-axis")
-            .style("transform", "translateY(150px)")
-            .call(xAxis).attr("font-size", "15px");
+            .style("transform", "translateY(370px)")
+            .call(xAxis).attr("font-size", "16px");
 
         const yAxis = axisRight(yScale);
         svg
             .select(".y-axis")
-            .style("transform", "translateX(303px)")
+            .style("transform", "translateX(302px)")
             .call(yAxis)
             .attr("font-size", "13px");
 
@@ -249,7 +237,7 @@ export default function Sorting() {
             .style("transform", "scale(1, -1)")
             .attr("x", (value, index) => xScale(index))
 
-            .attr("y", -150)
+            .attr("y", -370)
             .attr("width", xScale.bandwidth())
 
             .on("mouseenter", (value, index) => {
@@ -280,10 +268,7 @@ export default function Sorting() {
 
 
             })
-            .attr("height", value => 150 - yScale(value));
-
-
-
+            .attr("height", value => 370 - yScale(value));
     }, [data], swap1, swap2);
 
   const changeIns = () => {settype("Insertion"); handleClick1();}
@@ -380,7 +365,7 @@ export default function Sorting() {
                       <h1></h1>
                     </Grid>
                     <Grid item xs={7}>
-                      <Button variant="contained" color="primary">
+                      <Button variant="contained" color="primary" onClick={Sort}>
                         Insert
                       </Button>
                     </Grid>
