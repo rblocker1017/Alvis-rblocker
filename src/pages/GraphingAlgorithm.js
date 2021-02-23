@@ -113,9 +113,10 @@ export default function GraphingAlgorithm() {
         setCircles(newcircles);
     };
 
+    // after we add Circle, use its function to reset back original
     function resetForm() {
         document.getElementById("addCircle").reset();
-      };
+    };
 
     // circle being dragged has variable isDragging set to true.
     // e - event listener
@@ -424,7 +425,7 @@ setCircles(tempCircles);
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary"onClick = {()=>resetForm()}> >Reset</Button>
+                                            <Button variant="contained" color="primary"onClick ={resetForm}>Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
