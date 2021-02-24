@@ -81,6 +81,8 @@ export default function Sorting() {
   const [flag5, setFlag5] = useState(true);
   const [flag6, setFlag6] = useState(true);
 
+  const [checked, setChecked] = useState(false)
+
     const current = [4, 5, 7, 2, 6, 12, 8]
     const arraysOfArrays = Sort(current)
     var [stepCount, setStepCount] = useState(0);
@@ -88,7 +90,12 @@ export default function Sorting() {
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
     let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
+    let [newArray, setNewArray] = useState([1,2,3,4]); 
 
+  const addValue = () => {
+    setNewArray(newArray.concat(4));
+  }
+  
   const handleClick1 = () => {
     if (flag1) setFlag1(!flag1);
     setFlag2(true);
@@ -149,7 +156,7 @@ export default function Sorting() {
         if (stepCount < arraysOfArrays.length - 1) {
             setStepCount(stepCount + 1);
             console.log("StepCount in Next: " + stepCount)
-            setData(arraysOfArrays[stepCount].data.split(',').map(Number))
+            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
             setswap1(arraysOfArrays[stepCount].swappedValue1);
             setswap2(arraysOfArrays[stepCount].swappedValue2);
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
@@ -161,7 +168,7 @@ export default function Sorting() {
         if (stepCount > 1) {
             setStepCount(stepCount - 1);
             console.log("StepCount in Prev: " + stepCount)
-            setData(arraysOfArrays[stepCount].data.split(',').map(Number))
+            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
             setswap1(arraysOfArrays[stepCount].swappedValue1);
             setswap2(arraysOfArrays[stepCount].swappedValue2);
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
@@ -178,11 +185,12 @@ export default function Sorting() {
         </div>
     );
 
+
     useEffect(() => {
         let x = Math.max(...data)
         const svg = select(svgRef.current);
         const xScale = scaleBand()
-            .domain(data.map((value, index) => index))
+            .domain(newArray.map((value, index) => index))
             .range([-200, 300])
             .padding(0.5);
 
@@ -195,7 +203,7 @@ export default function Sorting() {
             .range(["green", "green", "green"])
             .clamp(true);
 
-        const xAxis = axisBottom(xScale).ticks(data.length);
+        const xAxis = axisBottom(xScale).ticks(newArray.length);
 
         svg
             .select(".x-axis")
@@ -210,7 +218,7 @@ export default function Sorting() {
             .attr("font-size", "13px");
 
         svg.selectAll("text")
-            .data(data)
+            .data(newArray)
             .enter()
             .append("text")
             .text(function (d) { return d; })
@@ -227,7 +235,7 @@ export default function Sorting() {
 
         svg
             .selectAll(".bar")
-            .data(data)
+            .data(newArray)
             .join("rect")
             .attr("class", "bar")
             .style("transform", "scale(1, -1)")
@@ -265,7 +273,7 @@ export default function Sorting() {
 
             })
             .attr("height", value => 370 - yScale(value));
-    }, [data], swap1, swap2);
+    }, [newArray], swap1, swap2);
 
   const changeIns = () => {settype("Insertion"); handleClick1();}
   const changeSel = () => {settype("Selection"); handleClick2();}
@@ -361,7 +369,7 @@ export default function Sorting() {
                       <h1></h1>
                     </Grid>
                     <Grid item xs={7}>
-                      <Button variant="contained" color="primary">
+                      <Button variant="contained" color="primary" onClick = {addValue}>
                         Insert
                       </Button>
                     </Grid>
