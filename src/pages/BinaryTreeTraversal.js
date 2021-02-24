@@ -473,6 +473,7 @@ export default function BinaryTreeTraversal() {
                         <Grid item xs={9}>
                             <Paper className={classes.paper}>
                                 <h1>Graphing Algorithm: {type}</h1>
+                                <h1>Step: { num }</h1>
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {visualArray.map((rect) => (
