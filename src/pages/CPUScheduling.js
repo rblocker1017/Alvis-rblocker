@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold'
     },
     tc: {
-        border: '1px solid rgba(224, 224, 224, 1)'
+        border: '2px solid rgba(224, 224, 224, 1)'
     }
 }));
 
@@ -637,8 +637,8 @@ export default function CpuScheduling(props) {
     function reset()
     {
         setDisplayBoolean(false);
-        setTurnaroundTime(0);
-        setWaitingTime(0);
+        setTurnaroundTime(null);
+        setWaitingTime(null);
         let empty = [];
         setprocesses(empty);
     }
@@ -765,10 +765,12 @@ export default function CpuScheduling(props) {
         setDisplayBoolean(false);
     }
 
-    function addRow (table,procName,arrivalTime,burstTime){
-        var newdata = {procName,arrivalTime,burstTime}    
+    function addRow (table,procName,arrivalTime,burstTime,timeQ,Priority){
+        var newdata = {procName,arrivalTime,burstTime,timeQ,Priority}    
         table.concat(newdata); 
-        return table;
+            return table;
+    
+        
     }
 
     const addRowRR = () => {
@@ -781,12 +783,18 @@ export default function CpuScheduling(props) {
 
 
     const showProceses = processes.map((proc) => {
-        return (
-        addRow(proc.name,proc.arrivalTime,proc.BurstTime),
-        <>
-            <p>Process: {proc.name} Arrival Time: {proc.arrivalTime} Burst Time: {proc.burstTime} {type === 'priority' ? <>Priority: {proc.priority}</> : null}</p>
-        </>
-        );
+        if (proc.Name == null || proc.arrivalTime == null || proc.BurstTime == null){
+
+         }
+         else{
+            return (
+                addRow(proc.name,proc.arrivalTime,proc.BurstTime,proc.quantum,proc.priority)
+                //<>
+                   // <p>Process: {proc.name} Arrival Time: {proc.arrivalTime} Burst Time: {proc.burstTime} {type === 'priority' ? <>Priority: {proc.priority}</> : null}</p>
+                //</>
+                );
+        }
+        
 
     })
 
@@ -837,9 +845,9 @@ export default function CpuScheduling(props) {
                                         </Grid>
                                         <Grid item>
                                              <FormControlLabel control={<Checkbox 
+                                                onChange={handleChangeCheck}
                                                 checked={checked}
                                                 name="checkedB"
-                                                onChange={handleChangeCheck}
                                                 inputProps={{ 'aria-label': 'primary checkbox' }}
                                                 color={"#000000"} />} 
                                                 label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
@@ -876,11 +884,11 @@ export default function CpuScheduling(props) {
 
 
                                                             </form>
-                                                            {type === "roundRobin" ? <form noValidate autoComplete="on">
+                                                            {type === "Round Robin" ? <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" onChange={(e) => { setQuantum(e.target.value) }} />
                                                             </form>
                                                                 : null}
-                                                            {type === "priority" ? <form noValidate autoComplete="on">
+                                                            {type === "Priority" ? <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
                                                             </form>
                                                                 : null}
@@ -959,14 +967,12 @@ export default function CpuScheduling(props) {
                                         
                                     </>
                                     : null}
-                                    <h3>  Average Waiting Time: {waitingtime} </h3>
-                                    <h3> Average turnaound Time: {turnaroundTime} </h3>                                
-                                        
-                                          
+
+                                      
                             </Paper>
                                             
 
-                            <Grid container direction="column" justify="flex-start" alignItems="stretch">
+                            <Grid item xs = {4} container direction="column" justify="flex-start" alignItems="stretch">
                                 <TableContainer componenet = {Grid}>
                                     <Table className = {classes.table} aria-label = "simple table">
                                         <TableHead>
@@ -974,6 +980,10 @@ export default function CpuScheduling(props) {
                                                 <TableCell className={classes.th} align="center">Process Name</TableCell>
                                                 <TableCell className={classes.th} align="center">Arrival Time</TableCell>
                                                 <TableCell className={classes.th} align="center">Burst Time</TableCell>
+                                                {type === "Round Robin" ? <TableCell className={classes.th} align="center">Time Quantum</TableCell>
+                                                                : null}
+                                                {type === "Priority" ? <TableCell className={classes.th} align="center">Priority</TableCell>
+                                                                : null}
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -984,11 +994,19 @@ export default function CpuScheduling(props) {
                                                     </TableCell>        
                                                     <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
                                                     <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                                    {type === "Round Robin" ? <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
+                                                                : null}
+                                                    {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                                                : null}
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>  
+                                <Grid item xs = {8} container direction="column"  justify="flex-end" alignItems="flex-start">
+                                    <h4>  Average Waiting Time: {waitingtime} </h4>
+                                    <h4> Average Turnaound Time: {turnaroundTime} </h4>                                
+                                </Grid>  
                             </Grid>    
                             
                          </Grid>
@@ -996,7 +1014,7 @@ export default function CpuScheduling(props) {
                                 <form noValidate autoComplete="off">
                                     <Paper className={classes.fields}>
                                         <Grid container spacing={1}>
-                                        <Grid item xs={2}></Grid>
+                                        <Grid item xs={1}></Grid>
                                         <Grid item>
                                             <Button variant="contained" color="primary">
                                             Step Back
