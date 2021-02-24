@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -84,6 +84,9 @@ export default function FCFSDisk() {
     const [direction, setdirection] = useState("inward")
     const [checked, setChecked] = useState(true);
     const [seekTime, setseekTime] = useState(0)
+    let textInput1 = useRef(null);
+    let textInput2 = useRef(null);
+    let textInput3 = useRef(null);
 
     function renderDiskGraph() {
         switch (type) {
@@ -436,25 +439,19 @@ export default function FCFSDisk() {
                                         <Grid item xs={4}>
                                             <Button variant="contained" color="primary" value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }} >LOOK</Button>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
+                                        <Grid item xs={12}><h1></h1></Grid>
                                         <Grid item xs={4}>
                                             <Button variant="contained" color="primary" value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }} >C-LOOK</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'fcfs'} onChange={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
+                                            <Button variant="contained" color="primary" value={'fcfs'} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
                                         </Grid>
                                         <Grid item xs={4}>
                                             <Button variant="contained" color="primary" value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }} >SSTF</Button>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
+                                        <Grid item xs={12}><h1></h1></Grid>
                                         <Grid item xs={6}>
-                                            <Button variant="contained" color="primary" value={'outward'} onChange={() => { setdirection("outward"); console.log("Selected: outward"); }} >Inwards</Button>
+                                            <Button variant="contained" color="primary" value={'outward'} onClick={() => { setdirection("outward"); console.log("Selected: outward"); }} >Inwards</Button>
                                         </Grid>
                                         <Grid item xs={6}>
                                             <Button variant="contained" color="primary" value={'inward'} onClick={() => { setdirection("inward"); console.log("Selected: inward"); }} >Outwards</Button>
@@ -462,8 +459,7 @@ export default function FCFSDisk() {
                                     </Grid>
                                 </Paper>
                             </Grid>
-                            <h2>
-                            </h2>
+                            <h2></h2>
                             <Paper className={classes.code}>
                                 <h3>
                                     CODE
@@ -490,23 +486,21 @@ export default function FCFSDisk() {
                                     <Paper className={classes.fields}>
                                         <Grid container>
                                             <Grid item xs={4}>
-                                                <TextField id="outlined-size-normal" variant="filled" label="Disk Size" onChange={(e) => { setdiskSize(e.target.value) }} />
+                                                <TextField id="outlined-size-normal" variant="filled" label="Disk Size" inputRef={textInput1} type="text" onChange={(e) => { setdiskSize(e.target.value); }} />
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" onChange={(e) => { setstarting(parseInt(e.target.value)) }} />
+                                                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" inputRef={textInput2} type="text" onChange={(e) => { setstarting(parseInt(e.target.value)) }} />
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }} />
+                                                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" inputRef={textInput3} type="text" onChange={(e) => { setinput(e.target.value.split(',').map(Number)); }} />
                                             </Grid>
                                             <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
+                                            <h1></h1>
                                                 <Button variant="contained" color="primary" onClick={renderDiskGraph}>Run Disk Scheduling</Button>
                                             </Grid>
                                             <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                                <Button variant="contained" color="primary" onClick={resetDiskGraph}>Reset</Button>
+                                            <h1></h1>
+                                                <Button variant="contained" color="primary" onClick={() => { renderDiskGraph(); setdiskSize(0); setstarting(0); setinput([]); {textInput1.current.value = ""; textInput2.current.value = ""; textInput3.current.value = "";} }}>Reset</Button>
                                             </Grid>
                                         </Grid>
                                     </Paper>
