@@ -801,6 +801,16 @@ export default function CpuScheduling(props) {
 
     const handleChangeCheck = (event) => {
         setChecked(!checked);
+        checkCheckbox();
+    }
+
+    const checkCheckbox = () => {
+        if (checked && type == 'Priority'){
+            settype('Preemptive Priority');
+        }
+        else if (!checked && type == 'Preemptive Priority'){
+            settype('Priority');
+        }
     };
 
     
@@ -827,7 +837,7 @@ export default function CpuScheduling(props) {
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); }}>Priority
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); checkCheckbox()}}>Priority
                                                
                                             </Button>
                                         </Grid>
@@ -845,7 +855,7 @@ export default function CpuScheduling(props) {
                                             </Button>
                                         </Grid>
                                         <Grid item>
-                                             <FormControlLabel control={<Checkbox 
+                                             <FormControlLabel control={<Checkbox    
                                                 onChange={handleChangeCheck}
                                                 checked={checked}
                                                 name="checkedB"
@@ -889,7 +899,11 @@ export default function CpuScheduling(props) {
                                                                 <TextField id="outlined-size-normal"  variant="outlined" label="Time Quantum" defaultValue = {quantum} onChange={(e) => { setQuantum(e.target.value) }} />
                                                             </form>
                                                                 : null}
-                                                            {type === "Priority" ? <form noValidate autoComplete="on">
+                                                            {type === "Priority"  ? <form noValidate autoComplete="on">
+                                                                <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
+                                                            </form>
+                                                                : null}
+                                                            {type === "Preemptive Priority"  ? <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
                                                             </form>
                                                                 : null}
@@ -985,6 +999,8 @@ export default function CpuScheduling(props) {
                                                 <TableCell className={classes.th} align="center">Burst Time</TableCell>
                                                 {type === "Priority" ? <TableCell className={classes.th} align="center">Priority</TableCell>
                                                                 : null}
+                                                {type === "Preemptive Priority" ? <TableCell className={classes.th} align="center">Priority</TableCell>
+                                                                : null}
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -995,7 +1011,9 @@ export default function CpuScheduling(props) {
                                                     </TableCell>        
                                                     <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
                                                     <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
-                                                    {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                                    {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.priority}</TableCell>
+                                                                : null}
+                                                    {type === "Preemptive Priority" ? <TableCell className={classes.tc} align="center">{row.priority}</TableCell>
                                                                 : null}
                                                 </TableRow>
                                             ))}
