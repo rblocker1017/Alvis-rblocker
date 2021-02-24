@@ -665,7 +665,7 @@ export default function CpuScheduling(props) {
     const [waitingtime, setWaitingTime] = useState();
     const [turnaroundTime, setTurnaroundTime] = useState();
     const [priority, setpriority] = useState(0)
-    const [select, setSelect] = useState({});
+    const [selected, setSelected] = useState({});
 
     function createData(procName, arrivalTime, burstTime,priority) {
         return { procName, arrivalTime, burstTime,priority};
@@ -1011,7 +1011,7 @@ export default function CpuScheduling(props) {
                                 <TableContainer componenet = {Grid}>
                                     <Table className = {classes.table} aria-label = "simple table">
                                         <TableHead>
-                                            <TableRow key={row.name} onClick={selectRow}>
+                                            <TableRow>
                                                 <TableCell className={classes.th} align="center">Process Name</TableCell>
                                                 <TableCell className={classes.th} align="center">Arrival Time</TableCell>
                                                 <TableCell className={classes.th} align="center">Burst Time</TableCell>
@@ -1021,7 +1021,7 @@ export default function CpuScheduling(props) {
                                         </TableHead>
                                         <TableBody>
                                             {processes.map((row) => (
-                                                <TableRow key={row.name}>
+                                                <TableRow key={row.name} onClick={selectRow}>
                                                     <TableCell id={row.name}  className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : {backgroundColor:"white"}} align="center" component="th" scope="row">
 
                                                         {row.name}
