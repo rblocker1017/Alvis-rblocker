@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         color: theme.palette.text.secondary,
         height: "100%",
-        width: "100%",
+        width: "125%",
     },
     buttons: {
         backgroundColor: grey[200],
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        height: "115%",
+        height: "76%",
     },
     fields: {
         backgroundColor: grey[200],
