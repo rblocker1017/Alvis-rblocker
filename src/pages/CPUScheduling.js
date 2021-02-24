@@ -665,6 +665,7 @@ export default function CpuScheduling(props) {
     const [waitingtime, setWaitingTime] = useState();
     const [turnaroundTime, setTurnaroundTime] = useState();
     const [priority, setpriority] = useState(0)
+    const [selected, setSelected] = useState({});
 
     function createData(procName, arrivalTime, burstTime,priority) {
         return { procName, arrivalTime, burstTime,priority};
@@ -760,7 +761,7 @@ export default function CpuScheduling(props) {
     const handleAddProc = () => {
         let temp = processes.slice();
 
-        temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)) });
+        temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)), select: false });
         setprocesses(temp);
         console.log(temp);
         setDisplayBoolean(false);
@@ -802,18 +803,49 @@ export default function CpuScheduling(props) {
     const handleChangeCheck = (event) => {
         setChecked(!checked);
         checkCheckbox();
-    }
-
-    const checkCheckbox = () => {
-        if (checked && type == 'Priority'){
-            settype('Preemptive Priority');
-        }
-        else if (!checked && type == 'Preemptive Priority'){
-            settype('Priority');
-        }
     };
 
-    
+    const checkCheckbox = () => {
+        if (checked && type != 'Preemptive Priority'){
+            settype('Preemptive Priority')
+        }
+        else if (!checked && type != 'Priority'){
+            settype('Priority')
+        }
+    }
+
+    const selectRow = (e) => {
+        const name = e.target.id;
+        let tempProcesses = processes
+        if (name === selected.name) {
+            tempProcesses = processes.map(process => {
+                if (process.select) {
+                    setSelected({});
+                    return {
+                        ...process,
+                        select: false
+                    }
+                }
+                return process;
+            });
+        }
+        else {
+            tempProcesses = tempProcesses.map(process => {
+                if (name === process.name) {
+                    setSelected(process);
+                    return {
+                        ...process,
+                        select: true
+                    }
+                }
+                return {
+                    ...process,
+                    select: false
+                };
+            });
+        }
+        setprocesses(tempProcesses);
+    }    
 
 
     return (
@@ -837,7 +869,7 @@ export default function CpuScheduling(props) {
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); checkCheckbox()}}>Priority
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { checkCheckbox(); console.log("Selected: priority"); }}>Priority
                                                
                                             </Button>
                                         </Grid>
@@ -855,9 +887,10 @@ export default function CpuScheduling(props) {
                                             </Button>
                                         </Grid>
                                         <Grid item>
-                                             <FormControlLabel control={<Checkbox    
-                                                onChange={handleChangeCheck}
+                                             <FormControlLabel control={<Checkbox 
                                                 checked={checked}
+                                                onClick={() => {handleChangeCheck(); checkCheckbox()}}
+                                                onChange={() => {handleChangeCheck(); checkCheckbox()}}
                                                 name="checkedB"
                                                 inputProps={{ 'aria-label': 'primary checkbox' }}
                                                 color={"#000000"} />} 
@@ -899,11 +932,11 @@ export default function CpuScheduling(props) {
                                                                 <TextField id="outlined-size-normal"  variant="outlined" label="Time Quantum" defaultValue = {quantum} onChange={(e) => { setQuantum(e.target.value) }} />
                                                             </form>
                                                                 : null}
-                                                            {type === "Priority"  ? <form noValidate autoComplete="on">
+                                                            {type === "Priority" ? <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
                                                             </form>
                                                                 : null}
-                                                            {type === "Preemptive Priority"  ? <form noValidate autoComplete="on">
+                                                            {type === "Preemptive Priority" ? <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
                                                             </form>
                                                                 : null}
@@ -1005,16 +1038,24 @@ export default function CpuScheduling(props) {
                                         </TableHead>
                                         <TableBody>
                                             {processes.map((row) => (
-                                                <TableRow key={row.name}>
-                                                    <TableCell className={classes.tc} align="center" component="th" scope="row">
+                                                <TableRow key={row.name} onClick={selectRow}>
+                                                    <TableCell id={row.name}  className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : {backgroundColor:"white"}} align="center" component="th" scope="row">
                                                         {row.name}
                                                     </TableCell>        
-                                                    <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
-                                                    <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
-                                                    {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.priority}</TableCell>
-                                                                : null}
-                                                    {type === "Preemptive Priority" ? <TableCell className={classes.tc} align="center">{row.priority}</TableCell>
-                                                                : null}
+                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                        {row.arrivalTime}
+                                                    </TableCell>
+                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green" , color: "white"} : { backgroundColor: "white" }} align="center">
+                                                        {row.burstTime}
+                                                    </TableCell>
+                                                    {type === "Priority" ? <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green" , color: "white"} : { backgroundColor: "white" }} align="center">
+                                                        {row.priority}
+                                                    </TableCell>
+                                                        : null}
+                                                     {type === "Preemptive Priority" ? <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green" , color: "white"} : { backgroundColor: "white" }} align="center">
+                                                        {row.priority}
+                                                    </TableCell>
+                                                        : null}
                                                 </TableRow>
                                             ))}
                                         </TableBody>
