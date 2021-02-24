@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        height: "115%"
+        height: "76%"
     },
     fields:
     {
