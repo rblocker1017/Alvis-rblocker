@@ -90,7 +90,7 @@ export default function Sorting() {
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
     let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState([1,2,3,4]); 
+    let [newArray, setNewArray] = useState([4,5,7,2,6,12,8]); 
 
   const addValue = () => {
     setNewArray(newArray.concat(4));
