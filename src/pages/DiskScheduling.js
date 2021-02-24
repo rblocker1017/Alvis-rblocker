@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey, orange, green } from '@material-ui/core/colors';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -416,7 +416,7 @@ export default function FCFSDisk() {
     const theme = createMuiTheme({
         palette: {
             primary: {
-                main: grey[900],
+                main: green[900],
             }
         }
     })
