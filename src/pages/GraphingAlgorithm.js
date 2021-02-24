@@ -7,6 +7,9 @@ import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva'
 import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
+import { kruskalAlgorithm } from "./Algorithms/Graphing";
+
+
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 950;
@@ -73,21 +76,49 @@ function pointValues(circle) {
 
 // Main function that keeps track of, displays and calculates the graphing functions
 export default function GraphingAlgorithm() {
-    // store styles
-    const classes = useStyles();
-
-    // generate function states
-    const [type, setType] = useState("Prim");
-    const [circles, setCircles] = React.useState(INIT);
-    const [lines, setLines] = React.useState(CONNECT);
-    const [connecting, setConnecting] = React.useState(false);
-    const [selected, setSelected] = React.useState({});
-    const [connections, setConnections] = React.useState(CURRENT_CON);
+   
+        // store styles
+        const classes = useStyles();
+    
+        // generate function states
+        const [type, setType] = useState("Prim");
+        const [circles, setCircles] = React.useState(INIT);
+        const [lines, setLines] = React.useState(CONNECT);
+        const [connecting, setConnecting] = React.useState(false);
+        const [selected, setSelected] = React.useState({});
+        const [connections, setConnections] = React.useState(CURRENT_CON);
+        const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
+        const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
+        const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+    
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
-    const changeKruskal = () => setType("Kruskal");
+    //const changeKruskal = () => setType("Kruskal");
+    const changeKruskal = () => {
+        setType("Kruskal");
+        let newAlgo = kruskalAlgorithm(startNode, endNode, lines, connections);
+        let clearLines = lines.map(line => {
+            return {
+                ...line,
+                stroke: "black"
+            };
+        });
+        setLines(
+            clearLines.map(line => {
+                if (newAlgo.includes(line.id)) {
+                    return {
+                        ...line,
+                        stroke: "red"
+                    };
+                }
+                return line;
+            })
+        );
+        setAlgoArray(newAlgo);
+    }
+
 
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
@@ -112,12 +143,50 @@ export default function GraphingAlgorithm() {
         // set circle array state to the new concatinated array
         setCircles(newcircles);
     };
-
-    // after we add Circle, use its function to reset back original
-    function resetForm() {
-        document.getElementById("addCircle").reset();
+  
+  /*
+    const stepForward = () => {
+        let tempCircles = circles;
+        if (num < tempCircles.length) {
+            tempCircles[inOrderArray[num]].stroke = "red";
+            visualArray[num].value = tempCircles[inOrderArray[num]].value;
+            changeIteration(num + 1);
+        }
+        setCircles(tempCircles);
+        setVisualArray(visualArray);
+        return setCircles(tempCircles), setVisualArray(visualArray);
     };
 
+    const stepBack = () => {
+        let tempCircles = circles;
+        let tempArray = visualArray;
+        if (num - 1 < 0) return;        
+        else {            
+            tempCircles[inOrderArray[num - 1]].stroke = "black";
+            tempArray[num - 1].value = null;
+            setCircles(tempCircles);
+            setVisualArray(tempArray);
+            if (num - 1 >= 0) changeIteration(num - 1);
+            console.log(num);
+            return setCircles(tempCircles), setVisualArray(tempArray);
+        }
+    };
+
+     // after we add Circle, use its function to reset graph back original
+    const resetGraph = () => {
+        circles.forEach((circle) => (circle.stroke = "black"));
+        visualArray.forEach((rect) => (rect.value = null));
+        setCircles(circles);
+        setVisualArray(visualArray);
+        changeIteration(0);
+        return setCircles(circles);
+    };
+      const reset = (e) => {
+        setCircles(INIT);
+        setLines(CONNECT);
+    };
+    
+    */
     // circle being dragged has variable isDragging set to true.
     // e - event listener
     const handleDragStart = (e) => {
@@ -425,7 +494,7 @@ setCircles(tempCircles);
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary"onClick ={resetForm}>Reset</Button>
+                                            <Button variant="contained" color="primary"onClick ={changeKruskal}>Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
@@ -538,13 +607,13 @@ setCircles(tempCircles);
                                             <Grid item xs={1}>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Step Back</Button>
+                                                <Button variant="contained" color="primary" >Step Back</Button>
                                             </Grid>
                                             <Grid item >
                                                 <Button variant="contained" color="primary">Pause</Button>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Step Forward</Button>
+                                                <Button variant="contained" color="primary" >Step Forward</Button>
                                             </Grid>
                                             <Grid item xs={2}>
                                             </Grid>
