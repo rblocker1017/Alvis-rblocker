@@ -665,6 +665,7 @@ export default function CpuScheduling(props) {
     const [waitingtime, setWaitingTime] = useState();
     const [turnaroundTime, setTurnaroundTime] = useState();
     const [priority, setpriority] = useState(0)
+    const [select, setSelect] = useState({});
 
     function createData(procName, arrivalTime, burstTime,priority) {
         return { procName, arrivalTime, burstTime,priority};
@@ -760,7 +761,7 @@ export default function CpuScheduling(props) {
     const handleAddProc = () => {
         let temp = processes.slice();
 
-        temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)) });
+        temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)), select: false });
         setprocesses(temp);
         console.log(temp);
         setDisplayBoolean(false);
@@ -803,7 +804,38 @@ export default function CpuScheduling(props) {
         setChecked(!checked);
     };
 
-    
+    const selectRow = (e) => {
+        const name = e.target.id;
+        let tempProcesses = processes
+        if (name === selected.name) {
+            tempProcesses = processes.map(process => {
+                if (process.select) {
+                    setSelected({});
+                    return {
+                        ...process,
+                        select: false
+                    }
+                }
+                return process;
+            });
+        }
+        else {
+            tempProcesses = tempProcesses.map(process => {
+                if (name === process.name) {
+                    setSelected(process);
+                    return {
+                        ...process,
+                        select: true
+                    }
+                }
+                return {
+                    ...process,
+                    select: false
+                };
+            });
+        }
+        setprocesses(tempProcesses);
+    }    
 
 
     return (
@@ -979,7 +1011,7 @@ export default function CpuScheduling(props) {
                                 <TableContainer componenet = {Grid}>
                                     <Table className = {classes.table} aria-label = "simple table">
                                         <TableHead>
-                                            <TableRow>
+                                            <TableRow key={row.name} onClick={selectRow}>
                                                 <TableCell className={classes.th} align="center">Process Name</TableCell>
                                                 <TableCell className={classes.th} align="center">Arrival Time</TableCell>
                                                 <TableCell className={classes.th} align="center">Burst Time</TableCell>
@@ -990,12 +1022,19 @@ export default function CpuScheduling(props) {
                                         <TableBody>
                                             {processes.map((row) => (
                                                 <TableRow key={row.name}>
-                                                    <TableCell className={classes.tc} align="center" component="th" scope="row">
+                                                    <TableCell id={row.name}  className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : {backgroundColor:"white"}} align="center" component="th" scope="row">
+
                                                         {row.name}
                                                     </TableCell>        
-                                                    <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
-                                                    <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
-                                                    {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                                {row.arrivalTime}
+                                                    </TableCell>
+                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green" , color: "white"} : { backgroundColor: "white" }} align="center">
+                                                            {row.burstTime}
+                                                    </TableCell>
+                                                    {type === "Priority" ? <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green" , color: "white"} : { backgroundColor: "white" }} align="center">
+                                                            {row.burstTime}
+                                                    </TableCell>
                                                                 : null}
                                                 </TableRow>
                                             ))}
