@@ -540,13 +540,7 @@ export default function BinaryTreeTraversal() {
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />
-                                                <Label
-                                                    x={(line.points[0] + line.points[2]) / 2}
-                                                    y={(line.points[1] + line.points[3]) / 2}
-                                                >
-                                                    <Tag fill={"white"} />
-                                                    <Text text={line.value} fill="black" />
-                                                </Label>
+
                                             </React.Fragment>
                                         ))}
                                     </Layer>
