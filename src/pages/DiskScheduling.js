@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, orange } from '@material-ui/core/colors';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -17,6 +18,7 @@ import DiskGraph from "./DiskGraph";
 import { values, scan, set } from 'd3';
 import '../styles/DiskScheduling.css'
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -27,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         height: "115%",
         width: "100%"
+    },
+    graphingpaper: {
+        padding: theme.spacing(3),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
     buttons:
     {
@@ -51,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
         height: "100%"
-    }
+    },
 }));
 
 export default function FCFSDisk() {
@@ -79,6 +86,9 @@ export default function FCFSDisk() {
     const [direction, setdirection] = useState("inward")
     const [checked, setChecked] = useState(true);
     const [seekTime, setseekTime] = useState(0)
+    let textInput1 = useRef(null);
+    let textInput2 = useRef(null);
+    let textInput3 = useRef(null);
 
     function renderDiskGraph() {
         switch (type) {
@@ -120,6 +130,12 @@ export default function FCFSDisk() {
     }
 
     // all the functions
+    function resetDiskGraph() {
+        let answer = [[0, 0], [0, 1]];
+        setdata(answer);
+        setdisplayBoolean(true);
+    }
+
     function fcfsFunction() {
         let answer = [];
         answer.push(['x', 'Path'])
@@ -417,79 +433,77 @@ export default function FCFSDisk() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">SCAN</Button>
+                                            <Button variant="contained" color="primary" value={'scan'} onClick={() => { settype("scan"); console.log("Selected: SCAN"); }} >SCAN</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">C-SCAN</Button>
+                                            <Button variant="contained" color="primary" value={'cscan'} onClick={() => { settype("cscan"); console.log("Selected: cscan"); }} >C-SCAN</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">LOOK</Button>
+                                            <Button variant="contained" color="primary" value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }} >LOOK</Button>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
+                                        <Grid item xs={12}><h1></h1></Grid>
+                                        <Grid item xs={4}>
+                                            <Button variant="contained" color="primary" value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }} >C-LOOK</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">C-LOOK</Button>
+                                            <Button variant="contained" color="primary" value={'fcfs'} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">FCFS</Button>
+                                            <Button variant="contained" color="primary" value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }} >SSTF</Button>
                                         </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color="primary">SSTF</Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
+                                        <Grid item xs={12}><h1></h1></Grid>
+                                        <Grid item xs={6}>
+                                            <Button variant="contained" color="primary" value={'outward'} onClick={() => { setdirection("inward"); console.log("Selected: outward"); }} >Inwards</Button>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Button variant="contained" color="primary">Inwards</Button>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Button variant="contained" color="primary">Outwards</Button>
+                                            <Button variant="contained" color="primary" value={'inward'} onClick={() => { setdirection("outward"); console.log("Selected: inward"); }} >Outwards</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
                             </Grid>
-                            <h2>
-                            </h2>
+                            <h2></h2>
                             <Paper className={classes.code}>
                                 <h3>
                                     CODE
-              </h3>
+                                </h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                                     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                                     Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                                </p>
                             </Paper>
                         </Grid>
                         <Grid item xs={9}>
-                            <Paper className={classes.paper}>
+                            <Paper className={classes.graphingpaper}>
                                 <h1>
-                                    Disk Scheduling
-            </h1>
-                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    Disk Scheduling: {type} { type !== "fcfs" ? direction : "" }
+                                </h1>
+                                    <DiskGraph data={data} size={diskSize} > </DiskGraph>
 
-                                </div>
-
+                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}></div>
                             </Paper>
-                            <h1>
-                            </h1>
                             <Grid item xs={12}>
                                 <form noValidate autoComplete="off">
                                     <Paper className={classes.fields}>
                                         <Grid container>
                                             <Grid item xs={4}>
-                                                <TextField id="outlined-size-normal" variant="filled" label="Disk Size" />
+                                                <TextField id="outlined-size-normal" variant="filled" label="Disk Size" inputRef={textInput1} type="text" onChange={(e) => { setdiskSize(e.target.value); }} />
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" />
+                                                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" inputRef={textInput2} type="text" onChange={(e) => { setstarting(parseInt(e.target.value)) }} />
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" />
+                                                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" inputRef={textInput3} type="text" onChange={(e) => { setinput(e.target.value.split(',').map(Number)); }} />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <h1></h1>
+                                                <Button variant="contained" color="primary" onClick={renderDiskGraph}>Run Disk Scheduling</Button>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <h1></h1>
+                                                <Button variant="contained" color="primary" onClick={() => { renderDiskGraph(); setdiskSize(0); setstarting(0); setinput([]); { textInput1.current.value = ""; textInput2.current.value = ""; textInput3.current.value = ""; } }}>Reset</Button>
                                             </Grid>
                                         </Grid>
                                     </Paper>
