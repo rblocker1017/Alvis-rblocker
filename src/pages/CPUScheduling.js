@@ -869,7 +869,6 @@ export default function CpuScheduling(props) {
                                                    <Grid item xs={12}> 
                                                         <Paper className={classes.paperOverlay}>
                                                              <h1>CPU Scheduling: {type} </h1>
-                                                        
                                                             <form noValidate autoComplete="on">
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
                                                                 <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
@@ -970,33 +969,26 @@ export default function CpuScheduling(props) {
                             <Grid container direction="column" justify="flex-start" alignItems="stretch">
                                 <TableContainer componenet = {Grid}>
                                     <Table className = {classes.table} aria-label = "simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell className={classes.th} align="center">Process Name</TableCell>
-                                            <TableCell className={classes.th} align="center">Arrival Time</TableCell>
-                                            <TableCell className={classes.th} align="center">Burst Time</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map((row) => (
-                                            <TableRow key={row.name}>
-                                                <TableCell className={classes.tc} align="center" component="th" scope="row">
-                                                    {row.processName}
-                                                </TableCell>        
-                                                <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
-                                                <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell className={classes.th} align="center">Process Name</TableCell>
+                                                <TableCell className={classes.th} align="center">Arrival Time</TableCell>
+                                                <TableCell className={classes.th} align="center">Burst Time</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-
-                               
-                                           
+                                        </TableHead>
+                                        <TableBody>
+                                            {processes.map((row) => (
+                                                <TableRow key={row.name}>
+                                                    <TableCell className={classes.tc} align="center" component="th" scope="row">
+                                                        {row.name}
+                                                    </TableCell>        
+                                                    <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
+                                                    <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
                                     </Table>
                                 </TableContainer>  
-                                <form noValidate autoComplete="off">
-                                    <h2>List of Processes:</h2> 
-                                    {showProceses}     
-                                </form>
                             </Grid>    
                             
                          </Grid>
