@@ -639,6 +639,7 @@ export default function CpuScheduling(props) {
         setDisplayBoolean(false);
         setTurnaroundTime(null);
         setWaitingTime(null);
+        setQuantum(null);
         let empty = [];
         setprocesses(empty);
     }
@@ -665,12 +666,12 @@ export default function CpuScheduling(props) {
     const [turnaroundTime, setTurnaroundTime] = useState();
     const [priority, setpriority] = useState(0)
 
-    function createData(procName, arrivalTime, burstTime) {
-        return { procName, arrivalTime, burstTime};
+    function createData(procName, arrivalTime, burstTime,priority) {
+        return { procName, arrivalTime, burstTime,priority};
     }
 
     const rows = [
-        createData('Process Name', 'Arrival Time', 'Burst Time'),
+        createData('Process Name', 'Arrival Time', 'Burst Time','Priority'),
     ]
 
 
@@ -885,7 +886,7 @@ export default function CpuScheduling(props) {
 
                                                             </form>
                                                             {type === "Round Robin" ? <form noValidate autoComplete="on">
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" onChange={(e) => { setQuantum(e.target.value) }} />
+                                                                <TextField id="outlined-size-normal"  variant="outlined" label="Time Quantum" defaultValue = {quantum} onChange={(e) => { setQuantum(e.target.value) }} />
                                                             </form>
                                                                 : null}
                                                             {type === "Priority" ? <form noValidate autoComplete="on">
@@ -929,6 +930,8 @@ export default function CpuScheduling(props) {
                         <Grid item xs={8} container direction="column" justify="flex-start" alignItems="stretch">
                             <Paper className={classes.paper}>
                                 <h1>CPU Scheduling: {type}</h1>
+                                {type === "Round Robin" ? <h3>Time Quantum = {quantum}</h3>
+                                                                : null}
                                 {displayBoolean ?
                                     <>
                                         <p></p>
@@ -980,8 +983,6 @@ export default function CpuScheduling(props) {
                                                 <TableCell className={classes.th} align="center">Process Name</TableCell>
                                                 <TableCell className={classes.th} align="center">Arrival Time</TableCell>
                                                 <TableCell className={classes.th} align="center">Burst Time</TableCell>
-                                                {type === "Round Robin" ? <TableCell className={classes.th} align="center">Time Quantum</TableCell>
-                                                                : null}
                                                 {type === "Priority" ? <TableCell className={classes.th} align="center">Priority</TableCell>
                                                                 : null}
                                             </TableRow>
@@ -994,8 +995,6 @@ export default function CpuScheduling(props) {
                                                     </TableCell>        
                                                     <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
                                                     <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
-                                                    {type === "Round Robin" ? <TableCell className={classes.tc} align="center">{row.arrivalTime}</TableCell>
-                                                                : null}
                                                     {type === "Priority" ? <TableCell className={classes.tc} align="center">{row.burstTime}</TableCell>
                                                                 : null}
                                                 </TableRow>
