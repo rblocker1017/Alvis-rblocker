@@ -30,6 +30,7 @@ import {
 } from "./Shapes/NodeGenerator";
 import trash from '../trash.png';
 
+
 const WIDTH = 1400;
 const HEIGHT = 450;
 

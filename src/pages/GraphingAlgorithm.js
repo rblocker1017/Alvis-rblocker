@@ -2,7 +2,7 @@
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, orange } from '@material-ui/core/colors';
+import { grey, orange, green } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
 import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
@@ -87,6 +87,22 @@ export default function GraphingAlgorithm() {
     const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
     const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+
+    const handleChange = (e) => {
+        console.log(e.target.value);
+        setType(e.target.value);
+        switch (e.target.value) {
+            case "Prim":
+                changePrim();
+                break;
+            case "Kruskal":
+                changeKruskal();
+                break;
+            case "Dijkstras":
+                changeDij();
+                break;
+        }
+    }
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
@@ -386,7 +402,10 @@ export default function GraphingAlgorithm() {
     const theme = createMuiTheme({
         palette: {
             primary: {
-                main: grey[900],
+                main: green[800],
+            },
+            secondary: {
+                main: green[200]
             }
         }
     })
@@ -402,13 +421,13 @@ export default function GraphingAlgorithm() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePrim}>Prim</Button>
+                                            <Button variant="contained" color={type === "Prim" ? "secondary" : "primary"} className={classes.button} onClick={changePrim}>Prim</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeDij}>Dijkstras</Button>
+                                            <Button variant="contained" color={type === "Dijkstras" ? "secondary" : "primary"} className={classes.button} onClick={changeDij}>Dijkstras</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeKruskal}>Kruskal</Button>
+                                            <Button variant="contained" color={type==="Kruskal" ? "secondary" : "primary"} className={classes.button} onClick={changeKruskal}>Kruskal</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
