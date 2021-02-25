@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 import clsx from "clsx";
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper } from "@material-ui/core";
-import {
-  makeStyles,
-  ThemeProvider,
-  createMuiTheme,
-} from "@material-ui/core/styles";
-import { grey, orange } from "@material-ui/core/colors";
+import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { grey, green, orange } from "@material-ui/core/colors";
+import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
+import { Update } from '@material-ui/icons';
+
+
+function Sort(a)
+{   
+    let len = a.length-1; 
+    let array = a; 
+    let answer = [];
+    let list = [];
+    let temp =0; 
+    for(let i =0; i<len ; i++){
+         
+         for(let j = 0; j<len ; j++){
+            
+            if(array[j]> array[j+1] ){
+                temp = array[j];
+                array[j] = array[j+1]; 
+                array[j+1] = temp; 
+                answer.push({data: array.toString(),
+                            swappedValue1: j,
+                            swappedValue2: j+1
+                });
+            }
+         }
+    }
+    return answer;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function Sorting() {
   const classes = useStyles();
   const [type, settype] = useState("Insertion");
@@ -56,6 +81,21 @@ export default function Sorting() {
   const [flag5, setFlag5] = useState(true);
   const [flag6, setFlag6] = useState(true);
 
+  const [checked, setChecked] = useState(false)
+
+    const current = [4, 5, 7, 2, 6, 12, 8]
+    const arraysOfArrays = Sort(current)
+    var [stepCount, setStepCount] = useState(0);
+    var [stepInfo, setStepInfo] = useState();
+    let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
+    let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
+    let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
+    let [newArray, setNewArray] = useState([4,5,7,2,6,12,8]); 
+
+  const addValue = () => {
+    setNewArray(newArray.concat(4));
+  }
+  
   const handleClick1 = () => {
     if (flag1) setFlag1(!flag1);
     setFlag2(true);
@@ -109,7 +149,131 @@ export default function Sorting() {
     setFlag4(true);
     setFlag5(true);
   };
-  let name = "test";
+    let name = "test";
+
+    function stepForward() {
+
+        if (stepCount < arraysOfArrays.length - 1) {
+            setStepCount(stepCount + 1);
+            console.log("StepCount in Next: " + stepCount)
+            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
+            setswap1(arraysOfArrays[stepCount].swappedValue1);
+            setswap2(arraysOfArrays[stepCount].swappedValue2);
+            setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
+        }
+    }
+    
+    function stepBack() {
+
+        if (stepCount > 1) {
+            setStepCount(stepCount - 1);
+            console.log("StepCount in Prev: " + stepCount)
+            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
+            setswap1(arraysOfArrays[stepCount].swappedValue1);
+            setswap2(arraysOfArrays[stepCount].swappedValue2);
+            setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
+        }
+    }
+    const svgRef = useRef();
+
+
+    const listCurrent = arraysOfArrays.map((value, index) =>
+        <div><p> </p>
+            <p>Step :{++index} Array= {value.data}</p>
+            <p>Values Swapped: {value.swappedValue1} , {value.swappedValue2} </p>
+
+        </div>
+    );
+
+
+    useEffect(() => {
+        let x = Math.max(...data)
+        const svg = select(svgRef.current);
+        const xScale = scaleBand()
+            .domain(newArray.map((value, index) => index))
+            .range([-200, 300])
+            .padding(0.5);
+
+        const yScale = scaleLinear()
+            .domain([0, x])
+            .range([370, 5]);
+
+        const colorScale = scaleLinear()
+            .domain([75, 100, 150])
+            .range(["green", "green", "green"])
+            .clamp(true);
+
+        const xAxis = axisBottom(xScale).ticks(newArray.length);
+
+        svg
+            .select(".x-axis")
+            .style("transform", "translateY(370px)")
+            .call(xAxis).attr("font-size", "16px");
+
+        const yAxis = axisRight(yScale);
+        svg
+            .select(".y-axis")
+            .style("transform", "translateX(302px)")
+            .call(yAxis)
+            .attr("font-size", "13px");
+
+        svg.selectAll("text")
+            .data(newArray)
+            .enter()
+            .append("text")
+            .text(function (d) { return d; })
+            .attr("x", function (d, i) {
+                return xScale(i) + xScale.bandwidth() / 2;
+            })
+            .attr("y", function (d) {
+                return yAxis;
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle");
+
+        svg
+            .selectAll(".bar")
+            .data(newArray)
+            .join("rect")
+            .attr("class", "bar")
+            .style("transform", "scale(1, -1)")
+            .attr("x", (value, index) => xScale(index))
+
+            .attr("y", -370)
+            .attr("width", xScale.bandwidth())
+
+            .on("mouseenter", (value, index) => {
+                svg
+                    .selectAll(".tooltip")
+                    .data([value])
+                    .join(enter => enter.append("text").attr("y", yScale(value) - 4))
+                    .attr("class", "tooltip")
+                    .text(value)
+                    .attr("x", xScale(index) + xScale.bandwidth() / 2)
+                    .attr("text-anchor", "middle")
+                    .transition()
+                    .attr("y", yScale(value) - 8)
+                    .attr("opacity", 1);
+            })
+            .on("mouseleave", () => svg.select(".tooltip").remove())
+
+            .attr("fill", (value, index) => {
+                if (index == swap1) {
+                    return "red"
+                }
+                if (index == swap2) {
+
+                    return "red"
+                } else {
+                    return "green"
+                }
+
+
+            })
+            .attr("height", value => 370 - yScale(value));
+    }, [newArray], swap1, swap2);
 
   const changeIns = () => {settype("Insertion"); handleClick1();}
   const changeSel = () => {settype("Selection"); handleClick2();}
@@ -121,10 +285,10 @@ export default function Sorting() {
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: grey[900],
+        main: green[900],
       },
       secondary: {
-        main: grey[700],
+        main: green[700],
       },
     },
   });
@@ -205,7 +369,7 @@ export default function Sorting() {
                       <h1></h1>
                     </Grid>
                     <Grid item xs={7}>
-                      <Button variant="contained" color="primary">
+                      <Button variant="contained" color="primary" onClick = {addValue}>
                         Insert
                       </Button>
                     </Grid>
@@ -234,7 +398,11 @@ export default function Sorting() {
             </Grid>
             <Grid item xs={9}>
               <Paper className={classes.paper}>
-                <h1>Sorting: {type}</h1>
+                              <h1>Sorting: {type}</h1>
+                              <svg ref={svgRef} >
+                                  <g className="x-axis" />
+                                  <g className="y-axis" />
+                              </svg>
               </Paper>
               <h1></h1>
               <Grid item xs={12}>
@@ -243,7 +411,7 @@ export default function Sorting() {
                     <Grid container spacing={1}>
                       <Grid item xs={1}></Grid>
                       <Grid item xs={3}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={stepBack}>
                           Step Back
                         </Button>
                       </Grid>
@@ -253,7 +421,7 @@ export default function Sorting() {
                         </Button>
                       </Grid>
                       <Grid item xs={3}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={stepForward}>
                           Step Forward
                         </Button>
                       </Grid>

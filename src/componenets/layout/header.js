@@ -11,16 +11,13 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import NatureIcon from '@material-ui/icons/Nature';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import LinkRoute from 'react-router-dom/Link';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Route, Switch } from 'react-router-dom';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import trophy from '../../awesome-trophy.png';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 
 
 const drawerWidth = 250;
@@ -109,7 +106,7 @@ export default function PersistentDrawerLeft(props) {
                 ]
 
   const CSC139 = [{name:"CPU Scheduling ", url : "/CpuScheduling", logo:ScheduleIcon}
-                  ,{name: "Page Replacement", url:"/PageReplacement", logo:ScheduleIcon},
+                , { name: "Page Replacement", url: "/PageReplacement", logo: FileCopyIcon},
                   {name: "Disk Scheduling", url:"/FCFSDisk", logo:SaveIcon}
                 ]
   

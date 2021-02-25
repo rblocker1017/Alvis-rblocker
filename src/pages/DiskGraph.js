@@ -12,8 +12,8 @@ export default function DiskGraph(props) {
     <div>
 
       <Chart
-        width={'600px'}
-        height={'400px'}
+        width={'700px'}
+        height={'500px'}
         chartType="LineChart"
         loader={<div>Loading Chart</div>}
         data={props.data}
