@@ -102,12 +102,15 @@ export default function GraphingAlgorithm() {
     const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
     const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+    const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
+    const [step, setStep] = React.useState(0);
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => {
+        let displayTemp = [];
         setType("Kruskal");
         let newAlgo = kruskalAlgorithm(startNode, endNode, lines, connections);
         let clearLines = lines.map(line => {
@@ -116,9 +119,10 @@ export default function GraphingAlgorithm() {
                 stroke: "black"
             };
         });
+        setStep(0)
         setLines(
             clearLines.map(line => {
-                if (newAlgo.includes(line.id)) {
+                if (newAlgo[0] === line.id) {
                     return {
                         ...line,
                         stroke: "red"
@@ -128,6 +132,43 @@ export default function GraphingAlgorithm() {
             })
         );
         setAlgoArray(newAlgo);
+    }
+
+    const stepForward = (e) => {
+        console.log(step);
+        if (step < algoArray.length) {
+            let tempStep = step + 1;
+            setLines(
+                lines.map(line => {
+                    if (line.id === algoArray[tempStep]) {
+                        return {
+                            ...line,
+                            stroke: "red"
+                        };
+                    }
+                    return line;
+                })
+            );
+            setStep(tempStep);
+        }
+    }
+    const stepBack = (e) => {
+        console.log(step)
+        if (step >= 0) {
+            let tempStep = step - 1;
+            setLines(
+                lines.map(line => {
+                    if(line.id === algoArray[step]) {
+                        return {
+                            ...line,
+                            stroke:"black"
+                        }
+                    }
+                    return line;
+                })
+            );
+            setStep(tempStep);
+        }
     }
 
     // Adds a circle to the canvas. It is not attached to any connectors.
@@ -562,13 +603,13 @@ export default function GraphingAlgorithm() {
                                             <Grid item xs={1}>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Step Back</Button>
+                                                <Button variant="contained" color="primary" onClick={stepBack}>Step Back</Button>
                                             </Grid>
                                             <Grid item >
                                                 <Button variant="contained" color="primary">Pause</Button>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Step Forward</Button>
+                                                <Button variant="contained" color="primary" onClick={stepForward}>Step Forward</Button>
                                             </Grid>
                                             <Grid item xs={2}>
                                                 <InputLabel >Connector Value</InputLabel>
