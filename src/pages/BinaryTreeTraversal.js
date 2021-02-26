@@ -331,14 +331,14 @@ export default function BinaryTreeTraversal() {
 
     const insertNode = (e) => {
         if (Object.keys(selectedLeft).length !== 0) {
-            console.log(selectedLeft);
-            console.log(selectedRight);
+            setSelectedLeft({});
             const child = createLeft(selectedLeft, circles.length, WIDTH)
             const connectionBundle = newConnectNodeBTT(selectedLeft, child, connection, true);
             setLines(lines.concat(connectionBundle[0]));
             setCircles(circles.concat(child));
         }
         else if (Object.keys(selectedRight).length !== 0) {
+            setSelectedRight({});
             const child = createRight(selectedRight, circles.length, WIDTH)
             const connectionBundle = newConnectNodeBTT(selectedRight, child, connection, false);
             setLines(lines.concat(connectionBundle[0]));
