@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react';
 import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase } from "@material-ui/core";
+import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, green } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
@@ -101,6 +101,7 @@ export default function GraphingAlgorithm() {
     const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
     const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+    const [conValue, setConValue] = React.useState(0);
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
@@ -370,7 +371,7 @@ export default function GraphingAlgorithm() {
             })
         );
         // creates a temporary new line
-        const connectBundle = connectNode(toCircle, selected, connections);
+        const connectBundle = connectNode(toCircle, selected, connections, conValue);
         // if the line isn't just connecting to itself, add it to the connector state array
         if (JSON.stringify(connectBundle) === '{}') {
             setLines(lines);
@@ -396,6 +397,10 @@ export default function GraphingAlgorithm() {
         setConnecting(!connecting);
         setSelected({});
     };
+
+    const changeConValue = (e) => {
+        setConValue(e.target.value);
+    }
 
     const theme = createMuiTheme({
         palette: {
@@ -554,6 +559,21 @@ export default function GraphingAlgorithm() {
                                                 <Button variant="contained" color="primary">Step Forward</Button>
                                             </Grid>
                                             <Grid item xs={2}>
+                                                <InputLabel >Connector Value</InputLabel>
+                                                <Select
+                                                    value={conValue}
+                                                    onChange={changeConValue}
+                                                >
+                                                    <MenuItem value={1}>1</MenuItem>
+                                                    <MenuItem value={2}>2</MenuItem>
+                                                    <MenuItem value={3}>3</MenuItem>
+                                                    <MenuItem value={4}>4</MenuItem>
+                                                    <MenuItem value={5}>5</MenuItem>
+                                                    <MenuItem value={6}>6</MenuItem>
+                                                    <MenuItem value={7}>7</MenuItem>
+                                                    <MenuItem value={8}>8</MenuItem>
+                                                    <MenuItem value={9}>9</MenuItem>
+                                                </Select>
                                             </Grid>
                                             <Grid item>
                                                 <Button variant="contained" color="primary" onClick={setStart}>Set Start</Button>
