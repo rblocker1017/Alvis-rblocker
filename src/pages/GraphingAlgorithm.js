@@ -119,18 +119,7 @@ export default function GraphingAlgorithm() {
                 stroke: "black"
             };
         });
-        setStep(0)
-        setLines(
-            clearLines.map(line => {
-                if (newAlgo[0] === line.id) {
-                    return {
-                        ...line,
-                        stroke: "red"
-                    };
-                }
-                return line;
-            })
-        );
+        setStep(-1)
         setAlgoArray(newAlgo);
     }
 
@@ -169,6 +158,16 @@ export default function GraphingAlgorithm() {
             );
             setStep(tempStep);
         }
+    }
+    const reset = (e) => {
+        let clearLines = lines.map(line => {
+            return {
+                ...line,
+                stroke: "black"
+            };
+        });
+        setStep(-1);
+        setLines(clearLines);
     }
 
     // Adds a circle to the canvas. It is not attached to any connectors.
@@ -490,7 +489,7 @@ export default function GraphingAlgorithm() {
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" >Reset</Button>
+                                            <Button variant="contained" color="primary" onClick={ reset } >Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
