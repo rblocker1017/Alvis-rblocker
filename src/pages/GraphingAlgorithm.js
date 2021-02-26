@@ -96,12 +96,13 @@ export default function GraphingAlgorithm() {
     const [circles, setCircles] = React.useState(INIT);
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
+    const [circleId, setCircleId] = React.useState(INIT.length);
     const [selected, setSelected] = React.useState({});
     const [connections, setConnections] = React.useState(CURRENT_CON);
     const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
     const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
-    const [conValue, setConValue] = React.useState(0);
+    const [conValue, setConValue] = React.useState(1);
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
@@ -136,7 +137,7 @@ export default function GraphingAlgorithm() {
         const value = Math.floor(Math.random() * 100);
         // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
-            id: circles.length,
+            id: circleId,
             x: (Math.random() * (WIDTH - 200)) + 100,
             y: (Math.random() * (HEIGHT - 200)) + 100,
             width: 100,
@@ -151,6 +152,7 @@ export default function GraphingAlgorithm() {
         });
         // set circle array state to the new concatinated array
         setCircles(newcircles);
+        setCircleId(circleId + 1);
     };
 
     // circle being dragged has variable isDragging set to true.
@@ -402,6 +404,16 @@ export default function GraphingAlgorithm() {
         setConValue(e.target.value);
     }
 
+    const deleteNode = (e) => {
+        console.log(lines);
+        const id = selected.id;
+        if (id != -1) {
+            setCircles(circles.filter(circle => circle.id != id));
+            setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
+            setSelected({ id: -1 });
+        }
+    }
+
     const theme = createMuiTheme({
         palette: {
             primary: {
@@ -588,7 +600,7 @@ export default function GraphingAlgorithm() {
                         </Grid>
                     </Grid>
                 </Grid>
-                <ButtonBase className={classes.trashBtn}>
+                <ButtonBase className={classes.trashBtn} onClick={ deleteNode}>
                     <img src={trash} className={classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>
