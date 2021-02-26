@@ -151,6 +151,15 @@ export default function Sorting() {
   };
     let name = "test";
 
+    function reset() {
+        let tempStep = 0;
+        setStepCount(tempStep);
+        setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
+        setswap1(arraysOfArrays[tempStep].swappedValue1);
+        setswap2(arraysOfArrays[tempStep].swappedValue2);
+        setStepInfo("In step:" + (tempStep) + " We swap index: " + arraysOfArrays[tempStep].swappedValue1 + " and " + arraysOfArrays[tempStep].swappedValue2);
+    }
+
     function stepForward() {
 
         if (stepCount < arraysOfArrays.length - 1) {
@@ -374,7 +383,7 @@ export default function Sorting() {
                       </Button>
                     </Grid>
                     <Grid item xs={3}>
-                      <Button variant="contained" color="primary">
+                                          <Button variant="contained" color="primary" onClick={ reset }>
                         Reset
                       </Button>
                     </Grid>
