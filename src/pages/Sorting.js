@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import clsx from "clsx";
 import Header from "../componenets/layout/header";
-import { Button, Grid, Paper } from "@material-ui/core";
+import { Button, Grid, Paper, ButtonBase } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { grey, green, orange } from "@material-ui/core/colors";
 import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
 import { Update } from '@material-ui/icons';
+import trash from '../trash.png';
 
 
 function Sort(a)
@@ -25,7 +26,7 @@ function Sort(a)
                 array[j+1] = temp; 
                 answer.push({data: array.toString(),
                             swappedValue1: j,
-                            swappedValue2: j+1
+                    swappedValue2: j + 1
                 });
             }
          }
@@ -67,7 +68,20 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     color: theme.palette.text.secondary,
     height: "100%",
-  },
+    },
+    trashBtn: {
+        position: "fixed",
+        top: "85%",
+        right: "1%",
+        '&:hover': {
+            '& $trashImg': {
+                opacity: 1
+            }
+        }
+    },
+    trashImg: {
+        opacity: 0.55
+    }
 }));
 
 
@@ -90,12 +104,22 @@ export default function Sorting() {
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
     let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState([4,5,7,2,6,12,8]); 
+    let [newArray, setNewArray] = useState([4, 5, 7, 2, 6, 12, 8]); 
+    let [selected, setSelected] = useState(-1);
+    const [test, setTest] = useState(-1);
 
   const addValue = () => {
     setNewArray(newArray.concat(4));
   }
-  
+
+    const testFunc = (value) => {
+        setSelected(value);
+    }
+
+    const removeValue = () => {
+        setNewArray(newArray.filter(node => node !== selected));
+    }
+
   const handleClick1 = () => {
     if (flag1) setFlag1(!flag1);
     setFlag2(true);
@@ -183,7 +207,7 @@ export default function Sorting() {
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
         }
     }
-    const svgRef = useRef();
+    const svgRef = useState();
 
 
     const listCurrent = arraysOfArrays.map((value, index) =>
@@ -266,9 +290,11 @@ export default function Sorting() {
                     .attr("y", yScale(value) - 8)
                     .attr("opacity", 1);
             })
+            .on("click", (value, index) => {
+                testFunc(value);
+            })
             .on("mouseleave", () => svg.select(".tooltip").remove())
-
-            .attr("fill", (value, index) => {
+                .attr("fill", (value, index) => {
                 if (index == swap1) {
                     return "red"
                 }
@@ -279,10 +305,10 @@ export default function Sorting() {
                     return "green"
                 }
 
-
             })
-            .attr("height", value => 370 - yScale(value));
-    }, [newArray], swap1, swap2);
+
+            .attr("height", value => 370 - yScale(value))
+    }, [newArray], swap1, swap2, test);
 
   const changeIns = () => {settype("Insertion"); handleClick1();}
   const changeSel = () => {settype("Selection"); handleClick2();}
@@ -441,7 +467,10 @@ export default function Sorting() {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+              </Grid>
+              <ButtonBase className={classes.trashBtn} onClick={removeValue}>
+                  <img src={trash} className={classes.trashImg} />
+              </ButtonBase>
       </ThemeProvider>
     </Header>
   );

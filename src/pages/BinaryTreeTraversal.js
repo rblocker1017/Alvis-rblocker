@@ -27,6 +27,10 @@ import {
     preOrderTraversalHelper,
     postOrderTraversalHelper,
     generateArray,
+    createLeft,
+    createRight,
+    connectNodeBTT,
+    newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
 import trash from '../trash.png';
 
@@ -109,6 +113,8 @@ export default function BinaryTreeTraversal() {
     const [lines, setLines] = React.useState(CONNECT);
     const [connection, setConnections] = React.useState(CURRENT_CON);
     const [selected, setSelected] = React.useState({ id: -1 });
+    const [selectedRight, setSelectedRight] = React.useState({});
+    const [selectedLeft, setSelectedLeft] = React.useState({});
     const [connecting, setConnecting] = React.useState(false);
     const [fromCon, setFromCon] = React.useState({});
     const [tags, setTags] = React.useState({});
@@ -312,6 +318,34 @@ export default function BinaryTreeTraversal() {
         }
     }
 
+    const insertRight = (e) => {
+        setSelectedLeft({});
+        setSelectedRight(circles.filter(circle => circle.id == e.target.id())[0]);
+    }
+
+    const insertLeft = (e) => {
+        setSelectedRight({});
+        console.log(circles.filter(circle => circle.id == e.target.id()));
+        setSelectedLeft(circles.filter(circle => circle.id == e.target.id())[0]);
+    }
+
+    const insertNode = (e) => {
+        if (Object.keys(selectedLeft).length !== 0) {
+            console.log(selectedLeft);
+            console.log(selectedRight);
+            const child = createLeft(selectedLeft, circles.length, WIDTH)
+            const connectionBundle = newConnectNodeBTT(selectedLeft, child, connection, true);
+            setLines(lines.concat(connectionBundle[0]));
+            setCircles(circles.concat(child));
+        }
+        else if (Object.keys(selectedRight).length !== 0) {
+            const child = createRight(selectedRight, circles.length, WIDTH)
+            const connectionBundle = newConnectNodeBTT(selectedRight, child, connection, false);
+            setLines(lines.concat(connectionBundle[0]));
+            setCircles(circles.concat(child));
+        }
+    }
+
     const selectLine = (e) => {
         const id = e.target.id();
         // set connecting state to true
@@ -439,7 +473,7 @@ export default function BinaryTreeTraversal() {
                                             <h1></h1>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Button variant="contained" color="primary">
+                                            <Button variant="contained" color="primary" onClick={insertNode}>
                                                 Insert
                       </Button>
                                         </Grid>
@@ -515,20 +549,24 @@ export default function BinaryTreeTraversal() {
                                                         connecting ? finalConnect : initialConnect
                                                     }
                                                 />
-                                                <Text text={circle.value} x={circle.x} y={circle.y} />
+                                                <Text text={circle.value} x={circle.x} y={circle.y} fill="white" />
                                                 <Circle
                                                     x={circle.x + 40}
                                                     y={circle.y + 40}
-                                                    stroke="black"
+                                                    id={circle.id}
+                                                    stroke={selectedRight.id === circle.id ? "red" : "black"}
                                                     width={circle.width / 10}
                                                     height={circle.height / 10}
+                                                    onClick={insertRight}
                                                 />
                                                 <Circle
                                                     x={circle.x - 40}
                                                     y={circle.y + 40}
-                                                    stroke="black"
+                                                    id={circle.id}
+                                                    stroke={selectedLeft.id === circle.id ? "red" : "black"}
                                                     width={circle.width / 10}
                                                     height={circle.height / 10}
+                                                    onClick={insertLeft}
                                                 />
                                             </React.Fragment>
                                         ))}
