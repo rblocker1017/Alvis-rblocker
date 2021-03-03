@@ -90,7 +90,7 @@ export default function Sorting() {
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
     let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState([1,2,3,4]); 
+    let [newArray, setNewArray] = useState([4,5,7,2,6,12,8]); 
 
   const addValue = () => {
     setNewArray(newArray.concat(4));
@@ -150,6 +150,15 @@ export default function Sorting() {
     setFlag5(true);
   };
     let name = "test";
+
+    function reset() {
+        let tempStep = 0;
+        setStepCount(tempStep);
+        setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
+        setswap1(arraysOfArrays[tempStep].swappedValue1);
+        setswap2(arraysOfArrays[tempStep].swappedValue2);
+        setStepInfo("In step:" + (tempStep) + " We swap index: " + arraysOfArrays[tempStep].swappedValue1 + " and " + arraysOfArrays[tempStep].swappedValue2);
+    }
 
     function stepForward() {
 
@@ -374,7 +383,7 @@ export default function Sorting() {
                       </Button>
                     </Grid>
                     <Grid item xs={3}>
-                      <Button variant="contained" color="primary">
+                                          <Button variant="contained" color="primary" onClick={ reset }>
                         Reset
                       </Button>
                     </Grid>

@@ -329,7 +329,7 @@ export function generateConnectors(numberConnectors, circles) {
     let connections = [];
     while (result.length < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
-        const value = Math.floor(Math.random() * 100);
+        const value = Math.floor(Math.random() * 9);
         let fromIndex = Math.floor(Math.random() * circles.length);
         let toIndex = Math.floor(Math.random() * circles.length);
         while (toIndex === fromIndex) {
@@ -369,7 +369,7 @@ export function generateConnectors(numberConnectors, circles) {
 // to - circle connecting to
 // from - circle connecting from
 // idNum - id number of the connector
-export function connectNode(to, from, connections) {
+export function connectNode(to, from, connections, setValue) {
     let id = "";
     to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
     if (!connections.includes(id) && JSON.stringify(to) !== '{}') {
@@ -379,7 +379,11 @@ export function connectNode(to, from, connections) {
             id: id,
             connections: [to, from],
             points: getPoints(to, from),
+<<<<<<< HEAD
             value: value,
+=======
+            value: setValue,
+>>>>>>> 146413d0103662dae4445bbd1af99e2210f9a3f2
             stroke: "black",
             connected: false
         },

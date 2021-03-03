@@ -415,7 +415,14 @@ export default function PageReplacement() {
                         </tr>
                         )
                     }
-                    return;
+                    {
+                        return (
+                            <tr>
+                                <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
+                            </tr>
+                        )
+
+                    }
                 })}
 
                 <p>{ans.fault}</p>

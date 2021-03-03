@@ -473,6 +473,7 @@ export default function BinaryTreeTraversal() {
                         <Grid item xs={9}>
                             <Paper className={classes.paper}>
                                 <h1>Graphing Algorithm: {type}</h1>
+                                <h1>Step: { num }</h1>
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {visualArray.map((rect) => (
@@ -540,13 +541,7 @@ export default function BinaryTreeTraversal() {
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />
-                                                <Label
-                                                    x={(line.points[0] + line.points[2]) / 2}
-                                                    y={(line.points[1] + line.points[3]) / 2}
-                                                >
-                                                    <Tag fill={"white"} />
-                                                    <Text text={line.value} fill="black" />
-                                                </Label>
+
                                             </React.Fragment>
                                         ))}
                                     </Layer>

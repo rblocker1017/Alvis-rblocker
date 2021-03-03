@@ -812,6 +812,11 @@ export default function CpuScheduling(props) {
 
     })
 
+    const deleteRow = () => {
+        console.log(selected);
+        setprocesses(processes.filter(process => !process.select));
+    }
+
     const handleChangeCheck = (event) => {
         setChecked(!checked);
     };
@@ -1041,7 +1046,7 @@ export default function CpuScheduling(props) {
                                                     <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
                                                         {row.arrivalTime}
                                                     </TableCell>
-                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                    <TableCell id={row.name}  className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
                                                         {row.burstTime}
                                                     </TableCell>
                                                     {type === "Priority" ? <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
@@ -1088,7 +1093,7 @@ export default function CpuScheduling(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <ButtonBase className={classes.trashBtn}>
+                <ButtonBase className={classes.trashBtn} onClick={deleteRow}>
                     <img src={trash} className={classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>
