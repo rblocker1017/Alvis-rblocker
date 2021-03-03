@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, ButtonBase } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -8,12 +8,7 @@ import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
 import { kruskalAlgorithm } from "./Algorithms/Graphing";
-<<<<<<< HEAD
-
-
-=======
 import trash from '../trash.png';
->>>>>>> 4f1be445bac2ee447de42f3ed6ab8f12ca3037b4
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 950;
