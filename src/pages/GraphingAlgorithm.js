@@ -11,7 +11,7 @@ import { kruskalAlgorithm } from "./Algorithms/Graphing";
 import trash from '../trash.png';
 
 // Define width and height of the of the webapp canvas
-const WIDTH = 950;
+const WIDTH = 1370;
 const HEIGHT = 450;
 
 // Generate styles for React objects
@@ -104,7 +104,7 @@ export default function GraphingAlgorithm() {
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
-    const [step, setStep] = React.useState(0);
+    const [step, setStep] = React.useState(-1);
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
@@ -125,7 +125,7 @@ export default function GraphingAlgorithm() {
 
     const stepForward = (e) => {
         console.log(step);
-        if (step < algoArray.length) {
+        if (step < algoArray.length - 1) {
             let tempStep = step + 1;
             setLines(
                 lines.map(line => {
@@ -514,6 +514,7 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
+                                <h1>Step: {step + 1}</h1>
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {circles.map((circle) => (
@@ -532,10 +533,11 @@ export default function GraphingAlgorithm() {
                                                         stroke={circle.start || circle.end ? "black" : ""}
                                                     />
                                                     <Text
+                                                        fontSize={20}
                                                         align="center"
                                                         text={pointValues(circle)}
                                                         fill={"white"}
-                                                        width={75}
+                                                        width={100}
                                                     />
 
                                                 </Label>
@@ -559,9 +561,10 @@ export default function GraphingAlgorithm() {
                                                     draggable
                                                 />
                                                 <Text
+                                                    fontSize={20}
                                                     text={circle.id}
-                                                    x={circle.x}
-                                                    y={circle.y}
+                                                    x={circle.x - 5}
+                                                    y={circle.y - 7}
                                                     fill="white"
                                                 />
                                             </React.Fragment>
@@ -585,6 +588,7 @@ export default function GraphingAlgorithm() {
                                                     <Text
                                                         text={line.value}
                                                         fill="black"
+                                                        fontSize={30}
                                                     />
 
                                                 </Label>
