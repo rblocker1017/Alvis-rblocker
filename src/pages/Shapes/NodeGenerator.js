@@ -161,6 +161,7 @@ export function createLeft(circle, id, canvasWidth) {
             leftChild: null,
             rightChild: null
         };
+        circle.rightChild = newCircle;
         console.log(newCircle);
         return newCircle;
     }
@@ -187,6 +188,7 @@ export function createRight(circle, id, canvasWidth) {
             rightChild: null
         };
         console.log(newCircle);
+        circle.leftChild = newCircle;
         return newCircle;
     }
     return {};
@@ -445,7 +447,7 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
     if (isLeft) {
         newTo = {
             ...to,
-            x: to.x+ 5,
+            x: to.x + 5,
             y: to.y + 30
         }
     }
@@ -456,15 +458,15 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
             y: to.y + 30
         }
     }
-        const value = Math.floor(Math.random() * 100);
-        connections.push(id);
-        return [{
-            id: id,
-            connections: [to, from],
-            points: getPoints(newTo, from),
-            stroke: "black",
-            connected: false
-        },
-            connections];
+    const value = Math.floor(Math.random() * 100);
+    connections.push(id);
+    return [{
+        id: id,
+        connections: [to, from],
+        points: getPoints(newTo, from),
+        stroke: "black",
+        connected: false
+    },
+        connections];
     return {};
 }
