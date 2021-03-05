@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Grid, Box, Paper, Typography, Divider, ButtonBase, TextField, FormControlLabel, Checkbox } from "@material-ui/core";
 import { makeStyles, ThemeProvider, useTheme, createMuiTheme } from '@material-ui/core/styles';
 import LinkRoute from 'react-router-dom/Link';
@@ -62,8 +62,9 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
-
 export default function Login() {
+    const [email, setEmail] = useState([]);
+    const [password, setPassword] = useState([]);
     const classes = useStyles();
     const theme = createMuiTheme({
         typography:
@@ -76,7 +77,8 @@ export default function Login() {
     });
 
     function handleSubmit(event) {
-        alert("test");
+        console.log(email)
+        console.log(password)
         event.preventDefault();
     }
 
@@ -137,10 +139,10 @@ export default function Login() {
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
-                                            <TextField label="Email" variant="outlined" className={classes.input} />
+                                            <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}}/>
                                         </Box>
                                         <Box pt={1}>
-                                            <TextField label="Password" variant="outlined" className={classes.input} />
+                                            <TextField label="Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
                                         </Box>
                                     </Grid>
                                     <Grid item>
