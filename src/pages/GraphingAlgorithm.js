@@ -99,8 +99,8 @@ export default function GraphingAlgorithm() {
     const [circleId, setCircleId] = React.useState(INIT.length);
     const [selected, setSelected] = React.useState({});
     const [connections, setConnections] = React.useState(CURRENT_CON);
-    const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
-    const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
+    const [startNode, setStartNode] = React.useState(INIT.find(circle => circle.start === true));
+    const [endNode, setEndNode] = React.useState(INIT.find(circle => circle.end === true));
     const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
@@ -245,11 +245,11 @@ export default function GraphingAlgorithm() {
         setLines(
             tempLines.map(line => {
                 if (tempCircle.connections.includes(line.id)) {
-                    const other = line.connections.filter(otherCircle => otherCircle.id != tempCircle.id);
-                    const points = getPoints(tempCircle, other[0]);
+                    const other = circles.find(circle => line.connections.find(otherCircle => otherCircle !== tempCircle.id) === circle.id);
+                    const points = getPoints(tempCircle, other);
                     return {
                         ...line,
-                        connections: [tempCircle, other[0]],
+                        connections: [tempCircle.id, other.id],
                         points: points
                     };
                 }
@@ -265,7 +265,7 @@ export default function GraphingAlgorithm() {
         const id = e.target.id();
         // set connecting state to true
         setConnecting(true);
-
+        console.log(lines);
         setCircles(
             circles.map((circle) => {
                 if (circle.id == id) {
@@ -412,6 +412,7 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
+        console.log("test");
         // creates a temporary new line
         const connectBundle = connectNode(toCircle, selected, connections, conValue);
         // if the line isn't just connecting to itself, add it to the connector state array

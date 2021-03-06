@@ -420,12 +420,12 @@ export function generateConnectors(numberConnectors, circles) {
 export function connectNode(to, from, connections, setValue) {
     let id = "";
     to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
-    if (!connections.includes(id) && JSON.stringify(to) !== '{}') {
+    if (!connections.includes(id) && JSON.stringify(to) !== '{}' && to.id !== -1 && from.id !== -1) {
         const value = Math.floor(Math.random() * 100);
         connections.push(id);
         return [{
             id: id,
-            connections: [to, from],
+            connections: [to.id, from.id],
             points: getPoints(to, from),
             value: setValue,
             stroke: "black",
