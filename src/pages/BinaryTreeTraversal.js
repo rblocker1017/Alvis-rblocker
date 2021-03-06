@@ -125,14 +125,16 @@ export default function BinaryTreeTraversal() {
     };
 
     const inOrderTraversal = (root, array) => {
-        if (root !== null) {
-            inOrderTraversal(root.leftChild, array);
+        if (root !== undefined) {
+            if (root.leftChild !== null)
+                inOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
             circles.forEach((circle) => {
                 if (circle.id === root.id) {
                     array.push(circle);
                 }
             });
-            inOrderTraversal(root.rightChild, array);
+            if (root.rightChild !== null)
+                inOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
         }
     };
 
@@ -141,19 +143,20 @@ export default function BinaryTreeTraversal() {
      */
     const preOrderTraversalHelper = () => {
         let array = [];
-        let cur = circles[0];
-        preOrderTraversal(cur, array);
+        preOrderTraversal(circles[0], array);
         setPreorder(array);
         setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
     };
 
     const preOrderTraversal = (root, array) => {
-        if (root !== null) {
+        if (root !== undefined) {
             circles.map((circle) => {
                 if (circle.id === root.id) array.push(circle);
             });
-            preOrderTraversal(root.leftChild, array);
-            preOrderTraversal(root.rightChild, array);
+            if (root.leftChild !== null)
+                preOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
+            if (root.rightChild !== null)
+                preOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
         }
     };
 
@@ -167,16 +170,17 @@ export default function BinaryTreeTraversal() {
 
     const postOrderTraversalHelper = () => {
         let array = [];
-        let cur = circles[0];
-        postOrderTraversal(cur, array);
+        postOrderTraversal(circles[0], array);
         setPostorder(array);
         setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
     };
 
     const postOrderTraversal = (root, array) => {
-        if (root !== null) {
-            postOrderTraversal(root.leftChild, array);
-            postOrderTraversal(root.rightChild, array);
+        if (root !== undefined) {
+            if (root.leftChild !== null)
+                postOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
+            if (root.rightChild !== null)
+                postOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
             circles.map((circle) => {
                 if (circle.id === root.id) array.push(circle);
             });
@@ -329,6 +333,7 @@ export default function BinaryTreeTraversal() {
                 };
             })
         );
+        console.log(lines);
         console.log(circles);
     };
     const deleteBranch = (e) => {
@@ -338,17 +343,18 @@ export default function BinaryTreeTraversal() {
         //console.log(lines);
         if (id != -1 && id != circles[0].id) {
             let node = circles.filter((circle) => circle.id == id)[0]
+            console.log(node);
             tempBundle = deleteNode(node , circles.filter((circle) => circle.id != id), lines);
             // ** TODO **
             // disconnect node from the parent
             tempBundle[0] = tempBundle[0].map((circle) => {
-                if (circle.leftChild !== null && circle.leftChild.id === node.id) {
+                if (circle.leftChild !== null && circle.leftChild === node.id) {
                     return {
                         ...circle,
                         leftChild: null
                     };
                 }
-                else if (circle.rightChild !== null && circle.rightChild.id === node.id) {
+                else if (circle.rightChild !== null && circle.rightChild === node.id) {
                     return {
                         ...circle,
                         rightChild: null
@@ -362,7 +368,8 @@ export default function BinaryTreeTraversal() {
         }
     }
     const deleteNode = (node, nodeArray, nodeConnections) => {
-        //console.log(node);
+        console.log(node);
+        console.log(nodeArray);
         //console.log(nodeArray);
         let leftNodeArray = nodeArray;
         let rightNodeArray = nodeArray;
@@ -370,30 +377,32 @@ export default function BinaryTreeTraversal() {
 
         let newConnections = nodeConnections.filter((line) => {
             for (let i = 0; i < line.connections.length; i++) {
-                if (line.connections[i].id === node.id) {
+                if (line.connections[i] === node.id) {
+                    console.log("test");
                     return false;
                 }
             }
             return true;
         });
+        console.log(newConnections);
         let leftNodeConnections = newConnections;
         let rightNodeConnections = newConnections;
         //console.log(newConnections);
         if (node.leftChild != null) {
-            let leftBundle = deleteNode(node.leftChild, nodeArray.filter((circle) => circle.id != node.leftChild.id), newConnections);
+            let leftBundle = deleteNode(circles.filter((circle) => node.leftChild === circle.id)[0], nodeArray.filter((circle) => circle.id != node.leftChild), newConnections);
             leftNodeArray = leftBundle[0];
             leftNodeConnections = leftBundle[1];
             //console.log(leftNodeArray);
         }
         if (node.rightChild != null) {
-            let rightBundle = deleteNode(node.rightChild, nodeArray.filter((circle) => circle.id != node.rightChild.id), newConnections);
+            let rightBundle = deleteNode(circles.filter((circle) => node.rightChild === circle.id)[0], nodeArray.filter((circle) => circle.id != node.rightChild), newConnections);
             rightNodeArray = rightBundle[0];
             rightNodeConnections = rightBundle[1];
             //console.log(rightNodeArray);
         }
         resultNodeArray = leftNodeArray.filter((circle) => rightNodeArray.includes(circle));
         newConnections = leftNodeConnections.filter((line) => rightNodeConnections.includes(line));
-        //console.log(resultNodeArray);
+        console.log(resultNodeArray);
         return [resultNodeArray, newConnections];
         //let newArray = ;
         //if (node.leftChild) {

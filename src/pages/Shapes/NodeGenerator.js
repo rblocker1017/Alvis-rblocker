@@ -161,7 +161,7 @@ export function createLeft(circle, id, canvasWidth) {
             leftChild: null,
             rightChild: null
         };
-        circle.leftChild = newCircle;
+        circle.leftChild = newCircle.id;
         return newCircle;
     }
     return {id: -1};
@@ -186,7 +186,7 @@ export function createRight(circle, id, canvasWidth) {
             leftChild: null,
             rightChild: null
         };
-        circle.rightChild = newCircle;
+        circle.rightChild = newCircle.id;
         return newCircle;
     }
     return {id: -1};
@@ -197,14 +197,14 @@ export function createRight(circle, id, canvasWidth) {
 */
 export function inOrderTraversalHelper(circles) {
     let array = [];
-    inOrderTraversal(circles[0], array);
+    inOrderTraversal(circles[0], circles, array);
     return array;
 }
-export function inOrderTraversal(root, array) {
+export function inOrderTraversal(root, circles, array) {
     if (root !== null) {
-        inOrderTraversal(root.leftChild, array);
+        inOrderTraversal(root.leftChild, circles, array);
         array.push(root.id);
-        inOrderTraversal(root.rightChild, array);
+        inOrderTraversal(root.rightChild, circles, array);
     }
 }
 
@@ -214,14 +214,14 @@ export function inOrderTraversal(root, array) {
 */
 export function preOrderTraversalHelper(circles) {
     let array = [];
-    preOrderTraversal(circles[0], array);
+    preOrderTraversal(circles[0], circles, array);
     return array;
 }
-export function preOrderTraversal(root, array) {
+export function preOrderTraversal(root, circles, array) {
     if (root !== null) {
         array.push(root.id);
-        preOrderTraversal(root.leftChild, array);
-        preOrderTraversal(root.rightChild, array);
+        preOrderTraversal(root.leftChild, circles, array);
+        preOrderTraversal(root.rightChild, circles, array);
     }
 }
 
@@ -231,13 +231,13 @@ export function preOrderTraversal(root, array) {
 
 export function postOrderTraversalHelper(circles) {
     let array = [];
-    postOrderTraversal(circles[0], array);
+    postOrderTraversal(circles[0], circles, array);
     return array;
 }
-export function postOrderTraversal(root, array) {
+export function postOrderTraversal(root, circles, array) {
     if (root !== null) {
-        postOrderTraversal(root.leftChild, array);
-        postOrderTraversal(root.rightChild, array);
+        postOrderTraversal(root.leftChild, circles, array);
+        postOrderTraversal(root.rightChild, circles, array);
         array.push(root.id);
     }
 }
@@ -456,7 +456,7 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
     connections.push(id);
     return [{
         id: id,
-        connections: [to, from],
+        connections: [to.id, from.id],
         points: getPoints(newTo, from),
         stroke: "black",
         connected: false
