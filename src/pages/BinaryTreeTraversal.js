@@ -127,14 +127,14 @@ export default function BinaryTreeTraversal() {
     const inOrderTraversal = (root, array) => {
         if (root !== undefined) {
             if (root.leftChild !== null)
-                inOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
+                inOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
             circles.forEach((circle) => {
                 if (circle.id === root.id) {
                     array.push(circle);
                 }
             });
             if (root.rightChild !== null)
-                inOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
+                inOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
         }
     };
 
@@ -154,9 +154,9 @@ export default function BinaryTreeTraversal() {
                 if (circle.id === root.id) array.push(circle);
             });
             if (root.leftChild !== null)
-                preOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
+                preOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
             if (root.rightChild !== null)
-                preOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
+                preOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
         }
     };
 
@@ -178,9 +178,9 @@ export default function BinaryTreeTraversal() {
     const postOrderTraversal = (root, array) => {
         if (root !== undefined) {
             if (root.leftChild !== null)
-                postOrderTraversal(circles.filter((circle) => circle.id === root.leftChild)[0], array);
+                postOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
             if (root.rightChild !== null)
-                postOrderTraversal(circles.filter((circle) => circle.id === root.rightChild)[0], array);
+                postOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
             circles.map((circle) => {
                 if (circle.id === root.id) array.push(circle);
             });
@@ -342,7 +342,7 @@ export default function BinaryTreeTraversal() {
         let tempBundle;
         //console.log(lines);
         if (id != -1 && id != circles[0].id) {
-            let node = circles.filter((circle) => circle.id == id)[0]
+            let node = circles.find((circle) => circle.id == id);
             console.log(node);
             tempBundle = deleteNode(node , circles.filter((circle) => circle.id != id), lines);
             // ** TODO **
@@ -389,13 +389,13 @@ export default function BinaryTreeTraversal() {
         let rightNodeConnections = newConnections;
         //console.log(newConnections);
         if (node.leftChild != null) {
-            let leftBundle = deleteNode(circles.filter((circle) => node.leftChild === circle.id)[0], nodeArray.filter((circle) => circle.id != node.leftChild), newConnections);
+            let leftBundle = deleteNode(circles.find((circle) => node.leftChild === circle.id), nodeArray.filter((circle) => circle.id != node.leftChild), newConnections);
             leftNodeArray = leftBundle[0];
             leftNodeConnections = leftBundle[1];
             //console.log(leftNodeArray);
         }
         if (node.rightChild != null) {
-            let rightBundle = deleteNode(circles.filter((circle) => node.rightChild === circle.id)[0], nodeArray.filter((circle) => circle.id != node.rightChild), newConnections);
+            let rightBundle = deleteNode(circles.find((circle) => node.rightChild === circle.id), nodeArray.filter((circle) => circle.id != node.rightChild), newConnections);
             rightNodeArray = rightBundle[0];
             rightNodeConnections = rightBundle[1];
             //console.log(rightNodeArray);
@@ -450,14 +450,14 @@ export default function BinaryTreeTraversal() {
     const insertRight = (e) => {
         setSelected({ id: -1 });
         setSelectedLeft({});
-        setSelectedRight(circles.filter((circle) => circle.id == e.target.id())[0]);
+        setSelectedRight(circles.find((circle) => circle.id == e.target.id()));
     };
 
     const insertLeft = (e) => {
 
         setSelected({ id: -1 });
         setSelectedRight({});
-        setSelectedLeft(circles.filter((circle) => circle.id == e.target.id())[0]);
+        setSelectedLeft(circles.find((circle) => circle.id == e.target.id()));
     };
 
     const insertNode = (e) => {

@@ -397,7 +397,7 @@ export function generateConnectors(numberConnectors, circles) {
         // creates new connection between to and from circles and sorts the connectors
         const newConnection = {
             id: id,
-            connections: [to, from],
+            connections: [to.id, from.id],
             points: getPoints(to, from),
             value: value,
             stroke: "black",
