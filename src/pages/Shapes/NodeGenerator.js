@@ -112,7 +112,7 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             leftChild: null,
             rightChild: null
         };
-        Parent.leftChild = circle;
+        Parent.leftChild = circle.id;
         circles.push(circle);
     }
     else if (Parent.rightChild === null) {
@@ -133,7 +133,7 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             leftChild: null,
             rightChild: null
         };
-        Parent.rightChild = circle;
+        Parent.rightChild = circle.id;
         circles.push(circle);
     }
     else {
@@ -143,7 +143,7 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
 
 export function createLeft(circle, id, canvasWidth) {
     let step = Math.floor((id + 1) / 2) + 1;
-    if (circle.rightChild === null) {
+    if (circle.leftChild === null) {
         let newCircle = {
             id: id,
             x: circle.x - 150 - (Math.pow(canvasWidth, 1.22 / step)),
@@ -161,11 +161,10 @@ export function createLeft(circle, id, canvasWidth) {
             leftChild: null,
             rightChild: null
         };
-        circle.rightChild = newCircle;
-        console.log(newCircle);
+        circle.leftChild = newCircle;
         return newCircle;
     }
-    return {};
+    return {id: -1};
 }
 export function createRight(circle, id, canvasWidth) {
     let step = Math.floor((id + 1) / 2) + 1;
@@ -187,11 +186,10 @@ export function createRight(circle, id, canvasWidth) {
             leftChild: null,
             rightChild: null
         };
-        console.log(newCircle);
-        circle.leftChild = newCircle;
+        circle.rightChild = newCircle;
         return newCircle;
     }
-    return {};
+    return {id: -1};
 }
 
 /*
@@ -200,7 +198,6 @@ export function createRight(circle, id, canvasWidth) {
 export function inOrderTraversalHelper(circles) {
     let array = [];
     inOrderTraversal(circles[0], array);
-    console.log(array);
     return array;
 }
 export function inOrderTraversal(root, array) {
@@ -218,7 +215,6 @@ export function inOrderTraversal(root, array) {
 export function preOrderTraversalHelper(circles) {
     let array = [];
     preOrderTraversal(circles[0], array);
-    console.log(array);
     return array;
 }
 export function preOrderTraversal(root, array) {
@@ -236,7 +232,6 @@ export function preOrderTraversal(root, array) {
 export function postOrderTraversalHelper(circles) {
     let array = [];
     postOrderTraversal(circles[0], array);
-    console.log(array);
     return array;
 }
 export function postOrderTraversal(root, array) {
@@ -249,29 +244,30 @@ export function postOrderTraversal(root, array) {
 
 export function generateConnectorsBTT(circles) {
     console.log("in");
-    return connectNodeBTT(circles[0]);
+    return connectNodeBTT(circles[0], circles);
 }
 
-export function connectNodeBTT(circle) {
+export function connectNodeBTT(circle, circles) {
+    console.log(circles);
     let lines = [];
     let connections = [];
     //connections.push(id);
-    console.log(circle.leftChild);
     if (circle.leftChild !== null) {
         const value = Math.floor(Math.random() * 100);
         let id = "";
         let childBundle = null;
-        circle.id < circle.leftChild.id ? id = circle.id + "" + circle.leftChild.id : id = circle.leftChild.id + "" + circle.id;
+        let leftChild = circles.filter((node) => node.id === circle.leftChild)[0];
+        circle.id < circle.leftChild ? id = circle.id + "" + circle.leftChild : id = circle.leftChild + "" + circle.id;
         connections.push(id);
         lines.push({
             id: id,
-            connections: [circle, circle.leftChild],
-            points: getPoints({ x: circle.x + 5, y: circle.y + 30 }, circle.leftChild),
+            connections: [circle.id, circle.leftChild],
+            points: getPoints({ x: circle.x + 5, y: circle.y + 30 }, leftChild),
             value: value,
             stroke: "black",
             connected: false
         });
-        childBundle = connectNodeBTT(circle.leftChild);
+        childBundle = connectNodeBTT(leftChild, circles);
         if (childBundle !== null) {
             lines.push(...childBundle[0]);
             connections.push(...childBundle[1]);
@@ -281,17 +277,18 @@ export function connectNodeBTT(circle) {
         const value = Math.floor(Math.random() * 100);
         let id = "";
         let childBundle = null;
-        circle.id < circle.rightChild.id ? id = circle.id + "" + circle.rightChild.id : id = circle.rightChild.id + "" + circle.id;
+        let rightChild = circles.filter((node) => node.id === circle.rightChild)[0];
+        circle.id < circle.rightChild ? id = circle.id + "" + circle.rightChild : id = circle.rightChild + "" + circle.id;
         connections.push(id);
         lines.push({
             id: id,
-            connections: [circle, circle.rightChild],
-            points: getPoints({ x: circle.x - 5, y: circle.y + 30 }, circle.rightChild),
+            connections: [circle.id, circle.rightChild],
+            points: getPoints({ x: circle.x - 5, y: circle.y + 30 }, rightChild),
             value: value,
             stroke: "black",
             connected: false
         });
-        childBundle = connectNodeBTT(circle.rightChild);
+        childBundle = connectNodeBTT(rightChild, circles);
         if (childBundle !== null) {
             lines.push(...childBundle[0]);
             connections.push(...childBundle[1]);
@@ -300,7 +297,6 @@ export function connectNodeBTT(circle) {
     if (circle.rightChild === null && circle.leftChild === null) {
         return null;
     }
-    console.log(lines);
     return [lines, connections];
 }
 
@@ -394,7 +390,6 @@ export function generateConnectors(numberConnectors, circles) {
         if (connections.includes(id)) {
             continue;
         }
-        console.log(id);
         connections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];
@@ -458,7 +453,6 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
             y: to.y + 30
         }
     }
-    const value = Math.floor(Math.random() * 100);
     connections.push(id);
     return [{
         id: id,
@@ -468,5 +462,4 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
         connected: false
     },
         connections];
-    return {};
 }

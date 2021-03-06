@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../componenets/layout/header";
 import { Button, ButtonBase, Grid, Paper } from "@material-ui/core";
 import {
@@ -111,6 +111,7 @@ export default function BinaryTreeTraversal() {
     const [selectedLeft, setSelectedLeft] = React.useState({});
     const [connecting, setConnecting] = React.useState(false);
     const [fromCon, setFromCon] = React.useState({});
+    const [idNum, setIdNum] = useState(INIT.length);
     //const [width, setWidth] = React.useState(WIDTH);
     //const [height, setHeight] = React.useState(HEIGHT);
     /*
@@ -155,6 +156,10 @@ export default function BinaryTreeTraversal() {
             preOrderTraversal(root.rightChild, array);
         }
     };
+
+    //useEffect(() => {
+    //    updateDisplay();
+    //}, [circles]);
 
     /*
      *   Postorder Traversal
@@ -252,7 +257,6 @@ export default function BinaryTreeTraversal() {
     let name = "test";
 
     const changePreorder = () => {
-        console.log(circles);
         resetTree();
         preOrderTraversalHelper();
         settype("Preorder");
@@ -267,6 +271,18 @@ export default function BinaryTreeTraversal() {
         postOrderTraversalHelper();
         settype("Postorder");
     };
+
+    const updateDisplay = () => {
+        if (type === "Preorder") {
+            changePreorder();
+        }
+        else if (type === "Inorder") {
+            changeInorder();
+        }
+        else if (type === "Postorder") {
+            changePostorder();
+        }
+    }
 
     const addCircle = (e) => {
         const value = Math.floor(Math.random() * 100);
@@ -290,6 +306,8 @@ export default function BinaryTreeTraversal() {
     const selectCircle = (e) => {
         const id = e.target.id();
         // set connecting state to true
+        setSelectedLeft({});
+        setSelectedRight({});
         setConnecting(true);
         setCircles(
             circles.map((circle) => {
@@ -311,14 +329,81 @@ export default function BinaryTreeTraversal() {
                 };
             })
         );
+        console.log(circles);
     };
-    const deleteNode = (e) => {
+    const deleteBranch = (e) => {
+        const id = selected.id;
+        resetTree();
+        let tempBundle;
+        //console.log(lines);
+        if (id != -1 && id != circles[0].id) {
+            let node = circles.filter((circle) => circle.id == id)[0]
+            tempBundle = deleteNode(node , circles.filter((circle) => circle.id != id), lines);
+            // ** TODO **
+            // disconnect node from the parent
+            tempBundle[0] = tempBundle[0].map((circle) => {
+                if (circle.leftChild !== null && circle.leftChild.id === node.id) {
+                    return {
+                        ...circle,
+                        leftChild: null
+                    };
+                }
+                else if (circle.rightChild !== null && circle.rightChild.id === node.id) {
+                    return {
+                        ...circle,
+                        rightChild: null
+                    };
+                }
+                return circle;
+            });
+            setCircles(tempBundle[0]);
+            setLines(tempBundle[1]);
+            //console.log(tempBundle[0]);
+        }
+    }
+    const deleteNode = (node, nodeArray, nodeConnections) => {
+        //console.log(node);
+        //console.log(nodeArray);
+        let leftNodeArray = nodeArray;
+        let rightNodeArray = nodeArray;
+        let resultNodeArray = nodeArray;
+
+        let newConnections = nodeConnections.filter((line) => {
+            for (let i = 0; i < line.connections.length; i++) {
+                if (line.connections[i].id === node.id) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        let leftNodeConnections = newConnections;
+        let rightNodeConnections = newConnections;
+        //console.log(newConnections);
+        if (node.leftChild != null) {
+            let leftBundle = deleteNode(node.leftChild, nodeArray.filter((circle) => circle.id != node.leftChild.id), newConnections);
+            leftNodeArray = leftBundle[0];
+            leftNodeConnections = leftBundle[1];
+            //console.log(leftNodeArray);
+        }
+        if (node.rightChild != null) {
+            let rightBundle = deleteNode(node.rightChild, nodeArray.filter((circle) => circle.id != node.rightChild.id), newConnections);
+            rightNodeArray = rightBundle[0];
+            rightNodeConnections = rightBundle[1];
+            //console.log(rightNodeArray);
+        }
+        resultNodeArray = leftNodeArray.filter((circle) => rightNodeArray.includes(circle));
+        newConnections = leftNodeConnections.filter((line) => rightNodeConnections.includes(line));
+        //console.log(resultNodeArray);
+        return [resultNodeArray, newConnections];
+        //let newArray = ;
+        //if (node.leftChild) {
+        //}
+        /*
         let tempCircle = circles;
         resetTree();
-        console.log(lines);
         const id = selected.id;
         if (id != -1) {
-            tempCircle.map((circle) => {
+            tempCircle = tempCircle.map((circle) => {
                 if (circle.leftchild != null) {
                     if (circle.leftChild.id == id) {
                         return {
@@ -343,49 +428,62 @@ export default function BinaryTreeTraversal() {
                         };
                     }
                 }
+                return circle;
             });
 
             tempCircle = tempCircle.filter((circle) => circle.id != id);
             setCircles(tempCircle);
             setLines(lines.filter((line) => !line.id.includes(JSON.stringify(id))));
             setSelected({ id: -1 });
-        }
+        }*/
     };
 
     const insertRight = (e) => {
+        setSelected({ id: -1 });
         setSelectedLeft({});
         setSelectedRight(circles.filter((circle) => circle.id == e.target.id())[0]);
     };
 
     const insertLeft = (e) => {
+
+        setSelected({ id: -1 });
         setSelectedRight({});
-        console.log(circles.filter((circle) => circle.id == e.target.id()));
         setSelectedLeft(circles.filter((circle) => circle.id == e.target.id())[0]);
     };
 
     const insertNode = (e) => {
+
         if (Object.keys(selectedLeft).length !== 0) {
-            setSelectedLeft({});
-            const child = createLeft(selectedLeft, circles.length, WIDTH);
+            const child = createLeft(selectedLeft, idNum, WIDTH);
+            if (child.id === -1) {
+                return -1;
+            }
             const connectionBundle = newConnectNodeBTT(
                 selectedLeft,
                 child,
                 connection,
                 true
             );
+            setSelectedLeft({});
             setLines(lines.concat(connectionBundle[0]));
             setCircles(circles.concat(child));
+            setIdNum(idNum + 1);
         } else if (Object.keys(selectedRight).length !== 0) {
-            setSelectedRight({});
-            const child = createRight(selectedRight, circles.length, WIDTH);
+            const child = createRight(selectedRight, idNum, WIDTH);
+            if (child.id === -1) {
+                return -1;
+            }
             const connectionBundle = newConnectNodeBTT(
                 selectedRight,
                 child,
                 connection,
                 false
             );
+            setSelectedRight({});
             setLines(lines.concat(connectionBundle[0]));
             setCircles(circles.concat(child));
+            setIdNum(idNum + 1);
+            console.log(idNum);
         }
     };
 
@@ -691,7 +789,7 @@ export default function BinaryTreeTraversal() {
                         </Grid>
                     </Grid>
                 </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={deleteNode}>
+                <ButtonBase className={classes.trashBtn} onClick={deleteBranch}>
                     <img src={trash} className={classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>
