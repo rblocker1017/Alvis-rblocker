@@ -81,38 +81,50 @@ const sortLines = (a, b) => {
     }
     return 0;
 }
-
-function hasPath(currentNode, end, connections, pathsUsed) {
+/*
+ * hasPath - function to find if current node has a connection to end
+ * currentNode - current 
+ */
+function hasPath(currentNode, end, lines, processedNodes) {
     let exists = false;
-    for (let i = 0; i < connections.length; i++) {
-        if (connections[i].includes(currentNode) && !pathsUsed.includes(connections[i])) {
-            if (connections[i].includes(end)) {
-                return true;
-            }
-            pathsUsed.push(connections[i]);
-            exists = hasPath(connections[i].replace(currentNode, ''), end, connections, pathsUsed);
-        }
+    //console.log(currentNode);
+    if (currentNode === end) {
+        exists = true;
     }
+    lines.forEach(line => {
+        //
+        if (line.connections.includes(currentNode) && !processedNodes.includes(currentNode)) {
+
+            const nextStart = line.connections.find(circleId => circleId !== currentNode)
+            exists = exists || hasPath(nextStart, end, lines, processedNodes.concat(currentNode));
+        }
+    });
     return exists;
 }
 
-export function kruskalAlgorithm(start, end, lines, connections) {
+/*
+ * kruskalHelper - recursive helper for kruskalAlgorithm
+ * @param currentNode - the integer id of the current node
+ * @param end - the integer id of the end node
+ * @param lines - an array of all the existing lines
+ * @param processedNodes - the current nodes that have already been processed. this is so that there is no cyclical paths.
+ */
+function kruskalHelper(currentNode, end, lines, processedNodes) {
+    // push the current id
+    // find the lines that are connected to the current id
+    //console.log(currentNode);
+    //console.log(end);
+    console.log(hasPath(currentNode, end, lines, processedNodes));
+    
+    //return result;
+}
+
+export function kruskalAlgorithm(start, end, lines) {
     let displayArray = [];
     const tempLines = lines;
     let currentConnections = [];
-    tempLines.sort(sortLines);
-    for (let i = 0; i < tempLines.length; i++) {
-        for (let j = 0; j < tempLines.length; j++) {
-            if (tempLines[i].value === tempLines[j].value && tempLines[i].id !== tempLines[j].id) {
-                displayArray.push(tempLines[j].id);
-            }
-        }
-        displayArray.push(tempLines[i].id);
-        currentConnections.push(tempLines[i].id);
-        let pathsUsed = [];
-        if (hasPath(JSON.stringify(start.id), JSON.stringify(end.id), currentConnections, pathsUsed)) {
-            return displayArray;
-        }
-    }
+    //console.log(start);
+    console.log(kruskalHelper(start.id, end.id, lines, currentConnections));
+    //console.log(displayArray);
     return -1;
 }

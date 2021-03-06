@@ -101,7 +101,7 @@ export default function GraphingAlgorithm() {
     const [connections, setConnections] = React.useState(CURRENT_CON);
     const [startNode, setStartNode] = React.useState(INIT.find(circle => circle.start === true));
     const [endNode, setEndNode] = React.useState(INIT.find(circle => circle.end === true));
-    const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+    const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines));
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
     const [step, setStep] = React.useState(-1);
@@ -110,9 +110,10 @@ export default function GraphingAlgorithm() {
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => {
+        console.log(connections);
         let displayTemp = [];
         setType("Kruskal");
-        let newAlgo = kruskalAlgorithm(startNode, endNode, lines, connections);
+        let newAlgo = kruskalAlgorithm(startNode, endNode, lines);
         let clearLines = lines.map(line => {
             return {
                 ...line,

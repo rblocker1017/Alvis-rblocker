@@ -375,7 +375,7 @@ const sortConnectors = (a, b) => {
 // circles - array of circles to put connectors
 export function generateConnectors(numberConnectors, circles) {
     let result = [];
-    let connections = [];
+    let tempConnections = [];
     while (result.length < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
         const value = Math.floor(Math.random() * 9);
@@ -387,10 +387,10 @@ export function generateConnectors(numberConnectors, circles) {
         // create an id with the sorted indexes of the two circles
         let id = "";
         toIndex < fromIndex ? id = toIndex + "" + fromIndex : id = fromIndex + "" + toIndex;
-        if (connections.includes(id)) {
+        if (tempConnections.includes(id)) {
             continue;
         }
-        connections.push(id);
+        tempConnections.push(id);
         const from = circles[fromIndex];
         const to = circles[toIndex];
 
@@ -410,7 +410,7 @@ export function generateConnectors(numberConnectors, circles) {
         circles[toIndex].connections.push(id);
         result.push(newConnection);
     }
-    return [result, connections];
+    return [result, tempConnections];
 }
 
 // connects the to and from node
