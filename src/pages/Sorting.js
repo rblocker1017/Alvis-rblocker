@@ -108,7 +108,8 @@ export default function Sorting() {
     let [selected, setSelected] = useState(-1);
     const [test, setTest] = useState(-1);
 
-  const addValue = () => {
+    const addValue = () => {
+        console.log(arraysOfArrays);
     setNewArray(newArray.concat(4));
   }
 
