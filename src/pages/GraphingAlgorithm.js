@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -101,28 +101,23 @@ export default function GraphingAlgorithm() {
     const [connections, setConnections] = React.useState(CURRENT_CON);
     const [startNode, setStartNode] = React.useState(INIT.find(circle => circle.start === true));
     const [endNode, setEndNode] = React.useState(INIT.find(circle => circle.end === true));
-    const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines));
+    const [algoArray, setAlgoArray] = React.useState(-1);
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
     const [step, setStep] = React.useState(-1);
 
+    useEffect(() => {
+        if (type === "Kruskal") {
+            setStep(-1);
+            setAlgoArray(kruskalAlgorithm(startNode, endNode, lines));
+        }
+    }, [type]);
+
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
-    const changeKruskal = () => {
-        console.log(connections);
-        let displayTemp = [];
-        setType("Kruskal");
-        let newAlgo = kruskalAlgorithm(startNode, endNode, lines);
-        let clearLines = lines.map(line => {
-            return {
-                ...line,
-                stroke: "black"
-            };
-        });
-        setStep(-1)
-        setAlgoArray(newAlgo);
-    }
+    const changeKruskal = () => setType("Kruskal");
+    
 
     const stepForward = (e) => {
         console.log(step);

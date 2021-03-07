@@ -112,6 +112,7 @@ function hasPath(currentNode, end, lines, processedNodes) {
  * @return if a path exists, returns a display array containing the path from start to end, else return -1
  */
 export function kruskalAlgorithm(start, end, lines) {
+    console.log("test");
     let displayArray = [];
     let displayLines = [];
     const tempLines = lines;
@@ -123,7 +124,6 @@ export function kruskalAlgorithm(start, end, lines) {
         displayLines.push(tempLines[i]);
         displayArray.push(tempLines[i].id);
         if (hasPath(start.id, end.id, displayLines, currentConnections)) {
-            console.log(displayArray);
             return displayArray;
         }
     }
