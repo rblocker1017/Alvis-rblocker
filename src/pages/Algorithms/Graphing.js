@@ -81,50 +81,51 @@ const sortLines = (a, b) => {
     }
     return 0;
 }
-/*
- * hasPath - function to find if current node has a connection to end
- * currentNode - current 
+/* hasPath - recursivelyChecks all branches to see if there is a valid path
+ * @param currentNode - the integer id of the current node
+ * @param end - the integer id of the end node
+ * @param lines - an array of all the existing lines you want processed
+ * @param processedNodes - the current nodes that have already been processed. this is so that there is no cyclical paths.
+ * @return exists - boolean statement if there exists a path to the end node
  */
 function hasPath(currentNode, end, lines, processedNodes) {
     let exists = false;
-    //console.log(currentNode);
+    // if the currentNode and end are equal, then a valid path was found
     if (currentNode === end) {
         exists = true;
     }
     lines.forEach(line => {
-        //
+        // recursively check every line in the given connections to see if there is a path
         if (line.connections.includes(currentNode) && !processedNodes.includes(currentNode)) {
-
+            // if the line includes the currentNode in its connections, then assign newStart to the other node in the line's connections array
             const nextStart = line.connections.find(circleId => circleId !== currentNode)
+            // OR the result with exists in order to pass the result through the end
             exists = exists || hasPath(nextStart, end, lines, processedNodes.concat(currentNode));
         }
     });
     return exists;
 }
-
-/*
- * kruskalHelper - recursive helper for kruskalAlgorithm
- * @param currentNode - the integer id of the current node
- * @param end - the integer id of the end node
- * @param lines - an array of all the existing lines
- * @param processedNodes - the current nodes that have already been processed. this is so that there is no cyclical paths.
+/* kruskalAlgorithm - find the shortest path from start to end with kruskal
+ * @param start - start circle
+ * @param end - end circle
+ * @param lines - all existing lines
+ * @return if a path exists, returns a display array containing the path from start to end, else return -1
  */
-function kruskalHelper(currentNode, end, lines, processedNodes) {
-    // push the current id
-    // find the lines that are connected to the current id
-    //console.log(currentNode);
-    //console.log(end);
-    console.log(hasPath(currentNode, end, lines, processedNodes));
-    
-    //return result;
-}
-
 export function kruskalAlgorithm(start, end, lines) {
     let displayArray = [];
+    let displayLines = [];
     const tempLines = lines;
     let currentConnections = [];
-    //console.log(start);
-    console.log(kruskalHelper(start.id, end.id, lines, currentConnections));
-    //console.log(displayArray);
+    // sort lines from lowest to highest value for the kruskal algorithm
+    tempLines.sort(sortLines);
+    // add the lines from lowest value to highest value and check if there is a path every iteration
+    for (let i = 0; i < tempLines.length; i++) {
+        displayLines.push(tempLines[i]);
+        displayArray.push(tempLines[i].id);
+        if (hasPath(start.id, end.id, displayLines, currentConnections)) {
+            console.log(displayArray);
+            return displayArray;
+        }
+    }
     return -1;
 }
