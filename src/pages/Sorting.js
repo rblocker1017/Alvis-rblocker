@@ -150,21 +150,21 @@ function HeapSort(d)
 }
 
 // Quick Sort fuction
-function partitionQuick(d, left, right)
+function partitionQuick(e, left, right)
 {
   while (left <= right)
   {
-    while(d[left] < d[Math.floor((left + right)/2)])
+    while(e[left] < e[Math.floor((left + right)/2)])
     {
       left ++;
     }
-    while(d[right] > d[Math.floor((left + right)/2)])
+    while(e[right] > e[Math.floor((left + right)/2)])
     {
       right --;
     }
     if (left <= right)
     {
-      [d[left], d[right]] = [d[right] , d[left]]; //swaps elements
+      [e[left], e[right]] = [e[right] , e[left]]; //swaps elements
       left ++;
       right --;
     }
