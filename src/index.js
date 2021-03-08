@@ -5,6 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createMuiTheme,  ThemeProvider, MuiThemeProvider } from '@material-ui/core/styles';
 import { green, amber } from '@material-ui/core/colors';
+import ValidatedLoginForm from "./ValidatedLoginForm";
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
 
 
 const theme = createMuiTheme({

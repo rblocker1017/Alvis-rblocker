@@ -14,6 +14,7 @@ import Sorting from "./pages/Sorting"
 import BinaryTreeTraversal from "./pages/BinaryTreeTraversal";
 import Achievements from "./pages/Achievements";
 import Register from "./pages/Register";
+import ValidatedLoginForm from "./ValidatedLoginForm";
 
 function App() {
   return (
@@ -33,6 +34,11 @@ function App() {
         <Route path="/Achievements" exact component={Achievements} />
         <Route path="/Register" exact component={Register} />
     </BrowserRouter>
+
+
+
+    <h1>Validated Login Form</h1>
+      <ValidatedLoginForm />
     </div>
   );
 }
