@@ -379,11 +379,11 @@ export function connectNode(to, from, connections, setValue) {
             id: id,
             connections: [to, from],
             points: getPoints(to, from),
-<<<<<<< HEAD
+
             value: value,
-=======
+
             value: setValue,
->>>>>>> 146413d0103662dae4445bbd1af99e2210f9a3f2
+
             stroke: "black",
             connected: false
         },
