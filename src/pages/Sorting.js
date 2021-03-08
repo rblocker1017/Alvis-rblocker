@@ -67,7 +67,7 @@ function Insertion(b)
     } 
     arrayInsert[j] =  currentInsert;
   }
-  return arrayInsert;
+  return b;
 }
 
 // Selection Sort fuction
@@ -102,7 +102,7 @@ function Selection(c)
       });
     }
   }
-  return answer;
+  return c;
 }
 
 // Heap Sort fuction
