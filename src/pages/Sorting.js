@@ -8,22 +8,27 @@ import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
 import { Update } from '@material-ui/icons';
 import trash from '../trash.png';
 
-
+// Bubble sort function
+// @param a - array of data to be sorted
 function Sort(a)
 {   
+    // declare variables
     let len = a.length-1; 
     let array = a; 
     let answer = [];
     let list = [];
-    let temp =0; 
-    for(let i =0; i<len ; i++){
-         
+    let temp = 0; 
+    // repeat the bubble sort for the length of the algorithm
+    for (let i = 0; i < len; i++){
+        // the actual bubble sort part
+        // for every item in the array, float it up through the array
          for(let j = 0; j<len ; j++){
-            
             if(array[j]> array[j+1] ){
                 temp = array[j];
                 array[j] = array[j+1]; 
-                array[j+1] = temp; 
+                array[j + 1] = temp; 
+                // push an object every time a swap happens containing the data (aka the current array to string)
+                // as well as the swapped values
                 answer.push({data: array.toString(),
                             swappedValue1: j,
                     swappedValue2: j + 1
@@ -86,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Sorting() {
+
   const classes = useStyles();
   const [type, settype] = useState("Insertion");
   const [flag1, setFlag1] = useState(true);
@@ -104,21 +110,27 @@ export default function Sorting() {
     let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
     let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState([4, 5, 7, 2, 6, 12, 8]); 
+    let [newArray, setNewArray] = useState([4, 5, 7, 2, 6, 12, 8, 2, 8]); 
     let [selected, setSelected] = useState(-1);
-    const [test, setTest] = useState(-1);
+    const [test, setTest] = useState("tset");
 
     const addValue = () => {
         console.log(arraysOfArrays);
     setNewArray(newArray.concat(4));
   }
 
-    const testFunc = (value) => {
-        setSelected(value);
+    const testFunc = (value, index) => {
+        //svg.selectAll('.bar');
+        console.log(index);
+        //setSelected(value);
     }
 
     const removeValue = () => {
-        setNewArray(newArray.filter(node => node !== selected));
+        console.log(selected);
+        let tempArray = newArray;
+        newArray.splice(selected, 1)
+        console.log(newArray);
+        setNewArray(newArray.concat());
     }
 
   const handleClick1 = () => {
@@ -187,7 +199,8 @@ export default function Sorting() {
 
     function stepForward() {
 
-        if (stepCount < arraysOfArrays.length - 1) {
+        if (stepCount < arraysOfArrays.length) {
+
             setStepCount(stepCount + 1);
             console.log("StepCount in Next: " + stepCount)
             setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
@@ -208,7 +221,7 @@ export default function Sorting() {
             setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
         }
     }
-    const svgRef = useState();
+    const svgRef = useRef();
 
 
     const listCurrent = arraysOfArrays.map((value, index) =>
@@ -219,9 +232,17 @@ export default function Sorting() {
         </div>
     );
 
+    function onClick(d, i) {
+        console.log(i);
+        setSelected(i);
+        console.log(newArray);
+    }
+
+
 
     useEffect(() => {
-        let x = Math.max(...data)
+        let x = Math.max(...newArray)
+        console.log(svgRef.current);
         const svg = select(svgRef.current);
         const xScale = scaleBand()
             .domain(newArray.map((value, index) => index))
@@ -274,10 +295,12 @@ export default function Sorting() {
             .attr("class", "bar")
             .style("transform", "scale(1, -1)")
             .attr("x", (value, index) => xScale(index))
-
             .attr("y", -370)
+            .attr("id", (value, index) => {
+                return index;
+            })
             .attr("width", xScale.bandwidth())
-
+            .attr("stroke", "black")
             .on("mouseenter", (value, index) => {
                 svg
                     .selectAll(".tooltip")
@@ -291,12 +314,12 @@ export default function Sorting() {
                     .attr("y", yScale(value) - 8)
                     .attr("opacity", 1);
             })
-            .on("click", (value, index) => {
-                testFunc(value);
-            })
+            .on("click", onClick
+            )
             .on("mouseleave", () => svg.select(".tooltip").remove())
                 .attr("fill", (value, index) => {
                 if (index == swap1) {
+                    console.log(test);
                     return "red"
                 }
                 if (index == swap2) {
@@ -435,6 +458,7 @@ export default function Sorting() {
             <Grid item xs={9}>
               <Paper className={classes.paper}>
                               <h1>Sorting: {type}</h1>
+                              <h1>Step: {stepCount}</h1>
                               <svg ref={svgRef} >
                                   <g className="x-axis" />
                                   <g className="y-axis" />
