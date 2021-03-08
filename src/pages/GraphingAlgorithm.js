@@ -9,6 +9,7 @@ import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } f
 import { select } from 'd3';
 import { kruskalAlgorithm } from "./Algorithms/Graphing";
 import trash from '../trash.png';
+import  PathNotFound  from '../componenets/Messages/PathNotFound'
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
@@ -105,21 +106,33 @@ export default function GraphingAlgorithm() {
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
     const [step, setStep] = React.useState(-1);
+    const [validPath, setValidPath] = React.useState(true);
 
     useEffect(() => {
-        if (type === "Kruskal") {
-            setStep(-1);
-            setAlgoArray(kruskalAlgorithm(startNode, endNode, lines));
+        switch (type) {
+            case "Kruskal":
+                setStep(-1);
+                console.log(lines);
+                const tempArray = kruskalAlgorithm(startNode, endNode, lines);
+                setAlgoArray(tempArray);
+                console.log(tempArray.length);
+                tempArray.length === undefined ? setValidPath(false) : setValidPath(true);
+                break;
         }
-    }, [type]);
+    }, [type, connections, startNode, endNode]);
+
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
     const changeKruskal = () => setType("Kruskal");
     
-
     const stepForward = (e) => {
+        if (step === -1) {
+            clearLines();
+            clearCircles();
+            setSelected({});
+        }
         console.log(step);
         if (step < algoArray.length - 1) {
             let tempStep = step + 1;
@@ -128,7 +141,7 @@ export default function GraphingAlgorithm() {
                     if (line.id === algoArray[tempStep]) {
                         return {
                             ...line,
-                            stroke: "red"
+                            connected: true
                         };
                     }
                     return line;
@@ -146,7 +159,7 @@ export default function GraphingAlgorithm() {
                     if(line.id === algoArray[step]) {
                         return {
                             ...line,
-                            stroke:"black"
+                            connected: false
                         }
                     }
                     return line;
@@ -159,7 +172,7 @@ export default function GraphingAlgorithm() {
         let clearLines = lines.map(line => {
             return {
                 ...line,
-                stroke: "black"
+                connected: false
             };
         });
         setStep(-1);
@@ -169,10 +182,14 @@ export default function GraphingAlgorithm() {
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
     const addCircle = (e) => {
+        if (step !== -1) {
+            return;
+        }
         // calculate value
         const value = Math.floor(Math.random() * 100);
         // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
+            type: "line",
             id: circleId,
             x: (Math.random() * (WIDTH - 200)) + 100,
             y: (Math.random() * (HEIGHT - 200)) + 100,
@@ -218,6 +235,38 @@ export default function GraphingAlgorithm() {
         );
     };
 
+
+
+    // Method to clear all strokes on the circles
+    const clearCircles = () => {
+        setCircles(
+            circles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                    };
+                }
+                return circle;
+            })
+        );
+    }
+
+    // Method to clear all strokes on the lines
+    const clearLines = () => {
+        setLines(
+            lines.map((line) => {
+                if (line.connected) {
+                    return {
+                        ...line,
+                        connected: false,
+                    }
+                }
+                return line;
+            })
+        );
+    }
+
     // while being dragged, the circle x and y co-ordinates are updated 
     // and its connectors positions are updated to follow the circle
     // e - event listener
@@ -258,13 +307,16 @@ export default function GraphingAlgorithm() {
     // sets clicked circle to selected
     // e - event listener
     const selectCircle = (e) => {
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         // set connecting state to true
         setConnecting(true);
         console.log(lines);
         setCircles(
             circles.map((circle) => {
-                if (circle.id == id) {
+                if (circle.id === id) {
                     setSelected(circle);
                 }
                 return {
@@ -273,25 +325,38 @@ export default function GraphingAlgorithm() {
                 }
             })
         );
+        clearLines();
     };
 
     // sets clicked to selected
     // e - event listener
     const selectLine = (e) => {
+        console.log(connections);
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         // set connecting state to true
         setLines(
             lines.map((line) => {
+                if (line.id === id) {
+                    setSelected(line);
+                }
                 return {
                     ...line,
                     connected: line.id === id
                 }
             })
         );
+        setConnecting(false);
+        clearCircles();
     };
 
     // Sets the starting point for the algorithm
     const setStart = (e) => {
+        if (step !== -1) {
+            return;
+        }
         // create a temporary array to keep track of the array changes
         let tempCircles = [];
         // checks if something is selected as well as if the selected node is not the end node
@@ -336,6 +401,9 @@ export default function GraphingAlgorithm() {
 
     // Sets the ending point for the algorithm
     const setEnd = (e) => {
+        if (step !== -1) {
+            return;
+        }
         // create a temporary array to keep track of the array changes
         let tempCircles = [];
         // checks if something is selected as well as if the selected node is not the end node
@@ -381,6 +449,9 @@ export default function GraphingAlgorithm() {
     // makes a connector between the selected node and the next selected node
     // the connecting node's value is randomly generated
     const finalConnect = (e) => {
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         let conId = "";
         let newLines = [];
@@ -408,29 +479,17 @@ export default function GraphingAlgorithm() {
                 return circle;
             })
         );
-        console.log("test");
         // creates a temporary new line
         const connectBundle = connectNode(toCircle, selected, connections, conValue);
         // if the line isn't just connecting to itself, add it to the connector state array
         if (JSON.stringify(connectBundle) === '{}') {
-            setLines(lines);
-            setCircles(
-                circles.map((circle) => {
-                    if (circle.connected) {
-                        return {
-                            ...circle,
-                            connected: false,
-                        };
-                    }
-                    return circle;
-                })
-            );
+            //setLines(lines);
+            clearCircles();
         }
         else {
             newLines = lines.concat(connectBundle[0]);
             setLines(newLines);
-            setConnections(connectBundle[1]);
-            setAlgoArray(kruskalAlgorithm(startNode, endNode, newLines, connectBundle[1]));
+            setConnections(connectBundle[1].concat());
         }
         // clear connecting and selected states
         setConnecting(!connecting);
@@ -445,9 +504,15 @@ export default function GraphingAlgorithm() {
         console.log(lines);
         const id = selected.id;
         if (id != -1) {
-            setCircles(circles.filter(circle => circle.id != id));
-            setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
-            setSelected({ id: -1 });
+            if (connecting) {
+                setCircles(circles.filter(circle => circle.id != id));
+                setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
+                setSelected({ id: -1 });
+            }
+            else {
+                setLines(lines.filter((line) => line.id !== id));
+                setConnections(connections.filter((connection) => connection !== id));
+            }
         }
     }
 
@@ -511,7 +576,7 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
-                                <h1>Step: {step + 1}</h1>
+                                <PathNotFound display={validPath} step={step + 1} />
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {circles.map((circle) => (
@@ -539,6 +604,7 @@ export default function GraphingAlgorithm() {
 
                                                 </Label>
                                                 <Circle
+
                                                     key={circle.id}
                                                     id={circle.id}
                                                     x={circle.x}
@@ -566,12 +632,14 @@ export default function GraphingAlgorithm() {
                                                 />
                                             </React.Fragment>
                                         ))}
+                                        
                                         {lines.map((line) => (
                                             <React.Fragment>
                                                 <Line
                                                     id={line.id}
                                                     points={line.points}
-                                                    stroke={line.stroke}
+                                                    stroke={line.connected ? "red" : "black"}
+                                                    hitStrokeWidth={25}
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />
@@ -606,7 +674,7 @@ export default function GraphingAlgorithm() {
                                                 <Button variant="contained" color="primary" onClick={stepBack}>Step Back</Button>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Pause</Button>
+                                                <Button variant="contained" color="primary" >Pause</Button>
                                             </Grid>
                                             <Grid item >
                                                 <Button variant="contained" color="primary" onClick={stepForward}>Step Forward</Button>

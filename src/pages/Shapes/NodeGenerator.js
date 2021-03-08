@@ -310,6 +310,7 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
 
     while (circles.length < numberCircles) {
         let circle = {
+            type: "circle",
             id: circles.length,
             x: (Math.random() * (canvasWidth - 200)) + 100,
             y: (Math.random() * (canvasHeight - 200)) + 100,
@@ -396,6 +397,7 @@ export function generateConnectors(numberConnectors, circles) {
 
         // creates new connection between to and from circles and sorts the connectors
         const newConnection = {
+            type: "line",
             id: id,
             connections: [to.id, from.id],
             points: getPoints(to, from),
@@ -424,6 +426,7 @@ export function connectNode(to, from, connections, setValue) {
         const value = Math.floor(Math.random() * 100);
         connections.push(id);
         return [{
+            type: "line",
             id: id,
             connections: [to.id, from.id],
             points: getPoints(to, from),

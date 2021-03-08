@@ -292,7 +292,6 @@ export default function Sorting() {
 
     useEffect(() => {
         let x = Math.max(...newArray)
-        console.log(svgRef.current);
         const svg = select(svgRef.current);
         const xScale = scaleBand()
             .domain(newArray.map((value, index) => index))
