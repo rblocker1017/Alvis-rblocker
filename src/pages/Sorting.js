@@ -1,12 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import clsx from "clsx";
 import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase } from "@material-ui/core";
+import { Button, Grid, Paper, ButtonBase, Modal, Fade, Backdrop, TextField } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { grey, green, orange } from "@material-ui/core/colors";
 import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
 import { Update } from '@material-ui/icons';
 import trash from '../trash.png';
+import { generateINIT } from './Shapes/SortingGenerator';
+import { InsertModal } from "../componenets/Resources/InsertModal";
+
+const SIZE = 6;
+const INIT_VALUES = generateINIT(SIZE);
+const INIT_ARRAY_BUNDLE = Sort(INIT_VALUES);
 
 // Bubble sort function
 // @param a - array of data to be sorted
@@ -15,7 +21,10 @@ function Sort(a)
     // declare variables
     let len = a.length-1; 
     let array = a; 
-    let answer = [];
+    let answer = [{
+        data: array.toString(),
+        swappedValue1: -1,
+        swappedValue2: -1}];
     let list = [];
     let temp = 0; 
     // repeat the bubble sort for the length of the algorithm
@@ -38,6 +47,7 @@ function Sort(a)
     }
     return answer;
 }
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +96,19 @@ const useStyles = makeStyles((theme) => ({
     },
     trashImg: {
         opacity: 0.55
+    },
+    insertPaper: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 }));
 
@@ -101,36 +124,61 @@ export default function Sorting() {
   const [flag5, setFlag5] = useState(true);
   const [flag6, setFlag6] = useState(true);
 
-  const [checked, setChecked] = useState(false)
-
-    const current = [4, 5, 7, 2, 6, 12, 8]
-    const arraysOfArrays = Sort(current)
+    const [arraysOfArrays, setArraysOfArrays] = useState(INIT_ARRAY_BUNDLE);
+    const [checked, setChecked] = useState(false)
     var [stepCount, setStepCount] = useState(0);
     var [stepInfo, setStepInfo] = useState();
-    let [data, setData] = useState(arraysOfArrays[0].data.split(',').map(Number))
-    let [swap1, setswap1] = useState(arraysOfArrays[0].swappedValue1)
-    let [swap2, setswap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState([4, 5, 7, 2, 6, 12, 8, 2, 8]); 
+    let [swap1, setSwap1] = useState(arraysOfArrays[0].swappedValue1)
+    let [swap2, setSwap2] = useState(arraysOfArrays[0].swappedValue2)
+    let [newArray, setNewArray] = useState(arraysOfArrays[0].data.split(',').map(Number)); 
     let [selected, setSelected] = useState(-1);
     const [test, setTest] = useState("tset");
+    const [open, setOpen] = useState(false);
+    const [inputError, setInputError] = useState(false);
+    const [input, setInput] = useState("");
 
-    const addValue = () => {
-        console.log(arraysOfArrays);
-    setNewArray(newArray.concat(4));
-  }
+    const handleChange = (e) => {
+        setInput(e.target.value);
+        console.log(e.target.value);
+    }
 
-    const testFunc = (value, index) => {
-        //svg.selectAll('.bar');
-        console.log(index);
-        //setSelected(value);
+    const handleClose = () => {
+        setInputError(false);
+        setOpen(false);
+    }
+
+    const handleOpen = () => {
+        if (stepCount === 0) {
+            setOpen(true);
+        }
+    }
+
+    const insertValue = () => {
+        const regex = /[^0-9]/g;
+        if (!regex.test(input) && input !== "" && parseInt(input) > 1 && parseInt(input) < 100) {
+            let lastPart = newArray;
+            let firstPart = lastPart.splice(0, selected + 1);
+            updateArray(firstPart.concat(parseInt(input)).concat(lastPart));
+            handleClose();
+        }
+        else {
+            setInputError(true);
+        }
     }
 
     const removeValue = () => {
         console.log(selected);
         let tempArray = newArray;
         newArray.splice(selected, 1)
-        console.log(newArray);
-        setNewArray(newArray.concat());
+        updateArray(newArray.concat());
+    }
+    const updateArray = (array) => {
+        let arrayBundle = Sort(array);
+        setSwap1(arrayBundle[0].swappedValue1);
+        setSwap2(arrayBundle[0].swappedValue2);
+        setNewArray(arrayBundle[0].data.split(',').map(Number));
+        setArraysOfArrays(arrayBundle);
+        setSelected(-1);
     }
 
   const handleClick1 = () => {
@@ -185,40 +233,39 @@ export default function Sorting() {
     setFlag3(true);
     setFlag4(true);
     setFlag5(true);
-  };
-    let name = "test";
+    };
 
     function reset() {
         let tempStep = 0;
         setStepCount(tempStep);
         setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
-        setswap1(arraysOfArrays[tempStep].swappedValue1);
-        setswap2(arraysOfArrays[tempStep].swappedValue2);
+        setSwap1(arraysOfArrays[tempStep].swappedValue1);
+        setSwap2(arraysOfArrays[tempStep].swappedValue2);
         setStepInfo("In step:" + (tempStep) + " We swap index: " + arraysOfArrays[tempStep].swappedValue1 + " and " + arraysOfArrays[tempStep].swappedValue2);
     }
 
     function stepForward() {
-
-        if (stepCount < arraysOfArrays.length) {
-
-            setStepCount(stepCount + 1);
-            console.log("StepCount in Next: " + stepCount)
-            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
-            setswap1(arraysOfArrays[stepCount].swappedValue1);
-            setswap2(arraysOfArrays[stepCount].swappedValue2);
-            setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
+        console.log(INIT_VALUES);
+        if (stepCount === 0) {
+            setSelected(-1);
+        }
+        if (stepCount < arraysOfArrays.length - 1) {
+            let tempStep = stepCount + 1;
+            setStepCount(tempStep);
+            setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
+            setSwap1(arraysOfArrays[tempStep].swappedValue1);
+            setSwap2(arraysOfArrays[tempStep].swappedValue2);
         }
     }
     
     function stepBack() {
 
-        if (stepCount > 1) {
-            setStepCount(stepCount - 1);
-            console.log("StepCount in Prev: " + stepCount)
-            setNewArray(arraysOfArrays[stepCount].data.split(',').map(Number))
-            setswap1(arraysOfArrays[stepCount].swappedValue1);
-            setswap2(arraysOfArrays[stepCount].swappedValue2);
-            setStepInfo("In step:" + (stepCount) + " We swap index: " + arraysOfArrays[stepCount].swappedValue1 + " and " + arraysOfArrays[stepCount].swappedValue2);
+        if (stepCount > 0) {
+            let tempStep = stepCount - 1;
+            setStepCount(tempStep);
+            setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
+            setSwap1(arraysOfArrays[tempStep].swappedValue1);
+            setSwap2(arraysOfArrays[tempStep].swappedValue2);
         }
     }
     const svgRef = useRef();
@@ -228,14 +275,17 @@ export default function Sorting() {
         <div><p> </p>
             <p>Step :{++index} Array= {value.data}</p>
             <p>Values Swapped: {value.swappedValue1} , {value.swappedValue2} </p>
-
         </div>
     );
 
-    function onClick(d, i) {
-        console.log(i);
-        setSelected(i);
-        console.log(newArray);
+    function selectBar(d, i) {
+        if (stepCount === 0) {
+            setSelected(i);
+        }
+        if (selected === i) {
+            console.log("test");
+            setSelected(-1);
+        }
     }
 
 
@@ -300,7 +350,18 @@ export default function Sorting() {
                 return index;
             })
             .attr("width", xScale.bandwidth())
-            .attr("stroke", "black")
+            .attr("stroke-width", (value, index) => {
+                if (index === selected) {
+                    return 5;
+                }
+                return 1;
+            })
+            .attr("stroke", (value, index) => {
+                if (index === selected) {
+                    return "blue";
+                }
+                return "black";
+            })
             .on("mouseenter", (value, index) => {
                 svg
                     .selectAll(".tooltip")
@@ -314,7 +375,7 @@ export default function Sorting() {
                     .attr("y", yScale(value) - 8)
                     .attr("opacity", 1);
             })
-            .on("click", onClick
+            .on("click", selectBar
             )
             .on("mouseleave", () => svg.select(".tooltip").remove())
                 .attr("fill", (value, index) => {
@@ -328,11 +389,10 @@ export default function Sorting() {
                 } else {
                     return "green"
                 }
-
             })
 
             .attr("height", value => 370 - yScale(value))
-    }, [newArray], swap1, swap2, test);
+    }, [newArray, selected], swap1, swap2, test);
 
   const changeIns = () => {settype("Insertion"); handleClick1();}
   const changeSel = () => {settype("Selection"); handleClick2();}
@@ -352,8 +412,33 @@ export default function Sorting() {
     },
   });
   return (
-    <Header>
-      <ThemeProvider theme={theme}>
+      <Header>
+          <ThemeProvider theme={theme}>
+              <Modal
+                  className={classes.modal}
+                  open={open}
+                  onClose={handleClose}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+              >
+                  <Fade in={open}>
+                      <div className={classes.insertPaper}>
+                          <form>
+                              <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                  <Grid item>
+                                      <h2 >Insert a value between 1 and 100</h2>
+                                  </Grid>
+                                  <Grid item>
+                                      <TextField error={inputError} label="value" helperText={inputError ? "Invalid value" : ""} onChange={handleChange} />
+                                  </Grid>
+                                  <Grid item>
+                                      <Button variant="contained" color="primary" onClick={insertValue}>Insert</Button>
+                                  </Grid>
+                              </Grid>
+                          </form>
+                      </div>
+                  </Fade>
+              </Modal>
         <Grid container direction="column">
           <Grid item></Grid>
           <Grid item container spacing={1}>
@@ -427,8 +512,8 @@ export default function Sorting() {
                     <Grid item xs={12}>
                       <h1></h1>
                     </Grid>
-                    <Grid item xs={7}>
-                      <Button variant="contained" color="primary" onClick = {addValue}>
+                                      <Grid item xs={7}>
+                                          <Button variant="contained" color="primary" onClick={handleOpen}>
                         Insert
                       </Button>
                     </Grid>
