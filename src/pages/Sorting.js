@@ -138,7 +138,7 @@ function HeapSort(d)
   while(a >= 0)
   {
     maximumHeap(d,lenHeap,a);
-    b --;
+    a --;
   }
   while(b >= 0)
   {
@@ -189,6 +189,40 @@ function Quick(e, left, right)
     Quick(e, i, right);
   }
   return e;
+}
+
+//Shell Sort Function
+// @param f - array of data to be sorted
+function ShellSort(f)
+{
+  //declare variable
+  let len1 = f.length;
+  let len = len1/2;
+  while(len > 0)
+  {
+    for (let i=len; i < len1; i++)
+    {
+      //declare variables
+      let j = i;
+      let temp = f[i];
+      
+      while(j >= len && f[j-len] >temp)
+      {
+        f[j] = f[j-len];
+        j = j - len;
+      }
+      f[j] = temp;
+    }
+    if(len == 2)
+    {
+      len = 1;
+    }
+    else
+    {
+      len = parseInt(len*5/11);
+    }
+  }
+  return f;
 }
 
 const useStyles = makeStyles((theme) => ({
