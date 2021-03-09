@@ -136,7 +136,7 @@ export default function Sorting() {
     const removeValue = () => {
         console.log(selected);
         let tempArray = transitionArray;
-        newArray.splice(selected, 1)
+        transitionArray.splice(selected, 1)
         updateArray(transitionArray.concat());
     }
     const updateArray = (array) => {
