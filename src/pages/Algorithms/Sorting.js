@@ -103,7 +103,7 @@ export function selection(c) {
 
 // Heap Sort fuction
 //sets up maximumum of heap
-function maximumHeap(d, len, i) {
+function maximumHeap(d, len, i, answer) {
     let left = i * 2 + 1;
     let right = left + 1;
     let maximum = i;
@@ -115,9 +115,15 @@ function maximumHeap(d, len, i) {
     }
     if (maximum !== i) {
         [d[i], d[maximum]] = [d[maximum], d[i]]; //swaps elements
-        maximumHeap(d, len, maximum)
+        answer.push({
+            data: d.toString(),
+            swappedValue1: i,
+            swappedValue2: maximum
+        });
+        console.log(d[i] + " " + d[maximum]);
+        maximumHeap(d, len, maximum, answer)
     }
-    return d;
+    return answer;
 }
 
 // @param d - array of data to be sorted
@@ -126,16 +132,30 @@ export function heapSort(d) {
     let lenHeap = d.length;
     let a = Math.floor(lenHeap / 2 - 1);
     let b = lenHeap - 1;
+    let answer = [{
+        data: d.toString(),
+        swappedValue1: -1,
+        swappedValue2: -1
+    }];
     while (a >= 0) {
-        maximumHeap(d, lenHeap, a);
+        maximumHeap(d, lenHeap, a, answer);
         a--;
     }
     while (b >= 0) {
-        [d[0], d[b]] = [d[b], d[0]]; //swaps elements
-        maximumHeap(d, b, 0);
+        let swap1 = d[0];
+        let swap2 = d[b];
+        d[0] = swap2;
+        d[b] = swap1;
+        answer.push({
+            data: d.toString(),
+            swappedValue1: 0,
+            swappedValue2: b
+        });
+        console.log(swap1 + " " + swap2)
+        maximumHeap(d, b, 0, answer);
         b--;
     }
-    return d;
+    return answer;
 }
 
 // Quick Sort fuction

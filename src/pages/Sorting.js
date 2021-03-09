@@ -155,6 +155,10 @@ export default function Sorting() {
                 arrayBundle = insertion(transitionArray.concat());
                 console.log(arrayBundle);
                 break;
+            case "Heap":
+                arrayBundle = heapSort(transitionArray.concat());
+                console.log(arrayBundle);
+                break;
             default:
                 arrayBundle = null;
                 break;
