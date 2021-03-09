@@ -9,45 +9,11 @@ import { Update } from '@material-ui/icons';
 import trash from '../trash.png';
 import { generateINIT } from './Shapes/SortingGenerator';
 import { InsertModal } from "../componenets/Resources/InsertModal";
+import { bubble, insertion, selection, heapSort, quick, shellSort } from "./Algorithms/Sorting";
 
 const SIZE = 6;
 const INIT_VALUES = generateINIT(SIZE);
-const INIT_ARRAY_BUNDLE = Sort(INIT_VALUES);
-
-// Bubble sort function
-// @param a - array of data to be sorted
-function Sort(a)
-{   
-    // declare variables
-    let len = a.length-1; 
-    let array = a; 
-    let answer = [{
-        data: array.toString(),
-        swappedValue1: -1,
-        swappedValue2: -1}];
-    let list = [];
-    let temp = 0; 
-    // repeat the bubble sort for the length of the algorithm
-    for (let i = 0; i < len; i++){
-        // the actual bubble sort part
-        // for every item in the array, float it up through the array
-         for(let j = 0; j<len ; j++){
-            if(array[j]> array[j+1] ){
-                temp = array[j];
-                array[j] = array[j+1]; 
-                array[j + 1] = temp; 
-                // push an object every time a swap happens containing the data (aka the current array to string)
-                // as well as the swapped values
-                answer.push({data: array.toString(),
-                            swappedValue1: j,
-                    swappedValue2: j + 1
-                });
-            }
-         }
-    }
-    return answer;
-}
-
+const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -136,6 +102,7 @@ export default function Sorting() {
     const [open, setOpen] = useState(false);
     const [inputError, setInputError] = useState(false);
     const [input, setInput] = useState("");
+    const [transitionArray, setTransitionArray] = useState(arraysOfArrays[0].data.split(',').map(Number));
 
     const handleChange = (e) => {
         setInput(e.target.value);
@@ -156,7 +123,7 @@ export default function Sorting() {
     const insertValue = () => {
         const regex = /[^0-9]/g;
         if (!regex.test(input) && input !== "" && parseInt(input) > 1 && parseInt(input) < 100) {
-            let lastPart = newArray;
+            let lastPart = transitionArray;
             let firstPart = lastPart.splice(0, selected + 1);
             updateArray(firstPart.concat(parseInt(input)).concat(lastPart));
             handleClose();
@@ -168,72 +135,38 @@ export default function Sorting() {
 
     const removeValue = () => {
         console.log(selected);
-        let tempArray = newArray;
+        let tempArray = transitionArray;
         newArray.splice(selected, 1)
-        updateArray(newArray.concat());
+        updateArray(transitionArray.concat());
     }
     const updateArray = (array) => {
-        let arrayBundle = Sort(array);
-        setSwap1(arrayBundle[0].swappedValue1);
-        setSwap2(arrayBundle[0].swappedValue2);
-        setNewArray(arrayBundle[0].data.split(',').map(Number));
-        setArraysOfArrays(arrayBundle);
-        setSelected(-1);
+        setTransitionArray(array);
     }
-
-  const handleClick1 = () => {
-    if (flag1) setFlag1(!flag1);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick2 = () => {
-    if (flag2) setFlag2(!flag2);
-    setFlag1(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick3 = () => {
-    if (flag3) setFlag3(!flag3);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick4 = () => {
-    if (flag4) setFlag4(!flag4);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick5 = () => {
-    if (flag5) setFlag5(!flag5);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag6(true);
-  };
-
-  const handleClick6 = () => {
-    if (flag6) setFlag6(!flag6);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    };
+    useEffect(() => {
+        let arrayBundle;
+        switch (type) {
+            case "Bubble":
+                arrayBundle = bubble(transitionArray.concat());
+                break;
+            case "Selection":
+                arrayBundle = selection(transitionArray.concat());
+                break;
+            case "Insertion":
+                arrayBundle = insertion(transitionArray.concat());
+                console.log(arrayBundle);
+                break;
+            default:
+                arrayBundle = null;
+                break;
+        }
+        if (arrayBundle !== null) {
+            setSwap1(arrayBundle[0].swappedValue1);
+            setSwap2(arrayBundle[0].swappedValue2);
+            setNewArray(arrayBundle[0].data.split(',').map(Number));
+            setArraysOfArrays(arrayBundle);
+            setSelected(-1);
+        }
+    }, [type, transitionArray]);
 
     function reset() {
         let tempStep = 0;
@@ -259,7 +192,6 @@ export default function Sorting() {
     }
     
     function stepBack() {
-
         if (stepCount > 0) {
             let tempStep = stepCount - 1;
             setStepCount(tempStep);
@@ -270,14 +202,6 @@ export default function Sorting() {
     }
     const svgRef = useRef();
 
-
-    const listCurrent = arraysOfArrays.map((value, index) =>
-        <div><p> </p>
-            <p>Step :{++index} Array= {value.data}</p>
-            <p>Values Swapped: {value.swappedValue1} , {value.swappedValue2} </p>
-        </div>
-    );
-
     function selectBar(d, i) {
         if (stepCount === 0) {
             setSelected(i);
@@ -287,8 +211,6 @@ export default function Sorting() {
             setSelected(-1);
         }
     }
-
-
 
     useEffect(() => {
         let x = Math.max(...newArray)
@@ -391,14 +313,16 @@ export default function Sorting() {
             })
 
             .attr("height", value => 370 - yScale(value))
-    }, [newArray, selected], swap1, swap2, test);
+    }, [newArray, selected], swap1, swap2);
 
-  const changeIns = () => {settype("Insertion"); handleClick1();}
-  const changeSel = () => {settype("Selection"); handleClick2();}
-  const changeQui = () => {settype("Quick"); handleClick3();}
-  const changeBub = () => {settype("Bubble"); handleClick4();}
-  const changeHea = () => {settype("Heap"); handleClick5();}
-  const changeShe = () => {settype("Shell"); handleClick6();}
+    const changeAlgorithm = (e) => {
+        let currentType = e.target.textContent;
+        if (stepCount !== 0) {
+            return null;
+        }
+        settype(currentType);
+        console.log(e.target.textContent);
+    }
 
   const theme = createMuiTheme({
     palette: {
@@ -449,7 +373,7 @@ export default function Sorting() {
                       <Button
                         variant="contained"
                         className={classes.button}
-                        onClick={changeIns}
+                                              onClick={changeAlgorithm}
                         color={flag1 ? "primary" : "secondary"}
                       >
                         Insertion
@@ -458,7 +382,7 @@ export default function Sorting() {
                     <Grid item className={classes.button} xs={4}>
                       <Button
                         variant="contained"
-                        onClick={changeSel}
+                                              onClick={changeAlgorithm}
                         color={flag2 ? "primary" : "secondary"}
                         className={classes.button}
                       >
@@ -469,7 +393,7 @@ export default function Sorting() {
                       <Button
                         variant="contained"
                         className={classes.button}
-                        onClick={changeQui}
+                                              onClick={changeAlgorithm}
                         color={flag3 ? "primary" : "secondary"}
                       >
                         Quick
@@ -482,7 +406,7 @@ export default function Sorting() {
                       <Button
                         variant="contained"
                         className={classes.button}
-                        onClick={changeBub}
+                                              onClick={changeAlgorithm}
                         color={flag4 ? "primary" : "secondary"}
                       >
                         Bubble
@@ -492,7 +416,7 @@ export default function Sorting() {
                       <Button
                         variant="contained"
                         className={classes.button}
-                        onClick={changeHea}
+                                              onClick={changeAlgorithm}
                         color={flag5 ? "primary" : "secondary"}
                       >
                         Heap
@@ -501,8 +425,8 @@ export default function Sorting() {
                     <Grid item className={classes.button} xs={4}>
                       <Button
                         variant="contained"
-                        className={classes.button}
-                        onClick={changeShe}
+                                              className={classes.button}
+                                              onClick={changeAlgorithm}
                         color={flag6 ? "primary" : "secondary"}
                       >
                         Shell
