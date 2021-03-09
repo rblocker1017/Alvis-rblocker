@@ -152,13 +152,15 @@ function HeapSort(d)
 // Quick Sort fuction
 function partitionQuick(e, left, right)
 {
+  //declare variable for calculate middle of the range
+  let calcMiddle = (left+right)/2;
   while (left <= right)
   {
-    while(e[left] < e[Math.floor((left + right)/2)])
+    while(e[left] < e[Math.floor(calcMiddle)])
     {
       left ++;
     }
-    while(e[right] > e[Math.floor((left + right)/2)])
+    while(e[right] > e[Math.floor(calcMiddle)])
     {
       right --;
     }
@@ -172,21 +174,27 @@ function partitionQuick(e, left, right)
   return left;
 }
 
+
 // @param e - array of data to be sorted
 function Quick(e, left, right)
 {
   //declare variable
   let lenQuick = e.length;
-  let i = partitionQuick(e, left, right);
   left = left || 0;
   right = right || lenQuick -1;
-  if(left < i-1)
+
+  if(lenQuick > 1)
   {
-    Quick(e, left, i-1);
-  }
-  if(right > i)
-  {
-    Quick(e, i, right);
+    let i = partitionQuick(e, left, right);
+  
+    if(left < i-1)
+    {
+      Quick(e, left, i-1);
+    }
+    if(right > i)
+    {
+      Quick(e, i, right);
+    }
   }
   return e;
 }
