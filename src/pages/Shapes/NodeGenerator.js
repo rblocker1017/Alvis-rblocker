@@ -379,7 +379,7 @@ export function generateConnectors(numberConnectors, circles) {
     let tempConnections = [];
     while (result.length < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
-        const value = Math.floor(Math.random() * 9);
+        const value = Math.floor(Math.random() * 8) + 1;
         let fromIndex = Math.floor(Math.random() * circles.length);
         let toIndex = Math.floor(Math.random() * circles.length);
         while (toIndex === fromIndex) {
