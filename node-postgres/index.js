@@ -14,13 +14,24 @@ app.get('/', (req, res) => {
 
 app.get('/users', db.getUsers)
 
+// Whenever sign up is clicked, this function is called 
 app.post("/register", (req, res) => {
   const email = req.body.email
   const password = req.body.password
   const username = req.body.username
-  db.addUser("123", password, username)
-  
+  db.addLogin(password, email)
+  db.addUser(username, email)  
 })
+
+//returns true if hash and email match, false if they don't
+function validateHash(email, hash)
+{
+  db.validate(email, hash)
+  .then(valid => console.log(valid))
+  .catch(err => console.error(err));
+  
+}
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
