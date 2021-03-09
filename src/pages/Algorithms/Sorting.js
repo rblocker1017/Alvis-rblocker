@@ -159,7 +159,7 @@ export function heapSort(d) {
 }
 
 // Quick Sort fuction
-function partitionQuick(e, left, right) {
+function partitionQuick(e, left, right, answer) {
     while (left <= right) {
         while (e[left] < e[Math.floor((left + right) / 2)]) {
             left++;
@@ -169,6 +169,11 @@ function partitionQuick(e, left, right) {
         }
         if (left <= right) {
             [e[left], e[right]] = [e[right], e[left]]; //swaps elements
+            answer.push({
+                data: e.toString(),
+                swappedValue1: right,
+                swappedValue2: left
+            });
             left++;
             right--;
         }
@@ -180,14 +185,19 @@ function partitionQuick(e, left, right) {
 export function quick(e, left, right) {
     //declare variable
     let lenQuick = e.length;
+    let answer = [{
+        data: e.toString(),
+        swappedValue1: -1,
+        swappedValue2: -1
+    }];
     let i = partitionQuick(e, left, right);
     left = left || 0;
     right = right || lenQuick - 1;
     if (left < i - 1) {
-        quick(e, left, i - 1);
+        quick(e, left, i - 1, answer);
     }
     if (right > i) {
-        quick(e, i, right);
+        quick(e, i, right, answer);
     }
     return e;
 }
@@ -197,7 +207,12 @@ export function quick(e, left, right) {
 export function shellSort(f) {
     //declare variable
     let len1 = f.length;
-    let len = len1 / 2;
+    let len = Math.floor(len1 / 2);
+    let answer = [{
+        data: f.toString(),
+        swappedValue1: -1,
+        swappedValue2: -1
+    }];
     while (len > 0) {
         for (let i = len; i < len1; i++) {
             //declare variables
@@ -209,13 +224,13 @@ export function shellSort(f) {
                 j = j - len;
             }
             f[j] = temp;
+            answer.push({
+                data: f.toString(),
+                swappedValue1: j,
+                swappedValue2: i
+            })
         }
-        if (len == 2) {
-            len = 1;
-        }
-        else {
-            len = parseInt(len * 5 / 11);
-        }
+        len = Math.floor(len / 2);
     }
-    return f;
+    return answer;
 }

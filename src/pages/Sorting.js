@@ -159,6 +159,9 @@ export default function Sorting() {
                 arrayBundle = heapSort(transitionArray.concat());
                 console.log(arrayBundle);
                 break;
+            case "Shell":
+                arrayBundle = shellSort(transitionArray.concat());
+                break;
             default:
                 arrayBundle = null;
                 break;
