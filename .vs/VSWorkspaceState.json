@@ -4,8 +4,12 @@
     "\\src",
     "\\src\\componenets",
     "\\src\\componenets\\layout",
-    "\\src\\pages"
+    "\\src\\componenets\\Messages",
+    "\\src\\componenets\\Resources",
+    "\\src\\pages",
+    "\\src\\pages\\Algorithms",
+    "\\src\\pages\\Shapes"
   ],
-  "SelectedNode": "\\src\\componenets\\layout\\header.js",
+  "SelectedNode": "\\src\\pages\\Algorithms\\Sorting.js",
   "PreviewInSolutionExplorer": false
 }

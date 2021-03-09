@@ -9,7 +9,7 @@ import { Update } from '@material-ui/icons';
 import trash from '../trash.png';
 import { generateINIT } from './Shapes/SortingGenerator';
 import { InsertModal } from "../componenets/Resources/InsertModal";
-import { bubble, insertion, selection, heapSort, quick, shellSort } from "./Algorithms/Sorting";
+import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "./Algorithms/Sorting";
 
 const SIZE = 6;
 const INIT_VALUES = generateINIT(SIZE);
@@ -161,6 +161,9 @@ export default function Sorting() {
                 break;
             case "Shell":
                 arrayBundle = shellSort(transitionArray.concat());
+                break;
+            case "Quick":
+                arrayBundle = quickSort(transitionArray.concat());
                 break;
             default:
                 arrayBundle = null;

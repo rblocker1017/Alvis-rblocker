@@ -157,49 +157,51 @@ export function heapSort(d) {
     }
     return answer;
 }
-
-// Quick Sort fuction
+/*
+ * Quicksort code based off os psudocode from geeksforgeeks.com/quick-sort/
+ */ 
 function partitionQuick(e, left, right, answer) {
-    while (left <= right) {
-        while (e[left] < e[Math.floor((left + right) / 2)]) {
-            left++;
-        }
-        while (e[right] > e[Math.floor((left + right) / 2)]) {
-            right--;
-        }
-        if (left <= right) {
-            [e[left], e[right]] = [e[right], e[left]]; //swaps elements
+    let pivot = e[right];
+    let i = left - 1;
+    for (let j = left; j <= right - 1; j++) {
+        if (e[j] < pivot) {
+            i++;
+            e[i] = [e[j], e[j] = e[i]][0];
             answer.push({
                 data: e.toString(),
-                swappedValue1: right,
-                swappedValue2: left
+                swappedValue1: i,
+                swappedValue2: j
             });
-            left++;
-            right--;
         }
     }
-    return left;
+    e[i + 1] = [e[right], e[right] = e[i + 1]][0];
+    answer.push({
+        data: e.toString(),
+        swappedValue1: i + 1,
+        swappedValue2: right
+    });
+    return i + 1;
 }
 
 // @param e - array of data to be sorted
-export function quick(e, left, right) {
-    //declare variable
-    let lenQuick = e.length;
+function Quick(e, left, right, answer) {
+    if (left < right) {
+        let pi = partitionQuick(e, left, right, answer);
+
+        Quick(e, left, pi - 1, answer);
+        Quick(e, pi + 1, right, answer);
+    }
+    return e;
+}
+
+export function quickSort(e) {
     let answer = [{
         data: e.toString(),
         swappedValue1: -1,
         swappedValue2: -1
     }];
-    let i = partitionQuick(e, left, right);
-    left = left || 0;
-    right = right || lenQuick - 1;
-    if (left < i - 1) {
-        quick(e, left, i - 1, answer);
-    }
-    if (right > i) {
-        quick(e, i, right, answer);
-    }
-    return e;
+    Quick(e, 0, e.length - 1, answer);
+    return answer;
 }
 
 //Shell Sort Function
