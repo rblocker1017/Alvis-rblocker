@@ -25,8 +25,17 @@ const getUsers = (request, response) => {
     })
   }
 
+const addUser = (id, hash, email) => {
+  pool.query('INSERT INTO login(id, hash, email) VALUES($1, $2, $3)',[id, hash, email], (error, results) => {
+    if (error) {
+      throw error
+    }
+  })
+}
+
   module.exports = {
     getUsers,
+    addUser
   }
 
 

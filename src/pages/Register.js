@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { Button, Grid, Box, Paper, Typography, Divider, ButtonBase, TextField, FormControlLabel, Checkbox } from "@material-ui/core";
-import { makeStyles, ThemeProvider, useTheme, createMuiTheme } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, useTheme, createMuiTheme} from '@material-ui/core/styles';
 import LinkRoute from 'react-router-dom/Link';
+import Axios from 'axios'
 import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -62,9 +63,11 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
-
 export default function Register() {
     const classes = useStyles();
+    const [registerEmail, setEmail] = useState([]);
+    const [registerPassword, setPassword] = useState([]);
+    const [registerName, setName] = useState([]);
     const theme = createMuiTheme({
         typography:
         {
@@ -76,10 +79,21 @@ export default function Register() {
     });
 
     function handleSubmit(event) {
-        alert("test");
-        event.preventDefault();
+        console.log(registerEmail)
+        console.log(registerPassword)
+        console.log(registerName)
     }
+    
+    const register = () => {
+        Axios.post("http://localhost:3001/register",{
+            email: registerEmail,
+            password: registerPassword,
+            username: registerName,
 
+        }).then((response) =>{
+            console.log(response);
+        })
+    }
     return (
         <ThemeProvider theme={theme}>
             <Grid container direction={"row"} justify={"flex-start"}>
@@ -126,16 +140,16 @@ export default function Register() {
 
                                     <Grid item>
                                         <Box pt={2}>
-                                            <TextField label="Your Name" variant="outlined" className={classes.input} />
+                                            <TextField label="Your Name" variant="outlined" className={classes.input} onChange={(e) => { setName(e.target.value)}} />
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Your Email" variant="outlined" className={classes.input} />
+                                            <TextField label="Your Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}} />
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Password" variant="outlined" className={classes.input} />
+                                            <TextField label="Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Repeat your Password" variant="outlined" className={classes.input} />
+                                            <TextField label="Repeat your Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}} />
                                         </Box>
                                     </Grid>
                                     <Grid item>
@@ -143,7 +157,7 @@ export default function Register() {
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
-                                            <Button variant={"contained"} type={"submit"} className={classes.submit}>
+                                            <Button variant={"contained"} className={classes.submit} onClick={() => register()}>
                                                 <Typography variant={"h6"}>
                                                     Sign up
                                                 </Typography>
