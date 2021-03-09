@@ -34,11 +34,9 @@ function App() {
         <Route path="/Achievements" exact component={Achievements} />
         <Route path="/Register" exact component={Register} />
     </BrowserRouter>
-
-
-
-    <h1>Validated Login Form</h1>
-      <ValidatedLoginForm />
+    // Output not as my expectation
+   // <h1>Validated Login Form</h1>
+   //   <ValidatedLoginForm />
     </div>
   );
 }
