@@ -100,12 +100,13 @@ export default function Login() {
         })
     }
 
+
     return (
         <ThemeProvider theme={theme}>
             <Grid container direction={"row"} justify={"flex-start"}>
                 <Grid item>
                     <Box m={4}>
-                        <Button component={LinkRoute} to="/" variant="contained" id ="Back" className={classes.back}>
+                        <Button component={LinkRoute} to="/" variant="contained" className={classes.back}>
                             Back
                         </Button>
                     </Box>
@@ -157,10 +158,10 @@ export default function Login() {
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
-                                            <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}}/>
+                                            <TextField label="Email" variant="outlined" className={classes.input} />
                                         </Box>
                                         <Box pt={1}>
-                                            <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
+                                            <TextField label="Password" variant="outlined" className={classes.input} />
                                         </Box>
                                     </Grid>
                                     <Grid item>
@@ -181,7 +182,7 @@ export default function Login() {
                                     </Grid>
                                     <Grid item>
                                         <Box>
-                                            <Button variant={"contained"} className={classes.submit} onClick={() => handleSubmit()} >
+                                            <Button variant={"contained"} type={"submit"} className={classes.submit}>
                                                 <Typography variant={"h6"}>
                                                     Log In
                                                 </Typography>
