@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+build:
+  image: node:latest # Run the job in a `node` docker image
+  stage: build
+  variables:
+    # Replace this with your site URL
+    PUBLIC_URL: "/fall2020_buzzdev"
+  script:
+    - yarn install # Run `yarn install` and `yarn build`
+    - CI=false yarn build
+  artifacts:
+    paths:
+      - build/ # Save the build result as an artfact
+
+pages:
+  image: alpine:latest
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none # Do not clone git repo
+  script:
+    # Rename the CRA `build` folder to `public`
+    - mv build public
+    - cp public/index.html public/404.html
+  artifacts:
+    paths:
+      - public

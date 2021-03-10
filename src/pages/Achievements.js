@@ -16,11 +16,7 @@ import {
   FormControl,
   Select,
 } from "@material-ui/core";
-import {
-  makeStyles,
-  ThemeProvider,
-  createMuiTheme,
-} from "@material-ui/core/styles";
+import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
 import MenuList from "@material-ui/core/MenuList";
 import Modal from "@material-ui/core/Modal";
@@ -101,12 +97,7 @@ function createData(name, status, date, details) {
 }
 
 const originalRows = [
-  createData(
-    "Binary Search Traversal",
-    "Completed",
-    "Completed on X/X/XXXX",
-    "view"
-  ),
+  createData("Binary Search Traversal", "Completed", "Completed on X/X/XXXX", "view"),
   createData("Graphing", "Incomplete"),
   createData("Sorting", "Incomplete"),
   createData("CPU Scheduling", "Incomplete"),
@@ -157,32 +148,17 @@ export default function Achievements() {
     <Header>
       <ThemeProvider theme={theme}>
         <Paper className={classes.paper}>
-          <Grid
-            container
-            alignItems={"center"}
-            direction={"row"}
-            justify={"center"}
-            spacing={"5"}
-          >
+          <Grid container alignItems={"center"} direction={"row"} justify={"center"} spacing={"5"}>
             <Grid item>
               <h1>Achievements</h1>
             </Grid>
             <Grid item>
-              <SearchBar
-                value={searched}
-                onChange={(searchVal) => requestSearch(searchVal)}
-                onCancelSearch={() => cancelSearch()}
-              />
+              <SearchBar value={searched} onChange={(searchVal) => requestSearch(searchVal)} onCancelSearch={() => cancelSearch()} />
             </Grid>
             <Grid item>
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel>Sort by</InputLabel>
-                <Select
-                  labelId="simple-select"
-                  value={sort}
-                  onChange={handleChange}
-                  label="Sort by"
-                >
+                <Select labelId="simple-select" value={sort} onChange={handleChange} label="Sort by">
                   <MenuItem value={1}>Achievement</MenuItem>
                   <MenuItem value={2}>Status</MenuItem>
                   <MenuItem value={3}>Completition Date</MenuItem>
@@ -217,12 +193,7 @@ export default function Achievements() {
                   <TableBody>
                     {rows.map((row) => (
                       <TableRow key={row.name}>
-                        <TableCell
-                          className={classes.tc}
-                          align="center"
-                          component="th"
-                          scope="row"
-                        >
+                        <TableCell className={classes.tc} align="center" component="th" scope="row">
                           {row.name}
                         </TableCell>
                         <TableCell className={classes.tc} align="center">
@@ -235,11 +206,7 @@ export default function Achievements() {
                         <TableCell className={classes.tc} align="center">
                           {
                             <div>
-                              <buttons
-                                type="button"
-                                className={classes.button}
-                                onClick={handleOpen}
-                              >
+                              <buttons type="button" className={classes.button} onClick={handleOpen}>
                                 <MenuList>
                                   <MenuItem align="center">View</MenuItem>
                                 </MenuList>
@@ -266,29 +233,19 @@ export default function Achievements() {
                                 <div className={classes.paperOverlay}>
                                   <Card className={classes.root}>
                                     <CardContent>
-                                      <Typography
-                                        className={classes.title}
-                                        color="textSecondary"
-                                        gutterBottom
-                                      >
+                                      <Typography className={classes.title} color="textSecondary" gutterBottom>
                                         Sample Icon
                                       </Typography>
                                       <Typography variant="h5" component="h2">
                                         Name: Sample Achievement
                                       </Typography>
-                                      <Typography
-                                        className={classes.pos}
-                                        color="textSecondary"
-                                      >
-                                        Description: A sample description of the
-                                        achievement.
+                                      <Typography className={classes.pos} color="textSecondary">
+                                        Description: A sample description of the achievement.
                                       </Typography>
                                       <Typography variant="body2" component="p">
                                         Date: Completed on X/X/XXXX
                                         <br />
-                                        {
-                                          "Category: A Sample Category for the achievement"
-                                        }
+                                        {"Category: A Sample Category for the achievement"}
                                       </Typography>
                                     </CardContent>
                                     <CardActions>
