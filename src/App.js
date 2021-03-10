@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { HashRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import BubbleSort from "./pages/bubbleSort";
 import CPUScheduling from "./pages/CPUScheduling";
 import RoundRobin from "./pages/roundRobin";
@@ -18,7 +18,7 @@ import Register from "./pages/Register";
 function App() {
   return (
     <div className="App">
-      <HashRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Route path="/" exact component={Welcome} />
         <Route path="/bubblesort" exact component={BubbleSort} />
         <Route path="/CpuScheduling" exact component={CPUScheduling} />
@@ -32,7 +32,7 @@ function App() {
         <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
         <Route path="/Achievements" exact component={Achievements} />
         <Route path="/Register" exact component={Register} />
-      </HashRouter>
+      </BrowserRouter>
     </div>
   );
 }
