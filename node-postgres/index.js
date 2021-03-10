@@ -3,7 +3,8 @@ const app = express()
 const cors = require("cors");
 const port = 3001
 
-const db = require('./alvis_model')
+const db = require('./alvis_model');
+const { wait } = require('@testing-library/dom');
 
 app.use(express.json())
 app.use(cors())
@@ -23,20 +24,14 @@ app.post("/register", (req, res) => {
   db.addUser(username, email)  
 })
 
-//returns true if hash and email match, false if they don't
-function validateHash(email, hash)
-{
-  db.validate(email, hash)
-  .then(valid => console.log(valid))
-  .catch(err => console.error(err));
-  
-}
+
 
 app.post("/login", (req, res) => {
   const loginEmail = req.body.loginEmail
   const loginPassword = req.body.loginPassword
-  validateHash(loginEmail, loginPassword)
-  res.send(db.getValidate())
+  db.validate(loginEmail, loginPassword)
+  .then(valid => res.send(String(valid)))
+  .catch(err => console.error(err));
 })
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)

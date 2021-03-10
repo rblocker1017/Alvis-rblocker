@@ -21,14 +21,16 @@ function validate(email, hash)
       if (error) {
         return reject(err);
       }
-      if(result.rows.length === 1)
+      else if(result.rows.length === 1)
       {
-        validateResponse = "true";
+        validateResponse = "true"
         resolve(true)
+        
       }
       else{
-        validateResponse = "false";
+        validateResponse = "false"
         resolve(false)
+        
       }
     })) 
 }
