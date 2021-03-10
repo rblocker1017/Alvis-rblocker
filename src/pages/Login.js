@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
     input:
     {
         width: "50%"
+    },
+    checkbox:
+    {
+        color: "#000000"
     }
 
 }));
@@ -79,21 +83,19 @@ export default function Login() {
     });
 
     function handleSubmit(event) {
-        Axios.post("http://localhost:3001/login",{
+        Axios.post("http://localhost:3001/login", {
             loginEmail: email,
             loginPassword: password,
 
-        }).then((response) =>{
-            if(String(response.data) == "true")
-            {
+        }).then((response) => {
+            if (String(response.data) == "true") {
                 console.log("Correct username and password")
 
                 const cookies = new Cookies();
                 cookies.set('cookie', { username: "email" }, { path: '/' });
                 window.location.assign("/");
-        
-            }else
-            {
+
+            } else {
                 // Unvalidated
                 console.log("Incorrect username and password")
             }
@@ -105,7 +107,7 @@ export default function Login() {
             <Grid container direction={"row"} justify={"flex-start"}>
                 <Grid item>
                     <Box m={4}>
-                        <Button component={LinkRoute} to="/" variant="contained" id ="Back" className={classes.back}>
+                        <Button component={LinkRoute} to="/" variant="contained" id="Back" className={classes.back}>
                             Back
                         </Button>
                     </Box>
@@ -116,14 +118,14 @@ export default function Login() {
                     <Box pl={"25%"}>
                         <Box>
                             <Typography variant={"h1"} justify="flex-start" >
-                                    ALVIS
+                                ALVIS
                             </Typography>
                         </Box>
                         <Box className={classes.divider}>
                             <Divider />
                         </Box>
                         <Box>
-                            <Typography variant={"b1"} align="baseline" >
+                            <Typography variant={"body1"} >
                                 An Interactive Algorithm Visualizer for
                                 Computer Science courses making
                                 learning more enjoyable and challenging
@@ -139,14 +141,14 @@ export default function Login() {
                                     <Grid item>
                                         <Box pt={5}>
                                             <Typography variant={"h2"}>
-                                                    Log In
+                                                Log In
                                             </Typography>
                                         </Box>
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
                                             <Typography variant={"h6"}>
-                                                {"New User? "} 
+                                                {"New User? "}
                                                 <ButtonBase component={LinkRoute} to="/Register">
                                                     <Typography variant={"h6"} className={classes.link}>
                                                         Create an account!
@@ -157,17 +159,17 @@ export default function Login() {
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
-                                            <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}}/>
+                                            <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value) }} />
                                         </Box>
                                         <Box pt={1}>
-                                            <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
+                                            <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value) }} />
                                         </Box>
                                     </Grid>
                                     <Grid item>
                                         <Box pl={"20%"} pr={"20%"}>
                                             <Grid container direction={"row"} justify={"space-around"} alignItems={"center"}>
                                                 <Grid item>
-                                                    <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>Remember Me</Typography>} labelPlacement={"end"} />
+                                                    <FormControlLabel control={<Checkbox className={classes.checkbox} />} label={<Typography variant={"button"}>Remember Me</Typography>} labelPlacement={"end"} />
                                                 </Grid>
                                                 <Grid item>
                                                     <ButtonBase>
