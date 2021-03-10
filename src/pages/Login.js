@@ -3,6 +3,7 @@ import { Button, Grid, Box, Paper, Typography, Divider, ButtonBase, TextField, F
 import { makeStyles, ThemeProvider, useTheme, createMuiTheme } from '@material-ui/core/styles';
 import LinkRoute from 'react-router-dom/Link';
 import Axios from 'axios'
+import Cookies from 'universal-cookie';
 import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -85,8 +86,12 @@ export default function Login() {
         }).then((response) =>{
             if(String(response.data) == "true")
             {
-                // Validated user
                 console.log("Correct username and password")
+
+                const cookies = new Cookies();
+                cookies.set('cookie', { username: "email" }, { path: '/' });
+                window.location.assign("/");
+        
             }else
             {
                 // Unvalidated
@@ -100,7 +105,7 @@ export default function Login() {
             <Grid container direction={"row"} justify={"flex-start"}>
                 <Grid item>
                     <Box m={4}>
-                        <Button component={LinkRoute} to="/" variant="contained" className={classes.back}>
+                        <Button component={LinkRoute} to="/" variant="contained" id ="Back" className={classes.back}>
                             Back
                         </Button>
                     </Box>
