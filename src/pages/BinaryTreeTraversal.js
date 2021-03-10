@@ -510,7 +510,6 @@ export default function BinaryTreeTraversal() {
             console.log(idNum);
         }
     };
-
     const selectLine = (e) => {
         const id = e.target.id();
         // set connecting state to true
