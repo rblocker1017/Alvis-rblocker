@@ -5,6 +5,7 @@ import LinkRoute from 'react-router-dom/Link';
 import Axios from 'axios'
 import Cookies from 'universal-cookie';
 import { green } from "@material-ui/core/colors";
+import IncorrectLogin from '../componenets/Messages/IncorrectLogin';
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -71,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
     const [email, setEmail] = useState([]);
     const [password, setPassword] = useState([]);
+    const [valid, setValid] = useState(true);
     const classes = useStyles();
     const theme = createMuiTheme({
         typography:
@@ -97,6 +99,7 @@ export default function Login() {
 
             } else {
                 // Unvalidated
+                setValid(false);
                 console.log("Incorrect username and password")
             }
         })
@@ -157,6 +160,7 @@ export default function Login() {
                                             </Typography>
                                         </Box>
                                     </Grid>
+                                    <IncorrectLogin valid={valid} />
                                     <Grid item>
                                         <Box pt={2}>
                                             <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value) }} />
