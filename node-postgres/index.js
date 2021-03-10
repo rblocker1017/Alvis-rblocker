@@ -32,6 +32,12 @@ function validateHash(email, hash)
   
 }
 
+app.post("/login", (req, res) => {
+  const loginEmail = req.body.loginEmail
+  const loginPassword = req.body.loginPassword
+  validateHash(loginEmail, loginPassword)
+  res.send(db.getValidate())
+})
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })

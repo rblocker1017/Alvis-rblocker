@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Grid, Box, Paper, Typography, Divider, ButtonBase, TextField, FormControlLabel, Checkbox } from "@material-ui/core";
 import { makeStyles, ThemeProvider, useTheme, createMuiTheme } from '@material-ui/core/styles';
 import LinkRoute from 'react-router-dom/Link';
+import Axios from 'axios'
 import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,9 +78,21 @@ export default function Login() {
     });
 
     function handleSubmit(event) {
-        console.log(email)
-        console.log(password)
-        event.preventDefault();
+        Axios.post("http://localhost:3001/login",{
+            loginEmail: email,
+            loginPassword: password,
+
+        }).then((response) =>{
+            if(String(response.data) == "true")
+            {
+                // Validated user
+                console.log("Correct username and password")
+            }else
+            {
+                // Unvalidated
+                console.log("Incorrect username and password")
+            }
+        })
     }
 
     return (
@@ -163,7 +176,7 @@ export default function Login() {
                                     </Grid>
                                     <Grid item>
                                         <Box>
-                                            <Button variant={"contained"} type={"submit"} className={classes.submit}>
+                                            <Button variant={"contained"} className={classes.submit} onClick={() => handleSubmit()} >
                                                 <Typography variant={"h6"}>
                                                     Log In
                                                 </Typography>

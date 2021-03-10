@@ -6,6 +6,13 @@ const pool = new Pool({
   connectionString : connString,
   ssl: {rejectUnauthorized: false}
 });
+var validateResponse = "";
+
+function getValidate()
+{
+  return validateResponse;
+}
+
 
 function validate(email, hash)
 {
@@ -16,12 +23,14 @@ function validate(email, hash)
       }
       if(result.rows.length === 1)
       {
-        resolve(true);
+        validateResponse = "true";
+        resolve(true)
       }
       else{
-        resolve(false);
+        validateResponse = "false";
+        resolve(false)
       }
-    }))
+    })) 
 }
 
 const getUsers = (request, response) => {
@@ -62,6 +71,7 @@ const addUser = (name, email) => {
     addLogin,
     addUser,
     validate,
+    getValidate
   }
 
 
