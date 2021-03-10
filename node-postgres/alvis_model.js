@@ -1,3 +1,5 @@
+const bcrypt  = require('bcrypt')
+
 const {Pool} = require('pg')
 
 let connString = 'postgres://iwqzigmkdqwrsx:d56e6f5bdac388d778c65d81cca2ad6d169263bab208239266e728bc53cea03b@ec2-54-90-55-211.compute-1.amazonaws.com:5432/dd3df33hrh6sfk';
@@ -6,29 +8,27 @@ const pool = new Pool({
   connectionString : connString,
   ssl: {rejectUnauthorized: false}
 });
-var validateResponse = "";
-
-function getValidate()
-{
-  return validateResponse;
-}
 
 
-function validate(email, hash)
+function validate(email, password)
 {
   return new Promise((resolve, reject) => 
-    pool.query('SELECT * FROM login WHERE email = $1 AND hash = $2 ', [email, hash], (error, result) => {
+    pool.query('SELECT hash FROM login WHERE email = $1', [email], (error, result) => {
       if (error) {
         return reject(err);
       }
       else if(result.rows.length === 1)
       {
-        validateResponse = "true"
-        resolve(true)
-        
+        if(bcrypt.compareSync(password, (result.rows[0].hash)))
+        {
+          resolve(true)
+        }
+        else
+        {
+          resolve(false)
+        }
       }
       else{
-        validateResponse = "false"
         resolve(false)
         
       }
@@ -73,7 +73,6 @@ const addUser = (name, email) => {
     addLogin,
     addUser,
     validate,
-    getValidate
   }
 
 

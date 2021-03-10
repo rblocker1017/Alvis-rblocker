@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bcrypt  = require('bcrypt')
 const cors = require("cors");
 const port = 3001
 
@@ -15,15 +16,22 @@ app.get('/', (req, res) => {
 
 app.get('/users', db.getUsers)
 
+const hashPassword = (password) => {
+  return new Promise((resolve, reject) =>
+    bcrypt.hash(password, 10, (err, hash) => {
+      err ? reject(err) : resolve(hash)
+    })
+  )
+}
+
 // Whenever sign up is clicked, this function is called 
 app.post("/register", (req, res) => {
   const email = req.body.email
-  const password = req.body.password
+  const password = bcrypt.hashSync(String(req.body.password), 10)
   const username = req.body.username
   db.addLogin(password, email)
   db.addUser(username, email)  
 })
-
 
 
 app.post("/login", (req, res) => {
@@ -33,6 +41,8 @@ app.post("/login", (req, res) => {
   .then(valid => res.send(String(valid)))
   .catch(err => console.error(err));
 })
+
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })

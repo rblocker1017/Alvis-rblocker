@@ -160,7 +160,7 @@ export default function Login() {
                                             <TextField label="Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}}/>
                                         </Box>
                                         <Box pt={1}>
-                                            <TextField label="Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
+                                            <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
                                         </Box>
                                     </Grid>
                                     <Grid item>

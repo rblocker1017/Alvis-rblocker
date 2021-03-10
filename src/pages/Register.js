@@ -93,6 +93,8 @@ export default function Register() {
         }).then((response) =>{
             console.log(response);
         })
+
+        window.location.assign("/Login");
     }
     return (
         <ThemeProvider theme={theme}>
@@ -146,10 +148,10 @@ export default function Register() {
                                             <TextField label="Your Email" variant="outlined" className={classes.input} onChange={(e) => { setEmail(e.target.value)}} />
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
+                                            <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Repeat your Password" variant="outlined" className={classes.input} onChange={(e) => { setPassword(e.target.value)}} />
+                                            <TextField label="Repeat your Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}} />
                                         </Box>
                                     </Grid>
                                     <Grid item>
