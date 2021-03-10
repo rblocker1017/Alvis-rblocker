@@ -117,9 +117,9 @@ export default function GraphingAlgorithm() {
             case "Prim":
                 tempArray = primAlgorithm(startNode, endNode, lines);
                 break;
-            case "Dijkstras":
-                console.log(dijkstraAlgorithm(circles, lines, startNode, endNode));
-                break
+            //case "Dijkstras":
+                //console.log(dijkstraAlgorithm(circles, lines, startNode, endNode));
+                //break
             default:
                 tempArray = kruskalAlgorithm(startNode, endNode, lines);
                 break;

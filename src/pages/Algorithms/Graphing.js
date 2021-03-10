@@ -139,12 +139,11 @@ export function dijkstraAlgorithm(circles, lines, start, end) {
     // For loop to initialize all the distances to infinity
     for (let i = 0; i < nodes.length; i++) {
         distances[i] = Infinity;
-        if (nodes[i].id === start.id) startNum = i;
+        if (nodes[i] === start.id) startNum = i;
     }
 
     // Starting node distance to itself is 0
     distances[startNum] = 0;
-
     // True while the shortestIndex is not -1
     while (true) {
         shortestDistance = Infinity;
@@ -152,63 +151,43 @@ export function dijkstraAlgorithm(circles, lines, start, end) {
 
         // Discover all of the nodes that are not visited
 
-        for (let i = 0; i < nodes.length; i++) {
+        for (let i = 0; i < distances.length; i++) {
             if (distances[i] < shortestDistance && !visited[i]) {
                 shortestDistance = distances[i];
                 shortestIndex = i;
             }
         }
+        console.log(shortestDistance);
+        console.log(shortestIndex);
 
         // No node visitted so quit out
         if (shortestIndex === -1) {
             return distances;
         }
 
+        console.log("after return");
         // Find the node with the shortestIndex to find its neighbors
         let curNode;
         circles.forEach((circle) => {
             if (circle.id === shortestIndex) curNode = circle;
         });
-
+        console.log(curNode);
+        console.log("after assigning current");
         for (let i = 0; i < list[curNode].length; i++) {
             // if the path over this edge is shorter
             if (
-                list[curNode][i] !== 0 &&
-                distances[i] > distances[shortestIndex] + list[curNode][i].weight
+                list[shortestIndex][i] !== 0 &&
+                distances[i] > distances[shortestIndex] + list[shortestIndex][i].weight
             ) {
                 // Save this path as new shortest path.
                 console.log(distances);
                 console.log(list);
-                distances[i] = distances[shortestIndex] + list[curNode][i].weight;
+                distances[i] = distances[shortestIndex] + list[shortestIndex][i].weight;
             }
         }
-
-        // This was another attempt that was similar to the for loop above.
-        /*
-            console.log(shortestDistance);
-            let curNode;
-            circles.forEach(circle => {
-                if(circle.id === shortestIndex)
-                    curNode = circle;
-            });
-            let r = 0;
-            list[curNode].forEach((neighbor) =>
-            {
-                console.log(r);
-                console.log(distances[r]);
-                console.log(neighbor.weight);
-                if(neighbor.weight !== 0 && (distances[r] > distances[shortestIndex] + neighbor.weight)){
-                    console.log(true);
-                    distances[r] = distances[shortestIndex] + neighbor.weight;
-                }
-                
-                r++;
-                if(r >= list[curNode].length/2 + 1)
-                    r = 0;
-            });
-            */
-
+        console.log("after for loop");
         // After we visit the node, we mark it as done
+        console.log("after comment");
         visited[shortestIndex] = true;
         console.log("Visited nodes: " + visited);
         console.log("Currently lowest distances: " + distances);

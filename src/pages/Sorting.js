@@ -107,7 +107,8 @@ export default function Sorting() {
 
     const setCookie = () => {
         const cookies = new Cookies();
-        cookies.set('cookie', 'login', {path:'/'});
+        cookies.set('cookie', { username: "David" }, { path: '/' });
+        window.location.reload(false);
         //console.log();
     }
 
