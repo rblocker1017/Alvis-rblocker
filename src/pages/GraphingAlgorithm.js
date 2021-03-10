@@ -7,7 +7,7 @@ import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva'
 import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
-import { kruskalAlgorithm, primAlgorithm } from "./Algorithms/Graphing";
+import { kruskalAlgorithm, primAlgorithm, dijkstraAlgorithm  } from "./Algorithms/Graphing";
 import trash from '../trash.png';
 import  PathNotFound  from '../componenets/Messages/PathNotFound'
 
@@ -117,6 +117,9 @@ export default function GraphingAlgorithm() {
             case "Prim":
                 tempArray = primAlgorithm(startNode, endNode, lines);
                 break;
+            case "Dijkstras":
+                console.log(dijkstraAlgorithm(circles, lines, startNode, endNode));
+                break
             default:
                 tempArray = kruskalAlgorithm(startNode, endNode, lines);
                 break;

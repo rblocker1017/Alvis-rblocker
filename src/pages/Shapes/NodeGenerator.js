@@ -81,13 +81,13 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
         }
     }
     for (let i = 0; i < circles.length; i++) {
-        console.log(circles[i].value);
+        //console.log(circles[i].value);
         let parent = circles[i].parent === null ? "none" : circles[i].parent.value;
         let leftChild = circles[i].leftChild === null ? "none" : circles[i].leftChild.value;
         let rightChild = circles[i].rightChild === null ? "none" : circles[i].rightChild.value;
-        console.log("Parent value is: " + parent);
-        console.log("Left child value is: " + leftChild);
-        console.log("Right child value is: " + rightChild);
+        //console.log("Parent value is: " + parent);
+        //console.log("Left child value is: " + leftChild);
+        //console.log("Right child value is: " + rightChild);
     }
     return circles;
 }
@@ -248,7 +248,7 @@ export function generateConnectorsBTT(circles) {
 }
 
 export function connectNodeBTT(circle, circles) {
-    console.log(circles);
+    //console.log(circles);
     let lines = [];
     let connections = [];
     //connections.push(id);

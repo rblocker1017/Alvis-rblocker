@@ -84,3 +84,133 @@ export function primAlgorithm(start, end, lines) {
     console.log(displayLines);
     return displayLines;
 }
+
+// Graph creates a graph out of the circles and connected lines
+
+export function Graph(circles, lines) {
+    const nodes = [];
+    const list = {};
+
+    // Add a vertex to the array of vertices (nodes)
+    const addNode = (node) => {
+        nodes.push(node);
+        list[node] = [];
+    };
+
+    // Add an edge to the map of edges (lines)
+    const addEdge = (node1, node2, weight) => {
+        list[node1].push({ node: node2, weight: weight });
+        list[node2].push({ node: node1, weight: weight });
+    };
+
+    // Begin adding each circle object to the array
+    circles.forEach((circle) => {
+        addNode(circle.id);
+    });
+
+    // Begin adding each edge to the map
+    let firstNode;
+    let secondNode;
+    lines.forEach((line) => {
+        circles.forEach((circle) => {
+            if (circle.id === line.connections[0]) firstNode = circle; // Find the exact pairing to insert into the map
+            if (circle.id === line.connections[1]) secondNode = circle;
+        });
+        addEdge(firstNode.id, secondNode.id, line.value);
+    });
+
+    // Returns the graph as an array for easy access
+    return [nodes, list];
+}
+
+export function dijkstraAlgorithm(circles, lines, start, end) {
+    // Get the graph and parse it into a node array & list map
+    let graph = Graph(circles, lines);
+    let nodes = graph[0];
+    let list = graph[1];
+    console.log(list);
+    // Dijkstra start up arrays & variables
+    let distances = [];
+    let visited = [];
+    let shortestDistance; // current shortest distance
+    let shortestIndex; // current shortest index
+    let startNum;
+
+    // For loop to initialize all the distances to infinity
+    for (let i = 0; i < nodes.length; i++) {
+        distances[i] = Infinity;
+        if (nodes[i].id === start.id) startNum = i;
+    }
+
+    // Starting node distance to itself is 0
+    distances[startNum] = 0;
+
+    // True while the shortestIndex is not -1
+    while (true) {
+        shortestDistance = Infinity;
+        shortestIndex = -1;
+
+        // Discover all of the nodes that are not visited
+
+        for (let i = 0; i < nodes.length; i++) {
+            if (distances[i] < shortestDistance && !visited[i]) {
+                shortestDistance = distances[i];
+                shortestIndex = i;
+            }
+        }
+
+        // No node visitted so quit out
+        if (shortestIndex === -1) {
+            return distances;
+        }
+
+        // Find the node with the shortestIndex to find its neighbors
+        let curNode;
+        circles.forEach((circle) => {
+            if (circle.id === shortestIndex) curNode = circle;
+        });
+
+        for (let i = 0; i < list[curNode].length; i++) {
+            // if the path over this edge is shorter
+            if (
+                list[curNode][i] !== 0 &&
+                distances[i] > distances[shortestIndex] + list[curNode][i].weight
+            ) {
+                // Save this path as new shortest path.
+                console.log(distances);
+                console.log(list);
+                distances[i] = distances[shortestIndex] + list[curNode][i].weight;
+            }
+        }
+
+        // This was another attempt that was similar to the for loop above.
+        /*
+            console.log(shortestDistance);
+            let curNode;
+            circles.forEach(circle => {
+                if(circle.id === shortestIndex)
+                    curNode = circle;
+            });
+            let r = 0;
+            list[curNode].forEach((neighbor) =>
+            {
+                console.log(r);
+                console.log(distances[r]);
+                console.log(neighbor.weight);
+                if(neighbor.weight !== 0 && (distances[r] > distances[shortestIndex] + neighbor.weight)){
+                    console.log(true);
+                    distances[r] = distances[shortestIndex] + neighbor.weight;
+                }
+                
+                r++;
+                if(r >= list[curNode].length/2 + 1)
+                    r = 0;
+            });
+            */
+
+        // After we visit the node, we mark it as done
+        visited[shortestIndex] = true;
+        console.log("Visited nodes: " + visited);
+        console.log("Currently lowest distances: " + distances);
+    }
+}
