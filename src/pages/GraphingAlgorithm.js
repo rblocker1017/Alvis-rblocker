@@ -7,7 +7,7 @@ import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva'
 import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
-import { kruskalAlgorithm } from "./Algorithms/Graphing";
+import { kruskalAlgorithm, primAlgorithm } from "./Algorithms/Graphing";
 import trash from '../trash.png';
 import  PathNotFound  from '../componenets/Messages/PathNotFound'
 
@@ -93,7 +93,7 @@ export default function GraphingAlgorithm() {
     const classes = useStyles();
 
     // generate function states
-    const [type, setType] = useState("Prim");
+    const [type, setType] = useState("Kruskal");
     const [circles, setCircles] = React.useState(INIT);
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
@@ -109,16 +109,21 @@ export default function GraphingAlgorithm() {
     const [validPath, setValidPath] = React.useState(true);
 
     useEffect(() => {
+        let tempArray = null;
         switch (type) {
             case "Kruskal":
-                setStep(-1);
-                console.log(lines);
-                const tempArray = kruskalAlgorithm(startNode, endNode, lines);
-                setAlgoArray(tempArray);
-                console.log(tempArray.length);
-                tempArray.length === undefined ? setValidPath(false) : setValidPath(true);
+                tempArray = kruskalAlgorithm(startNode, endNode, lines);
+                break;
+            case "Prim":
+                tempArray = primAlgorithm(startNode, endNode, lines);
+                break;
+            default:
+                tempArray = kruskalAlgorithm(startNode, endNode, lines);
                 break;
         }
+        setStep(-1);
+        setAlgoArray(tempArray);
+        tempArray.length === undefined ? setValidPath(false) : setValidPath(true);
     }, [type, connections, startNode, endNode]);
 
 
@@ -354,7 +359,7 @@ export default function GraphingAlgorithm() {
 
     // Sets the starting point for the algorithm
     const setStart = (e) => {
-        if (step !== -1) {
+        if (step !== -1 || JSON.stringify(selected) === "{}") {
             return;
         }
         // create a temporary array to keep track of the array changes
@@ -401,7 +406,7 @@ export default function GraphingAlgorithm() {
 
     // Sets the ending point for the algorithm
     const setEnd = (e) => {
-        if (step !== -1) {
+        if (step !== -1 || JSON.stringify(selected) === "{}") {
             return;
         }
         // create a temporary array to keep track of the array changes

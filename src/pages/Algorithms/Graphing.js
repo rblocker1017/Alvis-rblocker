@@ -1,75 +1,3 @@
-/* Placeholder Dijkstras by Alex
-function DijkstraAlgorithm(start, lines) {
-    const numberOfVertices = edges.length;
-    const minDistances = [];
-
-    for (let currentVertex = 0; currentVertex < numberOfVertices; currentVertex++) {
-        minDistances.push(Infinity);
-    }
-    minDistances[start] = 0;
-
-    const visited = new Set();
-
-    while (visited.size != numberOfVertices) {
-        const [vertex, currentMinDistance] = MinDistanceVertex(minDistances, visited);
-
-        if (currentMinDistance === Infinity)
-            break;
-
-        visited.add(vertex);
-
-        for (const edge of edges[vertex]) {
-            const [destination, distanceToDestination] = edge;
-
-            if (visited.has(destination)) {
-                continue;
-            }
-
-            const newPathDistance = currentMinDistance + distanceToDestination;
-            const currentDestinationDistance = minDistances[destination];
-            if (newPathDistance < currentDestinationDistance) {
-                minDistances[destination] = newPathDistance;
-            }
-        }
-    }
-    return minDistances.map(x => (x === Infinity ? -1 : x));
-}
-
-function MinDistanceVertex(distances, visited) {
-    let currentMinDistance = Infinity;
-    let vertex = -1;
-
-    for (const [vertexIndex, distance] of distances.entries()) {
-        if (visited.has(vertexIndex)) {
-            continue;
-        }
-        if (distance <= currentMinDistance) {
-            vertex = vertexIndex;
-            currentMinDistance = distance;
-        }
-    }
-    return [vertex, currentMinDistance];
-}
-
-let start = 0;
-let edges = [
-    [
-        [1, 7]
-    ],
-    [
-        [2, 6],
-        [3, 20],
-        [4, 3]
-    ],
-    [
-        [3, 14]
-    ],
-    [
-        [4, 2]
-    ],
-    [],
-];
-*/
 // Sorting function for line objects to sort by value
 // @return: if value of a < value of b return -1, > return 1, equal 0
 const sortLines = (a, b) => {
@@ -112,7 +40,6 @@ function hasPath(currentNode, end, lines, processedNodes) {
  * @return if a path exists, returns a display array containing the path from start to end, else return -1
  */
 export function kruskalAlgorithm(start, end, lines) {
-    console.log("test");
     let displayArray = [];
     let displayLines = [];
     const tempLines = lines;
@@ -128,4 +55,32 @@ export function kruskalAlgorithm(start, end, lines) {
         }
     }
     return -1;
+}
+
+function primHelper(start, end, displayLines, tempLines, processedNodes) {
+    console.log(start);
+    if (start === end) {
+        return 0;
+    }
+    for (let node of processedNodes) {
+        for (let line of tempLines) {
+            if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
+                let nextStart = line.connections.find(id => id !== node);
+                displayLines.push(line.id);
+                processedNodes.push(nextStart);
+                return primHelper(nextStart, end, displayLines, tempLines, processedNodes);
+            }
+        }
+    }
+    return -1;
+}
+
+export function primAlgorithm(start, end, lines) {
+    let displayLines = [];
+    const tempLines = lines;
+    let processedNodes = [start.id];
+    tempLines.sort(sortLines);
+    primHelper(start.id, end.id, displayLines, tempLines, processedNodes);
+    console.log(displayLines);
+    return displayLines;
 }

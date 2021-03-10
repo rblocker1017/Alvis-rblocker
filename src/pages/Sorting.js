@@ -10,8 +10,9 @@ import trash from '../trash.png';
 import { generateINIT } from './Shapes/SortingGenerator';
 import { InsertModal } from "../componenets/Resources/InsertModal";
 import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "./Algorithms/Sorting";
+import Cookies from 'universal-cookie';
 
-const SIZE = 6;
+const SIZE = 50;
 const INIT_VALUES = generateINIT(SIZE);
 const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
@@ -103,6 +104,12 @@ export default function Sorting() {
     const [inputError, setInputError] = useState(false);
     const [input, setInput] = useState("");
     const [transitionArray, setTransitionArray] = useState(arraysOfArrays[0].data.split(',').map(Number));
+
+    const setCookie = () => {
+        const cookies = new Cookies();
+        cookies.set('cookie', 'login', {path:'/'});
+        //console.log();
+    }
 
     const handleChange = (e) => {
         setInput(e.target.value);
@@ -493,8 +500,8 @@ export default function Sorting() {
                           Step Back
                         </Button>
                       </Grid>
-                      <Grid item xs={3}>
-                        <Button variant="contained" color="primary">
+                                          <Grid item xs={3}>
+                                              <Button variant="contained" color="primary" onClick={setCookie}>
                           Pause
                         </Button>
                       </Grid>

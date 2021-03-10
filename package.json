@@ -21,7 +21,8 @@
     "react-scripts": "3.4.0",
     "react-spring": "^8.0.27",
     "resize-observer-polyfill": "^1.5.1",
-    "source-sans-pro": "^3.6.0"
+    "source-sans-pro": "^3.6.0",
+    "universal-cookie": "^4.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
