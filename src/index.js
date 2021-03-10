@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -20,9 +19,7 @@ console.log(theme);
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <App />
-    </BrowserRouter>
+    <App />
   </MuiThemeProvider>,
   document.getElementById("root")
 );
