@@ -5,14 +5,12 @@ stages:
 build:
   image: node:latest # Run the job in a `node` docker image
   stage: build
-  env:
-    process.env.CI : false
   variables:
     # Replace this with your site URL
     PUBLIC_URL: https://yang_SacState.gitlab.io/fall2020_buzzdev
   script:
     - yarn install # Run `yarn install` and `yarn build`
-    - yarn build
+    - CI=false yarn build
   artifacts:
     paths:
       - build/ # Save the build result as an artfact
