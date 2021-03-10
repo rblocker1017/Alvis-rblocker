@@ -156,6 +156,7 @@ export default function GraphingAlgorithm() {
             clearLines();
             clearCircles();
             setSelected({});
+            setConnecting(false);
         }
         console.log(step);
         if (step < algoArray.length - 1) {
@@ -473,7 +474,7 @@ export default function GraphingAlgorithm() {
     // makes a connector between the selected node and the next selected node
     // the connecting node's value is randomly generated
     const finalConnect = (e) => {
-        if (step !== -1) {
+        if (step !== -1 || JSON.stringify(selected) === "{}") {
             return;
         }
         const id = e.target.id();
