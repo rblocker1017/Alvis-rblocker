@@ -172,9 +172,12 @@ export default function CpuScheduling(props) {
         palette: {
             primary: {
                 main: green[900],
-            }
-        }
-    })
+            },
+            secondary: {
+                main: grey[700],
+            },
+        },
+    });
 
     function fcfs(processes) {
         let timeCounter = 0;
@@ -866,17 +869,17 @@ export default function CpuScheduling(props) {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); }}>FCFS
+                                            <Button variant="contained" color={type === "First Come First Serve" ? "secondary" : "primary"} className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); }}>FCFS
                                                {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); }}>SJF
+                                            <Button variant="contained" color={type === "Shortest Job First" ? "secondary" : "primary"} className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); }}>SJF
                                             
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); }}>Priority
+                                            <Button variant="contained" color={type === "Priority" ? "secondary" : "primary"} className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); }}>Priority
                                             
                                             </Button>
                                         </Grid>
@@ -884,12 +887,12 @@ export default function CpuScheduling(props) {
                                             <h1></h1>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); }}>RR
+                                            <Button variant="contained" color={type === "Round Robin" ? "secondary" : "primary"} className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); }}>RR
                                             
                                             </Button>
                                         </Grid>
                                         <Grid item item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); }}>SRTF
+                                            <Button variant="contained" color={type === "Shortest Remaining Job First" ? "secondary" : "primary"} className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); }}>SRTF
                                             
                                             </Button>
                                         </Grid>

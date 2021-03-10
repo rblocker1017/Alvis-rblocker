@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -7,11 +7,12 @@ import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva'
 import Konva from "konva";
 import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
 import { select } from 'd3';
-import { kruskalAlgorithm } from "./Algorithms/Graphing";
+import { kruskalAlgorithm, primAlgorithm, dijkstraAlgorithm } from "./Algorithms/Graphing";
 import trash from '../trash.png';
+import PathNotFound from '../componenets/Messages/PathNotFound'
 
 // Define width and height of the of the webapp canvas
-const WIDTH = 950;
+const WIDTH = 1370;
 const HEIGHT = 450;
 
 // Generate styles for React objects
@@ -99,40 +100,57 @@ export default function GraphingAlgorithm() {
     const [circleId, setCircleId] = React.useState(INIT.length);
     const [selected, setSelected] = React.useState({});
     const [connections, setConnections] = React.useState(CURRENT_CON);
-    const [startNode, setStartNode] = React.useState(INIT.filter(circle => circle.start === true)[0]);
-    const [endNode, setEndNode] = React.useState(INIT.filter(circle => circle.end === true)[0]);
-    const [algoArray, setAlgoArray] = React.useState(kruskalAlgorithm(startNode, endNode, lines, connections));
+    const [startNode, setStartNode] = React.useState(INIT.find(circle => circle.start === true));
+    const [endNode, setEndNode] = React.useState(INIT.find(circle => circle.end === true));
+    const [algoArray, setAlgoArray] = React.useState(-1);
     const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
-    const [step, setStep] = React.useState(0);
+    const [step, setStep] = React.useState(-1);
+    const [validPath, setValidPath] = React.useState(true);
+
+    useEffect(() => {
+        let tempArray = null;
+        switch (type) {
+            case "Kruskal":
+                tempArray = kruskalAlgorithm(startNode, endNode, lines);
+                break;
+            case "Prim":
+                tempArray = primAlgorithm(startNode, endNode, lines);
+                break;
+            //case "Dijkstras":
+            //console.log(dijkstraAlgorithm(circles, lines, startNode, endNode));
+            //break
+            default:
+                tempArray = kruskalAlgorithm(startNode, endNode, lines);
+                break;
+        }
+        setStep(-1);
+        setAlgoArray(tempArray);
+        console.log(tempArray);
+        tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
+    }, [type, circles, startNode, endNode]);
+
 
     // anonymous functions that change header to respective button
     const changePrim = () => setType("Prim");
     const changeDij = () => setType("Dijkstras");
-    const changeKruskal = () => {
-        let displayTemp = [];
-        setType("Kruskal");
-        let newAlgo = kruskalAlgorithm(startNode, endNode, lines, connections);
-        let clearLines = lines.map(line => {
-            return {
-                ...line,
-                stroke: "black"
-            };
-        });
-        setStep(-1)
-        setAlgoArray(newAlgo);
-    }
+    const changeKruskal = () => setType("Kruskal");
 
     const stepForward = (e) => {
+        if (step === -1) {
+            clearLines();
+            clearCircles();
+            setSelected({});
+        }
         console.log(step);
-        if (step < algoArray.length) {
+        if (step < algoArray.length - 1) {
             let tempStep = step + 1;
             setLines(
                 lines.map(line => {
                     if (line.id === algoArray[tempStep]) {
                         return {
                             ...line,
-                            stroke: "red"
+                            connected: true
                         };
                     }
                     return line;
@@ -147,10 +165,10 @@ export default function GraphingAlgorithm() {
             let tempStep = step - 1;
             setLines(
                 lines.map(line => {
-                    if(line.id === algoArray[step]) {
+                    if (line.id === algoArray[step]) {
                         return {
                             ...line,
-                            stroke:"black"
+                            connected: false
                         }
                     }
                     return line;
@@ -163,7 +181,7 @@ export default function GraphingAlgorithm() {
         let clearLines = lines.map(line => {
             return {
                 ...line,
-                stroke: "black"
+                connected: false
             };
         });
         setStep(-1);
@@ -173,10 +191,14 @@ export default function GraphingAlgorithm() {
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
     const addCircle = (e) => {
+        if (step !== -1) {
+            return;
+        }
         // calculate value
         const value = Math.floor(Math.random() * 100);
         // create a new circle array by concatinating a new circle to it
         const newcircles = circles.concat({
+            type: "line",
             id: circleId,
             x: (Math.random() * (WIDTH - 200)) + 100,
             y: (Math.random() * (HEIGHT - 200)) + 100,
@@ -222,6 +244,38 @@ export default function GraphingAlgorithm() {
         );
     };
 
+
+
+    // Method to clear all strokes on the circles
+    const clearCircles = () => {
+        setCircles(
+            circles.map((circle) => {
+                if (circle.connected) {
+                    return {
+                        ...circle,
+                        connected: false,
+                    };
+                }
+                return circle;
+            })
+        );
+    }
+
+    // Method to clear all strokes on the lines
+    const clearLines = () => {
+        setLines(
+            lines.map((line) => {
+                if (line.connected) {
+                    return {
+                        ...line,
+                        connected: false,
+                    }
+                }
+                return line;
+            })
+        );
+    }
+
     // while being dragged, the circle x and y co-ordinates are updated 
     // and its connectors positions are updated to follow the circle
     // e - event listener
@@ -245,11 +299,11 @@ export default function GraphingAlgorithm() {
         setLines(
             tempLines.map(line => {
                 if (tempCircle.connections.includes(line.id)) {
-                    const other = line.connections.filter(otherCircle => otherCircle.id != tempCircle.id);
-                    const points = getPoints(tempCircle, other[0]);
+                    const other = circles.find(circle => line.connections.find(otherCircle => otherCircle !== tempCircle.id) === circle.id);
+                    const points = getPoints(tempCircle, other);
                     return {
                         ...line,
-                        connections: [tempCircle, other[0]],
+                        connections: [tempCircle.id, other.id],
                         points: points
                     };
                 }
@@ -262,13 +316,16 @@ export default function GraphingAlgorithm() {
     // sets clicked circle to selected
     // e - event listener
     const selectCircle = (e) => {
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         // set connecting state to true
         setConnecting(true);
-
+        console.log(lines);
         setCircles(
             circles.map((circle) => {
-                if (circle.id == id) {
+                if (circle.id === id) {
                     setSelected(circle);
                 }
                 return {
@@ -277,25 +334,38 @@ export default function GraphingAlgorithm() {
                 }
             })
         );
+        clearLines();
     };
 
     // sets clicked to selected
     // e - event listener
     const selectLine = (e) => {
+        console.log(connections);
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         // set connecting state to true
         setLines(
             lines.map((line) => {
+                if (line.id === id) {
+                    setSelected(line);
+                }
                 return {
                     ...line,
                     connected: line.id === id
                 }
             })
         );
+        setConnecting(false);
+        clearCircles();
     };
 
     // Sets the starting point for the algorithm
     const setStart = (e) => {
+        if (step !== -1 || JSON.stringify(selected) === "{}") {
+            return;
+        }
         // create a temporary array to keep track of the array changes
         let tempCircles = [];
         // checks if something is selected as well as if the selected node is not the end node
@@ -340,6 +410,9 @@ export default function GraphingAlgorithm() {
 
     // Sets the ending point for the algorithm
     const setEnd = (e) => {
+        if (step !== -1 || JSON.stringify(selected) === "{}") {
+            return;
+        }
         // create a temporary array to keep track of the array changes
         let tempCircles = [];
         // checks if something is selected as well as if the selected node is not the end node
@@ -385,6 +458,9 @@ export default function GraphingAlgorithm() {
     // makes a connector between the selected node and the next selected node
     // the connecting node's value is randomly generated
     const finalConnect = (e) => {
+        if (step !== -1) {
+            return;
+        }
         const id = e.target.id();
         let conId = "";
         let newLines = [];
@@ -416,24 +492,13 @@ export default function GraphingAlgorithm() {
         const connectBundle = connectNode(toCircle, selected, connections, conValue);
         // if the line isn't just connecting to itself, add it to the connector state array
         if (JSON.stringify(connectBundle) === '{}') {
-            setLines(lines);
-            setCircles(
-                circles.map((circle) => {
-                    if (circle.connected) {
-                        return {
-                            ...circle,
-                            connected: false,
-                        };
-                    }
-                    return circle;
-                })
-            );
+            //setLines(lines);
+            clearCircles();
         }
         else {
             newLines = lines.concat(connectBundle[0]);
             setLines(newLines);
-            setConnections(connectBundle[1]);
-            setAlgoArray(kruskalAlgorithm(startNode, endNode, newLines, connectBundle[1]));
+            setConnections(connectBundle[1].concat());
         }
         // clear connecting and selected states
         setConnecting(!connecting);
@@ -448,19 +513,27 @@ export default function GraphingAlgorithm() {
         console.log(lines);
         const id = selected.id;
         if (id != -1) {
-            setCircles(circles.filter(circle => circle.id != id));
-            setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
-            setSelected({ id: -1 });
+            if (connecting) {
+                setCircles(circles.filter(circle => circle.id != id));
+                setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
+                setSelected({ id: -1 });
+            }
+            else {
+                setLines(lines.filter((line) => line.id !== id));
+                setConnections(connections.filter((connection) => connection !== id));
+            }
         }
     }
-
     const theme = createMuiTheme({
         palette: {
             primary: {
                 main: green[900],
-            }
-        }
-    })
+            },
+            secondary: {
+                main: grey[700],
+            },
+        },
+    });
     // return object to be rendered
     return (
         <Header>
@@ -473,13 +546,13 @@ export default function GraphingAlgorithm() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePrim}>Prim</Button>
+                                            <Button variant="contained" color={type !== "Prim" ? "primary" : "secondary"} className={classes.button} onClick={changePrim}>Prim</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeDij}>Dijkstras</Button>
+                                            <Button variant="contained" color={type !== "Dijkstras" ? "primary" : "secondary"} className={classes.button} onClick={changeDij}>Dijkstras</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeKruskal}>Kruskal</Button>
+                                            <Button variant="contained" color={type !== "Kruskal" ? "primary" : "secondary"} className={classes.button} onClick={changeKruskal}>Kruskal</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
@@ -489,7 +562,7 @@ export default function GraphingAlgorithm() {
                                             <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={ reset } >Reset</Button>
+                                            <Button variant="contained" color="primary" onClick={reset} >Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
@@ -514,6 +587,7 @@ export default function GraphingAlgorithm() {
                                 <h1>
                                     Graphing Algorithm: {type}
                                 </h1>
+                                <PathNotFound display={validPath} step={step + 1} />
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {circles.map((circle) => (
@@ -532,14 +606,16 @@ export default function GraphingAlgorithm() {
                                                         stroke={circle.start || circle.end ? "black" : ""}
                                                     />
                                                     <Text
+                                                        fontSize={20}
                                                         align="center"
                                                         text={pointValues(circle)}
                                                         fill={"white"}
-                                                        width={75}
+                                                        width={100}
                                                     />
 
                                                 </Label>
                                                 <Circle
+
                                                     key={circle.id}
                                                     id={circle.id}
                                                     x={circle.x}
@@ -559,19 +635,22 @@ export default function GraphingAlgorithm() {
                                                     draggable
                                                 />
                                                 <Text
+                                                    fontSize={20}
                                                     text={circle.id}
-                                                    x={circle.x}
-                                                    y={circle.y}
+                                                    x={circle.x - 5}
+                                                    y={circle.y - 7}
                                                     fill="white"
                                                 />
                                             </React.Fragment>
                                         ))}
+
                                         {lines.map((line) => (
                                             <React.Fragment>
                                                 <Line
                                                     id={line.id}
                                                     points={line.points}
-                                                    stroke={line.stroke}
+                                                    stroke={line.connected ? "red" : "black"}
+                                                    hitStrokeWidth={25}
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />
@@ -585,6 +664,7 @@ export default function GraphingAlgorithm() {
                                                     <Text
                                                         text={line.value}
                                                         fill="black"
+                                                        fontSize={30}
                                                     />
 
                                                 </Label>
@@ -605,7 +685,7 @@ export default function GraphingAlgorithm() {
                                                 <Button variant="contained" color="primary" onClick={stepBack}>Step Back</Button>
                                             </Grid>
                                             <Grid item >
-                                                <Button variant="contained" color="primary">Pause</Button>
+                                                <Button variant="contained" color="primary" >Pause</Button>
                                             </Grid>
                                             <Grid item >
                                                 <Button variant="contained" color="primary" onClick={stepForward}>Step Forward</Button>
@@ -640,7 +720,7 @@ export default function GraphingAlgorithm() {
                         </Grid>
                     </Grid>
                 </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={ deleteNode}>
+                <ButtonBase className={classes.trashBtn} onClick={deleteNode}>
                     <img src={trash} className={classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>

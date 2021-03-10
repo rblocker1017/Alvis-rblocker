@@ -440,10 +440,10 @@ export default function PageReplacement() {
                 main: green[900],
             },
             secondary: {
-                main: green[900]
-            }
-        }
-    })
+                main: grey[700],
+            },
+        },
+    });
 
     return (
         <Header>
@@ -456,13 +456,13 @@ export default function PageReplacement() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" onClick={() => runFIFO()}>FIFO</Button>
+                                            <Button variant="contained" color={type === ": FIFO" ? "secondary" : "primary"} onClick={() => runFIFO()}>FIFO</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" onClick={() => runOPT()}>OPT</Button>
+                                            <Button variant="contained" color={type === ": OPT" ? "secondary" : "primary"} onClick={() => runOPT()}>OPT</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" onClick={() => runLRU()}>LRU</Button>
+                                            <Button variant="contained" color={type === ": LRU" ? "secondary" : "primary"} onClick={() => runLRU()}>LRU</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
