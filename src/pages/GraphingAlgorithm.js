@@ -69,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 // Generate initial connectors and circles
-const INIT = generateCirclesGraphing(3, WIDTH, HEIGHT);
-const CON_GEN = generateConnectors(2, INIT)
+const INIT = generateCirclesGraphing(6, WIDTH, HEIGHT);
+const CON_GEN = generateConnectors(6, INIT)
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
 
@@ -128,7 +128,7 @@ export default function GraphingAlgorithm() {
         setAlgoArray(tempArray);
         console.log(tempArray);
         tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
-    }, [type, circles, startNode, endNode]);
+    }, [type, connections, circles, startNode, endNode]);
 
 
     // anonymous functions that change header to respective button
