@@ -348,7 +348,7 @@ export default function Sorting() {
                 main: green[900],
             },
             secondary: {
-                main: green[700],
+                main: grey[700],
             },
         },
     });
@@ -392,7 +392,7 @@ export default function Sorting() {
                                                 variant="contained"
                                                 className={classes.button}
                                                 onClick={changeAlgorithm}
-                                                color={flag1 ? "primary" : "secondary"}
+                                                color={type !== "Insertion" ? "primary" : "secondary"}
                                             >
                                                 Insertion
                       </Button>
@@ -401,7 +401,7 @@ export default function Sorting() {
                                             <Button
                                                 variant="contained"
                                                 onClick={changeAlgorithm}
-                                                color={flag2 ? "primary" : "secondary"}
+                                                color={type !== "Selection" ? "primary" : "secondary"}
                                                 className={classes.button}
                                             >
                                                 Selection
@@ -412,7 +412,7 @@ export default function Sorting() {
                                                 variant="contained"
                                                 className={classes.button}
                                                 onClick={changeAlgorithm}
-                                                color={flag3 ? "primary" : "secondary"}
+                                                color={type !== "Quick" ? "primary" : "secondary"}
                                             >
                                                 Quick
                       </Button>
@@ -425,7 +425,7 @@ export default function Sorting() {
                                                 variant="contained"
                                                 className={classes.button}
                                                 onClick={changeAlgorithm}
-                                                color={flag4 ? "primary" : "secondary"}
+                                                color={type !== "Bubble" ? "primary" : "secondary"}
                                             >
                                                 Bubble
                       </Button>
@@ -435,7 +435,7 @@ export default function Sorting() {
                                                 variant="contained"
                                                 className={classes.button}
                                                 onClick={changeAlgorithm}
-                                                color={flag5 ? "primary" : "secondary"}
+                                                color={type !== "Heap" ? "primary" : "secondary"}
                                             >
                                                 Heap
                       </Button>
@@ -445,7 +445,7 @@ export default function Sorting() {
                                                 variant="contained"
                                                 className={classes.button}
                                                 onClick={changeAlgorithm}
-                                                color={flag6 ? "primary" : "secondary"}
+                                                color={type !== "Shell" ? "primary" : "secondary"}
                                             >
                                                 Shell
                       </Button>
@@ -502,7 +502,7 @@ export default function Sorting() {
                         </Button>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Button variant="contained" color="primary" onClick={setCookie}>
+                                                <Button variant="contained" color="primary">
                                                     Pause
                         </Button>
                                             </Grid>

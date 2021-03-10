@@ -93,7 +93,7 @@ export default function GraphingAlgorithm() {
     const classes = useStyles();
 
     // generate function states
-    const [type, setType] = useState("Kruskal");
+    const [type, setType] = useState("Prim");
     const [circles, setCircles] = React.useState(INIT);
     const [lines, setLines] = React.useState(CONNECT);
     const [connecting, setConnecting] = React.useState(false);
@@ -126,8 +126,9 @@ export default function GraphingAlgorithm() {
         }
         setStep(-1);
         setAlgoArray(tempArray);
-        tempArray.length === undefined ? setValidPath(false) : setValidPath(true);
-    }, [type, connections, startNode, endNode]);
+        console.log(tempArray);
+        tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
+    }, [type, circles, startNode, endNode]);
 
 
     // anonymous functions that change header to respective button
@@ -523,14 +524,16 @@ export default function GraphingAlgorithm() {
             }
         }
     }
-
     const theme = createMuiTheme({
         palette: {
             primary: {
                 main: green[900],
-            }
-        }
-    })
+            },
+            secondary: {
+                main: grey[700],
+            },
+        },
+    });
     // return object to be rendered
     return (
         <Header>
@@ -543,13 +546,13 @@ export default function GraphingAlgorithm() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changePrim}>Prim</Button>
+                                            <Button variant="contained" color={type !== "Prim" ? "primary" : "secondary"} className={classes.button} onClick={changePrim}>Prim</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeDij}>Dijkstras</Button>
+                                            <Button variant="contained" color={type !== "Dijkstras" ? "primary" : "secondary"} className={classes.button} onClick={changeDij}>Dijkstras</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={changeKruskal}>Kruskal</Button>
+                                            <Button variant="contained" color={type !== "Kruskal" ? "primary" : "secondary"} className={classes.button} onClick={changeKruskal}>Kruskal</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
