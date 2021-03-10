@@ -419,9 +419,12 @@ export default function FCFSDisk() {
         palette: {
             primary: {
                 main: green[900],
-            }
-        }
-    })
+            },
+            secondary: {
+                main: grey[700],
+            },
+        },
+    });
     return (
         <Header>
             <ThemeProvider theme={theme}>
@@ -433,30 +436,30 @@ export default function FCFSDisk() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'scan'} onClick={() => { settype("scan"); console.log("Selected: SCAN"); }} >SCAN</Button>
+                                            <Button variant="contained" color={type === "scan" ? "secondary" : "primary"} value={'scan'} onClick={() => { settype("scan"); console.log("Selected: SCAN"); }} >SCAN</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'cscan'} onClick={() => { settype("cscan"); console.log("Selected: cscan"); }} >C-SCAN</Button>
+                                            <Button variant="contained" color={type === "cscan" ? "secondary" : "primary"} value={'cscan'} onClick={() => { settype("cscan"); console.log("Selected: cscan"); }} >C-SCAN</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }} >LOOK</Button>
+                                            <Button variant="contained" color={type === "look" ? "secondary" : "primary"} value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }} >LOOK</Button>
                                         </Grid>
                                         <Grid item xs={12}><h1></h1></Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }} >C-LOOK</Button>
+                                            <Button variant="contained" color={type === "clook" ? "secondary" : "primary"} value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }} >C-LOOK</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'fcfs'} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
+                                            <Button variant="contained" color={type === "fcfs" ? "secondary" : "primary"} value={'fcfs'} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }} >SSTF</Button>
+                                            <Button variant="contained" color={type === "sstf" ? "secondary" : "primary"} value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }} >SSTF</Button>
                                         </Grid>
                                         <Grid item xs={12}><h1></h1></Grid>
                                         <Grid item xs={6}>
-                                            <Button variant="contained" color="primary" value={'outward'} onClick={() => { setdirection("inward"); console.log("Selected: outward"); }} >Inwards</Button>
+                                            <Button variant="contained" color={direction === "inward" ? "secondary" : "primary"} value={'outward'} onClick={() => { setdirection("inward"); console.log("Selected: outward"); }} >Inwards</Button>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Button variant="contained" color="primary" value={'inward'} onClick={() => { setdirection("outward"); console.log("Selected: inward"); }} >Outwards</Button>
+                                            <Button variant="contained" color={direction === "outward" ? "secondary" : "primary"} value={'inward'} onClick={() => { setdirection("outward"); console.log("Selected: inward"); }} >Outwards</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>

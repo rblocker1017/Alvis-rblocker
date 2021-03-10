@@ -35,6 +35,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import trophy from "../../awesome-trophy.png";
+import LoginBundle from "../Resources/LoginBundle";
+import Cookies from "universal-cookie";
 
 const drawerWidth = 250;
 
@@ -102,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
+  const cookies = new Cookies();
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -146,28 +149,7 @@ export default function PersistentDrawerLeft(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Grid container alignItems={"center"} direction={"row"} justify={"space-between"}>
-            <Grid item>
-              <ButtonBase component={LinkRoute} to="/">
-                <Typography variant="h5" noWrap align="center">
-                  Alvis Algorithm Visualizer
-                </Typography>
-              </ButtonBase>
-            </Grid>
-            <Button component={LinkRoute} to="/Achievements" color="inherit" className={classes.achievementButton}>
-              <img src={trophy} />
-              <Typography variant="button" noWrap align="center">
-                Achievements
-              </Typography>
-            </Button>
-            <Grid item>
-              <ButtonBase component={LinkRoute} to="/Login">
-                <Typography variant="button" noWrap align="center">
-                  Login
-                </Typography>
-              </ButtonBase>
-            </Grid>
-          </Grid>
+          <LoginBundle cookie={cookies.get("cookie")} />
         </Toolbar>
       </AppBar>
       <Drawer

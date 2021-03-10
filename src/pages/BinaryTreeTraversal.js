@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../componenets/layout/header";
 import { Button, ButtonBase, Grid, Paper } from "@material-ui/core";
 import {
@@ -30,9 +30,9 @@ import {
     createLeft,
     createRight,
     connectNodeBTT,
-    newConnectNodeBTT
+    newConnectNodeBTT,
 } from "./Shapes/NodeGenerator";
-import trash from '../trash.png';
+import trash from "../trash.png";
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -77,15 +77,15 @@ const useStyles = makeStyles((theme) => ({
         position: "fixed",
         top: "85%",
         right: "1%",
-        '&:hover': {
-            '& $trashImg': {
-                opacity: 1
-            }
-        }
+        "&:hover": {
+            "& $trashImg": {
+                opacity: 1,
+            },
+        },
     },
     trashImg: {
-        opacity: 0.55
-    }
+        opacity: 0.55,
+    },
     /*TRASH BUTTON END*/
 }));
 
@@ -93,23 +93,17 @@ const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
-const INORDER = inOrderTraversalHelper(INIT);
-const PREORDER = preOrderTraversalHelper(INIT);
-const POSTORDER = postOrderTraversalHelper(INIT);
-const ARRAY = generateArray(INIT.length, WIDTH, HEIGHT);
 
 export default function BinaryTreeTraversal() {
     const classes = useStyles();
-    const [type, settype] = useState("Preorder");
-    const [flag1, setFlag1] = useState(true);
-    const [flag2, setFlag2] = useState(true);
-    const [flag3, setFlag3] = useState(true);
+    const [type, settype] = useState("");
     const [num, changeIteration] = useState(0);
     const [circles, setCircles] = React.useState(INIT);
-    const [visualArray, setVisualArray] = React.useState(ARRAY);
-    const [inOrderArray, setInorder] = React.useState(INORDER);
-    const [preOrderArray, setPreorder] = React.useState(PREORDER);
-    const [postOrderArray, setPostorder] = React.useState(POSTORDER);
+    const [defaultArray, setDefualtArray] = React.useState([])
+    const [visualArray, setVisualArray] = React.useState([]);
+    const [inOrderArray, setInorder] = React.useState([]);
+    const [preOrderArray, setPreorder] = React.useState([]);
+    const [postOrderArray, setPostorder] = React.useState([]);
     const [lines, setLines] = React.useState(CONNECT);
     const [connection, setConnections] = React.useState(CURRENT_CON);
     const [selected, setSelected] = React.useState({ id: -1 });
@@ -117,152 +111,194 @@ export default function BinaryTreeTraversal() {
     const [selectedLeft, setSelectedLeft] = React.useState({});
     const [connecting, setConnecting] = React.useState(false);
     const [fromCon, setFromCon] = React.useState({});
-    const [tags, setTags] = React.useState({});
+    const [idNum, setIdNum] = useState(INIT.length);
+    
+    useEffect(()=>{
+        switch (type) {
+            case "Preorder":
+                inOrderTraversalHelper();
+            case "Postorder":
+                postOrderTraversalHelper();
+            case "Inorder":
+                inOrderTraversalHelper();
+        }
+    }, [lines]);
+
+    //const [width, setWidth] = React.useState(WIDTH);
+    //const [height, setHeight] = React.useState(HEIGHT);
+    /*
+     *   Inorder Traversal
+     */
+    const inOrderTraversalHelper = () => {
+        let array = [];
+        inOrderTraversal(circles[0], array);
+        setInorder(array);
+        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
+    };
+
+    const inOrderTraversal = (root, array) => {
+        if (root !== undefined) {
+            if (root.leftChild !== null)
+                inOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
+            circles.forEach((circle) => {
+                if (circle.id === root.id) {
+                    array.push(circle);
+                }
+            });
+            if (root.rightChild !== null)
+                inOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
+        }
+    };
 
     /*
-     * These 3 click methods handle the different buttons clicked: Preorder, Inorder, Postorder
+     *   Preorder Traversal
      */
-    const handleClick1 = () => {
-        if (flag1) setFlag1(!flag1);
-        resetTree();
-        setFlag2(true);
-        setFlag3(true);
+    const preOrderTraversalHelper = () => {
+        let array = [];
+        preOrderTraversal(circles[0], array);
+        setPreorder(array);
+        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
     };
 
-    const handleClick2 = () => {
-        if (flag2) setFlag2(!flag2);
-        resetTree();
-        setFlag3(true);
-        setFlag1(true);
-        //inOrder();
-
-        //let displayArray = [];
-        //inOrder(circles[0], displayArray);
-        //return displayArray;
+    const preOrderTraversal = (root, array) => {
+        if (root !== undefined) {
+            circles.map((circle) => {
+                if (circle.id === root.id) array.push(circle);
+            });
+            if (root.leftChild !== null)
+                preOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
+            if (root.rightChild !== null)
+                preOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
+        }
     };
 
-    const handleClick3 = () => {
-        if (flag3) setFlag3(!flag3);
-        resetTree();
-        setFlag1(true);
-        setFlag2(true);
+    //useEffect(() => {
+    //    updateDisplay();
+    //}, [circles]);
+
+    /*
+     *   Postorder Traversal
+     */
+
+    const postOrderTraversalHelper = () => {
+        let array = [];
+        postOrderTraversal(circles[0], array);
+        setPostorder(array);
+        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
+    };
+
+    const postOrderTraversal = (root, array) => {
+        if (root !== undefined) {
+            if (root.leftChild !== null)
+                postOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
+            if (root.rightChild !== null)
+                postOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
+            circles.map((circle) => {
+                if (circle.id === root.id) array.push(circle);
+            });
+        }
     };
 
     /*
      * These 6 step methods handle the different steps being iterated for each algorithm
      */
+
     const stepForwardInorder = () => {
-        let tempCircles = circles;
-        if (num < tempCircles.length) {
-            tempCircles[inOrderArray[num]].stroke = "red";
-            visualArray[num].value = tempCircles[inOrderArray[num]].value;
+        if (num < inOrderArray.length) {
+            inOrderArray[num].stroke = "red";
+            visualArray[num].value = inOrderArray[num].value;
             changeIteration(num + 1);
         }
-        setCircles(tempCircles);
+        setCircles(circles);
         setVisualArray(visualArray);
-        return setCircles(tempCircles), setVisualArray(visualArray);
     };
 
     const stepBackInorder = () => {
-        let tempCircles = circles;
-        let tempArray = visualArray;
         if (num - 1 < 0) return;
-        //if (num >= tempCircles.length) changeIteration(num - 1);
         else {
-            //console.log(tempCircles[inOrderArray[num]].value);
-            tempCircles[inOrderArray[num - 1]].stroke = "black";
-            tempArray[num - 1].value = null;
-            setCircles(tempCircles);
-            setVisualArray(tempArray);
+            inOrderArray[num - 1].stroke = "black";
+            visualArray[num - 1].value = null;
+            setCircles(circles);
+            setVisualArray(visualArray);
             if (num - 1 >= 0) changeIteration(num - 1);
-            console.log(num);
-            return setCircles(tempCircles), setVisualArray(tempArray);
         }
     };
 
     const stepForwardPreorder = () => {
-        let tempCircles = circles;
-        if (num < tempCircles.length) {
-            tempCircles[preOrderArray[num]].stroke = "red";
-            visualArray[num].value = tempCircles[preOrderArray[num]].value;
+        if (num < preOrderArray.length) {
+            preOrderArray[num].stroke = "red";
+            visualArray[num].value = preOrderArray[num].value;
             changeIteration(num + 1);
         }
-        setCircles(tempCircles);
+        setCircles(circles);
         setVisualArray(visualArray);
-        return setCircles(tempCircles), setVisualArray(visualArray);
     };
 
     const stepBackPreorder = () => {
-        let tempCircles = circles;
         if (num - 1 < 0) return;
         else {
-            tempCircles[preOrderArray[num - 1]].stroke = "black";
+            preOrderArray[num - 1].stroke = "black";
             visualArray[num - 1].value = null;
-            setCircles(tempCircles);
+            setCircles(circles);
             setVisualArray(visualArray);
             if (num - 1 >= 0) changeIteration(num - 1);
-            return setCircles(tempCircles), setVisualArray(visualArray);
         }
     };
 
     const stepForwardPostorder = () => {
-        let tempCircles = circles;
-        if (num < tempCircles.length) {
-            tempCircles[postOrderArray[num]].stroke = "red";
-            visualArray[num].value = tempCircles[postOrderArray[num]].value;
+        if (num < postOrderArray.length) {
+            postOrderArray[num].stroke = "red";
+            visualArray[num].value = postOrderArray[num].value;
             changeIteration(num + 1);
         }
-        setCircles(tempCircles);
+        setCircles(circles);
         setVisualArray(visualArray);
-        return setCircles(tempCircles), setVisualArray(visualArray);
     };
 
     const stepBackPostorder = () => {
-        let tempCircles = circles;
         if (num - 1 < 0) return;
         else {
-            tempCircles[postOrderArray[num - 1]].stroke = "black";
+            postOrderArray[num - 1].stroke = "black";
             visualArray[num - 1].value = null;
-            setCircles(tempCircles);
+            setCircles(circles);
             setVisualArray(visualArray);
             if (num - 1 >= 0) changeIteration(num - 1);
-            return setCircles(tempCircles), setVisualArray(visualArray);
         }
-    };
-
-    // Work in progress to make an automatic traversal
-    const inOrder = () => {
-        /*if (root !== null) {
-          circles[root.id].stroke = "red";
-          console.log(circles[root.id].stroke);
-          setCircles(circles);
-          root.stroke = "black";
-          setCircles(circles);
-          inOrder(root.leftChild, array);
-          array.push(root.value);
-          inOrder(root.rightChild, array);
-        }
-        */
     };
 
     const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-    }
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
 
     let name = "test";
 
     const changePreorder = () => {
+        resetTree();
+        preOrderTraversalHelper();
         settype("Preorder");
-        handleClick1();
     };
     const changeInorder = () => {
+        resetTree();
+        inOrderTraversalHelper();
         settype("Inorder");
-        handleClick2();
     };
     const changePostorder = () => {
+        resetTree();
+        postOrderTraversalHelper();
         settype("Postorder");
-        handleClick3();
     };
+
+    const updateDisplay = () => {
+        if (type === "Preorder") {
+            changePreorder();
+        }
+        else if (type === "Inorder") {
+            changeInorder();
+        }
+        else if (type === "Postorder") {
+            changePostorder();
+        }
+    }
 
     const addCircle = (e) => {
         const value = Math.floor(Math.random() * 100);
@@ -284,8 +320,13 @@ export default function BinaryTreeTraversal() {
     };
 
     const selectCircle = (e) => {
+        if (num !== 0) {
+            return null;
+        }
         const id = e.target.id();
         // set connecting state to true
+        setSelectedLeft({});
+        setSelectedRight({});
         setConnecting(true);
         setCircles(
             circles.map((circle) => {
@@ -295,57 +336,180 @@ export default function BinaryTreeTraversal() {
                         return {
                             ...circle,
                             stroke: "blue",
-                            connected: true
-                        }
+                            connected: true,
+                        };
                     }
                     setSelected({ id: -1 });
                 }
                 return {
                     ...circle,
                     stroke: "black",
-                    connected: false
-                }
+                    connected: false,
+                };
             })
         );
-    };
-    const deleteNode = (e) => {
         console.log(lines);
+        console.log(circles);
+    };
+    const deleteBranch = (e) => {
+        const id = selected.id;
+        resetTree();
+        let tempBundle;
+        //console.log(lines);
+        if (id != -1 && id != circles[0].id) {
+            let node = circles.find((circle) => circle.id == id);
+            console.log(node);
+            tempBundle = deleteNode(node, circles.filter((circle) => circle.id != id), lines);
+            // ** TODO **
+            // disconnect node from the parent
+            tempBundle[0] = tempBundle[0].map((circle) => {
+                if (circle.leftChild !== null && circle.leftChild === node.id) {
+                    return {
+                        ...circle,
+                        leftChild: null
+                    };
+                }
+                else if (circle.rightChild !== null && circle.rightChild === node.id) {
+                    return {
+                        ...circle,
+                        rightChild: null
+                    };
+                }
+                return circle;
+            });
+            setCircles(tempBundle[0]);
+            setLines(tempBundle[1]);
+            //console.log(tempBundle[0]);
+        }
+    }
+    const deleteNode = (node, nodeArray, nodeConnections) => {
+        console.log(node);
+        console.log(nodeArray);
+        //console.log(nodeArray);
+        let leftNodeArray = nodeArray;
+        let rightNodeArray = nodeArray;
+        let resultNodeArray = nodeArray;
+
+        let newConnections = nodeConnections.filter((line) => {
+            for (let i = 0; i < line.connections.length; i++) {
+                if (line.connections[i] === node.id) {
+                    console.log("test");
+                    return false;
+                }
+            }
+            return true;
+        });
+        console.log(newConnections);
+        let leftNodeConnections = newConnections;
+        let rightNodeConnections = newConnections;
+        //console.log(newConnections);
+        if (node.leftChild != null) {
+            let leftBundle = deleteNode(circles.find((circle) => node.leftChild === circle.id), nodeArray.filter((circle) => circle.id != node.leftChild), newConnections);
+            leftNodeArray = leftBundle[0];
+            leftNodeConnections = leftBundle[1];
+            //console.log(leftNodeArray);
+        }
+        if (node.rightChild != null) {
+            let rightBundle = deleteNode(circles.find((circle) => node.rightChild === circle.id), nodeArray.filter((circle) => circle.id != node.rightChild), newConnections);
+            rightNodeArray = rightBundle[0];
+            rightNodeConnections = rightBundle[1];
+            //console.log(rightNodeArray);
+        }
+        resultNodeArray = leftNodeArray.filter((circle) => rightNodeArray.includes(circle));
+        newConnections = leftNodeConnections.filter((line) => rightNodeConnections.includes(line));
+        console.log(resultNodeArray);
+        return [resultNodeArray, newConnections];
+        //let newArray = ;
+        //if (node.leftChild) {
+        //}
+        /*
+        let tempCircle = circles;
+        resetTree();
         const id = selected.id;
         if (id != -1) {
-            setCircles(circles.filter(circle => circle.id != id));
-            setLines(lines.filter(line => !line.id.includes(JSON.stringify(id))));
+            tempCircle = tempCircle.map((circle) => {
+                if (circle.leftchild != null) {
+                    if (circle.leftChild.id == id) {
+                        return {
+                            ...circle,
+                            leftChild: null,
+                        };
+                    }
+                }
+                if (circle.rightChild != null) {
+                    if (circle.rightChild.id == id) {
+                        return {
+                            ...circle,
+                            rightChild: null,
+                        };
+                    }
+                }
+                if (circle.parent != null) {
+                    if (circle.parent.id == id) {
+                        return {
+                            ...circle,
+                            parent: null,
+                        };
+                    }
+                }
+                return circle;
+            });
+
+            tempCircle = tempCircle.filter((circle) => circle.id != id);
+            setCircles(tempCircle);
+            setLines(lines.filter((line) => !line.id.includes(JSON.stringify(id))));
             setSelected({ id: -1 });
-        }
-    }
+        }*/
+    };
 
     const insertRight = (e) => {
+        setSelected({ id: -1 });
         setSelectedLeft({});
-        setSelectedRight(circles.filter(circle => circle.id == e.target.id())[0]);
-    }
+        setSelectedRight(circles.find((circle) => circle.id == e.target.id()));
+    };
 
     const insertLeft = (e) => {
+
+        setSelected({ id: -1 });
         setSelectedRight({});
-        console.log(circles.filter(circle => circle.id == e.target.id()));
-        setSelectedLeft(circles.filter(circle => circle.id == e.target.id())[0]);
-    }
+        setSelectedLeft(circles.find((circle) => circle.id == e.target.id()));
+    };
 
     const insertNode = (e) => {
-        if (Object.keys(selectedLeft).length !== 0) {
-            setSelectedLeft({});
-            const child = createLeft(selectedLeft, circles.length, WIDTH)
-            const connectionBundle = newConnectNodeBTT(selectedLeft, child, connection, true);
-            setLines(lines.concat(connectionBundle[0]));
-            setCircles(circles.concat(child));
-        }
-        else if (Object.keys(selectedRight).length !== 0) {
-            setSelectedRight({});
-            const child = createRight(selectedRight, circles.length, WIDTH)
-            const connectionBundle = newConnectNodeBTT(selectedRight, child, connection, false);
-            setLines(lines.concat(connectionBundle[0]));
-            setCircles(circles.concat(child));
-        }
-    }
 
+        if (Object.keys(selectedLeft).length !== 0) {
+            const child = createLeft(selectedLeft, idNum, WIDTH);
+            if (child.id === -1) {
+                return -1;
+            }
+            const connectionBundle = newConnectNodeBTT(
+                selectedLeft,
+                child,
+                connection,
+                true
+            );
+            setSelectedLeft({});
+            setLines(lines.concat(connectionBundle[0]));
+            setCircles(circles.concat(child));
+            setIdNum(idNum + 1);
+        } else if (Object.keys(selectedRight).length !== 0) {
+            const child = createRight(selectedRight, idNum, WIDTH);
+            if (child.id === -1) {
+                return -1;
+            }
+            const connectionBundle = newConnectNodeBTT(
+                selectedRight,
+                child,
+                connection,
+                false
+            );
+            setSelectedRight({});
+            setLines(lines.concat(connectionBundle[0]));
+            setCircles(circles.concat(child));
+            setIdNum(idNum + 1);
+            console.log(idNum);
+        }
+    };
     const selectLine = (e) => {
         const id = e.target.id();
         // set connecting state to true
@@ -375,13 +539,24 @@ export default function BinaryTreeTraversal() {
         );
     };
 
+    const stepForward = () => {
+        if (type === "Preorder") stepForwardPreorder();
+        else if (type === "Inorder") stepForwardInorder();
+        else if (type === "Postorder") stepForwardPostorder();
+    };
+
+    const stepBackward = () => {
+        if (type === "Preorder") stepBackPreorder();
+        else if (type === "Inorder") stepBackInorder();
+        else if (type === "Postorder") stepBackPostorder();
+    };
+
     const resetTree = () => {
         circles.forEach((circle) => (circle.stroke = "black"));
         visualArray.forEach((rect) => (rect.value = null));
         setCircles(circles);
-        setVisualArray(visualArray);
+        //setVisualArray(visualArray);
         changeIteration(0);
-        return setCircles(circles);
     };
     const reset = (e) => {
         setCircles(INIT);
@@ -428,6 +603,7 @@ export default function BinaryTreeTraversal() {
             },
         },
     });
+
     return (
         <Header>
             <ThemeProvider theme={theme}>
@@ -442,7 +618,7 @@ export default function BinaryTreeTraversal() {
                                             <Button
                                                 variant="contained"
                                                 onClick={changePreorder}
-                                                color={flag1 ? "primary" : "secondary"}
+                                                color={type === "Preorder" ? "secondary" : "primary"}
                                                 className={classes.button}
                                             >
                                                 Preorder
@@ -453,7 +629,7 @@ export default function BinaryTreeTraversal() {
                                                 variant="contained"
                                                 //onClick={() => {console.log(CON_GEN) }}
                                                 onClick={changeInorder}
-                                                color={flag2 ? "primary" : "secondary"}
+                                                color={type === "Inorder" ? "secondary" : "primary"}
                                                 className={classes.button}
                                             >
                                                 Inorder
@@ -463,7 +639,7 @@ export default function BinaryTreeTraversal() {
                                             <Button
                                                 variant="contained"
                                                 onClick={changePostorder}
-                                                color={flag3 ? "primary" : "secondary"}
+                                                color={type === "Postorder" ? "secondary" : "primary"}
                                                 className={classes.button}
                                             >
                                                 Postorder
@@ -473,7 +649,11 @@ export default function BinaryTreeTraversal() {
                                             <h1></h1>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Button variant="contained" color="primary" onClick={insertNode}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={insertNode}
+                                            >
                                                 Insert
                       </Button>
                                         </Grid>
@@ -507,7 +687,7 @@ export default function BinaryTreeTraversal() {
                         <Grid item xs={9}>
                             <Paper className={classes.paper}>
                                 <h1>Graphing Algorithm: {type}</h1>
-                                <h1>Step: { num }</h1>
+                                <h1>Step: {num}</h1>
                                 <Stage width={WIDTH} height={HEIGHT}>
                                     <Layer>
                                         {visualArray.map((rect) => (
@@ -549,12 +729,19 @@ export default function BinaryTreeTraversal() {
                                                         connecting ? finalConnect : initialConnect
                                                     }
                                                 />
-                                                <Text text={circle.value} x={circle.x} y={circle.y} fill="white" />
+                                                <Text
+                                                    text={circle.value}
+                                                    x={circle.x}
+                                                    y={circle.y}
+                                                    fill="white"
+                                                />
                                                 <Circle
                                                     x={circle.x + 40}
                                                     y={circle.y + 40}
                                                     id={circle.id}
-                                                    stroke={selectedRight.id === circle.id ? "red" : "black"}
+                                                    stroke={
+                                                        selectedRight.id === circle.id ? "red" : "black"
+                                                    }
                                                     width={circle.width / 10}
                                                     height={circle.height / 10}
                                                     onClick={insertRight}
@@ -563,7 +750,9 @@ export default function BinaryTreeTraversal() {
                                                     x={circle.x - 40}
                                                     y={circle.y + 40}
                                                     id={circle.id}
-                                                    stroke={selectedLeft.id === circle.id ? "red" : "black"}
+                                                    stroke={
+                                                        selectedLeft.id === circle.id ? "red" : "black"
+                                                    }
                                                     width={circle.width / 10}
                                                     height={circle.height / 10}
                                                     onClick={insertLeft}
@@ -579,7 +768,6 @@ export default function BinaryTreeTraversal() {
                                                     fill={"black"}
                                                     onClick={selectLine}
                                                 />
-
                                             </React.Fragment>
                                         ))}
                                     </Layer>
@@ -596,15 +784,7 @@ export default function BinaryTreeTraversal() {
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    onClick={
-                                                        !flag1
-                                                            ? stepBackPreorder
-                                                            : !flag2
-                                                                ? stepBackInorder
-                                                                : !flag3
-                                                                    ? stepBackPostorder
-                                                                    : null
-                                                    }
+                                                    onClick={stepBackward}
                                                 >
                                                     Step Back
                         </Button>
@@ -620,15 +800,7 @@ export default function BinaryTreeTraversal() {
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    onClick={
-                                                        !flag1
-                                                            ? stepForwardPreorder
-                                                            : !flag2
-                                                                ? stepForwardInorder
-                                                                : !flag3
-                                                                    ? stepForwardPostorder
-                                                                    : null
-                                                    }
+                                                    onClick={stepForward}
                                                 >
                                                     Step Forward
                         </Button>
@@ -640,7 +812,7 @@ export default function BinaryTreeTraversal() {
                         </Grid>
                     </Grid>
                 </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={deleteNode}>
+                <ButtonBase className={classes.trashBtn} onClick={deleteBranch}>
                     <img src={trash} className={classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>
