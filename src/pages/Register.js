@@ -96,7 +96,7 @@ export default function Register() {
                     <Box pl={"25%"}>
                         <Box>
                             <Typography variant={"h1"} justify="flex-start" >
-                                    ALVIS
+                                ALVIS
                             </Typography>
                         </Box>
                         <Box className={classes.divider}>
@@ -119,11 +119,11 @@ export default function Register() {
                                     <Grid item>
                                         <Box pt={5}>
                                             <Typography variant={"h2"}>
-                                                    New Account
+                                                New Account
                                             </Typography>
                                         </Box>
                                     </Grid>
-                    
+
                                     <Grid item>
                                         <Box pt={2}>
                                             <TextField label="Your Name" variant="outlined" className={classes.input} />
@@ -139,10 +139,10 @@ export default function Register() {
                                         </Box>
                                     </Grid>
                                     <Grid item>
-                                         <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>} labelPlacement={"end"} />
+                                        <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>} labelPlacement={"end"} />
                                     </Grid>
                                     <Grid item>
-                                        <Box pt = {2}>
+                                        <Box pt={2}>
                                             <Button variant={"contained"} type={"submit"} className={classes.submit}>
                                                 <Typography variant={"h6"}>
                                                     Sign up
