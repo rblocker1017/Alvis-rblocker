@@ -124,7 +124,7 @@ export default function GraphingAlgorithm() {
                 tempArray = kruskalAlgorithm(startNode, endNode, lines);
                 break;
         }
-        setStep(-1);
+        //setStep(-1);
         setAlgoArray(tempArray);
         console.log(tempArray);
         tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
@@ -132,9 +132,24 @@ export default function GraphingAlgorithm() {
 
 
     // anonymous functions that change header to respective button
-    const changePrim = () => setType("Prim");
-    const changeDij = () => setType("Dijkstras");
-    const changeKruskal = () => setType("Kruskal");
+    const changePrim = () => {
+        if (step !== -1) {
+            return;
+        }
+        setType("Prim");
+    }
+    const changeDij = () => {
+        if (step !== -1) {
+            return;
+        }
+        setType("Dijkstras");
+    }
+    const changeKruskal = () => {
+        if (step !== -1) {
+            return;
+        }
+        setType("Kruskal");
+    }
 
     const stepForward = (e) => {
         if (step === -1) {
