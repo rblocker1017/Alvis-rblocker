@@ -112,6 +112,18 @@ export default function BinaryTreeTraversal() {
     const [connecting, setConnecting] = React.useState(false);
     const [fromCon, setFromCon] = React.useState({});
     const [idNum, setIdNum] = useState(INIT.length);
+    
+    useEffect(()=>{
+        switch (type) {
+            case "Preorder":
+                inOrderTraversalHelper();
+            case "Postorder":
+                postOrderTraversalHelper();
+            case "Inorder":
+                inOrderTraversalHelper();
+        }
+    }, [lines]);
+
     //const [width, setWidth] = React.useState(WIDTH);
     //const [height, setHeight] = React.useState(HEIGHT);
     /*
@@ -308,6 +320,9 @@ export default function BinaryTreeTraversal() {
     };
 
     const selectCircle = (e) => {
+        if (num !== 0) {
+            return null;
+        }
         const id = e.target.id();
         // set connecting state to true
         setSelectedLeft({});
