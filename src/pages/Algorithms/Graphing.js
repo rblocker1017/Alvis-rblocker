@@ -62,8 +62,8 @@ function primHelper(start, end, displayLines, tempLines, processedNodes) {
     if (start === end) {
         return 0;
     }
-    for (let node of processedNodes) {
-        for (let line of tempLines) {
+    for (let line of tempLines) {
+        for (let node of processedNodes) {
             if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
                 let nextStart = line.connections.find(id => id !== node);
                 displayLines.push(line.id);
