@@ -64,7 +64,7 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
                 y: 60,
                 width: 100,
                 height: 100,
-                color: 'green',
+                color: 'white',
                 fill: 'green',
                 stroke: 'black',
                 strokeWidth: 5,
@@ -139,6 +139,57 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
     else {
         return;
     }
+}
+
+export function createLeft(circle, id, canvasWidth) {
+    let step = Math.floor((id + 1) / 2) + 1;
+    if (circle.rightChild === null) {
+        let newCircle = {
+            id: id,
+            x: circle.x - 150 - (Math.pow(canvasWidth, 1.22 / step)),
+            y: circle.y + 60,
+            width: 100,
+            height: 100,
+            color: 'green',
+            value: Math.floor(Math.random() * 100),
+            fill: 'green',
+            stroke: 'black',
+            strokeWidth: 5,
+            selected: false,
+            connections: [],
+            parent: circle,
+            leftChild: null,
+            rightChild: null
+        };
+        console.log(newCircle);
+        return newCircle;
+    }
+    return {};
+}
+export function createRight(circle, id, canvasWidth) {
+    let step = Math.floor((id + 1) / 2) + 1;
+    if (circle.rightChild === null) {
+        let newCircle = {
+            id: id,
+            x: circle.x + 150 + (Math.pow(canvasWidth, 1.22 / step)),
+            y: circle.y + 60,
+            width: 100,
+            height: 100,
+            color: 'green',
+            value: Math.floor(Math.random() * 100),
+            fill: 'green',
+            stroke: 'black',
+            strokeWidth: 5,
+            selected: false,
+            connections: [],
+            parent: circle,
+            leftChild: null,
+            rightChild: null
+        };
+        console.log(newCircle);
+        return newCircle;
+    }
+    return {};
 }
 
 /*
@@ -329,7 +380,7 @@ export function generateConnectors(numberConnectors, circles) {
     let connections = [];
     while (result.length < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
-        const value = Math.floor(Math.random() * 100);
+        const value = Math.floor(Math.random() * 9);
         let fromIndex = Math.floor(Math.random() * circles.length);
         let toIndex = Math.floor(Math.random() * circles.length);
         while (toIndex === fromIndex) {
@@ -369,7 +420,7 @@ export function generateConnectors(numberConnectors, circles) {
 // to - circle connecting to
 // from - circle connecting from
 // idNum - id number of the connector
-export function connectNode(to, from, connections) {
+export function connectNode(to, from, connections, setValue) {
     let id = "";
     to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
     if (!connections.includes(id) && JSON.stringify(to) !== '{}') {
@@ -379,11 +430,41 @@ export function connectNode(to, from, connections) {
             id: id,
             connections: [to, from],
             points: getPoints(to, from),
-            value: value,
+            value: setValue,
             stroke: "black",
             connected: false
         },
             connections];
     }
+    return {};
+}
+export function newConnectNodeBTT(to, from, connections, isLeft) {
+    let id = "";
+    let newTo = {};
+    to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
+    if (isLeft) {
+        newTo = {
+            ...to,
+            x: to.x+ 5,
+            y: to.y + 30
+        }
+    }
+    else {
+        newTo = {
+            ...to,
+            x: to.x - 5,
+            y: to.y + 30
+        }
+    }
+        const value = Math.floor(Math.random() * 100);
+        connections.push(id);
+        return [{
+            id: id,
+            connections: [to, from],
+            points: getPoints(newTo, from),
+            stroke: "black",
+            connected: false
+        },
+            connections];
     return {};
 }
