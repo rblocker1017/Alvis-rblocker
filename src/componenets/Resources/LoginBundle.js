@@ -43,11 +43,7 @@ export default class LoginBundle extends Component {
                 <React.Fragment>
                     {this.title}
                     <Grid container alignItems={"center"} direction={"row"} justify={"flex-end"} spacing={2}>
-                        <Button component={LinkRoute} to="/Achievements" color="inherit" className={{
-                            marginLeft: 'auto',
-                            marginRight: '1%',
-                            textTransform: 'none',
-                        }}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button>
+
                         <Grid item>
                             <ButtonBase component={LinkRoute} to="/Login">
                                 <Typography variant="button" noWrap align="center">
@@ -62,14 +58,12 @@ export default class LoginBundle extends Component {
         return (
             <React.Fragment>
                 {this.title}
-                <Grid container alignItems={"center"} direction={"row"} justify={"space-between"} spacing={2}>
-                    <Grid item>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h6" noWrap align="center">
-                            Welcome {this.cookie.username}!
-                        </Typography>
-                    </Grid>
+                <Grid container alignItems={"center"} direction={"row"} justify={"flex-end"} spacing={2}>
+                    <Button component={LinkRoute} to="/Achievements" color="inherit" className={{
+                        marginLeft: 'auto',
+                        marginRight: '1%',
+                        textTransform: 'none',
+                    }}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button>
                     <Grid item>
                         <ButtonBase onClick={this.deleteCookie}>
                             <Typography variant="button" noWrap align="center">
