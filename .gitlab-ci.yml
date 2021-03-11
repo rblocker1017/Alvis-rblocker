@@ -11,10 +11,6 @@ build:
   script:
     - yarn install # Run `yarn install` and `yarn build`
     - CI=false yarn build
-    - cd node-postgres
-    - npm install pg
-    - node index.js
-    - cd ..
   artifacts:
     paths:
       - build/ # Save the build result as an artfact
