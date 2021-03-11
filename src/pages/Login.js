@@ -6,6 +6,7 @@ import Axios from "axios";
 import Cookies from "universal-cookie";
 import { green } from "@material-ui/core/colors";
 import IncorrectLogin from "../componenets/Messages/IncorrectLogin";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,18 +68,24 @@ export default function Login() {
       },
     },
   });
+  const history = useHistory();
+
+  function newRoute() {
+    history.push("/");
+  }
 
   function handleSubmit(event) {
     Axios.post("https://shrouded-lowlands-01346.herokuapp.com/login", {
       loginEmail: email,
       loginPassword: password,
     }).then((response) => {
-      if (String(response.data) == "true") {
+      if (String(response.data) === "true") {
         console.log("Correct username and password");
 
         const cookies = new Cookies();
         cookies.set("cookie", { username: "email" }, { path: "/" });
-        window.location.assign("/");
+        // window.location.assign("/");
+        newRoute();
       } else {
         // Unvalidated
         setValid(false);

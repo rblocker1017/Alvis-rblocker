@@ -4,6 +4,7 @@ import { makeStyles, ThemeProvider, useTheme, createMuiTheme } from "@material-u
 import LinkRoute from "react-router-dom/Link";
 import Axios from "axios";
 import { green } from "@material-ui/core/colors";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +64,12 @@ export default function Register() {
     },
   });
 
+  const history = useHistory();
+
+  function newRoute() {
+    history.push("/Login");
+  }
+
   function handleSubmit(event) {
     console.log(registerEmail);
     console.log(registerPassword);
@@ -78,7 +85,7 @@ export default function Register() {
       console.log(response);
     });
 
-    window.location.assign("/Login");
+    newRoute();
   };
   return (
     <ThemeProvider theme={theme}>
