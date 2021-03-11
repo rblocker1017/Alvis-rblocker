@@ -9,11 +9,11 @@ build:
     # Replace this with your site URL
     PUBLIC_URL: "/fall2020_buzzdev"
   script:
+    - yarn install # Run `yarn install` and `yarn build`
+    - CI=false yarn build
     - cd node-postgres
     - node index.js
     - cd ..
-    - yarn install # Run `yarn install` and `yarn build`
-    - CI=false yarn build
   artifacts:
     paths:
       - build/ # Save the build result as an artfact
