@@ -36,7 +36,7 @@ export default class LoginBundle extends Component {
   deleteCookie() {
     const cookies = new Cookies();
     cookies.remove("cookie");
-    window.location.replace(window.location.href);
+    window.location.href = window.location.href;
   }
   render() {
     if (this.cookie === undefined) {
