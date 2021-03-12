@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route } from "react-router-dom";
-import BubbleSort from "./pages/bubbleSort";
 import CPUScheduling from "./pages/CPUScheduling";
 import RoundRobin from "./pages/roundRobin";
 import Tree from "./pages/treeViewer";
@@ -20,7 +19,6 @@ function App() {
     <div className="App">
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Route path="/" exact component={Welcome} />
-        <Route path="/bubblesort" exact component={BubbleSort} />
         <Route path="/CpuScheduling" exact component={CPUScheduling} />
         <Route path="/tree" exact component={Tree} />
         <Route path="/PageReplacement" exact component={PageReplacement} />
