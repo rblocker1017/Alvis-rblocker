@@ -575,10 +575,10 @@ export default function GraphingAlgorithm() {
                                                     <Tag
                                                         //width={100}
                                                         pointerDirection="down"
-                                                        fill={circle.start || (circle.end && type !== "Prim") ? "green" : ""}
+                                                        fill={circle.start || (circle.end && type !== "Prim" && type !== "Kruskal") ? "green" : ""}
                                                         pointerWidth={25}
                                                         pointerHeight={10}
-                                                        stroke={circle.start || (circle.end && type !== "Prim") ? "black" : ""}
+                                                        stroke={circle.start || (circle.end && type !== "Prim" && type !== "Kruskal") ? "black" : ""}
                                                     />
                                                     <Text
                                                         fontSize={20}

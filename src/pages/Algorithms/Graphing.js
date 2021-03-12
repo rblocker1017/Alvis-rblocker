@@ -33,6 +33,22 @@ function hasPath(currentNode, end, lines, processedNodes) {
     });
     return exists;
 }
+
+function isCyclical(start, processedNodes, displayLines) {
+    console.log(displayLines);
+    console.log(processedNodes);
+    let cyclical = false;
+    for (let node of processedNodes.values()) {
+        for (let lines of displayLines) {
+            const newProc = new Set(processedNodes);
+            newProc.delete(node);
+            cyclical = cyclical || isCyclical(node, newProc, displayLines.filter(disLines => disLines !== lines));
+        }
+    }
+    return false;
+    //return cyclical;
+}
+
 /* kruskalAlgorithm - find the shortest path from start to end with kruskal
  * @param start - start circle
  * @param end - end circle
@@ -44,21 +60,16 @@ export function kruskalAlgorithm(start, end, lines) {
     let displayLines = [];
     const tempLines = Array.from(lines.values());
     let currentConnections = [];
-    //console.log("test");
     // sort lines from lowest to highest value for the kruskal algorithm
     tempLines.sort(sortLines);
-    console.log(tempLines);
-    console.log(start.id);
     // add the lines from lowest value to highest value and check if there is a path every iteration
     for (let i = 0; i < tempLines.length; i++) {
-        displayLines.push(tempLines[i]);
-        displayArray.push(tempLines[i].id);
-        if (hasPath(start, end, displayLines, currentConnections)) {
-            console.log(displayArray);
-            return displayArray;
+        if (!hasPath(tempLines[i].connections[0], tempLines[i].connections[1], displayLines, currentConnections )) {
+            displayLines.push(tempLines[i]);
+            displayArray.push(tempLines[i].id);
         }
     }
-    return -1;
+    return displayArray;
 }
 
 function primHelper(start, end, displayLines, tempLines, processedNodes) {
