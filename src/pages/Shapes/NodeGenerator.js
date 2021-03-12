@@ -3,11 +3,11 @@
 // width of canvas to put circles in
 // height of canvas to put circles in
 export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
-    let circles = [];
+    let circles = new Map();
 
     while (circles.length < numberCircles) {
         const value = Math.floor(Math.random() * 100);
-        circles.push({
+        const circle = {
             id: circles.length,
             x: canvasWidth / 2,
             y: (Math.random() * (canvasHeight - 200)) + 100,
@@ -19,8 +19,10 @@ export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
             selected: false,
             connections: [],
             value: value
-        });
+        };
+        circles.set(circle.id, circle);
     }
+    //console.log(circles);
     return circles;
 }
 
@@ -306,12 +308,12 @@ export function connectNodeBTT(circle, circles) {
 // width of canvas to put circles in
 // height of canvas to put circles in
 export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight) {
-    let circles = [];
+    let circles = new Map();
 
-    while (circles.length < numberCircles) {
+    while (circles.size < numberCircles) {
         let circle = {
             type: "circle",
-            id: circles.length,
+            id: circles.size,
             x: (Math.random() * (canvasWidth - 200)) + 100,
             y: (Math.random() * (canvasHeight - 200)) + 100,
             width: 100,
@@ -326,21 +328,22 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
             end: false
         }
         // sets first element to start node
-        if (circles.length === 0) {
+        if (circles.size === 0) {
             circle = {
                 ...circle,
                 start: true
             };
         }
         // sets last element to end node
-        if (circles.length === numberCircles - 1) {
+        if (circles.size === numberCircles - 1) {
             circle = {
                 ...circle,
                 end: true
             };
         }
-        circles.push(circle);
+        circles.set(circle.id, circle);
     }
+    console.log(Array.from(circles.values()));
     return circles;
 }
 
@@ -375,26 +378,25 @@ const sortConnectors = (a, b) => {
 // numberConnectors - initial number of connectors
 // circles - array of circles to put connectors
 export function generateConnectors(numberConnectors, circles) {
-    let result = [];
-    let tempConnections = [];
-    while (result.length < numberConnectors) {
+    let result = new Map();
+    while (result.size < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
         const value = Math.floor(Math.random() * 8) + 1;
-        let fromIndex = Math.floor(Math.random() * circles.length);
-        let toIndex = Math.floor(Math.random() * circles.length);
-        while (toIndex === fromIndex) {
-            toIndex = Math.floor(Math.random() * circles.length);
+        let fromIndex = Math.floor(Math.random() * circles.size);
+        let toIndex = Math.floor(Math.random() * circles.size);
+        while (Number(toIndex) === Number(fromIndex)) {
+            toIndex = Math.floor(Math.random() * circles.size);
         }
+        //console.log(toIndex + " " + fromIndex);
         // create an id with the sorted indexes of the two circles
-        let id = "";
-        toIndex < fromIndex ? id = toIndex + "" + fromIndex : id = fromIndex + "" + toIndex;
-        if (tempConnections.includes(id)) {
+        let id = JSON.stringify([Number(toIndex), Number(fromIndex)].sort());
+        if (result.has(id)) {
             continue;
         }
-        tempConnections.push(id);
-        const from = circles[fromIndex];
-        const to = circles[toIndex];
-
+        //console.log(circles);
+        const from = circles.get(fromIndex);
+        const to = circles.get(toIndex);
+        //console.log(from);
         // creates new connection between to and from circles and sorts the connectors
         const newConnection = {
             type: "line",
@@ -408,35 +410,32 @@ export function generateConnectors(numberConnectors, circles) {
         newConnection.connections.sort(sortConnectors);
 
         // push connector id to the connecting circles and current connectors
-        circles[fromIndex].connections.push(id);
-        circles[toIndex].connections.push(id);
-        result.push(newConnection);
+        //console.log();
+        to.connections.push(id);
+        from.connections.push(id);
+        circles.set(toIndex, to);
+        circles.set(fromIndex, from);
+        result.set(id, newConnection);
     }
-    return [result, tempConnections];
+    //console.log(result);
+    //console.log(tempConnections);
+    return result;
 }
 
 // connects the to and from node
 // to - circle connecting to
 // from - circle connecting from
 // idNum - id number of the connector
-export function connectNode(to, from, connections, setValue) {
-    let id = "";
-    to.id < from.id ? id = to.id + "" + from.id : id = from.id + "" + to.id;
-    if (!connections.includes(id) && JSON.stringify(to) !== '{}' && to.id !== -1 && from.id !== -1) {
-        const value = Math.floor(Math.random() * 100);
-        connections.push(id);
-        return [{
-            type: "line",
-            id: id,
-            connections: [to.id, from.id],
-            points: getPoints(to, from),
-            value: setValue,
-            stroke: "black",
-            connected: false
-        },
-            connections];
-    }
-    return {};
+export function connectNode(to, from, setValue, id) {
+    return {
+        type: "line",
+        id: id,
+        connections: [to.id, from.id],
+        points: getPoints(to, from),
+        value: setValue,
+        stroke: "black",
+        connected: false
+    };
 }
 export function newConnectNodeBTT(to, from, connections, isLeft) {
     let id = "";

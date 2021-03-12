@@ -26,7 +26,7 @@ function hasPath(currentNode, end, lines, processedNodes) {
         // recursively check every line in the given connections to see if there is a path
         if (line.connections.includes(currentNode) && !processedNodes.includes(currentNode)) {
             // if the line includes the currentNode in its connections, then assign newStart to the other node in the line's connections array
-            const nextStart = line.connections.find(circleId => circleId !== currentNode)
+            const nextStart = line.connections.find(circleId => circleId !== currentNode);
             // OR the result with exists in order to pass the result through the end
             exists = exists || hasPath(nextStart, end, lines, processedNodes.concat(currentNode));
         }
@@ -42,15 +42,19 @@ function hasPath(currentNode, end, lines, processedNodes) {
 export function kruskalAlgorithm(start, end, lines) {
     let displayArray = [];
     let displayLines = [];
-    const tempLines = lines;
+    const tempLines = Array.from(lines.values());
     let currentConnections = [];
+    //console.log("test");
     // sort lines from lowest to highest value for the kruskal algorithm
     tempLines.sort(sortLines);
+    console.log(tempLines);
+    console.log(start.id);
     // add the lines from lowest value to highest value and check if there is a path every iteration
     for (let i = 0; i < tempLines.length; i++) {
         displayLines.push(tempLines[i]);
         displayArray.push(tempLines[i].id);
-        if (hasPath(start.id, end.id, displayLines, currentConnections)) {
+        if (hasPath(start, end, displayLines, currentConnections)) {
+            console.log(displayArray);
             return displayArray;
         }
     }
@@ -58,10 +62,6 @@ export function kruskalAlgorithm(start, end, lines) {
 }
 
 function primHelper(start, end, displayLines, tempLines, processedNodes) {
-    console.log(start);
-    if (start === end) {
-        return 0;
-    }
     for (let line of tempLines) {
         for (let node of processedNodes) {
             if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
@@ -77,11 +77,10 @@ function primHelper(start, end, displayLines, tempLines, processedNodes) {
 
 export function primAlgorithm(start, end, lines) {
     let displayLines = [];
-    const tempLines = lines;
-    let processedNodes = [start.id];
+    const tempLines = Array.from(lines.values());
+    let processedNodes = [start];
     tempLines.sort(sortLines);
-    primHelper(start.id, end.id, displayLines, tempLines, processedNodes);
-    console.log(displayLines);
+    primHelper(start, end, displayLines, tempLines, processedNodes);
     return displayLines;
 }
 
