@@ -381,7 +381,7 @@ export function generateConnectors(numberConnectors, circles) {
     let result = new Map();
     while (result.size < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
-        const value = Math.floor(Math.random() * 8) + 1;
+        const value = Math.floor(Math.random() * 99) + 1;
         let fromIndex = Math.floor(Math.random() * circles.size);
         let toIndex = Math.floor(Math.random() * circles.size);
         while (Number(toIndex) === Number(fromIndex)) {

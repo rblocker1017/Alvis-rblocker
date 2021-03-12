@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel } from "@material-ui/core";
+import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel, Modal, Fade, Backdrop, TextField } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey, green } from '@material-ui/core/colors';
 import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
@@ -66,6 +66,19 @@ const useStyles = makeStyles((theme) => ({
     },
     trashImg: {
         opacity: 0.55
+    },
+    insertPaper: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 }));
 // Generate initial connectors and circles
@@ -101,10 +114,14 @@ export default function GraphingAlgorithm() {
     const [startNode, setStartNode] = React.useState(0);
     const [endNode, setEndNode] = React.useState(INIT.size - 1);
     const [algoArray, setAlgoArray] = React.useState(-1);
-    const [displayArray, setDisplayArray] = React.useState([]);
     const [conValue, setConValue] = React.useState(1);
     const [step, setStep] = React.useState(-1);
     const [validPath, setValidPath] = React.useState(true);
+    const [changed, setChanged] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [inputError, setInputError] = useState(false);
+    const [input, setInput] = useState("");
+    const [otherInsert, setOtherInsert] = useState(null);
     useEffect(() => {
         let tempArray = null;
         switch (type) {
@@ -122,10 +139,57 @@ export default function GraphingAlgorithm() {
                 break;
         }
         setAlgoArray(tempArray);
+        setChanged(false);
         console.log(tempArray);
         tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
-    }, [type, lines, startNode, endNode]);
+    }, [type, changed, startNode, endNode]);
 
+    const handleChange = (e) => {
+        setInput(e.target.value);
+        console.log(e.target.value);
+    }
+
+    const handleClose = () => {
+        setConnecting(false);
+        setSelected(null);
+        setChanged(true);
+        setOtherInsert(false);
+        setInputError(false);
+        setOpen(false);
+    }
+
+    const handleOpen = () => {
+        if (step === -1) {
+            setOpen(true);
+        }
+    }
+
+    const insertValue = () => {
+        const regex = /[^0-9]/g;
+        if (!regex.test(input) && input !== "" && parseInt(input) > 1 && parseInt(input) < 100) {
+            const id = otherInsert;
+            let conId = JSON.stringify([Number(selected), Number(id)].sort());
+            let newLines = new Map(lines);
+            let newCircles = new Map(circles);
+            // creates a temporary circle object
+            let toCircle = newCircles.get(id);
+            let fromCircle = newCircles.get(selected);
+            // concatinates the connector of the two circle objects to their connections variable
+            fromCircle.connected = false;
+            toCircle.connections.push(conId);
+            fromCircle.connections.push(conId);
+            // creates a temporary new line
+            newLines.set(conId, connectNode(toCircle, fromCircle, parseInt(input), conId));
+            setLines(newLines);
+            // clear connecting and selected states
+
+            handleClose();
+            return true;
+        }
+        else {
+            setInputError(true);
+        }
+    }
 
     // anonymous functions that change header to respective button
     const changePrim = () => {
@@ -207,6 +271,7 @@ export default function GraphingAlgorithm() {
         newCircles.set(circleId, newcircle);
         setCircles(newCircles);
         setCircleId(circleId + 1);
+        setChanged(true);
     };
 
     // circle being dragged has variable isDragging set to true.
@@ -355,7 +420,6 @@ export default function GraphingAlgorithm() {
     const finalConnect = (e) => {
         const id = e.target.id();
         let conId = JSON.stringify([Number(selected), Number(id)].sort());
-
         if (step !== -1 || lines.has(conId)) {
             console.log("I exist!");
             return 0;;
@@ -365,22 +429,8 @@ export default function GraphingAlgorithm() {
             clearSelected();
             return 0;
         }
-        let newLines = new Map(lines);
-        let newCircles = new Map(circles);
-        // creates a temporary circle object
-        let toCircle = newCircles.get(e.target.id());
-        let fromCircle = newCircles.get(selected);
-        // concatinates the connector of the two circle objects to their connections variable
-        fromCircle.connected = false;
-        toCircle.connections.push(conId);
-        fromCircle.connections.push(conId);
-
-        // creates a temporary new line
-        newLines.set(conId, connectNode(toCircle, fromCircle, conValue, conId));
-        setLines(newLines);
-        // clear connecting and selected states
-        setConnecting(false);
-        setSelected(null);
+        setOtherInsert(e.target.id());
+        handleOpen();
     };
 
     const changeConValue = (e) => {
@@ -422,6 +472,7 @@ export default function GraphingAlgorithm() {
         setCircles(newCircles);
         setSelected(null);
         setConnecting(false);
+        setChanged(true);
     }
     const theme = createMuiTheme({
         palette: {
@@ -437,6 +488,31 @@ export default function GraphingAlgorithm() {
     return (
         <Header>
             <ThemeProvider theme={theme}>
+                <Modal
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                    <Fade in={open}>
+                        <div className={classes.insertPaper}>
+                            <form>
+                                <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                    <Grid item>
+                                        <h2 >Insert a value between 1 and 100</h2>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField error={inputError} label="value" helperText={inputError ? "Invalid value" : ""} onChange={handleChange} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant="contained" color="primary" onClick={insertValue}>Insert</Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </Fade>
+                </Modal>
                 <Grid container direction="column">
                     <Grid item></Grid>
                     <Grid item container spacing={1}>
