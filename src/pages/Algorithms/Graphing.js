@@ -95,6 +95,34 @@ export function primAlgorithm(start, end, lines) {
     return displayLines;
 }
 
+export function dijkstrasHelper(start, end, displayLines, tempLines, processedNodes) {
+    if (Number(start) === Number(end)) {
+        console.log("test");
+        return displayLines
+    }
+    for (let line of tempLines) {
+        for (let node of processedNodes) {
+            if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
+                let nextStart = line.connections.find(id => id !== node);
+                displayLines.push(line.id);
+                processedNodes.push(nextStart);
+                return dijkstrasHelper(nextStart, end, displayLines, tempLines, processedNodes);
+            }
+        }
+    }
+    return -1;
+}
+
+
+export function dijkstrasAlgorithm(start, end, lines) {
+    let displayLines = [];
+    const tempLines = Array.from(lines.values());
+    let processedNodes = [start];
+    tempLines.sort(sortLines);
+    dijkstrasHelper(start, end, displayLines, tempLines, processedNodes);
+    return displayLines;
+}
+
 // Graph creates a graph out of the circles and connected lines
 
 export function Graph(circles, lines) {
@@ -132,7 +160,7 @@ export function Graph(circles, lines) {
     // Returns the graph as an array for easy access
     return [nodes, list];
 }
-
+/*
 export function dijkstraAlgorithm(circles, lines, start, end) {
     // Get the graph and parse it into a node array & list map
     let graph = Graph(circles, lines);
@@ -203,3 +231,4 @@ export function dijkstraAlgorithm(circles, lines, start, end) {
         console.log("Currently lowest distances: " + distances);
     }
 }
+*/
