@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase } from '@material-ui/core';
+import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase, Box } from '@material-ui/core';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         top: "50%",
         color: theme.palette.text.secondary,
         margin: 'auto',
-        height: "150%",
+        height: "125%",
         width: 500
     },
 
@@ -93,6 +93,12 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         height: "100%",
         width: "200%"
+    },
+    averages:
+    {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        color: theme.palette.text.secondary,
     },
 
     table: {
@@ -153,6 +159,11 @@ Fade.propTypes = {
 export default function CpuScheduling(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [flag1, setFlag1] = useState(true);
+    const [flag2, setFlag2] = useState(true);
+    const [flag3, setFlag3] = useState(true);
+    const [flag4, setFlag4] = useState(true);
+    const [flag5, setFlag5] = useState(true);
     const [processes, setprocesses] = useState([])
     const [quantum, setQuantum] = useState();
     const [type, settype] = useState("")
@@ -167,10 +178,14 @@ export default function CpuScheduling(props) {
     const changePri = () => settype("Priority");
 
 
+
     const theme = createMuiTheme({
         palette: {
             primary: {
                 main: green[900],
+            },
+            secondary: {
+                main: grey[700],
             }
         }
     })
@@ -510,6 +525,7 @@ export default function CpuScheduling(props) {
         }
 
 
+
         let answer = [[
             { type: 'string', label: 'Task ID' },
             { type: 'string', label: 'Task Name' },
@@ -539,6 +555,7 @@ export default function CpuScheduling(props) {
         return answer;
 
     }
+
 
 
     function sjfFuncPreemptive(processes) {
@@ -694,7 +711,7 @@ export default function CpuScheduling(props) {
             { type: 'date', label: 'Start Time' },
             { type: 'date', label: 'End Time' },
             { type: 'number', label: 'Duration' },
-            { type: 'number', label: 'Percent Complete' },
+           // { type: 'number', label: 'Percent Complete' },
             { type: 'string', label: 'Dependencies' },
         ],
         [
@@ -769,11 +786,36 @@ export default function CpuScheduling(props) {
 
     const handleAddProc = () => {
         let temp = processes.slice();
-
         temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)), select: false });
-        setprocesses(temp);
-        console.log(temp);
-        setDisplayBoolean(false);
+        if(formProcess == null ){
+            alert("Please enter Process name");
+            setformArrival(null);
+            setformBurst(null);
+        }
+        else if (formArrival == null){
+            alert("Please enter integer for Arrival Time");
+            setformProcess(null);
+            setformBurst(null);
+        }
+        else if (formBurst == null){
+            alert("Please enter integer for Burst Time");
+            setformProcess(null);
+            setformArrival(null);
+        }
+        else{
+            
+            setprocesses(temp);
+            console.log(temp);
+            setDisplayBoolean(false);
+        }
+
+        //Empty the inputs on the pop-up form, then set the values to null
+        Array.from(document.querySelectorAll("input")).forEach(
+            input => (input.value = "")
+        );
+       //setformProcess(null);
+       // setformArrival(null);
+       // setformBurst(null);
     }
 
     function addRow(table, procName, arrivalTime, burstTime, timeQ, Priority) {
@@ -816,7 +858,6 @@ export default function CpuScheduling(props) {
 
     const handleChangeCheck = (event) => {
         setChecked(!checked);
-        checkCheckbox();
     };
 
     const selectRow = (e) => {
@@ -853,6 +894,47 @@ export default function CpuScheduling(props) {
     }
 
 
+    const handleClick1 = () => {
+        if (flag1) setFlag1(!flag1);
+        setFlag2(true);
+        setFlag3(true);
+        setFlag4(true);
+        setFlag5(true);
+      };
+    
+      const handleClick2 = () => {
+        if (flag2) setFlag2(!flag2);
+        setFlag1(true);
+        setFlag3(true);
+        setFlag4(true);
+        setFlag5(true);
+      };
+    
+      const handleClick3 = () => {
+        if (flag3) setFlag3(!flag3);
+        setFlag1(true);
+        setFlag2(true);
+        setFlag4(true);
+        setFlag5(true);
+      };
+    
+      const handleClick4 = () => {
+        if (flag4) setFlag4(!flag4);
+        setFlag1(true);
+        setFlag2(true);
+        setFlag3(true);
+        setFlag5(true);
+      };
+    
+      const handleClick5 = () => {
+        if (flag5) setFlag5(!flag5);
+        setFlag1(true);
+        setFlag2(true);
+        setFlag3(true);
+        setFlag4(true);
+      };
+
+
     return (
 
         <Header>
@@ -864,17 +946,17 @@ export default function CpuScheduling(props) {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); }}>FCFS
+                                            <Button variant="contained" color={flag1 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); handleClick1();}}>FCFS
                                                {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); }}>SJF
+                                            <Button variant="contained" color={flag2 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); handleClick2();}}>SJF
                                             
                                             </Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); }}>Priority
+                                            <Button variant="contained" color={flag3 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); handleClick3(); }}>Priority
                                             
                                             </Button>
                                         </Grid>
@@ -882,12 +964,12 @@ export default function CpuScheduling(props) {
                                             <h1></h1>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); }}>RR
+                                            <Button variant="contained" color={flag4 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); handleClick4();}}>RR
                                             
                                             </Button>
                                         </Grid>
                                         <Grid item item xs={4}>
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); }}>SRTF
+                                            <Button variant="contained" color={flag5 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); handleClick5();}}>SRTF
                                             
                                             </Button>
                                         </Grid>
@@ -909,6 +991,8 @@ export default function CpuScheduling(props) {
                                         </Grid>
                                         <div>
                                             <Modal
+                                                justify="center" 
+                                                alignItems="center"
                                                 className={classes.modal}
                                                 open={open}
                                                 onClose={handleClose}
@@ -919,30 +1003,45 @@ export default function CpuScheduling(props) {
                                                 }}
                                             >
                                                 <Fade in={open}>
-
-
-                                                    <Grid>
-                                                        <Grid item xs={12}>
+                                                    <Grid >
+                                                        <Grid item xs={12} container justify="center" alignItems="center">
                                                             <Paper className={classes.paperOverlay}>
                                                                 <h1>CPU Scheduling: {type} </h1>
                                                                 <form noValidate autoComplete="on">
-                                                                    <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
-                                                                    <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
-                                                                    <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
-
+                                                                    <Box pt={2}>
+                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
+                                                                    </Box>
+                                                                    <Box pt={2}>
+                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
+                                                                    </Box>
+                                                                    <Box pt={2}>
+                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
+                                                                    </Box>
 
                                                                 </form>
                                                                 {type === "Round Robin" ? <form noValidate autoComplete="on">
-                                                                    <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" defaultValue={quantum} onChange={(e) => { setQuantum(e.target.value) }} />
+                                                                    <Box pt={2}>
+                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" defaultValue={quantum} onChange={(e) => { setQuantum(e.target.value) }} />
+                                                                    </Box>
                                                                 </form>
                                                                     : null}
                                                                 {type === "Priority" ? <form noValidate autoComplete="on">
-                                                                    <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
+                                                                    <Box pt={2}>
+                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
+                                                                        </Box>
                                                                 </form>
                                                                     : null}
-
-                                                                <Grid item xs={12}>
-                                                                    <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                                                                <Grid container spacing={1} justify = "center">
+                                                                <Grid item xs={4}>
+                                                                    <Box pt = {2}>
+                                                                         <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                                                                    </Box>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <Box pt = {2}>
+                                                                         <Button variant="contained" color="primary" onClick={handleClose} >Close</Button>
+                                                                    </Box>
+                                                                </Grid>
                                                                 </Grid>
                                                             </Paper>
                                                         </Grid>
@@ -956,62 +1055,9 @@ export default function CpuScheduling(props) {
                                         <Grid>
                                             <Button variant="contained" color="primary" onClick={() => reset()}>Reset</Button>
                                         </Grid>
-                                        <div>           
-                                            <Modal
-                                                className={classes.modal}
-                                                open={open}
-                                                onClose={handleClose}
-                                                closeAfterTransition
-                                                BackdropComponent={Backdrop}
-                                                BackdropProps={{
-                                                    timeout: 500,
-                                                }}
-                                            >
-                                                <Fade in={open}>
-                                               
-                                                  
-                                              <Grid> 
-                                                   <Grid item xs={12}> 
-                                                        <Paper className={classes.paperOverlay}>
-                                                             <h1>CPU Scheduling: {type} </h1>
-                                                            <form noValidate autoComplete="on">
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
-
-
-                                                            </form>
-                                                            {type === "Round Robin" ? <form noValidate autoComplete="on">
-                                                                <TextField id="outlined-size-normal"  variant="outlined" label="Time Quantum" defaultValue = {quantum} onChange={(e) => { setQuantum(e.target.value) }} />
-                                                            </form>
-                                                                : null}
-                                                            {type === "Priority" ? <form noValidate autoComplete="on">
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
-                                                            </form>
-                                                                : null}
-                                                            {type === "Preemptive Priority" ? <form noValidate autoComplete="on">
-                                                                <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
-                                                            </form>
-                                                                : null}
-
-                                                            <Grid item xs={12}>
-                                                                <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
-                                                             </Grid>
-                                                        </Paper>
-                                                    </Grid>
-                                                </Grid>
-                                            </Fade>
-                                        </Modal>
-                                    </div>
-                                     <Grid item xs={4}>
-                                        <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
                                     </Grid>
-                                    <Grid>
-                                        <Button variant="contained" color="primary" onClick = {()=>reset()}>Reset</Button>
-                                    </Grid>
-                                </Grid>
-                             </Paper>
-                          </Grid>
+                                </Paper>
+                            </Grid>
                             <h2>
                             </h2>
                             <Paper className={classes.code}>
@@ -1075,7 +1121,7 @@ export default function CpuScheduling(props) {
                             </Paper>
 
 
-                            <Grid item xs={4} container direction="column" justify="flex-start" alignItems="stretch">
+                            <Grid item xs={4} container direction="column" justify="flex-start" alignItems="stretch" spacing = {1}>
                                 <TableContainer componenet={Grid}>
                                     <Table className={classes.table} aria-label="simple table">
                                         <TableHead>
@@ -1091,7 +1137,6 @@ export default function CpuScheduling(props) {
                                             {processes.map((row) => (
                                                 <TableRow key={row.name} onClick={selectRow}>
                                                     <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center" component="th" scope="row">
-
                                                         {row.name}
                                                     </TableCell>
                                                     <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
@@ -1109,12 +1154,13 @@ export default function CpuScheduling(props) {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
+                                <Grid item xs={8}  container direction="column" justify="flex-end" alignItems="flex-start">
+                                    <Paper className = {classes.averages}>
                                     <h4>  Average Waiting Time: {waitingtime} </h4>
                                     <h4> Average Turnaound Time: {turnaroundTime} </h4>
+                                    </Paper>
                                 </Grid>
                             </Grid>
-
                         </Grid>
                         <Grid item xs={10} container direction="row" justify="center">
                             <form noValidate autoComplete="off">
@@ -1151,4 +1197,3 @@ export default function CpuScheduling(props) {
         </Header>
     )
 }
-
