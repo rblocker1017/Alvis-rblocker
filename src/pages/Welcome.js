@@ -41,7 +41,7 @@ export default function Welcome() {
                     <Grid container alignItems={"center"} direction={"column"}>
                         <Grid item>
                             <h1>
-                                ALVIS
+                                test
                             </h1>
                         </Grid>
                         <Grid item className={classes.divider}>
