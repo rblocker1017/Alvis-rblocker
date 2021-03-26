@@ -84,12 +84,6 @@ export default function Sorting() {
 
     const classes = useStyles();
     const [type, settype] = useState("Insertion");
-    const [flag1, setFlag1] = useState(true);
-    const [flag2, setFlag2] = useState(true);
-    const [flag3, setFlag3] = useState(true);
-    const [flag4, setFlag4] = useState(true);
-    const [flag5, setFlag5] = useState(true);
-    const [flag6, setFlag6] = useState(true);
 
     const [arraysOfArrays, setArraysOfArrays] = useState(INIT_ARRAY_BUNDLE);
     const [checked, setChecked] = useState(false)

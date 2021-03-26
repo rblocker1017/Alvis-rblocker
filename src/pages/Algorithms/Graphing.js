@@ -26,13 +26,29 @@ function hasPath(currentNode, end, lines, processedNodes) {
         // recursively check every line in the given connections to see if there is a path
         if (line.connections.includes(currentNode) && !processedNodes.includes(currentNode)) {
             // if the line includes the currentNode in its connections, then assign newStart to the other node in the line's connections array
-            const nextStart = line.connections.find(circleId => circleId !== currentNode)
+            const nextStart = line.connections.find(circleId => circleId !== currentNode);
             // OR the result with exists in order to pass the result through the end
             exists = exists || hasPath(nextStart, end, lines, processedNodes.concat(currentNode));
         }
     });
     return exists;
 }
+
+function isCyclical(start, processedNodes, displayLines) {
+    console.log(displayLines);
+    console.log(processedNodes);
+    let cyclical = false;
+    for (let node of processedNodes.values()) {
+        for (let lines of displayLines) {
+            const newProc = new Set(processedNodes);
+            newProc.delete(node);
+            cyclical = cyclical || isCyclical(node, newProc, displayLines.filter(disLines => disLines !== lines));
+        }
+    }
+    return false;
+    //return cyclical;
+}
+
 /* kruskalAlgorithm - find the shortest path from start to end with kruskal
  * @param start - start circle
  * @param end - end circle
@@ -42,26 +58,21 @@ function hasPath(currentNode, end, lines, processedNodes) {
 export function kruskalAlgorithm(start, end, lines) {
     let displayArray = [];
     let displayLines = [];
-    const tempLines = lines;
+    const tempLines = Array.from(lines.values());
     let currentConnections = [];
     // sort lines from lowest to highest value for the kruskal algorithm
     tempLines.sort(sortLines);
     // add the lines from lowest value to highest value and check if there is a path every iteration
     for (let i = 0; i < tempLines.length; i++) {
-        displayLines.push(tempLines[i]);
-        displayArray.push(tempLines[i].id);
-        if (hasPath(start.id, end.id, displayLines, currentConnections)) {
-            return displayArray;
+        if (!hasPath(tempLines[i].connections[0], tempLines[i].connections[1], displayLines, currentConnections )) {
+            displayLines.push(tempLines[i]);
+            displayArray.push(tempLines[i].id);
         }
     }
-    return -1;
+    return displayArray;
 }
 
 function primHelper(start, end, displayLines, tempLines, processedNodes) {
-    console.log(start);
-    if (start === end) {
-        return 0;
-    }
     for (let line of tempLines) {
         for (let node of processedNodes) {
             if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
@@ -77,11 +88,38 @@ function primHelper(start, end, displayLines, tempLines, processedNodes) {
 
 export function primAlgorithm(start, end, lines) {
     let displayLines = [];
-    const tempLines = lines;
-    let processedNodes = [start.id];
+    const tempLines = Array.from(lines.values());
+    let processedNodes = [start];
     tempLines.sort(sortLines);
-    primHelper(start.id, end.id, displayLines, tempLines, processedNodes);
-    console.log(displayLines);
+    primHelper(start, end, displayLines, tempLines, processedNodes);
+    return displayLines;
+}
+
+export function dijkstrasHelper(start, end, displayLines, tempLines, processedNodes) {
+    if (Number(start) === Number(end)) {
+        console.log("test");
+        return displayLines
+    }
+    for (let line of tempLines) {
+        for (let node of processedNodes) {
+            if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
+                let nextStart = line.connections.find(id => id !== node);
+                displayLines.push(line.id);
+                processedNodes.push(nextStart);
+                return dijkstrasHelper(nextStart, end, displayLines, tempLines, processedNodes);
+            }
+        }
+    }
+    return -1;
+}
+
+
+export function dijkstrasAlgorithm(start, end, lines) {
+    let displayLines = [];
+    const tempLines = Array.from(lines.values());
+    let processedNodes = [start];
+    tempLines.sort(sortLines);
+    dijkstrasHelper(start, end, displayLines, tempLines, processedNodes);
     return displayLines;
 }
 
@@ -122,7 +160,7 @@ export function Graph(circles, lines) {
     // Returns the graph as an array for easy access
     return [nodes, list];
 }
-
+/*
 export function dijkstraAlgorithm(circles, lines, start, end) {
     // Get the graph and parse it into a node array & list map
     let graph = Graph(circles, lines);
@@ -193,3 +231,4 @@ export function dijkstraAlgorithm(circles, lines, start, end) {
         console.log("Currently lowest distances: " + distances);
     }
 }
+*/

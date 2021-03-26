@@ -116,10 +116,13 @@ export default function BinaryTreeTraversal() {
     useEffect(()=>{
         switch (type) {
             case "Preorder":
-                inOrderTraversalHelper();
+                resetTree();
+                preOrderTraversalHelper();
             case "Postorder":
+                resetTree();
                 postOrderTraversalHelper();
             case "Inorder":
+                resetTree();
                 inOrderTraversalHelper();
         }
     }, [lines]);
@@ -273,7 +276,6 @@ export default function BinaryTreeTraversal() {
     let name = "test";
 
     const changePreorder = () => {
-        resetTree();
         preOrderTraversalHelper();
         settype("Preorder");
     };
