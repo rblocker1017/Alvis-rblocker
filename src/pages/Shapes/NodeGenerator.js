@@ -1,10 +1,6 @@
 // generate regular circle node
 // numberCircles - number of wanted circles to generate
 // width of canvas to put circles in
-
-import { TableRow } from "@material-ui/core";
-import { randomWeibull } from "d3-random";
-
 // height of canvas to put circles in
 export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
     let circles = new Map();
@@ -79,8 +75,7 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
                 value: value,
                 parent: null,
                 leftChild: null,
-                rightChild: null,
-                row: 0
+                rightChild: null
             });
         }
         else {
@@ -102,20 +97,10 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
 export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
     let step = Math.floor((circles.length + 1) / 2) + 1;
     if (Parent.leftChild === null) {
-        let x;
-        if(Parent.row + 1 === 1){
-            x = Parent.x - 60;
-        }
-        else if(Parent.x > canvasWidth / 2){
-            x = Parent.x;
-        }
-        else{
-            x = Parent.x - 240 / Parent.row + 1
-        }
         let circle = {
             id: circles.length,
-            x: x,
-            y: Parent.y + 120,
+            x: Parent.x - 150 - (Math.pow(canvasWidth, 1.22 / step)),
+            y: Parent.y + 60,
             width: 100,
             height: 100,
             color: 'green',
@@ -127,27 +112,16 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             value: value,
             parent: Parent,
             leftChild: null,
-            rightChild: null,
-            row: Parent.row + 1
+            rightChild: null
         };
         Parent.leftChild = circle.id;
         circles.push(circle);
     }
     else if (Parent.rightChild === null) {
-        let x;
-        if(Parent.row + 1 === 1){
-            x = Parent.x + 60;
-        }
-        else if(Parent.x < canvasWidth / 2){
-            x = Parent.x;
-        }
-        else{
-            x = Parent.x + 240 / Parent.row + 1
-        }
         let circle = {
             id: circles.length,
-            x: x,
-            y: Parent.y + 120,
+            x: Parent.x + 150 + (Math.pow(canvasWidth, 1.22 / step)),
+            y: Parent.y + 60,
             width: 100,
             height: 100,
             color: 'green',
@@ -159,8 +133,7 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             value: value,
             parent: Parent,
             leftChild: null,
-            rightChild: null,
-            row: Parent.row + 1
+            rightChild: null
         };
         Parent.rightChild = circle.id;
         circles.push(circle);

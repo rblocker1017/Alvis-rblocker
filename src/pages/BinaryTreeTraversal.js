@@ -35,7 +35,7 @@ import {
 import trash from "../trash.png";
 
 const WIDTH = 1400;
-const HEIGHT = 800;
+const HEIGHT = 450;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     /*TRASH BUTTON END*/
 }));
 
-const INIT = generateBinaryTree(15, WIDTH, HEIGHT);
+const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
@@ -690,27 +690,9 @@ export default function BinaryTreeTraversal() {
                             <Paper className={classes.paper}>
                                 <h1>Graphing Algorithm: {type}</h1>
                                 <h1>Step: {num}</h1>
-                                <Stage width={WIDTH} height={HEIGHT}>
+                                <Stage width={WIDTH} height={HEIGHT} draggable>
                                     <Layer>
-                                        {visualArray.map((rect) => (
-                                            <React.Fragment>
-                                                <Rect
-                                                    x={rect.x}
-                                                    y={rect.y}
-                                                    width={rect.width}
-                                                    height={rect.height}
-                                                    stroke={rect.stroke}
-                                                    strokeWidth={rect.strokeWidth}
-                                                    value={rect.value}
-                                                />
-                                                <Text
-                                                    text={rect.value}
-                                                    fontSize={20}
-                                                    x={rect.x + 40}
-                                                    y={rect.y + 40}
-                                                />
-                                            </React.Fragment>
-                                        ))}
+
                                         {circles.map((circle) => (
                                             <React.Fragment>
                                                 <Circle
@@ -772,8 +754,29 @@ export default function BinaryTreeTraversal() {
                                                 />
                                             </React.Fragment>
                                         ))}
+                                                                                {visualArray.map((rect) => (
+                                            <React.Fragment>
+                                                <Rect
+                                                    x={rect.x}
+                                                    y={rect.y}
+                                                    width={rect.width}
+                                                    height={rect.height}
+                                                    stroke={rect.stroke}
+                                                    strokeWidth={rect.strokeWidth}
+                                                    value={rect.value}
+                                                />
+                                                <Text
+                                                    text={rect.value}
+                                                    fontSize={20}
+                                                    x={rect.x + 40}
+                                                    y={rect.y + 40}
+                                                />
+                                            </React.Fragment>
+                                        ))}
                                     </Layer>
+                                    
                                 </Stage>
+                                
                             </Paper>
                             <h1></h1>
                             <Grid item xs={12}>
