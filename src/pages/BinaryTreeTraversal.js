@@ -35,7 +35,7 @@ import {
 import trash from "../trash.png";
 
 const WIDTH = 1400;
-const HEIGHT = 450;
+const HEIGHT = 800;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     /*TRASH BUTTON END*/
 }));
 
-const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
+const INIT = generateBinaryTree(15, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
