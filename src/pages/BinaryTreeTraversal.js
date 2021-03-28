@@ -32,6 +32,7 @@ import {
     connectNodeBTT,
     newConnectNodeBTT,
 } from "./Shapes/NodeGenerator";
+import {inOrderTraversal, preOrderTraversal, postOrderTraversal} from './Algorithms/BinaryTreeTraversal';
 import trash from "../trash.png";
 
 const WIDTH = 1400;
@@ -134,23 +135,9 @@ export default function BinaryTreeTraversal() {
      */
     const inOrderTraversalHelper = () => {
         let array = [];
-        inOrderTraversal(circles[0], array);
+        inOrderTraversal(circles[0], array, circles);
         setInorder(array);
         setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
-    };
-
-    const inOrderTraversal = (root, array) => {
-        if (root !== undefined) {
-            if (root.leftChild !== null)
-                inOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
-            circles.forEach((circle) => {
-                if (circle.id === root.id) {
-                    array.push(circle);
-                }
-            });
-            if (root.rightChild !== null)
-                inOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
-        }
     };
 
     /*
@@ -158,21 +145,9 @@ export default function BinaryTreeTraversal() {
      */
     const preOrderTraversalHelper = () => {
         let array = [];
-        preOrderTraversal(circles[0], array);
+        preOrderTraversal(circles[0], array, circles);
         setPreorder(array);
         setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
-    };
-
-    const preOrderTraversal = (root, array) => {
-        if (root !== undefined) {
-            circles.map((circle) => {
-                if (circle.id === root.id) array.push(circle);
-            });
-            if (root.leftChild !== null)
-                preOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
-            if (root.rightChild !== null)
-                preOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
-        }
     };
 
     //useEffect(() => {
@@ -185,21 +160,9 @@ export default function BinaryTreeTraversal() {
 
     const postOrderTraversalHelper = () => {
         let array = [];
-        postOrderTraversal(circles[0], array);
+        postOrderTraversal(circles[0], array, circles);
         setPostorder(array);
         setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
-    };
-
-    const postOrderTraversal = (root, array) => {
-        if (root !== undefined) {
-            if (root.leftChild !== null)
-                postOrderTraversal(circles.find((circle) => circle.id === root.leftChild), array);
-            if (root.rightChild !== null)
-                postOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array);
-            circles.map((circle) => {
-                if (circle.id === root.id) array.push(circle);
-            });
-        }
     };
 
     /*
