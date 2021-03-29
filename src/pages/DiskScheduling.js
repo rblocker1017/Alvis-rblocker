@@ -17,7 +17,8 @@ import Header from '../componenets/layout/header';
 import DiskGraph from "./DiskGraph";
 import { values, scan, set } from 'd3';
 import '../styles/DiskScheduling.css'
-
+import * as Algorithms from './Algorithms/DiskScheduling';
+import * as Functions from './Functionality/DiskSchedulingFunctions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -128,7 +129,6 @@ export default function FCFSDisk() {
                 break;
         }
     }
-
     // all the functions
     function resetDiskGraph() {
         let answer = [[0, 0], [0, 1]];
@@ -137,273 +137,43 @@ export default function FCFSDisk() {
     }
 
     function fcfsFunction() {
-        let answer = [];
-        answer.push(['x', 'Path'])
-        answer.push([parseInt(starting), 0])
-        for (let i = 0; i < input.length; i++) {
-
-            answer.push([input[i], i + 1]);
-        }
-        console.log("answer is: " + answer.toString());
-
-        setdata(answer);
+        setdata(Algorithms.fcfsFunction(starting, input));
         setdisplayBoolean(true);
     }
 
     function scanFunction() {
-        let answer = [];
-        answer.push(['x', 'SCAN path'])
-        answer.push([parseInt(starting), 0])
-        let smaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < starting;
-        });
-        smaller.sort(function (a, b) { return a - b });
-        console.log("Smaller sorted: " + smaller)
-        smaller.reverse();
-        console.log("Smaller reversed :" + smaller)
-        smaller.push(0);
-        console.log('Smaller after all: ' + smaller);
-        let larger = input.filter((values) => {
-            return values >= starting;
-        });
-        larger = larger.sort();
-        console.table(larger)
-        for (let i = 0; i < smaller.length; i++) {
-            answer.push([smaller[i], i + 1])
-        }
-
-        for (let i = 0; i < larger.length; i++) {
-            answer.push([larger[i], i + smaller.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.scanFunction(starting, input));
         setdisplayBoolean(true);
-
     }
     function scanOutwardsFunction() {
-        let answer = [];
-        answer.push(['x', 'SCAN outwards path'])
-        answer.push([parseInt(starting), 0])
-        let smaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < starting;
-        });
-        smaller.sort(function (a, b) { return a - b });
-        console.log("Smaller sorted: " + smaller)
-        smaller.reverse();
-        console.log("Smaller reversed :" + smaller)
-
-        console.log('Smaller after all: ' + smaller);
-        let larger = input.filter((values) => {
-            return values >= starting;
-        });
-        larger.push(diskSize);
-        larger = larger.sort();
-        console.table(larger)
-
-        for (let i = 0; i < larger.length; i++) {
-            answer.push([larger[i], i + 1])
-        }
-        for (let i = 0; i < smaller.length; i++) {
-            answer.push([smaller[i], i + larger.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.scanOutwardsFunction(starting, input, diskSize));
         setdisplayBoolean(true);
-
     }
-
     function lookFunction() {
-        let answer = [];
-        answer.push(['x', 'Look path'])
-        answer.push([parseInt(starting), 0])
-
-        let smaller = input.filter((values) => {
-            console.log("Value: " + values);
-            console.log("Value" + (typeof values))
-
-            return values < starting;
-        });
-        //smaller = smaller.sort().reverse();
-
-        let larger = input.filter((values) => {
-            return values >= starting;
-        });
-        larger = larger.sort(function (a, b) { return a - b });
-        console.table(larger)
-        for (let i = 0; i < smaller.length; i++) {
-            answer.push([smaller[i], i + 1])
-        }
-
-        for (let i = 0; i < larger.length; i++) {
-            answer.push([larger[i], i + smaller.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.lookFunction(starting, input));
         setdisplayBoolean(true);
-
     }
     function lookOutwardsFunction() {
-        let answer = [];
-        answer.push(['x', 'Look outwards path'])
-        answer.push([parseInt(starting), 0])
-        let smaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < starting;
-        });
-        smaller.sort(function (a, b) { return a - b });
-        console.log("Smaller sorted: " + smaller)
-        smaller.reverse();
-        console.log("Smaller reversed :" + smaller)
-
-        console.log('Smaller after all: ' + smaller);
-        let larger = input.filter((values) => {
-            return values >= starting;
-        });
-        larger = larger.sort();
-        console.table(larger)
-
-        for (let i = 0; i < larger.length; i++) {
-            answer.push([larger[i], i + 1])
-        }
-        for (let i = 0; i < smaller.length; i++) {
-            answer.push([smaller[i], i + larger.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.lookOutwardsFunction(starting, input));
         setdisplayBoolean(true);
-
     }
     function cscanFunction() {
-        let answer = [];
-        answer.push(['x', 'SCAN path'])
-        answer.push([parseInt(starting), 0])
-        let firstSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < starting;
-        });
-        firstSmaller.sort(function (a, b) { return a - b });
-        firstSmaller.reverse();
-        firstSmaller.push(0)
-        for (let i = 0; i < firstSmaller.length; i++) {
-            answer.push([firstSmaller[i], i + 1])
-        }
-
-        let secondSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < diskSize;
-        });
-        let difference = secondSmaller.filter(x => !firstSmaller.includes(x));
-        difference.reverse();
-        difference.unshift(diskSize)
-        for (let i = 0; i < difference.length; i++) {
-            answer.push([difference[i], i + difference.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.cscanFunction(starting, input, diskSize));
         setdisplayBoolean(true);
 
     }
     function cscanOutwardsFunction() {
-        let answer = [];
-        answer.push(['x', 'Cscan outwards path'])
-        answer.push([parseInt(starting), 0])
-        let firstSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values > starting;
-        });
-        firstSmaller.sort(function (a, b) { return a - b });
-        // firstSmaller.reverse();
-        firstSmaller.push(diskSize)
-        for (let i = 0; i < firstSmaller.length; i++) {
-            answer.push([firstSmaller[i], i + 1])
-        }
-
-        let secondSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values > 0;
-        });
-
-
-
-        let difference = secondSmaller.filter(x => !firstSmaller.includes(x));
-        difference.reverse();
-        difference.unshift(0)
-        for (let i = 0; i < difference.length; i++) {
-            answer.push([difference[i], i + difference.length + 1])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.lookOutwardsFunction(starting, input, diskSize));
         setdisplayBoolean(true);
-
     }
 
     function clookFunction() {
-        let answer = [];
-        answer.push(['x', 'SCAN path'])
-        answer.push([parseInt(starting), 0])
-        let firstSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < starting;
-        });
-        firstSmaller.sort(function (a, b) { return a - b });
-        firstSmaller.reverse();
-        for (let i = 0; i < firstSmaller.length; i++) {
-            answer.push([firstSmaller[i], i + 1])
-        }
-
-        let secondSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values < diskSize;
-        });
-        let difference = secondSmaller.filter(x => !firstSmaller.includes(x));
-        difference.sort(function (a, b) { return a - b }).reverse();
-        difference.unshift(diskSize)
-        for (let i = 0; i < difference.length; i++) {
-            answer.push([difference[i], i + difference.length])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.clookFunction(starting, input, diskSize));
         setdisplayBoolean(true);
-
     }
     function clookOutwardsFunction() {
-        let answer = [];
-        answer.push(['x', 'cLook path'])
-        answer.push([parseInt(starting), 0])
-        let firstSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values > starting;
-        });
-        firstSmaller.sort(function (a, b) { return a - b });
-        //firstSmaller.reverse();
-        for (let i = 0; i < firstSmaller.length; i++) {
-            answer.push([firstSmaller[i], i + 1])
-        }
-
-        let secondSmaller = input.filter((values) => {
-            console.log("Value is type : " + (typeof values))
-            return values > 0;
-        });
-        let difference = secondSmaller.filter(x => !firstSmaller.includes(x));
-        difference.sort(function (a, b) { return a - b });
-        difference.unshift(0)
-        for (let i = 0; i < difference.length; i++) {
-            answer.push([difference[i], i + difference.length])
-        }
-
-
-        setdata(answer);
+        setdata(Algorithms.clookOutwardsFunction(starting, input));
         setdisplayBoolean(true);
-
     }
 
     const handleChange = (event) => {

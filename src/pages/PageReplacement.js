@@ -15,7 +15,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { grey, green } from '@material-ui/core/colors';
-import * as Functions from './Functionality/PageReplacementFunctions';
+import * as Algorithms from './Algorithms/PageReplacement';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,13 +82,13 @@ export default function PageReplacement() {
         let bundle;
         switch (newType) {
             case "FIFO":
-                bundle = Functions.fcfsPageReplacementFunc(input, frames);
+                bundle = Algorithms.fcfsPageReplacementFunc(input, frames);
                 break;
             case "LRU":
-                bundle = Functions.lruPageReplacementFunc(input, frames);
+                bundle = Algorithms.lruPageReplacementFunc(input, frames);
                 break;
             case "OPT":
-                bundle = Functions.optPageReplacementFunc(input, frames);
+                bundle = Algorithms.optPageReplacementFunc(input, frames);
                 break;
             default:
                 break;
@@ -100,7 +100,7 @@ export default function PageReplacement() {
     function reset() {
         setValue("");
         setinput(value.split(',').map(Number))
-        setAnswer(Functions.fcfsPageReplacementFunc(0, 0).answer);
+        setAnswer(Algorithms.fcfsPageReplacementFunc(0, 0).answer);
         setDisplayBoolean(false);
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")

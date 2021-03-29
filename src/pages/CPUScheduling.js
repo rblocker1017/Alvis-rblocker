@@ -25,7 +25,7 @@ import { useSpring, animated } from 'react-spring/web.cjs';
 import { FormControlLabel } from '@material-ui/core';
 import { grey, green } from '@material-ui/core/colors';
 import trash from '../trash.png';
-import * as Functions from './Functionality/CPUSchedulingFunctions';
+import * as Algorithms from './Algorithms/CPUScheduling';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -191,7 +191,7 @@ export default function CpuScheduling(props) {
     })
 
     function fcfs(processes) {
-        const bundle = Functions.fcfs(processes);
+        const bundle = Algorithms.fcfs(processes);
         setTurnaroundTime(bundle.turnaroundTime);
         //setResponseTime((totalResponse / processList.length).toFixed(2))
         setWaitingTime(bundle.waitingTime);
@@ -199,33 +199,33 @@ export default function CpuScheduling(props) {
     }
 
     function sjf(processes) {
-        const bundle = Functions.sjf(processes);
+        const bundle = Algorithms.sjf(processes);
         setTurnaroundTime(bundle.turnaroundTime);
         setWaitingTime(bundle.waitingTime);
         return bundle.answer;
     }
 
     function roundRobin(processes) {
-        const bundle = Functions.roundRobin(processes, quantum);
+        const bundle = Algorithms.roundRobin(processes, quantum);
         setTurnaroundTime(bundle.turnaroundTime);
         setWaitingTime(bundle.waitingTime);
         return bundle.answer;
     }
 
     function priorityFunc(processes) {
-        const bundle = Functions.priorityFunc(processes);
+        const bundle = Algorithms.priorityFunc(processes);
         setTurnaroundTime(bundle.turnaroundTime)
         setWaitingTime(bundle.waitingTime)
         return bundle.answer;
     }
     function priorityFuncPreemptive(processes) {
-        const bundle = Functions.priorityFuncPreemptive(processes);
+        const bundle = Algorithms.priorityFuncPreemptive(processes);
         setTurnaroundTime(bundle.turnaroundTime)
         setWaitingTime(bundle.waitingTime)
         return bundle.answer;
     }
     function sjfFuncPreemptive(processes) {
-        const bundle = Functions.sjfFuncPreemptive(processes);
+        const bundle = Algorithms.sjfFuncPreemptive(processes);
         setTurnaroundTime(bundle.turnaroundTime)
         setWaitingTime(bundle.waitingTime)
         return bundle.answer;
