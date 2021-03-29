@@ -97,19 +97,6 @@ export default function PageReplacement() {
         setFaultcount(bundle.faults);
         setDisplayBoolean(true);
     }
-    function fcfsPageReplacement(pages, frames) {
-        return Functions.fcfsPageReplacementFunc(pages, frames);
-    }
-
-    function lruPageReplacement(pages, frames) {
-        return Functions.lruPageReplacementFunc(pages, frames);
-
-    }
-
-    function optPageReplacement(pages, frames) {
-        return Functions.optPageReplacementFunc(pages, frames);
-
-    }
     function reset() {
         setValue("");
         setinput(value.split(',').map(Number))
@@ -145,19 +132,12 @@ export default function PageReplacement() {
                                 <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
                             </tr>
                         )
-
                     }
                 })}
-
                 <p>{ans.fault}</p>
             </td>
-
         );
-
-
     })
-
-
     const theme = createMuiTheme({
         palette: {
             primary: {
