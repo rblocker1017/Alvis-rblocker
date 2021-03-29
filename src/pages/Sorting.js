@@ -4,269 +4,52 @@ import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, ButtonBase, Modal, Fade, Backdrop, TextField } from "@material-ui/core";
 import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { grey, green, orange } from "@material-ui/core/colors";
-import { select, axisBottom, axisRight, scaleLinear, scaleBand, max } from "d3";
+import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
 import { Update } from '@material-ui/icons';
 import trash from '../trash.png';
 import { generateINIT } from './Shapes/SortingGenerator';
 import { InsertModal } from "../componenets/Resources/InsertModal";
+import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "./Algorithms/Sorting";
+import Cookies from 'universal-cookie';
 
-const SIZE = 6;
+const SIZE = 15;
 const INIT_VALUES = generateINIT(SIZE);
-const INIT_ARRAY_BUNDLE = Sort(INIT_VALUES);
-
-
-// Bubble sort function
-// @param a - array of data to be sorted
-function Sort(a)
-{   
-    // declare variables
-    let len = a.length-1; 
-    let array = a; 
-    let answer = [{
-        data: array.toString(),
-        swappedValue1: -1,
-        swappedValue2: -1}];
-    let list = [];
-    let temp = 0; 
-    // repeat the bubble sort for the length of the algorithm
-    for (let i = 0; i < len; i++){
-        // the actual bubble sort part
-        // for every item in the array, float it up through the array
-         for(let j = 0; j<len ; j++){
-            if(array[j]> array[j+1] ){
-                temp = array[j];
-                array[j] = array[j+1]; 
-                array[j + 1] = temp; 
-                // push an object every time a swap happens containing the data (aka the current array to string)
-                // as well as the swapped values
-                answer.push({data: array.toString(),
-                            swappedValue1: j,
-                    swappedValue2: j + 1
-                });
-            }
-         }
-    }
-    return answer;
-}
-
-// Insertion Sort fuction
-// @param b - array of data to be sorted
-function Insertion(b)
-{
-  // declare variables
-  let lenInsert = b.length;
-  let arrayInsert = b; 
-  // repeat the insertion sort for the length of the algorithm
-  for (let i =1; i <lenInsert; i++){
-    let currentInsert = arrayInsert[i];
-    let j =i;
-    //shift larger values to the right
-    while (j >0 && arrayInsert[j-1] > 0){
-      arrayInsert[j] = arrayInsert[j-1];
-      j--
-    } 
-    arrayInsert[j] =  currentInsert;
-  }
-  return b;
-}
-
-// Selection Sort fuction
-// @param c - array of data to be sorted
-function Selection(c)
-{
-  //declare variables
-  let lenSelect = c.length;
-  let arraySelect =c;
-  let answer = [{
-    data: arraySelect.toString(),
-    swappedValue1: -1,
-    swappedValue2: -1}];
-  let temp =0;
-  for(let i = 0; i < c-1; i++){
-    let minimum = i;
-    for(let j=i+1; j < lenSelect; j++){
-      if(arraySelect[j] < arraySelect[minimum]){
-        minimum = j;
-      }
-    }
-    if(minimum != i){
-      // swaps to elements in an array 
-      temp = arraySelect[i];
-      arraySelect[i] = arraySelect[minimum];
-      arraySelect[minimum] = temp;
-      // push an object every time a swap happens containing the data (aka the current array to string)
-      // as well as the swapped values
-      answer.push({data: arraySelect.toString(),
-                  swappedValue1: i,
-                  swappedValue2: minimum
-      });
-    }
-  }
-  return c;
-}
-
-// Heap Sort fuction
-//sets up maximumum of heap
-function maximumHeap(d, len, i)
-{ 
-  let left = i * 2 + 1;
-  let right = left + 1;
-  let maximum = i;
-  if(left < len && d[left]>d[maximum])
-  {
-    maximum = left;
-  }
-  if(right < len && d[right] > d[maximum])
-  {
-    maximum = right;
-  }
-  if(maximum !== i)
-  {
-    [d[i],d[maximum]] = [d[maximum], d[i]]; //swaps elements
-    maximumHeap(d,len,maximum)
-  }
-  return d;
-}
-
-// @param d - array of data to be sorted
-function HeapSort(d)
-{
-  //declare variables
-  let lenHeap = d.length;
-  let a = Math.floor(lenHeap/2-1);
-  let b = lenHeap - 1;
-  while(a >= 0)
-  {
-    maximumHeap(d,lenHeap,a);
-    a --;
-  }
-  while(b >= 0)
-  {
-    [d[0], d[b]] = [d[b], d[0]]; //swaps elements
-    maximumHeap(d, b, 0);
-    b--;
-  } 
-  return d;
-}
-
-// Quick Sort fuction
-function partitionQuick(e, left, right)
-{
-  //declare variable for calculate middle of the range
-  let calcMiddle = (left+right)/2;
-  while (left <= right)
-  {
-    while(e[left] < e[Math.floor(calcMiddle)])
-    {
-      left ++;
-    }
-    while(e[right] > e[Math.floor(calcMiddle)])
-    {
-      right --;
-    }
-    if (left <= right)
-    {
-      [e[left], e[right]] = [e[right] , e[left]]; //swaps elements
-      left ++;
-      right --;
-    }
-  }
-  return left;
-}
-
-
-// @param e - array of data to be sorted
-function Quick(e, left, right)
-{
-  //declare variable
-  let lenQuick = e.length;
-  left = left || 0;
-  right = right || lenQuick -1;
-
-  if(lenQuick > 1)
-  {
-    let i = partitionQuick(e, left, right);
-  
-    if(left < i-1)
-    {
-      Quick(e, left, i-1);
-    }
-    if(right > i)
-    {
-      Quick(e, i, right);
-    }
-  }
-  return e;
-}
-
-//Shell Sort Function
-// @param f - array of data to be sorted
-function ShellSort(f)
-{
-  //declare variable
-  let len1 = f.length;
-  let len = len1/2;
-  while(len > 0)
-  {
-    for (let i=len; i < len1; i++)
-    {
-      //declare variables
-      let j = i;
-      let temp = f[i];
-      
-      while(j >= len && f[j-len] >temp)
-      {
-        f[j] = f[j-len];
-        j = j - len;
-      }
-      f[j] = temp;
-    }
-    if(len == 2)
-    {
-      len = 1;
-    }
-    else
-    {
-      len = parseInt(len*5/11);
-    }
-  }
-  return f;
-}
+const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: "125%",
-    width: "100%",
-  },
-  buttons: {
-    backgroundColor: grey[200],
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    width: "100%",
-    height: "100%",
-  },
-  button: {
-    width: "90%",
-  },
-  code: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: "100%",
-  },
-  fields: {
-    backgroundColor: grey[200],
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: "100%",
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        height: "125%",
+        width: "100%",
+    },
+    buttons: {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        width: "100%",
+        height: "100%",
+    },
+    button: {
+        width: "90%",
+    },
+    code: {
+        padding: theme.spacing(2),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        height: "100%",
+    },
+    fields: {
+        backgroundColor: grey[200],
+        padding: theme.spacing(2),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        height: "100%",
     },
     trashBtn: {
         position: "fixed",
@@ -299,14 +82,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Sorting() {
 
-  const classes = useStyles();
-  const [type, settype] = useState("Insertion");
-  const [flag1, setFlag1] = useState(true);
-  const [flag2, setFlag2] = useState(true);
-  const [flag3, setFlag3] = useState(true);
-  const [flag4, setFlag4] = useState(true);
-  const [flag5, setFlag5] = useState(true);
-  const [flag6, setFlag6] = useState(true);
+    const classes = useStyles();
+    const [type, settype] = useState("Insertion");
 
     const [arraysOfArrays, setArraysOfArrays] = useState(INIT_ARRAY_BUNDLE);
     const [checked, setChecked] = useState(false)
@@ -314,12 +91,20 @@ export default function Sorting() {
     var [stepInfo, setStepInfo] = useState();
     let [swap1, setSwap1] = useState(arraysOfArrays[0].swappedValue1)
     let [swap2, setSwap2] = useState(arraysOfArrays[0].swappedValue2)
-    let [newArray, setNewArray] = useState(arraysOfArrays[0].data.split(',').map(Number)); 
+    let [newArray, setNewArray] = useState(arraysOfArrays[0].data.split(',').map(Number));
     let [selected, setSelected] = useState(-1);
     const [test, setTest] = useState("tset");
     const [open, setOpen] = useState(false);
     const [inputError, setInputError] = useState(false);
     const [input, setInput] = useState("");
+    const [transitionArray, setTransitionArray] = useState(arraysOfArrays[0].data.split(',').map(Number));
+
+    const setCookie = () => {
+        const cookies = new Cookies();
+        cookies.set('cookie', { username: "David" }, { path: '/' });
+        window.location.reload(false);
+        //console.log();
+    }
 
     const handleChange = (e) => {
         setInput(e.target.value);
@@ -340,7 +125,7 @@ export default function Sorting() {
     const insertValue = () => {
         const regex = /[^0-9]/g;
         if (!regex.test(input) && input !== "" && parseInt(input) > 1 && parseInt(input) < 100) {
-            let lastPart = newArray;
+            let lastPart = transitionArray;
             let firstPart = lastPart.splice(0, selected + 1);
             updateArray(firstPart.concat(parseInt(input)).concat(lastPart));
             handleClose();
@@ -352,72 +137,47 @@ export default function Sorting() {
 
     const removeValue = () => {
         console.log(selected);
-        let tempArray = newArray;
-        newArray.splice(selected, 1)
-        updateArray(newArray.concat());
+        let tempArray = transitionArray;
+        transitionArray.splice(selected, 1)
+        updateArray(transitionArray.concat());
     }
     const updateArray = (array) => {
-        let arrayBundle = Sort(array);
-        setSwap1(arrayBundle[0].swappedValue1);
-        setSwap2(arrayBundle[0].swappedValue2);
-        setNewArray(arrayBundle[0].data.split(',').map(Number));
-        setArraysOfArrays(arrayBundle);
-        setSelected(-1);
+        setTransitionArray(array);
     }
-
-  const handleClick1 = () => {
-    if (flag1) setFlag1(!flag1);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick2 = () => {
-    if (flag2) setFlag2(!flag2);
-    setFlag1(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick3 = () => {
-    if (flag3) setFlag3(!flag3);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag4(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick4 = () => {
-    if (flag4) setFlag4(!flag4);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag5(true);
-    setFlag6(true);
-  };
-
-  const handleClick5 = () => {
-    if (flag5) setFlag5(!flag5);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag6(true);
-  };
-
-  const handleClick6 = () => {
-    if (flag6) setFlag6(!flag6);
-    setFlag1(true);
-    setFlag2(true);
-    setFlag3(true);
-    setFlag4(true);
-    setFlag5(true);
-    };
+    useEffect(() => {
+        let arrayBundle;
+        switch (type) {
+            case "Bubble":
+                arrayBundle = bubble(transitionArray.concat());
+                break;
+            case "Selection":
+                arrayBundle = selection(transitionArray.concat());
+                break;
+            case "Insertion":
+                arrayBundle = insertion(transitionArray.concat());
+                console.log(arrayBundle);
+                break;
+            case "Heap":
+                arrayBundle = heapSort(transitionArray.concat());
+                break;
+            case "Shell":
+                arrayBundle = shellSort(transitionArray.concat());
+                break;
+            case "Quick":
+                arrayBundle = quickSort(transitionArray.concat());
+                break;
+            default:
+                arrayBundle = null;
+                break;
+        }
+        if (arrayBundle !== null) {
+            setSwap1(arrayBundle[0].swappedValue1);
+            setSwap2(arrayBundle[0].swappedValue2);
+            setNewArray(arrayBundle[0].data.split(',').map(Number));
+            setArraysOfArrays(arrayBundle);
+            setSelected(-1);
+        }
+    }, [type, transitionArray]);
 
     function reset() {
         let tempStep = 0;
@@ -425,7 +185,6 @@ export default function Sorting() {
         setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
         setSwap1(arraysOfArrays[tempStep].swappedValue1);
         setSwap2(arraysOfArrays[tempStep].swappedValue2);
-        setStepInfo("In step:" + (tempStep) + " We swap index: " + arraysOfArrays[tempStep].swappedValue1 + " and " + arraysOfArrays[tempStep].swappedValue2);
     }
 
     function stepForward() {
@@ -441,9 +200,8 @@ export default function Sorting() {
             setSwap2(arraysOfArrays[tempStep].swappedValue2);
         }
     }
-    
-    function stepBack() {
 
+    function stepBack() {
         if (stepCount > 0) {
             let tempStep = stepCount - 1;
             setStepCount(tempStep);
@@ -453,14 +211,6 @@ export default function Sorting() {
         }
     }
     const svgRef = useRef();
-
-
-    const listCurrent = arraysOfArrays.map((value, index) =>
-        <div><p> </p>
-            <p>Step :{++index} Array= {value.data}</p>
-            <p>Values Swapped: {value.swappedValue1} , {value.swappedValue2} </p>
-        </div>
-    );
 
     function selectBar(d, i) {
         if (stepCount === 0) {
@@ -472,11 +222,8 @@ export default function Sorting() {
         }
     }
 
-
-
     useEffect(() => {
         let x = Math.max(...newArray)
-        console.log(svgRef.current);
         const svg = select(svgRef.current);
         const xScale = scaleBand()
             .domain(newArray.map((value, index) => index))
@@ -562,7 +309,7 @@ export default function Sorting() {
             .on("click", selectBar
             )
             .on("mouseleave", () => svg.select(".tooltip").remove())
-                .attr("fill", (value, index) => {
+            .attr("fill", (value, index) => {
                 if (index == swap1) {
                     console.log(test);
                     return "red"
@@ -576,196 +323,198 @@ export default function Sorting() {
             })
 
             .attr("height", value => 370 - yScale(value))
-    }, [newArray, selected], swap1, swap2, test);
+    }, [newArray, selected], swap1, swap2);
 
-  const changeIns = () => {settype("Insertion"); handleClick1();}
-  const changeSel = () => {settype("Selection"); handleClick2();}
-  const changeQui = () => {settype("Quick"); handleClick3();}
-  const changeBub = () => {settype("Bubble"); handleClick4();}
-  const changeHea = () => {settype("Heap"); handleClick5();}
-  const changeShe = () => {settype("Shell"); handleClick6();}
+    const changeAlgorithm = (e) => {
+        let currentType = e.target.textContent;
+        if (stepCount !== 0) {
+            return null;
+        }
+        settype(currentType);
+        console.log(e.target.textContent);
+    }
 
-  const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: green[900],
-      },
-      secondary: {
-        main: green[700],
-      },
-    },
-  });
-  return (
-      <Header>
-          <ThemeProvider theme={theme}>
-              <Modal
-                  className={classes.modal}
-                  open={open}
-                  onClose={handleClose}
-                  closeAfterTransition
-                  BackdropComponent={Backdrop}
-              >
-                  <Fade in={open}>
-                      <div className={classes.insertPaper}>
-                          <form>
-                              <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
-                                  <Grid item>
-                                      <h2 >Insert a value between 1 and 100</h2>
-                                  </Grid>
-                                  <Grid item>
-                                      <TextField error={inputError} label="value" helperText={inputError ? "Invalid value" : ""} onChange={handleChange} />
-                                  </Grid>
-                                  <Grid item>
-                                      <Button variant="contained" color="primary" onClick={insertValue}>Insert</Button>
-                                  </Grid>
-                              </Grid>
-                          </form>
-                      </div>
-                  </Fade>
-              </Modal>
-        <Grid container direction="column">
-          <Grid item></Grid>
-          <Grid item container spacing={1}>
-            <Grid item xs={3}>
-              <Grid container direction="column">
-                <Paper className={classes.buttons}>
-                  <Grid container spacing={0}>
-                    <Grid item xs={4}>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        onClick={changeIns}
-                        color={flag1 ? "primary" : "secondary"}
-                      >
-                        Insertion
+    const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: green[900],
+            },
+            secondary: {
+                main: grey[700],
+            },
+        },
+    });
+    return (
+        <Header>
+            <ThemeProvider theme={theme}>
+                <Modal
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                    <Fade in={open}>
+                        <div className={classes.insertPaper}>
+                            <form>
+                                <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                    <Grid item>
+                                        <h2 >Insert a value between 1 and 100</h2>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField error={inputError} label="value" helperText={inputError ? "Invalid value" : ""} onChange={handleChange} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant="contained" color="primary" onClick={insertValue}>Insert</Button>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </Fade>
+                </Modal>
+                <Grid container direction="column">
+                    <Grid item></Grid>
+                    <Grid item container spacing={1}>
+                        <Grid item xs={3}>
+                            <Grid container direction="column">
+                                <Paper className={classes.buttons}>
+                                    <Grid container spacing={0}>
+                                        <Grid item xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                className={classes.button}
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Insertion" ? "primary" : "secondary"}
+                                            >
+                                                Insertion
                       </Button>
-                    </Grid>
-                    <Grid item className={classes.button} xs={4}>
-                      <Button
-                        variant="contained"
-                        onClick={changeSel}
-                        color={flag2 ? "primary" : "secondary"}
-                        className={classes.button}
-                      >
-                        Selection
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Selection" ? "primary" : "secondary"}
+                                                className={classes.button}
+                                            >
+                                                Selection
                       </Button>
-                    </Grid>
-                    <Grid item item xs={4}>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        onClick={changeQui}
-                        color={flag3 ? "primary" : "secondary"}
-                      >
-                        Quick
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                className={classes.button}
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Quick" ? "primary" : "secondary"}
+                                            >
+                                                Quick
                       </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <h1></h1>
-                    </Grid>
-                    <Grid item className={classes.button} xs={4}>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        onClick={changeBub}
-                        color={flag4 ? "primary" : "secondary"}
-                      >
-                        Bubble
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1></h1>
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                className={classes.button}
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Bubble" ? "primary" : "secondary"}
+                                            >
+                                                Bubble
                       </Button>
-                    </Grid>
-                    <Grid item item xs={4}>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        onClick={changeHea}
-                        color={flag5 ? "primary" : "secondary"}
-                      >
-                        Heap
+                                        </Grid>
+                                        <Grid item item xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                className={classes.button}
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Heap" ? "primary" : "secondary"}
+                                            >
+                                                Heap
                       </Button>
-                    </Grid>
-                    <Grid item className={classes.button} xs={4}>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        onClick={changeShe}
-                        color={flag6 ? "primary" : "secondary"}
-                      >
-                        Shell
+                                        </Grid>
+                                        <Grid item className={classes.button} xs={4}>
+                                            <Button
+                                                variant="contained"
+                                                className={classes.button}
+                                                onClick={changeAlgorithm}
+                                                color={type !== "Shell" ? "primary" : "secondary"}
+                                            >
+                                                Shell
                       </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <h1></h1>
-                    </Grid>
-                                      <Grid item xs={7}>
-                                          <Button variant="contained" color="primary" onClick={handleOpen}>
-                        Insert
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <h1></h1>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <Button variant="contained" color="primary" onClick={handleOpen}>
+                                                Insert
                       </Button>
-                    </Grid>
-                    <Grid item xs={3}>
-                                          <Button variant="contained" color="primary" onClick={ reset }>
-                        Reset
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button variant="contained" color="primary" onClick={reset}>
+                                                Reset
                       </Button>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-              <h2></h2>
-              <Paper className={classes.code}>
-                <h3>CODE</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                            <h2></h2>
+                            <Paper className={classes.code}>
+                                <h3>CODE</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum
+                                    dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                    cupidatat non proident, sunt in culpa qui officia deserunt
+                                    mollit anim id est laborum.
                 </p>
-              </Paper>
-            </Grid>
-            <Grid item xs={9}>
-              <Paper className={classes.paper}>
-                              <h1>Sorting: {type}</h1>
-                              <h1>Step: {stepCount}</h1>
-                              <svg ref={svgRef} >
-                                  <g className="x-axis" />
-                                  <g className="y-axis" />
-                              </svg>
-              </Paper>
-              <h1></h1>
-              <Grid item xs={12}>
-                <form noValidate autoComplete="off">
-                  <Paper className={classes.fields}>
-                    <Grid container spacing={1}>
-                      <Grid item xs={1}></Grid>
-                      <Grid item xs={3}>
-                        <Button variant="contained" color="primary" onClick={stepBack}>
-                          Step Back
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Paper className={classes.paper}>
+                                <h1>Sorting: {type}</h1>
+                                <h1>Step: {stepCount}</h1>
+                                <svg ref={svgRef} >
+                                    <g className="x-axis" />
+                                    <g className="y-axis" />
+                                </svg>
+                            </Paper>
+                            <h1></h1>
+                            <Grid item xs={12}>
+                                <form noValidate autoComplete="off">
+                                    <Paper className={classes.fields}>
+                                        <Grid container spacing={1}>
+                                            <Grid item xs={1}></Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant="contained" color="primary" onClick={stepBack}>
+                                                    Step Back
                         </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button variant="contained" color="primary">
-                          Pause
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant="contained" color="primary">
+                                                    Pause
                         </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button variant="contained" color="primary" onClick={stepForward}>
-                          Step Forward
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant="contained" color="primary" onClick={stepForward}>
+                                                    Step Forward
                         </Button>
-                      </Grid>
-                      <Grid item xs={2}></Grid>
+                                            </Grid>
+                                            <Grid item xs={2}></Grid>
+                                        </Grid>
+                                    </Paper>
+                                </form>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                  </Paper>
-                </form>
-              </Grid>
-            </Grid>
-          </Grid>
-              </Grid>
-              <ButtonBase className={classes.trashBtn} onClick={removeValue}>
-                  <img src={trash} className={classes.trashImg} />
-              </ButtonBase>
-      </ThemeProvider>
-    </Header>
-  );
+                </Grid>
+                <ButtonBase className={classes.trashBtn} onClick={removeValue}>
+                    <img src={trash} className={classes.trashImg} />
+                </ButtonBase>
+            </ThemeProvider>
+        </Header>
+    );
 }
