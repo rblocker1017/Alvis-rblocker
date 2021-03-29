@@ -10,6 +10,7 @@ import { select } from 'd3';
 import { kruskalAlgorithm, primAlgorithm, dijkstrasAlgorithm } from "./Algorithms/Graphing";
 import trash from '../trash.png';
 import PathNotFound from '../componenets/Messages/PathNotFound'
+import * as Functions from './Functionality/GraphingFunctions';
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
@@ -191,24 +192,11 @@ export default function GraphingAlgorithm() {
         }
     }
 
-    // anonymous functions that change header to respective button
-    const changePrim = () => {
-        if (step !== -1) {
+    const changeAlgorithm = (e) => {
+        if(step !== -1) {
             return;
         }
-        setType("Prim");
-    }
-    const changeDij = () => {
-        if (step !== -1) {
-            return;
-        }
-        setType("Dijkstras");
-    }
-    const changeKruskal = () => {
-        if (step !== -1) {
-            return;
-        }
-        setType("Kruskal");
+        setType(e.target.textContent);
     }
 
     const stepForward = (e) => {
@@ -219,24 +207,19 @@ export default function GraphingAlgorithm() {
         }
         let tempLines = new Map(lines);
         if (step < algoArray.length - 1) {
-            let tempStep = step + 1;
-            let tempLine = tempLines.get(algoArray[tempStep]);
-            tempLine.connected = true;
-            tempLines.set(algoArray[tempStep], tempLine);
-            setLines(tempLines);
-            setStep(tempStep);
+            tempLines = Functions.stepForwardFunc(tempLines, algoArray, step);
+            setStep(step + 1);
         }
+        setLines(tempLines);
     }
+
     const stepBack = (e) => {
         if (step >= 0) {
-            let tempLines = new Map(lines);
-            let tempLine = tempLines.get(algoArray[step]);
-            tempLine.connected = false;
-            tempLines.set(algoArray[step], tempLine);
-            setLines(tempLines);
+            setLines(Functions.stepBackFunc(lines, algoArray, step));
             setStep(step - 1);
         }
     }
+
     const reset = (e) => {
         clearSteps();
         setStep(-1);
@@ -248,28 +231,7 @@ export default function GraphingAlgorithm() {
         if (step !== -1) {
             return;
         }
-        let newCircles = new Map(circles);
-        // calculate value
-        const value = Math.floor(Math.random() * 100);
-        // create a new circle array by concatinating a new circle to it
-        const newcircle = {
-            type: "line",
-            id: circleId,
-            x: (Math.random() * (WIDTH - 200)) + 100,
-            y: (Math.random() * (HEIGHT - 200)) + 100,
-            width: 100,
-            height: 100,
-            color: 'green',
-            stroke: 'black',
-            strokeWidth: 5,
-            selected: false,
-            connect: false,
-            connections: [],
-            value: value
-        };
-        // set circle array state to the new concatinated array
-        newCircles.set(circleId, newcircle);
-        setCircles(newCircles);
+        setCircles(Functions.addCircleFunc(circles, circleId, HEIGHT, WIDTH));
         setCircleId(circleId + 1);
         setChanged(true);
     };
@@ -277,36 +239,18 @@ export default function GraphingAlgorithm() {
     // circle being dragged has variable isDragging set to true.
     // e - event listener
     const handleDragStart = (e) => {
-        const id = e.target.id();
-        let tempCircles = circles;
-        let tempCircle = tempCircles.get(id);
-        tempCircle.isDragging = true;
-        tempCircles.set(id, tempCircle);
-        setCircles(tempCircles);
+        setCircles(Functions.handleDragStartFunc(circles, e.target.id()));
     };
 
     // Once circle is finished being dragged, isDragging is set to false
     // e - event listener
     const handleDragEnd = (e) => {
-        const id = e.target.id();
-        let tempCircles = circles;
-        let tempCircle = tempCircles.get(id);
-        tempCircle.isDragging = false;
-        tempCircles.set(id, tempCircle);
-        setCircles(tempCircles);
+        setCircles(Functions.handleDragEndFunc(circles, e.target.id()));
     };
 
     const clearSteps = () => {
-        let tempStep = step;
-        let tempLines = new Map(lines);
-        while (tempStep >= 0) {
-            const currentIndex = algoArray[tempStep];
-            let currentLine = tempLines.get(currentIndex);
-            currentLine.connected = false;
-            tempLines.set(currentIndex, currentLine);
-            tempStep--;
-        }
-        setLines(tempLines);
+        setLines(Functions.clearStepsFunc(lines, algoArray, step));
+        setStep(-1);
     }
 
     // Method to clear all strokes on the lines
@@ -314,35 +258,18 @@ export default function GraphingAlgorithm() {
         if (selected === null) {
             return 0;
         }
-        let tempNodes; 
-        let tempNode;
-        const isString = typeof selected === "string";
-        isString ? tempNodes = new Map(lines) : tempNodes = new Map(circles);
-        tempNode = tempNodes.get(selected);
-        tempNode.connected = false;
-        tempNodes.set(selected, tempNode);
+        let tempNodes = Functions.clearSelectedFunc(lines, circles, selected);
         setSelected(null);
-        isString ? setLines(tempNodes) : setCircles(tempNodes);
+        typeof selected === "string" ? setLines(tempNodes) : setCircles(tempNodes);
     }
 
     // while being dragged, the circle x and y co-ordinates are updated 
     // and its connectors positions are updated to follow the circle
     // e - event listener
     const handleMove = (e) => {
-        let tempCircles = new Map(circles);
-        let tempLines = new Map(lines);
-        let tempCircle = tempCircles.get(e.target.id());
-        tempCircle.x = e.target.x();
-        tempCircle.y = e.target.y();
-        tempCircles.set(e.target.id(), tempCircle);
-        for (let line of tempCircle.connections) {
-            let tempLine = tempLines.get(line);
-            let otherCircle = tempCircles.get(tempLine.connections.find(otherCircle => otherCircle !== tempCircle.id));
-            tempLine.points = getPoints(tempCircle, otherCircle); 
-            tempLines.set(tempLine.id, tempLine);
-        }
-        setCircles(tempCircles);
-        setLines(tempLines);
+        const bundleMove = Functions.handleMoveFunc(lines, circles, e);
+        setCircles(bundleMove.circles);
+        setLines(bundleMove.lines);
     }
 
     // sets clicked circle to selected
@@ -354,7 +281,6 @@ export default function GraphingAlgorithm() {
         }
         // Clear preivously selected
         clearSelected();
-        console.log(circles);
         const id = e.target.id();
         // do nothing if the selected and new selected circle are the same.
         if (id === selected) {
@@ -362,17 +288,13 @@ export default function GraphingAlgorithm() {
         }
         // initialize the tempNodes to make new values
         let tempNodes;
-        let tempNode;
         const isString = typeof id === "string";
+        isString ? tempNodes = new Map(lines) : tempNodes = new Map(circles);
+        tempNodes = Functions.selectNodeFunc(tempNodes, id);
+        setSelected(id);
         // if it is a circle, then set tempNodes to circles and set connecting to true
         // else set tempNodes to lines and set connecting to false
         isString ? setConnecting(false) : setConnecting(true);
-        isString ? tempNodes = new Map(lines) : tempNodes = new Map(circles);
-        // retrieve the circle with given id and set its connected value
-        tempNode = tempNodes.get(id);
-        tempNode.connected = true;
-        tempNodes.set(id, tempNode);
-        setSelected(id);
         // update the respective node
         isString ? setLines(tempNodes) : setCircles(tempNodes);
     };
@@ -382,15 +304,7 @@ export default function GraphingAlgorithm() {
         if (step !== -1 || selected === null || selected === startNode || selected === endNode) {
             return;
         }
-        // create a temporary array to keep track of the array changes
-        let tempCircles = new Map(circles);
-        let oldStart = tempCircles.get(startNode);
-        let newStart = tempCircles.get(selected);
-        oldStart.start = false;
-        tempCircles.set(startNode, oldStart);
-        newStart.start = true;
-        newStart.connected = false;
-        tempCircles.set(selected, newStart);
+        setCircles(Functions.setStartFunc(circles, startNode, selected));
         setStartNode(selected);
         setConnecting(false);
         setSelected(null);
@@ -401,15 +315,7 @@ export default function GraphingAlgorithm() {
         if (step !== -1 || selected === null || selected === startNode || selected === endNode) {
             return;
         }
-        // create a temporary array to keep track of the array changes
-        let tempCircles = new Map(circles);
-        let oldEnd = tempCircles.get(endNode);
-        let newEnd = tempCircles.get(selected);
-        oldEnd.end = false;
-        tempCircles.set(endNode, oldEnd);
-        newEnd.end = true;
-        newEnd.connected = false;
-        tempCircles.set(selected, newEnd);
+        setCircles(Functions.setEndFunc(circles, endNode, selected));
         setEndNode(selected);
         setConnecting(false);
         setSelected(null);
@@ -437,43 +343,19 @@ export default function GraphingAlgorithm() {
         setConValue(e.target.value);
     }
 
-    const deleteLine = (newLines, newCircles, line) => {
-        let tempLine = newLines.get(line);
-        for (let circle of tempLine.connections) {
-            let tempCircle = newCircles.get(circle);
-            tempCircle.connections = tempCircle.connections.filter(internalLine => line !== internalLine)
-            newCircles.set(circle, tempCircle);
-        }
-        newLines.delete(line);
-    }
-
-    const deleteCircle = (newLines, newCircles, circle) => {
-        let tempCircle = newCircles.get(circle);
-        for (let line of tempCircle.connections) {
-            deleteLine(newLines, newCircles, line);
-        }
-        newCircles.delete(circle);
-    }
-
     const deleteNode = (e) => {
         if (selected === null) {
             return 0;
         }
         const isString = typeof selected === "string";
-        let newLines = new Map(lines);
-        let newCircles = new Map(circles);
-        if (isString) {
-            deleteLine(newLines, newCircles, selected);
-        }
-        else {
-            deleteCircle(newLines, newCircles, selected);
-        }
-        setLines(newLines);
-        setCircles(newCircles);
+        const deleteObject = Functions.deleteNodeFunc(circles, lines, selected, isString);
+        setLines(deleteObject.lines);
+        setCircles(deleteObject.circles);
         setSelected(null);
         setConnecting(false);
         setChanged(true);
     }
+
     const theme = createMuiTheme({
         palette: {
             primary: {
@@ -521,13 +403,13 @@ export default function GraphingAlgorithm() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type !== "Prim" ? "primary" : "secondary"} className={classes.button} onClick={changePrim}>Prim</Button>
+                                            <Button variant="contained" color={type !== "Prim" ? "primary" : "secondary"} className={classes.button} onClick={changeAlgorithm}>Prim</Button>
                                         </Grid>
                                         <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color={type !== "Dijkstras" ? "primary" : "secondary"} className={classes.button} onClick={changeDij}>Dijkstras</Button>
+                                            <Button variant="contained" color={type !== "Dijkstras" ? "primary" : "secondary"} className={classes.button} onClick={changeAlgorithm}>Dijkstras</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type !== "Kruskal" ? "primary" : "secondary"} className={classes.button} onClick={changeKruskal}>Kruskal</Button>
+                                            <Button variant="contained" color={type !== "Kruskal" ? "primary" : "secondary"} className={classes.button} onClick={changeAlgorithm}>Kruskal</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
