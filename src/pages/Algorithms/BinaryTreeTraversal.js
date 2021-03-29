@@ -22,7 +22,6 @@ export function preOrderTraversal(root, array, circles){
         if (root.rightChild !== null)
             preOrderTraversal(circles.find((circle) => circle.id === root.rightChild), array, circles);
     }
-    console.log(array);
 };
 
 export function postOrderTraversal(root, array, circles){
