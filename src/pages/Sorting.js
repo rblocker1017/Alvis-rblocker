@@ -159,7 +159,6 @@ export default function Sorting() {
                 break;
             case "Heap":
                 arrayBundle = heapSort(transitionArray.concat());
-                console.log(arrayBundle);
                 break;
             case "Shell":
                 arrayBundle = shellSort(transitionArray.concat());
@@ -186,7 +185,6 @@ export default function Sorting() {
         setNewArray(arraysOfArrays[tempStep].data.split(',').map(Number))
         setSwap1(arraysOfArrays[tempStep].swappedValue1);
         setSwap2(arraysOfArrays[tempStep].swappedValue2);
-        setStepInfo("In step:" + (tempStep) + " We swap index: " + arraysOfArrays[tempStep].swappedValue1 + " and " + arraysOfArrays[tempStep].swappedValue2);
     }
 
     function stepForward() {

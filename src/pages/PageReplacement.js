@@ -15,7 +15,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { grey, green } from '@material-ui/core/colors';
-
+import * as Functions from './Functionality/PageReplacementFunctions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,338 +67,62 @@ export default function PageReplacement() {
     const classes = useStyles();
     const [displayBoolean, setDisplayBoolean] = useState(false);
     const [answer, setAnswer] = useState([]);
-    const [type, settype] = useState(": FIFO")
+    const [type, settype] = useState("FIFO")
     const [frames, setframes] = useState([]);
     const [input, setinput] = useState([]);
     const [value, setValue] = useState("");
+    const [faultCount, setFaultcount] = useState(0);
 
-
-    function runFIFO() {
-        settype(": FIFO");
-        console.log("Selected: FIFO");
-        renderPageReplacement();
-    }
-    function runOPT() {
-        settype(": OPT");
-        console.log("Selected: OPT");
-        renderPageReplacement();
+    function runAlgorithm(e){
+        settype(e.target.textContent);
+        renderPageReplacement(e.target.textContent);
     }
 
-    function runLRU() {
-        settype(": LRU");
-        console.log("Selected: LRU");
-        renderPageReplacement();
-    }
-
-    function renderPageReplacement() {
-        switch (type) {
-            case ": FIFO":
-                setAnswer(fcfsPageReplacement(input, frames));
-                setDisplayBoolean(true);
+    function renderPageReplacement(newType) {
+        let bundle;
+        switch (newType) {
+            case "FIFO":
+                bundle = Functions.fcfsPageReplacementFunc(input, frames);
                 break;
-            case ": LRU":
-                setAnswer(lruPageReplacement(input, frames));
-                setDisplayBoolean(true);
+            case "LRU":
+                bundle = Functions.lruPageReplacementFunc(input, frames);
                 break;
-            case ": OPT":
-                setAnswer(optPageReplacement(input, frames));
-                setDisplayBoolean(true);
+            case "OPT":
+                bundle = Functions.optPageReplacementFunc(input, frames);
                 break;
             default:
                 break;
         }
-
+        setAnswer(bundle.answer);
+        setFaultcount(bundle.faults);
+        setDisplayBoolean(true);
     }
-
-    const [faultCount, setFaultcount] = useState(0);
-
     function fcfsPageReplacement(pages, frames) {
-        console.log("FCFS ran.");
-
-        let s = new Set()
-        let answer = []
-        let indexes = []
-        let page_faults = 0;
-        let prevStruct = []
-        let filler = []
-        for (let i = 0; i < pages.length; i++) {
-            //prev struct keeps the order of the numbers correct. Set has unpredictable order.
-
-            console.log("For Loop");
-            if (s.size < frames) {
-
-                if (!s.has(pages[i])) {
-                    s.add(pages[i]);
-                    prevStruct = [...s]
-                    page_faults += 1;
-                    filler = [];
-                    for (let j = i; j < frames - 1; j++) {
-                        filler.push("");
-                    }
-                    let arr = {
-                        column: [...s],
-                        fault: "Fault"
-                    }
-                    answer.push({
-                        column: [...s, ...filler],
-                        fault: "❌"
-
-                    });
-
-
-                    console.log("Set: " + arr.toString())
-                    indexes.push(pages[i]);
-                    continue;
-                }
-            } else {
-
-                if (!s.has(pages[i])) {
-                    let val = indexes.shift();
-
-                    s.delete(val);
-                    s.add(pages[i])
-                    console.log(prevStruct)
-                    const orderedAnswer = prevStruct.map(page => {
-                        if (s.has(page)) {
-                            return page;
-                        } else {
-                            return pages[i];
-                        }
-                    })
-                    prevStruct = orderedAnswer;
-                    answer.push({
-                        column: orderedAnswer,
-                        fault: "❌ "
-                    });
-                    indexes.push(pages[i])
-                    page_faults += 1;
-                    continue;
-                }
-
-            }
-
-            answer.push({
-                column: prevStruct,
-                fault: "✔️"
-            });
-
-
-        }
-        setFaultcount(page_faults);
-        return answer
-
+        return Functions.fcfsPageReplacementFunc(pages, frames);
     }
 
     function lruPageReplacement(pages, frames) {
-        console.log("Lru ran.");
-
-        let s = new Set()
-        let answer = []
-        let indexes = []
-        let page_faults = 0;
-        let lruArr = [];
-        let prevStruct = []
-        let filler = []
-
-        for (let i = 0; i < pages.length; i++) {
-            console.log("For Loop");
-            if (s.size < frames) {
-
-                if (!s.has(pages[i])) {
-                    s.add(pages[i]);
-                    prevStruct = [...s]
-                    page_faults += 1;
-                    filler = [];
-                    for (let j = i; j < frames - 1; j++) {
-                        filler.push("");
-                    }
-                    let arr = {
-                        column: [...s],
-                        fault: "Fault"
-                    }
-                    answer.push({
-                        column: [...s, ...filler],
-                        fault: "❌"
-                    });
-
-                    //if(pages[i] !== lruArr[0])
-                    lruArr.unshift(pages[i])
-
-                    console.log("Set: " + arr.toString())
-                    indexes.push(pages[i]);
-                    continue;
-                }
-
-
-
-
-
-            } else {
-                console.log("Getting val: for " + pages[i] + "---" + lruArr.toString())
-                if (!s.has(pages[i])) {
-
-                    lruArr.pop();
-
-                    let val = lruArr[2]
-                    lruArr.unshift(pages[i])
-                    console.log("val: " + val)
-
-                    console.log("Lru arr Length: " + lruArr.length);
-
-
-                    s.delete(val);
-                    s.add(pages[i])
-                    const orderedAnswer = prevStruct.map(page => {
-                        if (s.has(page)) {
-                            return page;
-                        } else {
-                            return pages[i];
-                        }
-                    })
-
-                    answer.push({
-                        column: orderedAnswer,
-                        fault: "❌ "
-                    });
-                    prevStruct = orderedAnswer;
-                    indexes.push(pages[i])
-                    page_faults += 1;
-                    continue;
-                }
-                lruArr.unshift(pages[i]);
-            }
-
-
-            answer.push({
-                column: prevStruct,
-                fault: "✔️"
-            });
-
-
-        }
-        setFaultcount(page_faults);
-        return answer
+        return Functions.lruPageReplacementFunc(pages, frames);
 
     }
 
     function optPageReplacement(pages, frames) {
-        console.log("OPT ran.");
-
-        let s = new Set()
-        let answer = []
-        let indexes = []
-        let page_faults = 0;
-        let prevStruct = []
-        let filler = [];
-        for (let i = 0; i < pages.length; i++) {
-            //prev struct keeps the order of the numbers correct. Set has unpredictable order.
-
-            console.log("For Loop");
-            if (s.size < frames) {
-
-                if (!s.has(pages[i])) {
-                    s.add(pages[i]);
-                    prevStruct = [...s]
-                    page_faults += 1;
-                    filler = [];
-                    for (let j = i; j < frames - 1; j++) {
-                        filler.push("");
-                    }
-                    let arr = {
-                        column: [...s],
-                        fault: "Fault"
-                    }
-                    answer.push({
-                        column: [...s, ...filler],
-                        fault: "❌"
-                    });
-                    console.log("Set: " + arr.toString())
-                    indexes.push(pages[i]);
-                    continue;
-                }
-
-
-
-            } else {
-
-                if (!s.has(pages[i])) {
-
-                    let val;
-                    let tempSet = new Set(s)
-
-                    if (!prevStruct.slice(i, pages.length).includes(pages[i])) {
-                        let tempArr = [...prevStruct]
-                        val = tempArr.shift();
-                    } else {
-
-                        for (let j = i + 1; j < pages.length; j++) {
-                            if (tempSet.has(pages[j])) {
-                                console.log("OPT " + pages[i])
-                                val = pages[j]
-                                tempSet.delete(pages[j]);
-                                console.log('Temp set: ', tempSet)
-                            }
-
-
-                        }
-                    }
-                    console.log("VAL after for: " + val)
-
-                    s.delete(val);
-                    s.add(pages[i])
-                    console.log(prevStruct)
-                    const orderedAnswer = prevStruct.map(page => {
-                        if (s.has(page)) {
-                            return page;
-                        } else {
-                            return pages[i];
-                        }
-                    })
-                    prevStruct = orderedAnswer;
-                    answer.push({
-                        column: orderedAnswer,
-                        fault: "❌ "
-                    });
-                    indexes.push(pages[i])
-                    page_faults += 1;
-                    continue;
-                }
-
-            }
-
-            answer.push({
-                column: prevStruct,
-                fault: "✔️"
-            });
-
-
-        }
-        setFaultcount(page_faults);
-        return answer
+        return Functions.optPageReplacementFunc(pages, frames);
 
     }
     function reset() {
         setValue("");
         setinput(value.split(',').map(Number))
-        setAnswer(fcfsPageReplacement(0, 0));
+        setAnswer(Functions.fcfsPageReplacementFunc(0, 0).answer);
         setDisplayBoolean(false);
-
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
         );
-
     }
-    const takeInput = () => {
-        setAnswer(fcfsPageReplacement(input, frames));
-        setDisplayBoolean(true);
-        console.log(answer.toString());
-    }
-
 
     const tableHeader = input.map((page) => {
         return (
             <th style={{ border: "1px solid black", width: "45px", color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
-
         );
 
     })
@@ -456,13 +180,13 @@ export default function PageReplacement() {
                                 <Paper className={classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === ": FIFO" ? "secondary" : "primary"} onClick={() => runFIFO()}>FIFO</Button>
+                                            <Button variant="contained" color={type === "FIFO" ? "secondary" : "primary"} onClick={runAlgorithm}>FIFO</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === ": OPT" ? "secondary" : "primary"} onClick={() => runOPT()}>OPT</Button>
+                                            <Button variant="contained" color={type === "OPT" ? "secondary" : "primary"} onClick={runAlgorithm}>OPT</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === ": LRU" ? "secondary" : "primary"} onClick={() => runLRU()}>LRU</Button>
+                                            <Button variant="contained" color={type === "LRU" ? "secondary" : "primary"} onClick={runAlgorithm}>LRU</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
@@ -495,7 +219,7 @@ export default function PageReplacement() {
                         <Grid item xs={9}>
                             <Paper className={classes.paper}>
                                 <h1>
-                                    Page Replacement{type}
+                                    Page Replacement: {type}
                                 </h1>
                                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <table>
