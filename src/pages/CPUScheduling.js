@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase, Box } from '@material-ui/core';
+import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase, Box, withStyles } from '@material-ui/core';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
@@ -26,9 +26,10 @@ import { FormControlLabel } from '@material-ui/core';
 import { grey, green } from '@material-ui/core/colors';
 import trash from '../trash.png';
 import * as Algorithms from './Algorithms/CPUScheduling';
+import { ThreeSixty } from '@material-ui/icons';
 
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
     root: {
         flexGrow: 1,
     },
@@ -123,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
     trashImg: {
         opacity: 0.55
     }
-}));
+});
 
 const Fade = React.forwardRef(function Fade(props, ref) {
     const { in: open, children, onEnter, onExited, ...other } = props;
@@ -156,281 +157,230 @@ Fade.propTypes = {
     onExited: PropTypes.func,
 };
 
-export default function CpuScheduling(props) {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [flag1, setFlag1] = useState(true);
-    const [flag2, setFlag2] = useState(true);
-    const [flag3, setFlag3] = useState(true);
-    const [flag4, setFlag4] = useState(true);
-    const [flag5, setFlag5] = useState(true);
-    const [processes, setprocesses] = useState([])
-    const [quantum, setQuantum] = useState();
-    const [type, settype] = useState("")
-    const [checked, setChecked] = useState(false)
-
-    let name = "test";
-
-    const changeFCFS = () => settype("FCFS");
-    const changeSJF = () => settype("SJF");
-    const changeRR = () => settype("RR");
-    const changeSRTF = () => settype("SRTF");
-    const changePri = () => settype("Priority");
-
-
-
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                main: green[900],
-            },
-            secondary: {
-                main: grey[700],
-            }
-        }
-    })
-
-    function fcfs(processes) {
-        const bundle = Algorithms.fcfs(processes);
-        setTurnaroundTime(bundle.turnaroundTime);
-        //setResponseTime((totalResponse / processList.length).toFixed(2))
-        setWaitingTime(bundle.waitingTime);
-        return bundle.answer;
+class CPUScheduling extends Component{
+    constructor(props){
+        super(props);
+        this.classes = this.props.classes;
+        this.state = {
+            open: false,
+            processes: [],
+            type: "",
+            checked: false,
+            formProcess: null,
+            formArrival: null,
+            formBurst: null,
+            waitingTime: null,
+            priority: 0,
+            selected: {},
+            data: [
+                [
+                    { type: 'string', label: 'Task ID' },
+                    { type: 'string', label: 'Task Name' },
+                    { type: 'string', label: 'Process' },
+                    { type: 'date', label: 'Start Time' },
+                    { type: 'date', label: 'End Time' },
+                    { type: 'number', label: 'Duration' },
+                    // { type: 'number', label: 'Percent Complete' },
+                    { type: 'string', label: 'Dependencies' },
+                ],
+                [
+                    '1',
+                    'P1',
+                    'P1',
+                    new Date(0, 0, 0, 0, 0, 0),
+                    new Date(0, 0, 0, 0, 0, 0),
+                    null,
+                    100,
+                    null,
+                ],
+            ]
+        };
+        this.changeAlgo = this.changeAlgo.bind(this);
+        this.reset = this.reset.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.clickInput = this.clickInput.bind(this);
+        this.handleAddProc = this.handleAddProc.bind(this);
+        this.setformArrival = this.setformArrival.bind(this);
+        this.setformBurst = this.setformBurst.bind(this);
+        this.setformProcess = this.setformProcess.bind(this);
+        this.setQuantum = this.setQuantum.bind(this);
+        this.setpriority = this.setpriority.bind(this);
+        this.deleteRow = this.deleteRow.bind(this);
+        this.handleChangeCheck = this.handleChangeCheck.bind(this);
+        this.selectRow = this.selectRow.bind(this);
     }
 
-    function sjf(processes) {
-        const bundle = Algorithms.sjf(processes);
-        setTurnaroundTime(bundle.turnaroundTime);
-        setWaitingTime(bundle.waitingTime);
-        return bundle.answer;
+    changeAlgo(e){
+        this.setState({
+            type: e.target.textContent
+        });
     }
 
-    function roundRobin(processes) {
-        const bundle = Algorithms.roundRobin(processes, quantum);
-        setTurnaroundTime(bundle.turnaroundTime);
-        setWaitingTime(bundle.waitingTime);
-        return bundle.answer;
+    reset() {
+        this.setState({
+            displayBoolean: false,
+            turnaroundTime: null,
+            waitingTime: null,
+            quantum: null,
+            processes: []
+        });
     }
 
-    function priorityFunc(processes) {
-        const bundle = Algorithms.priorityFunc(processes);
-        setTurnaroundTime(bundle.turnaroundTime)
-        setWaitingTime(bundle.waitingTime)
-        return bundle.answer;
-    }
-    function priorityFuncPreemptive(processes) {
-        const bundle = Algorithms.priorityFuncPreemptive(processes);
-        setTurnaroundTime(bundle.turnaroundTime)
-        setWaitingTime(bundle.waitingTime)
-        return bundle.answer;
-    }
-    function sjfFuncPreemptive(processes) {
-        const bundle = Algorithms.sjfFuncPreemptive(processes);
-        setTurnaroundTime(bundle.turnaroundTime)
-        setWaitingTime(bundle.waitingTime)
-        return bundle.answer;
-    }
-    function reset() {
-        setDisplayBoolean(false);
-        setTurnaroundTime(null);
-        setWaitingTime(null);
-        setQuantum(null);
-        let empty = [];
-        setprocesses(empty);
+    handleOpen(){
+        this.setState({
+            open: true
+        });
     }
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleChange = (event) => {
-        settype(event.target.value);
-    };
-
-    const [formProcess, setformProcess] = useState()
-    const [formArrival, setformArrival] = useState()
-    const [formBurst, setformBurst] = useState()
-    const [displayBoolean, setDisplayBoolean] = useState(false);
-    const [waitingtime, setWaitingTime] = useState();
-    const [turnaroundTime, setTurnaroundTime] = useState();
-    const [priority, setpriority] = useState(0)
-    const [selected, setSelected] = useState({});
-
-    function createData(procName, arrivalTime, burstTime, priority) {
-        return { procName, arrivalTime, burstTime, priority };
+    handleClose(){
+        this.setState({
+            open: false
+        });
     }
 
-    const rows = [
-        createData('Process Name', 'Arrival Time', 'Burst Time', 'Priority'),
-    ]
-
-    const [data, setData] = useState([
-        [
-            { type: 'string', label: 'Task ID' },
-            { type: 'string', label: 'Task Name' },
-            { type: 'string', label: 'Process' },
-            { type: 'date', label: 'Start Time' },
-            { type: 'date', label: 'End Time' },
-            { type: 'number', label: 'Duration' },
-            // { type: 'number', label: 'Percent Complete' },
-            { type: 'string', label: 'Dependencies' },
-        ],
-        [
-            '1',
-            'P1',
-            'P1',
-            new Date(0, 0, 0, 0, 0, 0),
-            new Date(0, 0, 0, 0, 0, 0),
-            null,
-            100,
-            null,
-        ],
-
-
-    ])
-
-    console.log("Data : " + data)
-    const clickInput = () => {
-        if (!checked) {
-            switch (type) {
-                case 'First Come First Serve':
-                    setData(fcfs(processes));
-                    setDisplayBoolean(true);
+    handleChange(event){
+        this.setState({
+            type: event.target.value
+        });
+    }
+    clickInput(){
+        let bundle;
+        if (!this.state.checked) {
+            switch (this.state.type) {
+                case 'FCFS':
+                    bundle = Algorithms.fcfs(this.state.processes);
                     break;
-                case 'Shortest Job First':
-                    setData(sjf(processes));
-                    setDisplayBoolean(true);
+                case 'SJF':
+                    bundle = Algorithms.sjf(this.state.processes);
                     break;
-                case 'Round Robin':
-                    setData(roundRobin(processes));
-                    setDisplayBoolean(true);
+                case 'RR':
+                    bundle = Algorithms.roundRobin(this.state.processes);
                     break;
                 case 'Priority':
-                    setData(priorityFunc(processes));
-                    setDisplayBoolean(true);
+                    bundle = Algorithms.priorityFunc(this.state.processes);
                     break;
-                case 'Shortest Remaining Job First':
-                    setData(sjfFuncPreemptive(processes));
-                    setDisplayBoolean(true);
+                case 'SRTF':
+                    bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
                 default:
                     break;
             }
         }
         else {
-            switch (type) {
-                case 'First Come First Serve':
-                    setData(fcfs(processes));
-                    setDisplayBoolean(true);
+            switch (this.state.type) {
+                case 'FCFS':
+                    bundle = Algorithms.fcfs(this.state.processes);
                     break;
-                case 'Shortest Job First':
-                    setData(sjf(processes));
-                    setDisplayBoolean(true);
+                case 'SJF':
+                    bundle = Algorithms.sjf(this.state.processes);
                     break;
-                case 'Round Robin':
-                    setData(roundRobin(processes));
-                    setDisplayBoolean(true);
+                case 'RR':
+                    bundle = Algorithms.roundRobin(this.state.processes);
                     break;
-                case 'Preemptive Priority':
-                    setData(priorityFuncPreemptive(processes));
-                    setDisplayBoolean(true);
+                case 'Priority':
+                    bundle = Algorithms.priorityFuncPreemptive(this.state.processes);
                     break;
-                case 'Shortest Remaining Job First':
-                    setData(sjfFuncPreemptive(processes));
-                    setDisplayBoolean(true);
+                case 'SRTF':
+                    bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
                 default:
                     break;
             }
         }
-
-        data.forEach(i => { console.log("Data stream: " + i) })
+        this.setState({
+            turnaroundTime: bundle.turnaroundTime,
+            waitingtime: bundle.waitingTime,
+            data: bundle.answer,
+            displayBoolean: true
+        });
     }
-
-    const handleAddProc = () => {
-        let temp = processes.slice();
-        temp.push({ name: formProcess, arrivalTime: parseInt(formArrival), burstTime: parseInt(formBurst), priority: (parseInt(priority)), select: false });
-        if (formProcess == null) {
+    handleAddProc(){
+        let temp = this.state.processes.slice();
+        temp.push({ name: this.state.formProcess, arrivalTime: parseInt(this.state.formArrival), burstTime: parseInt(this.state.formBurst), priority: (parseInt(this.state.priority)), select: false });
+        if (this.state.formProcess === null) {
+            this.setState({
+                formArrival: null,
+                formBurst: null
+            });
             alert("Please enter Process name");
-            setformArrival(null);
-            setformBurst(null);
         }
-        else if (formArrival == null) {
+        else if (this.state.formArrival === null) {
+            this.setState({
+                formProcess: null,
+                setformBurst: null
+            });
             alert("Please enter integer for Arrival Time");
-            setformProcess(null);
-            setformBurst(null);
         }
-        else if (formBurst == null) {
+        else if (this.state.formBurst === null) {
+            this.setState({
+                formProcess: null,
+                formArrival: null
+            });
             alert("Please enter integer for Burst Time");
-            setformProcess(null);
-            setformArrival(null);
         }
         else {
-
-            setprocesses(temp);
-            console.log(temp);
-            setDisplayBoolean(false);
+            this.setState({
+                processes: temp,
+                displayBoolean: false
+            });
         }
 
         //Empty the inputs on the pop-up form, then set the values to null
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
         );
-        setformProcess(null);
-        setformArrival(null);
-        setformBurst(null);
+        this.setState({
+            formProcess: null,
+            formArrival: null,
+            formBurst: null
+        });
+    }
+    setformArrival(e){
+        this.setState({
+            formArrival: e.target.value
+        });
+    }
+    setformBurst(e){
+        this.setState({
+            formBurst: e.target.value
+        });
+    }
+    setformProcess(e){
+        this.setState({
+            formProcess: e.target.value
+        });
+    }
+    setQuantum(e){
+        this.setState({
+            quantum: e.target.value
+        });
+    }
+    setpriority(e){
+        this.setState({
+            priority: e.target.value
+        });
+    }
+    deleteRow(){
+        this.setState({
+            processes: this.state.processes.filter(process => !process.select)
+        });
     }
 
-    function addRow(table, procName, arrivalTime, burstTime, timeQ, Priority) {
-        var newdata = { procName, arrivalTime, burstTime, timeQ, Priority }
-        table.concat(newdata);
-        return table;
+    handleChangeCheck(event){
+        this.setState({
+            checked: !this.state.checked
+        });
     }
 
-    const addRowRR = () => {
-
-    }
-
-    const addRowPriority = () => {
-
-    }
-
-
-    const showProceses = processes.map((proc) => {
-        if (proc.Name == null || proc.arrivalTime == null || proc.BurstTime == null) {
-
-        }
-        else {
-            return (
-                addRow(proc.name, proc.arrivalTime, proc.BurstTime, proc.quantum, proc.priority)
-                //<>
-                // <p>Process: {proc.name} Arrival Time: {proc.arrivalTime} Burst Time: {proc.burstTime} {type === 'priority' ? <>Priority: {proc.priority}</> : null}</p>
-                //</>
-            );
-        }
-
-
-    })
-
-    const deleteRow = () => {
-        console.log(selected);
-        setprocesses(processes.filter(process => !process.select));
-    }
-
-    const handleChangeCheck = (event) => {
-        setChecked(!checked);
-    };
-
-    const selectRow = (e) => {
+    selectRow(e){
         const name = e.target.id;
-        let tempProcesses = processes
-        console.log(e.target);
-        if (name === selected.name) {
-            tempProcesses = processes.map(process => {
+        let tempProcesses = this.state.processes
+        if (name === this.state.selected.name) {
+            this.setState({
+                selected: {}
+            });
+            tempProcesses = this.state.processes.map(process => {
                 if (process.select) {
-                    setSelected({});
                     return {
                         ...process,
                         select: false
@@ -442,7 +392,9 @@ export default function CpuScheduling(props) {
         else {
             tempProcesses = tempProcesses.map(process => {
                 if (name === process.name) {
-                    setSelected(process);
+                    this.setState({
+                        selected: process
+                    });
                     return {
                         ...process,
                         select: true
@@ -454,307 +406,277 @@ export default function CpuScheduling(props) {
                 };
             });
         }
-        setprocesses(tempProcesses);
+        this.setState({
+            processes: tempProcesses
+        });
     }
-
-
-    const handleClick1 = () => {
-        if (flag1) setFlag1(!flag1);
-        setFlag2(true);
-        setFlag3(true);
-        setFlag4(true);
-        setFlag5(true);
-    };
-
-    const handleClick2 = () => {
-        if (flag2) setFlag2(!flag2);
-        setFlag1(true);
-        setFlag3(true);
-        setFlag4(true);
-        setFlag5(true);
-    };
-
-    const handleClick3 = () => {
-        if (flag3) setFlag3(!flag3);
-        setFlag1(true);
-        setFlag2(true);
-        setFlag4(true);
-        setFlag5(true);
-    };
-
-    const handleClick4 = () => {
-        if (flag4) setFlag4(!flag4);
-        setFlag1(true);
-        setFlag2(true);
-        setFlag3(true);
-        setFlag5(true);
-    };
-
-    const handleClick5 = () => {
-        if (flag5) setFlag5(!flag5);
-        setFlag1(true);
-        setFlag2(true);
-        setFlag3(true);
-        setFlag4(true);
-    };
-    return (
-        <Header>
-            <ThemeProvider theme={theme}>
-                <Grid container direction="column">
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={classes.buttons}>
-                                    <Grid container spacing={0}>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={flag1 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("First Come First Serve"); console.log("Selected: FCFS"); handleClick1(); }}>FCFS
-                                               {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
-                                            </Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color={flag2 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Shortest Job First"); console.log("Selected: SJF"); handleClick2(); }}>SJF
-                                            
-                                            </Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color={flag3 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Priority"); console.log("Selected: priority"); handleClick3(); }}>Priority
-                                            
-                                            </Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1></h1>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color={flag4 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Round Robin"); console.log("Selected: RR"); handleClick4(); }}>RR
-                                            
-                                            </Button>
-                                        </Grid>
-                                        <Grid item item xs={4}>
-                                            <Button variant="contained" color={flag5 ? "primary" : "secondary"} className={classes.button} onClick={() => { settype("Shortest Remaining Job First"); console.log("Selected: SRJF"); handleClick5(); }}>SRTF
-                                            
-                                            </Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <FormControlLabel control={<Checkbox
-                                                onChange={handleChangeCheck}
-                                                checked={checked}
-                                                name="checkedB"
-                                                inputProps={{ 'aria-label': 'primary checkbox' }}
-                                                color={"#000000"} />}
-                                                label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={handleOpen}>Insert</Button>
-                                        </Grid>
-                                        <div>
-                                            <Modal
-                                                justify="center"
-                                                alignItems="center"
-                                                className={classes.modal}
-                                                open={open}
-                                                onClose={handleClose}
-                                                closeAfterTransition
-                                                BackdropComponent={Backdrop}
-                                                BackdropProps={{
-                                                    timeout: 500,
-                                                }}
-                                            >
-                                                <Fade in={open}>
-                                                    <Grid >
-                                                        <Grid item xs={12} container justify="center" alignItems="center">
-                                                            <Paper className={classes.paperOverlay}>
-                                                                <h1>CPU Scheduling: {type} </h1>
-                                                                <form noValidate autoComplete="on">
-                                                                    <Box pt={2}>
-                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={(e) => { setformProcess(e.target.value) }} />
-                                                                    </Box>
-                                                                    <Box pt={2}>
-                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={(e) => { setformArrival(e.target.value) }} />
-                                                                    </Box>
-                                                                    <Box pt={2}>
-                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={(e) => { setformBurst(e.target.value) }} />
-                                                                    </Box>
-
-                                                                </form>
-                                                                {type === "Round Robin" ? <form noValidate autoComplete="on">
-                                                                    <Box pt={2}>
-                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" defaultValue={quantum} onChange={(e) => { setQuantum(e.target.value) }} />
-                                                                    </Box>
-                                                                </form>
-                                                                    : null}
-                                                                {type === "Priority" ? <form noValidate autoComplete="on">
-                                                                    <Box pt={2}>
-                                                                        <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={(e) => { setpriority(e.target.value) }} />
-                                                                    </Box>
-                                                                </form>
-                                                                    : null}
-                                                                <Grid container spacing={1} justify="center">
-                                                                    <Grid item xs={4}>
+    render(){
+        const theme = createMuiTheme({
+            palette: {
+                primary: {
+                    main: green[900],
+                },
+                secondary: {
+                    main: grey[700],
+                }
+            }
+        })
+        return (
+            <Header>
+                <ThemeProvider theme={theme}>
+                    <Grid container direction="column">
+                        <Grid item container spacing={1}>
+                            <Grid item xs={3}>
+                                <Grid container direction="column">
+                                    <Paper className={this.classes.buttons}>
+                                        <Grid container spacing={0}>
+                                            <Grid item xs={4}>
+                                                <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>FCFS
+                                                   {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
+                                                </Button>
+                                            </Grid>
+                                            <Grid item className={this.classes.button} xs={4}>
+                                                <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>SJF
+                                                
+                                                </Button>
+                                            </Grid>
+                                            <Grid item className={this.classes.button} xs={4}>
+                                                <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>Priority
+                                                
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <h1></h1>
+                                            </Grid>
+                                            <Grid item className={this.classes.button} xs={4}>
+                                                <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>RR
+                                                
+                                                </Button>
+                                            </Grid>
+                                            <Grid item item xs={4}>
+                                                <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>SRTF
+                                                
+                                                </Button>
+                                            </Grid>
+                                            <Grid item>
+                                                <FormControlLabel control={<Checkbox
+                                                    onChange={this.handleChangeCheck}
+                                                    checked={this.state.checked}
+                                                    name="checkedB"
+                                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                                    color={"#000000"} />}
+                                                    label={<Typography variant={"caption"}>Preemptive Priority</Typography>} labelPlacement={"bottom"} />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <h1>
+                                                </h1>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant="contained" color="primary" onClick={this.handleOpen}>Insert</Button>
+                                            </Grid>
+                                            <div>
+                                                <Modal
+                                                    justify="center"
+                                                    alignItems="center"
+                                                    className={this.classes.modal}
+                                                    open={this.state.open}
+                                                    onClose={this.handleClose}
+                                                    closeAfterTransition
+                                                    BackdropComponent={Backdrop}
+                                                    BackdropProps={{
+                                                        timeout: 500,
+                                                    }}
+                                                >
+                                                    <Fade in={this.state.open}>
+                                                        <Grid >
+                                                            <Grid item xs={12} container justify="center" alignItems="center">
+                                                                <Paper className={this.classes.paperOverlay}>
+                                                                    <h1>CPU Scheduling: {this.state.type} </h1>
+                                                                    <form noValidate autoComplete="on">
                                                                         <Box pt={2}>
-                                                                            <Button variant="contained" color="primary" onClick={handleAddProc}>Add Process</Button>
+                                                                            <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={this.setformProcess} />
                                                                         </Box>
-                                                                    </Grid>
-                                                                    <Grid item>
                                                                         <Box pt={2}>
-                                                                            <Button variant="contained" color="primary" onClick={handleClose} >Close</Button>
+                                                                            <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={this.setformArrival} />
                                                                         </Box>
+                                                                        <Box pt={2}>
+                                                                            <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={this.setformBurst} />
+                                                                        </Box>
+    
+                                                                    </form>
+                                                                    {this.state.type === "RR" ? <form noValidate autoComplete="on">
+                                                                        <Box pt={2}>
+                                                                            <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" defaultValue={this.state.quantum} onChange={this.setQuantum } />
+                                                                        </Box>
+                                                                    </form>
+                                                                        : null}
+                                                                    {this.state.type === "Priority" ? <form noValidate autoComplete="on">
+                                                                        <Box pt={2}>
+                                                                            <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={this.setpriority} />
+                                                                        </Box>
+                                                                    </form>
+                                                                        : null}
+                                                                    <Grid container spacing={1} justify="center">
+                                                                        <Grid item xs={4}>
+                                                                            <Box pt={2}>
+                                                                                <Button variant="contained" color="primary" onClick={this.handleAddProc}>Add Process</Button>
+                                                                            </Box>
+                                                                        </Grid>
+                                                                        <Grid item>
+                                                                            <Box pt={2}>
+                                                                                <Button variant="contained" color="primary" onClick={this.handleClose} >Close</Button>
+                                                                            </Box>
+                                                                        </Grid>
                                                                     </Grid>
-                                                                </Grid>
-                                                            </Paper>
+                                                                </Paper>
+                                                            </Grid>
                                                         </Grid>
-                                                    </Grid>
-                                                </Fade>
-                                            </Modal>
-                                        </div>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color="primary" onClick={clickInput}>Run  </Button>
+                                                    </Fade>
+                                                </Modal>
+                                            </div>
+                                            <Grid item xs={4}>
+                                                <Button variant="contained" color="primary" onClick={this.clickInput}>Run  </Button>
+                                            </Grid>
+                                            <Grid>
+                                                <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
+                                            </Grid>
                                         </Grid>
-                                        <Grid>
-                                            <Button variant="contained" color="primary" onClick={() => reset()}>Reset</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <h2>
-                            </h2>
-                            <Paper className={classes.code}>
-                                <h3>
-                                    CODE
-                                 </h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                 </p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={8} container direction="column" justify="flex-start" alignItems="stretch">
-                            <Paper className={classes.paper}>
-                                <h1>CPU Scheduling: {type}</h1>
-                                {type === "Round Robin" ? <h3>Time Quantum = {quantum}</h3>
-                                    : null}
-                                {displayBoolean ?
-                                    <>
-                                        <p></p>
-                                        <Chart
-                                            width={'90%'}
-                                            height={'400px'}
-                                            chartType="Gantt"
-                                            loader={<div>Loading Chart</div>}
-                                            data={data}
-                                            options={{
-                                                height: 400,
-                                                gantt: {
-                                                    trackHeight: 30,
-                                                    criticalPathEnabled: false,
-                                                    defaultStartDate: new Date(0, 0, 0, 0, 0, 0),
-                                                    animation:
-                                                    {
-                                                        startup: true,
-                                                        easing: 'linear',
-                                                        duration: 1500,
-                                                    },
-                                                    enableInteractivity: false,
-                                                },
-                                            }}
-                                            chartEvents={[
-                                                {
-                                                    eventName: 'animationfinish',
-                                                    callback: () => {
-                                                        console.log('Animation Finished')
-                                                    },
-                                                },
-                                            ]}
-
-                                            rootProps={{ 'data-testid': '1' }}
-                                        />
-
-                                    </>
-                                    : null}
-
-
-                            </Paper>
-
-
-                            <Grid item xs={4} container direction="column" justify="flex-start" alignItems="stretch" spacing={1}>
-                                <TableContainer componenet={Grid}>
-                                    <Table className={classes.table} aria-label="simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell className={classes.th} align="center">Process Name</TableCell>
-                                                <TableCell className={classes.th} align="center">Arrival Time</TableCell>
-                                                <TableCell className={classes.th} align="center">Burst Time</TableCell>
-                                                {type === "Priority" ? <TableCell className={classes.th} align="center">Priority</TableCell>
-                                                    : null}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {processes.map((row) => (
-                                                <TableRow key={row.name} onClick={selectRow}>
-                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center" component="th" scope="row">
-                                                        {row.name}
-                                                    </TableCell>
-                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                                        {row.arrivalTime}
-                                                    </TableCell>
-                                                    <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                                        {row.burstTime}
-                                                    </TableCell>
-                                                    {type === "Priority" ? <TableCell id={row.name} className={classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                                        {row.burstTime}
-                                                    </TableCell>
-                                                        : null}
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
-                                    <Paper className={classes.averages}>
-                                        <h4>  Average Waiting Time: {waitingtime} </h4>
-                                        <h4> Average Turnaound Time: {turnaroundTime} </h4>
                                     </Paper>
                                 </Grid>
+                                <h2>
+                                </h2>
+                                <Paper className={this.classes.code}>
+                                    <h3>
+                                        CODE
+                                     </h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                     </p>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={8} container direction="column" justify="flex-start" alignItems="stretch">
+                                <Paper className={this.classes.paper}>
+                                    <h1>CPU Scheduling: {this.state.type}</h1>
+                                    {this.state.type === "RR" ? <h3>Time Quantum = {this.state.quantum}</h3>
+                                        : null}
+                                    {this.displayBoolean ?
+                                        <>
+                                            <p></p>
+                                            <Chart
+                                                width={'90%'}
+                                                height={'400px'}
+                                                chartType="Gantt"
+                                                loader={<div>Loading Chart</div>}
+                                                data={this.state.data}
+                                                options={{
+                                                    height: 400,
+                                                    gantt: {
+                                                        trackHeight: 30,
+                                                        criticalPathEnabled: false,
+                                                        defaultStartDate: new Date(0, 0, 0, 0, 0, 0),
+                                                        animation:
+                                                        {
+                                                            startup: true,
+                                                            easing: 'linear',
+                                                            duration: 1500,
+                                                        },
+                                                        enableInteractivity: false,
+                                                    },
+                                                }}
+                                                chartEvents={[
+                                                    {
+                                                        eventName: 'animationfinish',
+                                                        callback: () => {
+                                                            console.log('Animation Finished')
+                                                        },
+                                                    },
+                                                ]}
+    
+                                                rootProps={{ 'data-testid': '1' }}
+                                            />
+                                        </>
+                                        : null}
+                                </Paper>
+                                <Grid item xs={4} container direction="column" justify="flex-start" alignItems="stretch" spacing={1}>
+                                    <TableContainer componenet={Grid}>
+                                        <Table className={this.classes.table} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className={this.classes.th} align="center">Process Name</TableCell>
+                                                    <TableCell className={this.classes.th} align="center">Arrival Time</TableCell>
+                                                    <TableCell className={this.classes.th} align="center">Burst Time</TableCell>
+                                                    {this.state.type === "Priority" ? <TableCell className={this.classes.th} align="center">Priority</TableCell>
+                                                        : null}
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {this.state.processes.map((row) => (
+                                                    <TableRow key={row.name} onClick={this.selectRow}>
+                                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center" component="th" scope="row">
+                                                            {row.name}
+                                                        </TableCell>
+                                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                            {row.arrivalTime}
+                                                        </TableCell>
+                                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                            {row.burstTime}
+                                                        </TableCell>
+                                                        {this.state.type === "Priority" ? <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                                            {row.burstTime}
+                                                        </TableCell>
+                                                            : null}
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
+                                        <Paper className={this.classes.averages}>
+                                            <h4>  Average Waiting Time: {this.state.waitingtime} </h4>
+                                            <h4> Average Turnaound Time: {this.state.turnaroundTime} </h4>
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={10} container direction="row" justify="center">
+                                <form noValidate autoComplete="off">
+                                    <Paper className={this.classes.fields}>
+                                        <Grid container spacing={1}>
+                                            <Grid item xs={1}></Grid>
+                                            <Grid item>
+                                                <Button variant="contained" color="primary">
+                                                    Step Back
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={2}></Grid>
+                                            <Grid item>
+                                                <Button variant="contained" color="primary">
+                                                    Pause
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={2}></Grid>
+                                            <Grid item>
+                                                <Button variant="contained" color="primary">
+                                                    Step Forward
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Paper>
+                                </form>
                             </Grid>
                         </Grid>
-                        <Grid item xs={10} container direction="row" justify="center">
-                            <form noValidate autoComplete="off">
-                                <Paper className={classes.fields}>
-                                    <Grid container spacing={1}>
-                                        <Grid item xs={1}></Grid>
-                                        <Grid item>
-                                            <Button variant="contained" color="primary">
-                                                Step Back
-                                            </Button>
-                                        </Grid>
-                                        <Grid item xs={2}></Grid>
-                                        <Grid item>
-                                            <Button variant="contained" color="primary">
-                                                Pause
-                                            </Button>
-                                        </Grid>
-                                        <Grid item xs={2}></Grid>
-                                        <Grid item>
-                                            <Button variant="contained" color="primary">
-                                                Step Forward
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </form>
-                        </Grid>
                     </Grid>
-                </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={deleteRow}>
-                    <img src={trash} className={classes.trashImg} />
-                </ButtonBase>
-            </ThemeProvider>
-        </Header>
-    )
+                    <ButtonBase className={this.classes.trashBtn} onClick={this.deleteRow}>
+                        <img src={trash} className={this.classes.trashImg} />
+                    </ButtonBase>
+                </ThemeProvider>
+            </Header>
+        );
+    }
 }
+
+export default withStyles(styles)(CPUScheduling);

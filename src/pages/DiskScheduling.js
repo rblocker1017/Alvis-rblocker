@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import { grey, orange, green } from '@material-ui/core/colors';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -19,8 +19,9 @@ import { values, scan, set } from 'd3';
 import '../styles/DiskScheduling.css'
 import * as Algorithms from './Algorithms/DiskScheduling';
 import * as Functions from './Functionality/DiskSchedulingFunctions';
+import { Component } from 'react';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
     root: {
         flexGrow: 1,
     },
@@ -60,232 +61,230 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         height: "100%"
     },
-}));
+});
 
-export default function FCFSDisk() {
-    const classes = useStyles();
-    const [data, setdata] = useState([
-        ['x', 'Path'],
-        [200, 0],
-        [100, 2],
-        [300, 3],
-        [100, 4],
-        [49, 5],
-        [500, 6],
-        [350, 7],
-        [350, 8],
-        [100, 9],
-        [65, 10],
-        [340, 11],
-        [199, 12],
-    ])
-    const [starting, setstarting] = useState(0)
-    const [input, setinput] = useState([])
-    const [diskSize, setdiskSize] = useState(0)
-    const [displayBoolean, setdisplayBoolean] = useState(false)
-    const [type, settype] = useState("scan")
-    const [direction, setdirection] = useState("inward")
-    const [checked, setChecked] = useState(true);
-    const [seekTime, setseekTime] = useState(0)
-    let textInput1 = useRef(null);
-    let textInput2 = useRef(null);
-    let textInput3 = useRef(null);
-
-    function renderDiskGraph() {
-        switch (type) {
+class FCFSDisk extends Component{
+    constructor(props){
+        super(props);
+        this.classes = this.props.classes;
+        this.state = {
+            data: [        
+                ['x', 'Path'],
+                [200, 0],
+                [100, 2],
+                [300, 3],
+                [100, 4],
+                [49, 5],
+                [500, 6],
+                [350, 7],
+                [350, 8],
+                [100, 9],
+                [65, 10],
+                [340, 11],
+                [199, 12],],
+            starting: 0,
+            input: [],
+            diskSize: false,
+            displayBoolean: false,
+            type: "scan",
+            outward: true,
+            checked: true
+        }
+        this.theme = createMuiTheme({
+            palette: {
+                primary: {
+                    main: green[900],
+                },
+                secondary: {
+                    main: grey[700],
+                },
+            },
+        });
+        this.changeAlgo = this.changeAlgo.bind(this);
+        this.changeDirection = this.changeDirection.bind(this);
+        this.setDiskSize = this.setDiskSize.bind(this);
+        this.setStarting = this.setStarting.bind(this);
+        this.setInput = this.setInput.bind(this);
+        this.reset = this.reset.bind(this);
+        this.renderDiskGraph = this.renderDiskGraph.bind(this);
+    }
+    changeAlgo(e) {
+        this.setState({
+            type: e.target.textContent
+        });
+    }
+    changeDirection(e){
+        if(e.target.textContent === "Outwards"){
+            this.setState({
+                outward: true
+            });
+        }
+        else{
+            this.setState({
+                outward: false
+            });
+        }
+    }
+    setDiskSize(e){
+        this.setState({
+            diskSize: e.target.value
+        });
+    }
+    setStarting(e){
+        this.setState({
+            starting: e.target.value
+        });
+    }
+    setInput(e){
+        this.setState({
+            input: e.target.value.split(',').map(Number)
+        });
+    }
+    reset(){
+        this.renderDiskGraph();
+        this.setState({
+            diskSize: 0,
+            starting: 0,
+            input: []
+        });
+    }
+    renderDiskGraph() {
+        let data;
+        switch (this.state.type) {
             case "fcfs":
-                fcfsFunction();
+                data = Algorithms.fcfsFunction(this.state.starting, this.state.input);
                 break;
             case "scan":
-                if (direction === 'outward') {
-                    scanOutwardsFunction();
+                if (this.state.outward) {
+                    data = Algorithms.scanOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
-                    scanFunction();
+                    data = Algorithms.scanFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "look":
-                if (direction === 'outward') {
-                    lookOutwardsFunction();
+                if (this.state.outward) {
+                    data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
-                    lookFunction();
+                    data = Algorithms.lookFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "cscan":
-                if (direction === 'outward') {
-                    cscanOutwardsFunction();
+                if (this.state.outward) {
+                    data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
-                    cscanFunction();
+                    data = Algorithms.cscanFunction(this.state.starting, this.state.input, this.state.diskSize);
                 }
                 break;
             case "clook":
-                if (direction === 'outward') {
-                    clookOutwardsFunction();
+                if (this.state.outward) {
+                    data = Algorithms.clookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
-                    clookFunction();
+                    data = Algorithms.clookFunction(this.state.starting, this.state.input, this.state.diskSize)
                 }
                 break;
 
             default:
                 break;
         }
+        this.setState({
+            data: data,
+            displayBoolean: false
+        });
     }
-    // all the functions
-    function resetDiskGraph() {
-        let answer = [[0, 0], [0, 1]];
-        setdata(answer);
-        setdisplayBoolean(true);
-    }
-
-    function fcfsFunction() {
-        setdata(Algorithms.fcfsFunction(starting, input));
-        setdisplayBoolean(true);
-    }
-
-    function scanFunction() {
-        setdata(Algorithms.scanFunction(starting, input));
-        setdisplayBoolean(true);
-    }
-    function scanOutwardsFunction() {
-        setdata(Algorithms.scanOutwardsFunction(starting, input, diskSize));
-        setdisplayBoolean(true);
-    }
-    function lookFunction() {
-        setdata(Algorithms.lookFunction(starting, input));
-        setdisplayBoolean(true);
-    }
-    function lookOutwardsFunction() {
-        setdata(Algorithms.lookOutwardsFunction(starting, input));
-        setdisplayBoolean(true);
-    }
-    function cscanFunction() {
-        setdata(Algorithms.cscanFunction(starting, input, diskSize));
-        setdisplayBoolean(true);
-
-    }
-    function cscanOutwardsFunction() {
-        setdata(Algorithms.lookOutwardsFunction(starting, input, diskSize));
-        setdisplayBoolean(true);
-    }
-
-    function clookFunction() {
-        setdata(Algorithms.clookFunction(starting, input, diskSize));
-        setdisplayBoolean(true);
-    }
-    function clookOutwardsFunction() {
-        setdata(Algorithms.clookOutwardsFunction(starting, input));
-        setdisplayBoolean(true);
-    }
-
-    const handleChange = (event) => {
-        settype(event.target.value);
-    };
-    const handleChangeCheck = (event) => {
-        setChecked(!checked);
-    };
-    const handleChangeDirection = (event) => {
-        setdirection(event.target.value);
-    };
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                main: green[900],
-            },
-            secondary: {
-                main: grey[700],
-            },
-        },
-    });
-    return (
-        <Header>
-            <ThemeProvider theme={theme}>
-                <Grid container direction="column">
-                    <Grid item></Grid>
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={classes.buttons}>
-                                    <Grid container spacing={0}>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "scan" ? "secondary" : "primary"} value={'scan'} onClick={() => { settype("scan"); console.log("Selected: SCAN"); }} >SCAN</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "cscan" ? "secondary" : "primary"} value={'cscan'} onClick={() => { settype("cscan"); console.log("Selected: cscan"); }} >C-SCAN</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "look" ? "secondary" : "primary"} value={'look'} onClick={() => { settype("look"); console.log("Selected: LOOK"); }} >LOOK</Button>
-                                        </Grid>
-                                        <Grid item xs={12}><h1></h1></Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "clook" ? "secondary" : "primary"} value={'clook'} onClick={() => { settype("clook"); console.log("Selected: cLOOK"); }} >C-LOOK</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "fcfs" ? "secondary" : "primary"} value={'fcfs'} onClick={() => { settype("fcfs"); console.log("Selected: FCFS"); }} >FCFS</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "sstf" ? "secondary" : "primary"} value={'sstf'} onClick={() => { settype("sstf"); console.log("Selected: SSTF"); }} >SSTF</Button>
-                                        </Grid>
-                                        <Grid item xs={12}><h1></h1></Grid>
-                                        <Grid item xs={6}>
-                                            <Button variant="contained" color={direction === "inward" ? "secondary" : "primary"} value={'outward'} onClick={() => { setdirection("inward"); console.log("Selected: outward"); }} >Inwards</Button>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Button variant="contained" color={direction === "outward" ? "secondary" : "primary"} value={'inward'} onClick={() => { setdirection("outward"); console.log("Selected: inward"); }} >Outwards</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <h2></h2>
-                            <Paper className={classes.code}>
-                                <h3>
-                                    CODE
-                                </h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Paper className={classes.graphingpaper}>
-                                <h1>
-                                    Disk Scheduling: {type} { type !== "fcfs" ? direction : "" }
-                                </h1>
-                                    <DiskGraph data={data} size={diskSize} > </DiskGraph>
-
-                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}></div>
-                            </Paper>
-                            <Grid item xs={12}>
-                                <form noValidate autoComplete="off">
-                                    <Paper className={classes.fields}>
-                                        <Grid container>
+    render(){
+        return (
+            <Header>
+                <ThemeProvider theme={this.theme}>
+                    <Grid container direction="column">
+                        <Grid item></Grid>
+                        <Grid item container spacing={1}>
+                            <Grid item xs={3}>
+                                <Grid container direction="column">
+                                    <Paper className={this.classes.buttons}>
+                                        <Grid container spacing={0}>
                                             <Grid item xs={4}>
-                                                <TextField id="outlined-size-normal" variant="filled" label="Disk Size" inputRef={textInput1} type="text" onChange={(e) => { setdiskSize(e.target.value); }} />
+                                                <Button variant="contained" color={this.state.type === "scan" ? "secondary" : "primary"} value={'scan'} onClick={this.changeAlgo} >scan</Button>
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" inputRef={textInput2} type="text" onChange={(e) => { setstarting(parseInt(e.target.value)) }} />
+                                                <Button variant="contained" color={this.state.type === "cscan" ? "secondary" : "primary"} value={'cscan'} onClick={this.changeAlgo} >c-scan</Button>
                                             </Grid>
                                             <Grid item xs={4}>
-                                                < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" inputRef={textInput3} type="text" onChange={(e) => { setinput(e.target.value.split(',').map(Number)); }} />
+                                                <Button variant="contained" color={this.state.type === "look" ? "secondary" : "primary"} value={'look'} onClick={this.changeAlgo} >look</Button>
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <h1></h1>
-                                                <Button variant="contained" color="primary" onClick={renderDiskGraph}>Run Disk Scheduling</Button>
+                                            <Grid item xs={12}><h1></h1></Grid>
+                                            <Grid item xs={4}>
+                                                <Button variant="contained" color={this.state.type === "clook" ? "secondary" : "primary"} value={'clook'} onClick={this.changeAlgo} >c-look</Button>
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <h1></h1>
-                                                <Button variant="contained" color="primary" onClick={() => { renderDiskGraph(); setdiskSize(0); setstarting(0); setinput([]); { textInput1.current.value = ""; textInput2.current.value = ""; textInput3.current.value = ""; } }}>Reset</Button>
+                                            <Grid item xs={4}>
+                                                <Button variant="contained" color={this.state.type === "fcfs" ? "secondary" : "primary"} value={'fcfs'} onClick={this.changeAlgo} >fcfs</Button>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Button variant="contained" color={this.state.type === "sstf" ? "secondary" : "primary"} value={'sstf'} onClick={this.changeAlgo} >sstf</Button>
+                                            </Grid>
+                                            <Grid item xs={12}><h1></h1></Grid>
+                                            <Grid item xs={6}>
+                                                <Button variant="contained" color={this.state.outward === "inward" ? "secondary" : "primary"} value={'outward'} onClick={this.changeDirection} >Inwards</Button>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Button variant="contained" color={this.state.outward === "outward" ? "secondary" : "primary"} value={'inward'} onClick={this.changeDirection} >Outwards</Button>
                                             </Grid>
                                         </Grid>
                                     </Paper>
-                                </form>
+                                </Grid>
+                                <h2></h2>
+                                <Paper className={this.classes.code}>
+                                    <h3>
+                                        CODE
+                                    </h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    </p>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={9}>
+                                <Paper className={this.classes.graphingpaper}>
+                                    <h1>
+                                        Disk Scheduling: {this.state.type} { this.state.type !== "fcfs" ? this.state.direction : "" }
+                                    </h1>
+                                        <DiskGraph data={this.state.data} size={this.state.diskSize} > </DiskGraph>
+    
+                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}></div>
+                                </Paper>
+                                <Grid item xs={12}>
+                                    <form noValidate autoComplete="off">
+                                        <Paper className={this.classes.fields}>
+                                            <Grid container>
+                                                <Grid item xs={4}>
+                                                    <TextField id="outlined-size-normal" variant="filled" label="Disk Size" type="text" onChange={this.setDiskSize} />
+                                                </Grid>
+                                                <Grid item xs={4}>
+                                                    < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" type="text" onChange={this.setStarting} />
+                                                </Grid>
+                                                <Grid item xs={4}>
+                                                    < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" type="text" onChange={this.setInput} />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <h1></h1>
+                                                    <Button variant="contained" color="primary" onClick={this.renderDiskGraph}>Run Disk Scheduling</Button>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <h1></h1>
+                                                    <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                    </form>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-            </ThemeProvider>
-        </Header>
-    );
+                </ThemeProvider>
+            </Header>
+        );
+    }
 }
+export default withStyles(styles)(FCFSDisk);

@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { withStyles, makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -16,8 +16,9 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { grey, green } from '@material-ui/core/colors';
 import * as Algorithms from './Algorithms/PageReplacement';
+import { Component } from 'react';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
     root: {
         flexGrow: 1,
     },
@@ -61,95 +62,114 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
         minWidth: 120
     },
-}));
+});
 
-export default function PageReplacement() {
-    const classes = useStyles();
-    const [displayBoolean, setDisplayBoolean] = useState(false);
-    const [answer, setAnswer] = useState([]);
-    const [type, settype] = useState("FIFO")
-    const [frames, setframes] = useState([]);
-    const [input, setinput] = useState([]);
-    const [value, setValue] = useState("");
-    const [faultCount, setFaultcount] = useState(0);
-
-    function runAlgorithm(e){
-        settype(e.target.textContent);
-        renderPageReplacement(e.target.textContent);
+class PageReplacement extends Component{
+    constructor(props){
+        super(props);
+        this.classes = this.props.classes;
+        this.state = {
+            answer: [],
+            type: "FIFO",
+            frames: [],
+            input: [],
+            value: "",
+            faultCount: 0
+        }
+        this.setInput = this.setInput.bind(this);
+        this.setFrames = this.setFrames.bind(this);
+        this.runAlgorithm = this.runAlgorithm.bind(this);
+        this.renderPageReplacement = this.renderPageReplacement.bind(this);
+        this.reset = this.reset.bind(this);
     }
-
-    function renderPageReplacement(newType) {
+    setInput(e){
+        this.setState({
+            input: e.target.value.split(',').map(Number)
+        });
+    }
+    setFrames(e){
+        this.setState({
+            frames: e.target.value
+        });
+    }
+    runAlgorithm(e){
+        this.setState({
+            type: e.target.textContent
+        });
+        this.renderPageReplacement(e.target.textContent);
+    }
+    renderPageReplacement(newType) {
         let bundle;
         switch (newType) {
             case "FIFO":
-                bundle = Algorithms.fcfsPageReplacementFunc(input, frames);
+                bundle = Algorithms.fcfsPageReplacementFunc(this.state.input, this.state.frames);
                 break;
             case "LRU":
-                bundle = Algorithms.lruPageReplacementFunc(input, frames);
+                bundle = Algorithms.lruPageReplacementFunc(this.state.input, this.state.frames);
                 break;
             case "OPT":
-                bundle = Algorithms.optPageReplacementFunc(input, frames);
+                bundle = Algorithms.optPageReplacementFunc(this.state.input, this.state.frames);
                 break;
             default:
                 break;
         }
-        setAnswer(bundle.answer);
-        setFaultcount(bundle.faults);
-        setDisplayBoolean(true);
+        this.setState({
+            answer: bundle.answer,
+            faultCount: bundle.faults,
+        });
     }
-    function reset() {
-        setValue("");
-        setinput(value.split(',').map(Number))
-        setAnswer(Algorithms.fcfsPageReplacementFunc(0, 0).answer);
-        setDisplayBoolean(false);
+    reset() {
+        this.setState({
+            value: "",
+            input: this.state.value.split(',').map(Number),
+            answer: Algorithms.fcfsPageReplacementFunc(0, 0).answer,
+        });
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
         );
     }
-
-    const tableHeader = input.map((page) => {
-        return (
-            <th style={{ border: "1px solid black", width: "45px", color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
-        );
-
-    })
-
-    const displayTable = answer.map((ans) => {
-        console.log(ans)
-        return (
-            <td>
-                {ans.column.map((page) => {
-                    if (JSON.stringify(page) !== '""') {
-                        return (
-                        <tr>
-                            <td style={{ border: "1px solid black", width: "50px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
-                        </tr>
-                        )
-                    }
-                    {
-                        return (
+    render(){
+        const tableHeader = this.state.input.map((page) => {
+            return (
+                <th style={{ border: "1px solid black", width: "45px", color: 'Black', fontSize: "40px", align: 'center' }} >{page}</th>
+            );
+        })
+    
+        const displayTable = this.state.answer.map((ans) => {
+            console.log(ans)
+            return (
+                <td>
+                    {ans.column.map((page) => {
+                        if (JSON.stringify(page) !== '""') {
+                            return (
                             <tr>
-                                <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
+                                <td style={{ border: "1px solid black", width: "50px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
                             </tr>
-                        )
-                    }
-                })}
-                <p>{ans.fault}</p>
-            </td>
-        );
-    })
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                main: green[900],
+                            )
+                        }
+                        {
+                            return (
+                                <tr>
+                                    <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
+                                </tr>
+                            )
+                        }
+                    })}
+                    <p>{ans.fault}</p>
+                </td>
+            );
+        })
+        const theme = createMuiTheme({
+            palette: {
+                primary: {
+                    main: green[900],
+                },
+                secondary: {
+                    main: grey[700],
+                },
             },
-            secondary: {
-                main: grey[700],
-            },
-        },
-    });
-
-    return (
+        });
+        return(
         <Header>
             <ThemeProvider theme={theme}>
                 <Grid container direction="column">
@@ -157,33 +177,33 @@ export default function PageReplacement() {
                     <Grid item container spacing={1}>
                         <Grid item xs={3}>
                             <Grid container direction="column">
-                                <Paper className={classes.buttons}>
+                                <Paper className={this.classes.buttons}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "FIFO" ? "secondary" : "primary"} onClick={runAlgorithm}>FIFO</Button>
+                                            <Button variant="contained" color={this.state.type === "FIFO" ? "secondary" : "primary"} onClick={this.runAlgorithm}>FIFO</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "OPT" ? "secondary" : "primary"} onClick={runAlgorithm}>OPT</Button>
+                                            <Button variant="contained" color={this.state.type === "OPT" ? "secondary" : "primary"} onClick={this.runAlgorithm}>OPT</Button>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Button variant="contained" color={type === "LRU" ? "secondary" : "primary"} onClick={runAlgorithm}>LRU</Button>
+                                            <Button variant="contained" color={this.state.type === "LRU" ? "secondary" : "primary"} onClick={this.runAlgorithm}>LRU</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <h1>
                                             </h1>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Button variant="contained" color="primary" onClick={() => console.log(answer)}>Insert</Button>
+                                            <Button variant="contained" color="primary">Insert</Button>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={() => reset()}>Reset</Button>
+                                            <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
                                         </Grid>
                                     </Grid>
                                 </Paper>
                             </Grid>
                             <h2>
                             </h2>
-                            <Paper className={classes.code}>
+                            <Paper className={this.classes.code}>
                                 <h3>
                                     CODE
               </h3>
@@ -197,14 +217,13 @@ export default function PageReplacement() {
                             </Paper>
                         </Grid>
                         <Grid item xs={9}>
-                            <Paper className={classes.paper}>
+                            <Paper className={this.classes.paper}>
                                 <h1>
-                                    Page Replacement: {type}
+                                    Page Replacement: {this.state.type}
                                 </h1>
                                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <table>
-                                        <tr>{
-                                            tableHeader}</tr>
+                                        <tr>{tableHeader}</tr>
                                         {displayTable}
                                     </table>
                                 </div>
@@ -212,10 +231,9 @@ export default function PageReplacement() {
                                 <Grid item container>
                                     <Grid item xs={5}></Grid>
                                     <Grid item xs={2}>
-                                        <Typography className={classes.table} variant="h5" gutterBottom>
-                                            Page Faults = {faultCount}
+                                        <Typography className={this.classes.table} variant="h5" gutterBottom>
+                                            Page Faults = {this.state.faultCount}
                                         </Typography>
-
                                     </Grid>
                                 </Grid>
                             </Paper>
@@ -223,22 +241,22 @@ export default function PageReplacement() {
                             </h1>
                             <Grid item xs={12}>
                                 <form noValidate autoComplete="off">
-                                    <Paper className={classes.fields}>
+                                    <Paper className={this.classes.fields}>
                                         <Grid container>
                                             <Grid item xs={1}>
                                             </Grid>
                                             <Grid item xs={5}>
                                                 <TextField id="outlined-size-normal" variant="filled" label="Reference String"
-                                                    onChange={(e) => { setinput(e.target.value.split(',').map(Number)) }}
+                                                    onChange={this.setInput}
                                                 />
                                             </Grid>
                                             <Grid item xs={5}>
-                                                <FormControl variant="filled" className={classes.formControl}>
+                                                <FormControl variant="filled" className={this.classes.formControl}>
                                                     <InputLabel id="demo-simple-select-label">Frames</InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-label"
                                                         id="demo-simple-select"
-                                                        onChange={(e) => { setframes(e.target.value) }}
+                                                        onChange={this.setFrames}
                                                     >
                                                         <MenuItem value={1}>1</MenuItem>
                                                         <MenuItem value={2}>2</MenuItem>
@@ -261,5 +279,8 @@ export default function PageReplacement() {
                 </Grid>
             </ThemeProvider>
         </Header>
-    );
+        );
+    }
 }
+
+export default withStyles(styles)(PageReplacement)
