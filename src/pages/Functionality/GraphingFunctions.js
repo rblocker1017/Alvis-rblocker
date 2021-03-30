@@ -99,6 +99,7 @@ export function selectNodeFunc(tempNodes, id){
     let tempNode = tempNodes.get(id);
     tempNode.connected = true;
     tempNodes.set(id, tempNode);
+    console.log(tempNodes);
     return tempNodes;
 }
 
