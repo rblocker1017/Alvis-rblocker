@@ -1,25 +1,14 @@
-import React, { useState, useRef } from 'react'
-import Button from "@material-ui/core/Button"
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from "@material-ui/core/Grid"
+import Button from "@material-ui/core/Button";
+import { green, grey } from '@material-ui/core/colors';
+import Grid from "@material-ui/core/Grid";
 import Paper from '@material-ui/core/Paper';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import { makeStyles, ThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
-import { grey, orange, green } from '@material-ui/core/colors';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
+import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import React, { Component } from 'react';
 import Header from '../componenets/layout/header';
-import DiskGraph from "./DiskGraph";
-import { values, scan, set } from 'd3';
-import '../styles/DiskScheduling.css'
+import '../styles/DiskScheduling.css';
 import * as Algorithms from './Algorithms/DiskScheduling';
-import * as Functions from './Functionality/DiskSchedulingFunctions';
-import { Component } from 'react';
+import DiskGraph from "./DiskGraph";
 
 const styles = (theme) => ({
     root: {

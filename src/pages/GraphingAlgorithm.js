@@ -1,17 +1,16 @@
-﻿import React, { useState, useEffect, Component } from 'react';
+﻿import { Backdrop, Button, ButtonBase, Fade, Grid, Modal, Paper, TextField, withStyles } from "@material-ui/core";
+import { green, grey } from '@material-ui/core/colors';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { Circle, Label, Layer, Line, Stage, Tag, Text } from 'react-konva';
 import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel, Modal, Fade, Backdrop, TextField, withStyles } from "@material-ui/core";
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, green } from '@material-ui/core/colors';
-import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
-import Konva from "konva";
-import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
-import { select } from 'd3';
-import { kruskalAlgorithm, primAlgorithm, dijkstrasAlgorithm } from "./Algorithms/Graphing";
+import PathNotFound from '../componenets/Messages/PathNotFound';
 import trash from '../trash.png';
-import PathNotFound from '../componenets/Messages/PathNotFound'
+import { dijkstrasAlgorithm, kruskalAlgorithm, primAlgorithm } from "./Algorithms/Graphing";
 import * as Functions from './Functionality/GraphingFunctions';
-
+import { connectNode, generateCirclesGraphing, generateConnectors } from "./Shapes/NodeGenerator";
+import MainPage from '../componenets/layout/Page/MainPage';
+import GraphingDisplay from '../componenets/layout/AlgorithmDisplay/Graphing/GraphingDisplay';
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
 const HEIGHT = 450;
@@ -433,6 +432,69 @@ class GraphingAlgorithm extends Component{
             },
         });
         return(
+            <React.Fragment>
+            <Modal
+                className={this.classes.modal}
+                open={this.state.open}
+                onClose={this.handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={this.state.open}>
+                    <div className={this.classes.insertPaper}>
+                        <form>
+                            <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                <Grid item>
+                                    <h2 >Insert a value between 1 and 100</h2>
+                                </Grid>
+                                <Grid item>
+                                    <TextField error={this.state.inputError} label="value" helperText={this.state.inputError ? "Invalid value" : ""} onChange={this.handleChange} />
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={this.insertValue}>Insert</Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </div>
+                </Fade>
+            </Modal>
+            <MainPage 
+                algorithms = {[
+                    {name: "Prim", func: this.changeAlgo},
+                    {name: "Dijkstras", func: this.changeAlgo},
+                    {name: "Kruskal", func: this.changeAlgo}
+                ]}
+                display = {{
+                    name: "Graphing Algorithms",
+                    type: this.state.type,
+                    step: this.state.step + 1,
+                    display: <GraphingDisplay 
+                                circles={this.state.circles} 
+                                lines={this.state.lines} 
+                                type={this.state.type}
+                                connecting={this.state.connecting}
+                                selectNode={this.selectNode}
+                                finalConnect={this.finalConnect}
+                                handleDragStart={this.handleDragStart}
+                                handleDragEnd={this.handleDragEnd}
+                                handleMove={this.handleMove}
+                                clearSelected={this.clearSelected}
+                            />,
+                    delete: this.deleteNode,
+                    insert: this.addCircle,
+                    reset: this.reset,
+                    extra: null
+                }}
+                barFunctions = {{
+                    forward: this.stepForward,
+                    back: this.stepBack,
+                    start: this.setStart,
+                    end: this.setEnd,
+                }}
+            />
+        </React.Fragment>
+
+            /*
             <Header>
             <ThemeProvider theme={theme}>
                 <Modal
@@ -631,7 +693,7 @@ class GraphingAlgorithm extends Component{
                     <img src={trash} className={this.classes.trashImg} />
                 </ButtonBase>
             </ThemeProvider>
-        </Header>
+        </Header>*/
         );
     }
 }
