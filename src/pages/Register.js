@@ -5,6 +5,7 @@ import LinkRoute from 'react-router-dom/Link';
 import Axios from 'axios'
 import { green } from "@material-ui/core/colors";
 
+
 const useStyles = makeStyles((theme) => ({
     root:
     {
@@ -63,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+}
+
 export default function Register() {
     const classes = useStyles();
     const [registerEmail, setEmail] = useState([]);
@@ -85,32 +91,37 @@ export default function Register() {
     }
     
     const register = () => {
-        
-        Axios.post("http://localhost:3001/email", {
-            email: registerEmail
+        if(validateEmail(registerEmail) === false)
+        {
+            alert("Please enter a valid email address.")
+        }
+        else
+        {
+            Axios.post("http://localhost:3001/email", {
+                email: registerEmail
 
-        }).then((response) => {
-            console.log(String(response.data))
-            if (String(response.data) == "false") {
-                Axios.post("http://localhost:3001/register",{
-                    email: registerEmail,
-                    password: registerPassword,
-                    username: registerName,
-        
-                }).then((response) =>{
-                    console.log(response);
-                })
-        
-                window.location.assign("/Login");
-
-            } else {
-                // Unvalidated
+            }).then((response) => {
                 console.log(String(response.data))
-                alert("This email is already in use.")
-            }
-        })
+                if (String(response.data) == "false") {
+                    Axios.post("http://localhost:3001/register",{
+                        email: registerEmail,
+                        password: registerPassword,
+                        username: registerName,
+            
+                    }).then((response) =>{
+                        console.log(response);
+                    })
+            
+                    window.location.assign("/Login");
 
+                } else {
+                    // Unvalidated
+                    console.log(String(response.data))
+                    alert("This email is already in use.")
+                }
+            })
 
+        }
     }
     return (
         <ThemeProvider theme={theme}>
