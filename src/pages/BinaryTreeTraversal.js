@@ -58,7 +58,15 @@ class BinaryTreeTraversal extends Component{
             this.state.visualArray[this.state.num].value = this.state.algorithmArray[this.state.num].value;
             this.setState({
                 num: this.state.num + 1,
-                circles: this.state.circles,
+                circles: this.state.circles.map(circle => {
+                    if(this.state.algorithmArray[this.state.num].id === circle.id){
+                        return {
+                            ...circle,
+                            stroke: "red"
+                        };
+                    }
+                    return circle;
+                }),
                 visualArray: this.state.visualArray
             });
         }
@@ -66,10 +74,18 @@ class BinaryTreeTraversal extends Component{
     stepBackward(){
         if (this.state.num - 1 < 0) return;
         else {
-            this.state.algorithmArray[this.state.num - 1].stroke = "black";
+            //this.state.algorithmArray[this.state.num - 1].stroke = "black";
             this.state.visualArray[this.state.num - 1].value = null;
             this.setState({
-                circles: this.state.circles,
+                circles: this.state.circles.map(circle => {
+                    if(this.state.algorithmArray[this.state.num - 1].id === circle.id){
+                        return {
+                            ...circle,
+                            stroke: "black"
+                        };
+                    }
+                    return circle;
+                }),
                 visualArray: this.state.visualArray,
                 num: this.state.num - 1
             });
@@ -188,8 +204,18 @@ class BinaryTreeTraversal extends Component{
     }
     resetTree(){
         this.setState({
-            circles: this.state.circles.map((circle) => (circle.stroke = "black")).concat(),
-            visualArray: this.state.visualArray.map((rect) => (rect.value = null)),
+            circles: this.state.circles.map((circle) => {
+                return{
+                    ...circle,
+                    stroke: "black"
+                };
+            }),
+            visualArray: this.state.visualArray.map((rect) => {
+                return{
+                    ...rect,
+                    value: null
+                }
+            }),
             num: 0
         });
     }
@@ -289,17 +315,22 @@ class BinaryTreeTraversal extends Component{
                     circles={this.state.circles} 
                     lines={this.state.lines} 
                     type={this.state.type}
+                    visualArray = {this.state.visualArray}
+                    insertRight = {this.insertRight}
+                    insertLeft = {this.insertLeft}
+                    selectedRight = {this.state.selectedRight}
+                    selectedLeft = {this.state.selectedLeft}
                     connecting={null}
-                    selectNode={null}
+                    selectNode={this.selectCircle}
                     finalConnect={null}
                     handleDragStart={null}
                     handleDragEnd={null}
                     handleMove={null}
                     clearSelected={null}
                 />,
-                delete: this.deleteNode,
+                delete: this.deleteBranch,
                 insert: this.insertNode,
-                reset: this.reset,
+                reset: this.resetTree,
                 extra: null
             }}
             barFunctions = {{
@@ -307,7 +338,6 @@ class BinaryTreeTraversal extends Component{
                 back: this.stepBackward
             }}
         />
-
         );
     }
 }

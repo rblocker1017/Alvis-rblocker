@@ -15,17 +15,17 @@ class CirclesDisplay extends Component{
                             height={circle.height}
                             fill={'green'}
                             opacity={0.8}
-                            stroke={circle.connected ? 'red' : 'black'}
+                            stroke={circle.connected ? 'blue' : circle.stroke}
                             shadowColor="black"
                             shadowBlur={10}
                             shadowOpacity={0.6}
-                            onClick={this.props.connecting ? this.props.finalConnect : this.props.selectNode}
+                            onClick={this.props.selectNode}
                             onDragMove={this.props.handleMove}
                             draggable
                         />
                         <Text
                             fontSize={20}
-                            text={circle.id}
+                            text={circle.value}
                             x={circle.x - 5}
                             y={circle.y - 7}
                             fill="white"

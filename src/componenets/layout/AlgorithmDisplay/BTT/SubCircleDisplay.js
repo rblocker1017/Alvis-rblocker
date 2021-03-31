@@ -3,7 +3,7 @@ import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva'
 
 class SubCircleDisplay extends Component{
     render(){
-        console.log(this.props.circles);
+        console.log(this.props);
         return(
             Array.from(this.props.circles.values()).map((circle) => (
                 <React.Fragment>
@@ -11,17 +11,19 @@ class SubCircleDisplay extends Component{
                         x={circle.x + 40}
                         y={circle.y + 40}
                         id={circle.id}
-                        stroke={"black"}
+                        stroke={this.props.selectedRight.id === circle.id ? "red" : "black"}
                         width={circle.width / 10}
                         height={circle.height / 10}
+                        onClick={this.props.insertRight}
                     />
                     <Circle
                         x={circle.x - 40}
                         y={circle.y + 40}
                         id={circle.id}
-                        stroke={"black"}
+                        stroke={this.props.selectedLeft.id === circle.id ? "red" : "black"}
                         width={circle.width / 10}
                         height={circle.height / 10}
+                        onClick={this.props.insertLeft}
                     />
                 </React.Fragment>
             ))
