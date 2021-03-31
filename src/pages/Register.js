@@ -64,15 +64,32 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+var check = false;
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+$/;
     return re.test(String(email).toLowerCase());
 }
 
+function validatePassword(password){
+    const re = /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/;
+    return re.test(String(password));
+}
+function setCheckBox()
+{
+    if(check === false)
+    {
+        check = true;
+    }
+    else 
+    {
+        check = false;
+    }
+}
 export default function Register() {
     const classes = useStyles();
     const [registerEmail, setEmail] = useState([]);
     const [registerPassword, setPassword] = useState([]);
+    const [repeatPassword, setRepeatPassword] = useState([]);
     const [registerName, setName] = useState([]);
     const theme = createMuiTheme({
         typography:
@@ -94,6 +111,18 @@ export default function Register() {
         if(validateEmail(registerEmail) === false)
         {
             alert("Please enter a valid email address.")
+        }
+        else if(validatePassword(registerPassword) === false)
+        {
+            alert("Passwords must contain at least one uppercase letter, one lowercase letter, and need to be at least 8 characters long.")
+        }
+        else if(registerPassword.localeCompare(repeatPassword) !== 0)
+        {
+            alert("Passwords should match.")
+        }
+        else if(check === false)
+        {
+            alert("Please agree to the terms and conditions.")
         }
         else
         {
@@ -178,11 +207,11 @@ export default function Register() {
                                             <TextField label="Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}}/>
                                         </Box>
                                         <Box pt={2}>
-                                            <TextField label="Repeat your Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setPassword(e.target.value)}} />
+                                            <TextField label="Repeat your Password" variant="outlined" type="password" className={classes.input} onChange={(e) => { setRepeatPassword(e.target.value)}} />
                                         </Box>
                                     </Grid>
                                     <Grid item>
-                                        <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>} labelPlacement={"end"} />
+                                        <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>}  labelPlacement={"end"}  onClick={() => setCheckBox()}/>
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
