@@ -8,7 +8,9 @@ import React, { Component } from 'react';
 import Header from '../componenets/layout/header';
 import '../styles/DiskScheduling.css';
 import * as Algorithms from './Algorithms/DiskScheduling';
-import DiskGraph from "./DiskGraph";
+import DiskGraph from "../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskGraph";
+import DiskSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskSchedulingDisplay';
+import MainPage from "../componenets/layout/Page/MainPage";
 
 const styles = (theme) => ({
     root: {
@@ -76,7 +78,7 @@ class FCFSDisk extends Component{
             diskSize: false,
             displayBoolean: false,
             type: "scan",
-            outward: true,
+            direction: "Outwards",
             checked: true
         }
         this.theme = createMuiTheme({
@@ -98,21 +100,16 @@ class FCFSDisk extends Component{
         this.renderDiskGraph = this.renderDiskGraph.bind(this);
     }
     changeAlgo(e) {
+        console.log(this.state.type);
         this.setState({
             type: e.target.textContent
         });
     }
     changeDirection(e){
-        if(e.target.textContent === "Outwards"){
-            this.setState({
-                outward: true
-            });
-        }
-        else{
-            this.setState({
-                outward: false
-            });
-        }
+        console.log("direction");
+        this.setState({
+            direction: e.target.textContent
+        });
     }
     setDiskSize(e){
         this.setState({
@@ -144,28 +141,28 @@ class FCFSDisk extends Component{
                 data = Algorithms.fcfsFunction(this.state.starting, this.state.input);
                 break;
             case "scan":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.scanOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
                     data = Algorithms.scanFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "look":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
                     data = Algorithms.lookFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "cscan":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
                     data = Algorithms.cscanFunction(this.state.starting, this.state.input, this.state.diskSize);
                 }
                 break;
             case "clook":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.clookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
                     data = Algorithms.clookFunction(this.state.starting, this.state.input, this.state.diskSize)
@@ -182,6 +179,48 @@ class FCFSDisk extends Component{
     }
     render(){
         return (
+            <MainPage
+                algorithms={[
+                    {name: "scan",func: this.changeAlgo},
+                    {name: "c-scan", func: this.changeAlgo},
+                    {name: "look", func: this.changeAlgo},
+                    {name: "c-look",func: this.changeAlgo},
+                    {name: "fcfs", func: this.changeAlgo},
+                    {name: "sstf", func: this.changeAlgo}
+                ]}
+                selectedAlgo={this.state.type}
+                extraOption = {{
+                    type: "buttons",
+                    functions: [
+                        {name: "Inwards", func: this.changeDirection},
+                        {name: "Outwards", func: this.changeDirection}
+                    ],
+                    selected: this.state.direction
+                }}
+                display = {{
+                    name: "Disk Scheduling",
+                    type: this.state.type,
+                    step: null,
+                    display: <DiskSchedulingDisplay 
+                        type= {this.state.type}
+                        data = {this.state.data}
+                        diskSize = {this.state.diskSize}
+                    />,
+                    insert: null,
+                    delete: null,
+                    reset: this.resetDiskGraph,
+                    extra: null
+                }}
+                barFunctions = {{
+                    setDiskSize: this.setDiskSize,
+                    setStarting: this.setStarting,
+                    setInput: this.setInput,
+                    renderDiskGraph: this.renderDiskGraph,
+                    reset: this.reset
+                }}
+            />
+
+            /*
             <Header>
                 <ThemeProvider theme={this.theme}>
                     <Grid container direction="column">
@@ -245,7 +284,9 @@ class FCFSDisk extends Component{
                                 </Paper>
                                 <Grid item xs={12}>
                                     <form noValidate autoComplete="off">
+                                    
                                         <Paper className={this.classes.fields}>
+                                        <form noValidate autoComplete="off">
                                             <Grid container>
                                                 <Grid item xs={4}>
                                                     <TextField id="outlined-size-normal" variant="filled" label="Disk Size" type="text" onChange={this.setDiskSize} />
@@ -265,6 +306,7 @@ class FCFSDisk extends Component{
                                                     <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
                                                 </Grid>
                                             </Grid>
+                                        </form>
                                         </Paper>
                                     </form>
                                 </Grid>
@@ -272,7 +314,7 @@ class FCFSDisk extends Component{
                         </Grid>
                     </Grid>
                 </ThemeProvider>
-            </Header>
+            </Header>*/
         );
     }
 }

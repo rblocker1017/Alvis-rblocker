@@ -22,11 +22,13 @@ class ControlBarStartEnd extends Component{
             <Grid container item spacing={10} justify="center">
                 <Grid item>
                     <Button
+                        color={"primary"}
                         text="Set Start"
                     />
                 </Grid>
                 <Grid item>
                     <Button
+                        color={"primary"}
                         text="Set End"
                     />
                 </Grid>

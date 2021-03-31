@@ -27,6 +27,9 @@ import { grey, green } from '@material-ui/core/colors';
 import trash from '../trash.png';
 import * as Algorithms from './Algorithms/CPUScheduling';
 import { ThreeSixty } from '@material-ui/icons';
+import CPUSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/CPUScheduling/CPUSchedulingDisplay';
+import MainPage from "../componenets/layout/Page/MainPage";
+
 
 
 const styles = (theme) => ({
@@ -172,6 +175,7 @@ class CPUScheduling extends Component{
             waitingTime: null,
             priority: 0,
             selected: {},
+            displayBoolean: false,
             data: [
                 [
                     { type: 'string', label: 'Task ID' },
@@ -422,6 +426,30 @@ class CPUScheduling extends Component{
             }
         })
         return (
+            <MainPage
+                algorithms={[
+                    {name: "FCFS",func: this.changeAlgo},
+                    {name: "SJF", func: this.changeAlgo},
+                    {name: "Priority", func: this.changeAlgo},
+                    {name: "RR",func: this.changeAlgo},
+                    {name: "SJF", func: this.changeAlgo}
+                ]}
+                display = {{
+                    name: "CPU Scheduling",
+                    type: this.state.type,
+                    step: null,
+                    display: <CPUSchedulingDisplay 
+                        data = {this.state.data}
+                        displayBoolean = {this.state.displayBoolean}
+                    />,
+                    insert: null,
+                    delete: null,
+                    reset: this.reset,
+                    extra: <h1>Testing</h1>
+                }}
+                barFunctions = {{}}
+            />
+            /*
             <Header>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column">
@@ -432,8 +460,8 @@ class CPUScheduling extends Component{
                                         <Grid container spacing={0}>
                                             <Grid item xs={4}>
                                                 <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>FCFS
-                                                   {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */}
-                                                </Button>
+                                                   {/* <input type="radio" name="fcfsRadio" id="fcfsRadio" value="option1"></input> */
+                                                /*</Button>
                                             </Grid>
                                             <Grid item className={this.classes.button} xs={4}>
                                                 <Button variant="contained" color={"primary"} className={this.classes.button} onClick={this.changeAlgo}>SJF
@@ -674,7 +702,7 @@ class CPUScheduling extends Component{
                         <img src={trash} className={this.classes.trashImg} />
                     </ButtonBase>
                 </ThemeProvider>
-            </Header>
+            </Header>*/
         );
     }
 }

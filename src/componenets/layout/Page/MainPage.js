@@ -43,7 +43,9 @@ class MainPage extends Component {
                         <Grid item container direction="column" spacing={5} xs={3}>
                             <Grid item>
                                 <AlgoSuite
+                                    type = {this.props.selectedAlgo}
                                     algorithms={this.algorithms} 
+                                    extra = {this.props.extraOption}
                                     insert={this.props.display.insert}
                                     reset={this.props.display.reset}
                                 />

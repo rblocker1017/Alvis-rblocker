@@ -29,21 +29,40 @@ class AlgoSuite extends Component {
                             return (
                                 <Grid item>
                                     <Button
+                                        color={this.props.type === currentAlgo.name ? "secondary" : "primary"}
                                         onClick={currentAlgo.func}
                                         text={currentAlgo.name}
                                     />
                                 </Grid>
                             );
                         })}
+                        {this.props.extra === undefined ? null : 
+                            this.props.extra.type === "buttons" ? 
+                            this.props.extra.functions.map(
+                                (currentAlgo) => {
+                                    return (
+                                        <Grid item>
+                                            <Button
+                                                color={this.props.extra.selected === currentAlgo.name ? "secondary" : "primary"}
+                                                onClick={currentAlgo.func}
+                                                text={currentAlgo.name}
+                                            />
+                                        </Grid>
+                                    );
+                                }
+                            ) : null
+                        }
                     </Grid>
                     <Grid item container spacing={1} justify={"center"}>
                         <Grid item onClick={this.props.insert}>
                             <Button
+                                color={"primary"}
                                 text={"Insert"}
                             />
                         </Grid>
                         <Grid item onClick={this.props.reset}>
                             <Button
+                                color={"primary"}
                                 text={"Reset"}
                             />
                         </Grid>

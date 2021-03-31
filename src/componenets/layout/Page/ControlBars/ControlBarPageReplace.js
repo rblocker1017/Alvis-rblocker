@@ -20,15 +20,32 @@ class ControlBarPageReplace extends Component{
     }
     render(){
         return(
-            <Grid container >
-                <Grid item xs={1}>
-                </Grid>
-                <Grid item xs={5}>
+            <Grid container spacing={10}>
+                <Grid item>
                     <TextField id="outlined-size-normal" variant="filled" label="Reference String"
                         onChange={this.props.input}
                     />
                 </Grid>
-
+                <Grid item>
+                    <FormControl variant="filled" className={this.classes.formControl}>
+                        <InputLabel id="demo-simple-select-label">Frames</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            onChange={this.props.frames}
+                        >
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                            <MenuItem value={8}>8</MenuItem>
+                            <MenuItem value={9}>9</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
             </Grid>
         );
     }

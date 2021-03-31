@@ -23,12 +23,14 @@ class ControlBar extends Component{
                 <Grid item>
                     <Button
                         onClick={this.props.back}
+                        color={"primary"}
                         text="Step Back"
                     />
                 </Grid>
                 <Grid item>
                     <Button
                         onClick={this.props.forward}
+                        color={"primary"}
                         text="Step Forward"
                     />
                 </Grid>

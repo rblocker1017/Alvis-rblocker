@@ -5,6 +5,7 @@ import ControlBarStep from "./ControlBarStep";
 import { grey} from "@material-ui/core/colors";
 import ControlBarStartEnd from './ControlBarStartEnd';
 import ControlBarPageReplace from './ControlBarPageReplace';
+import ControlBarDiskScheduling from './ControlBarDiskScheduling';
 
 const styles = (theme) => ({
     fields: {
@@ -25,6 +26,15 @@ class Mainbar extends Component{
                 this.bar.push(<ControlBarPageReplace 
                     frames={this.props.barFunctions.frames}
                     input={this.props.barFunctions.input}
+                />);
+                break;
+            case "Disk Scheduling":
+                this.bar.push(<ControlBarDiskScheduling 
+                    setDiskSize = {this.props.barFunctions.setDiskSize}
+                    setStarting = {this.props.barFunctions.setStarting}
+                    setInput = {this.props.barFunctions.setInput}
+                    renderDiskGraph = {this.props.barFunctions.renderDiskGraph}
+                    reset = {this.props.barFunctions.reset}
                 />);
                 break;
             case "Graphing Algorithms":

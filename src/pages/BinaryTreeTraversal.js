@@ -34,6 +34,8 @@ import {
 } from "./Shapes/NodeGenerator";
 import {inOrderTraversal, preOrderTraversal, postOrderTraversal} from './Algorithms/BinaryTreeTraversal';
 import trash from "../trash.png";
+import MainPage from "../componenets/layout/Page/MainPage";
+import BTTDisplay from '../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay';
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -355,218 +357,36 @@ class BinaryTreeTraversal extends Component{
             },
         });
         return (
-            <Header>
-                <ThemeProvider theme={theme}>
-                    <Grid container direction="column">
-                        <Grid item></Grid>
-                        <Grid item container spacing={1}>
-                            <Grid item xs={3}>
-                                <Grid container direction="column">
-                                    <Paper className={this.classes.buttons}>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={this.changeAlgo}
-                                                    color={this.state.type === "Preorder" ? "secondary" : "primary"}
-                                                    className={this.classes.button}
-                                                >
-                                                    Preorder
-                          </Button>
-                                            </Grid>
-                                            <Grid item className={this.classes.button} xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    //onClick={() => {console.log(CON_GEN) }}
-                                                    onClick={this.changeAlgo}
-                                                    color={this.state.type === "Inorder" ? "secondary" : "primary"}
-                                                    className={this.classes.button}
-                                                >
-                                                    Inorder
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={this.changeAlgo}
-                                                    color={this.state.type === "Postorder" ? "secondary" : "primary"}
-                                                    className={this.classes.button}
-                                                >
-                                                    Postorder
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <h1></h1>
-                                            </Grid>
-                                            <Grid item xs={7}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={this.insertNode}
-                                                >
-                                                    Insert
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={this.resetTree}
-                                                >
-                                                    Reset
-                          </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </Grid>
-                                <h2></h2>
-                                <Paper className={this.classes.code}>
-                                    <h3>CODE</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                        irure dolor in reprehenderit in voluptate velit esse cillum
-                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                        cupidatat non proident, sunt in culpa qui officia deserunt
-                                        mollit anim id est laborum.
-                    </p>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Paper className={this.classes.paper}>
-                                    <h1>Graphing Algorithm: {this.state.type}</h1>
-                                    <h1>Step: {this.state.num}</h1>
-                                    <Stage width={WIDTH} height={HEIGHT} draggable>
-                                        <Layer>
-    
-                                            {this.state.circles.map((circle) => (
-                                                <React.Fragment>
-                                                    <Circle
-                                                        key={circle.id}
-                                                        id={circle.id}
-                                                        x={circle.x}
-                                                        y={circle.y}
-                                                        width={circle.width}
-                                                        height={circle.height}
-                                                        fill={circle.fill}
-                                                        opacity={0.8}
-                                                        stroke={circle.stroke}
-                                                        shadowColor="black"
-                                                        shadowBlur={10}
-                                                        shadowOpacity={0.6}
-                                                        onClick={this.selectCircle}
-                                                    />
-                                                    <Text
-                                                        text={circle.value}
-                                                        x={circle.x}
-                                                        y={circle.y}
-                                                        fill="white"
-                                                    />
-                                                    <Circle
-                                                        x={circle.x + 40}
-                                                        y={circle.y + 40}
-                                                        id={circle.id}
-                                                        stroke={
-                                                            this.state.selectedRight.id === circle.id ? "red" : "black"
-                                                        }
-                                                        width={circle.width / 10}
-                                                        height={circle.height / 10}
-                                                        onClick={this.insertRight}
-                                                    />
-                                                    <Circle
-                                                        x={circle.x - 40}
-                                                        y={circle.y + 40}
-                                                        id={circle.id}
-                                                        stroke={
-                                                            this.state.selectedLeft.id === circle.id ? "red" : "black"
-                                                        }
-                                                        width={circle.width / 10}
-                                                        height={circle.height / 10}
-                                                        onClick={this.insertLeft}
-                                                    />
-                                                </React.Fragment>
-                                            ))}
-                                            {this.state.lines.map((line) => (
-                                                <React.Fragment>
-                                                    <Line
-                                                        id={line.id}
-                                                        points={line.points}
-                                                        stroke={line.stroke}
-                                                        fill={"black"}
-                                                        onClick={this.selectLine}
-                                                    />
-                                                </React.Fragment>
-                                            ))}
-                                            {this.state.visualArray.map((rect) => (
-                                                <React.Fragment>
-                                                    <Rect
-                                                        x={rect.x}
-                                                        y={rect.y}
-                                                        width={rect.width}
-                                                        height={rect.height}
-                                                        stroke={rect.stroke}
-                                                        strokeWidth={rect.strokeWidth}
-                                                        value={rect.value}
-                                                    />
-                                                    <Text
-                                                        text={rect.value}
-                                                        fontSize={20}
-                                                        x={rect.x + 40}
-                                                        y={rect.y + 40}
-                                                    />
-                                                </React.Fragment>
-                                            ))}
-                                        </Layer>
-                                        
-                                    </Stage>
-                                    
-                                </Paper>
-                                <h1></h1>
-                                <Grid item xs={12}>
-                                    <form noValidate autoComplete="off">
-                                        ``
-                      <Paper className={this.classes.fields}>
-                                            <Grid container spacing={1}>
-                                                <Grid item xs={2}></Grid>
-                                                <Grid item>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.stepBackward}
-                                                    >
-                                                        Step Back
-                            </Button>
-                                                </Grid>
-                                                <Grid item xs={2}></Grid>
-                                                <Grid item>
-                                                    <Button variant="contained" color="primary">
-                                                        Pause
-                            </Button>
-                                                </Grid>
-                                                <Grid item xs={2}></Grid>
-                                                <Grid item>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.stepForward}
-                                                    >
-                                                        Step Forward
-                            </Button>
-                                                </Grid>
-                                            </Grid>
-                                        </Paper>
-                                    </form>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <ButtonBase className={this.classes.trashBtn} onClick={this.deleteBranch}>
-                        <img src={trash} className={this.classes.trashImg} />
-                    </ButtonBase>
-                </ThemeProvider>
-            </Header>
+            <MainPage
+            algorithms={[
+                {name: "PreOrder",func: this.changeAlgo},
+                {name: "InOrder", func: this.changeAlgo},
+                {name: "PostOrder", func: this.changeAlgo}
+            ]}
+            display = {{
+                name: "Binary Tree Traversal",
+                type: this.state.type,
+                step: this.state.num,
+                display: <BTTDisplay 
+                    circles={this.state.circles} 
+                    lines={this.state.lines} 
+                    type={this.state.type}
+                    connecting={null}
+                    selectNode={null}
+                    finalConnect={null}
+                    handleDragStart={null}
+                    handleDragEnd={null}
+                    handleMove={null}
+                    clearSelected={null}
+                />,
+                delete: this.deleteNode,
+                insert: this.insertNode,
+                reset: this.reset,
+                extra: null
+            }}
+            barFunctions = {{}}
+        />
+
         );
     }
 }

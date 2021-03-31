@@ -17,6 +17,8 @@ import Container from '@material-ui/core/Container';
 import { grey, green } from '@material-ui/core/colors';
 import * as Algorithms from './Algorithms/PageReplacement';
 import { Component } from 'react';
+import MainPage from "../componenets/layout/Page/MainPage";
+import PageReplacementDisplay from "../componenets/layout/AlgorithmDisplay/PageReplacement/PageReplacementDisplay";
 
 const styles = (theme) => ({
     root: {
@@ -170,115 +172,32 @@ class PageReplacement extends Component{
             },
         });
         return(
-        <Header>
-            <ThemeProvider theme={theme}>
-                <Grid container direction="column">
-                    <Grid item></Grid>
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={this.classes.buttons}>
-                                    <Grid container spacing={0}>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={this.state.type === "FIFO" ? "secondary" : "primary"} onClick={this.runAlgorithm}>FIFO</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={this.state.type === "OPT" ? "secondary" : "primary"} onClick={this.runAlgorithm}>OPT</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={this.state.type === "LRU" ? "secondary" : "primary"} onClick={this.runAlgorithm}>LRU</Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <Button variant="contained" color="primary">Insert</Button>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <h2>
-                            </h2>
-                            <Paper className={this.classes.code}>
-                                <h3>
-                                    CODE
-              </h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Paper className={this.classes.paper}>
-                                <h1>
-                                    Page Replacement: {this.state.type}
-                                </h1>
-                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                    <table>
-                                        <tr>{tableHeader}</tr>
-                                        {displayTable}
-                                    </table>
-                                </div>
+            <MainPage
+                algorithms={[
+                    {name: "FIFO",func: this.runAlgorithm},
+                    {name: "OPT", func: this.runAlgorithm},
+                    {name: "LRU", func: this.runAlgorithm}
+                ]}
+                display = {{
+                    name: "Page Replacement",
+                    type: this.state.type,
+                    step: null,
+                    display: <PageReplacementDisplay 
+                        tableHeader = {tableHeader}
+                        answer = {this.state.answer}
+                        faultCount = {this.state.faultCount}
+                    />,
+                    insert: null,
+                    delete: null,
+                    reset: this.reset,
+                    extra: null
+                }}
+                barFunctions = {{
+                    frames: this.setFrames,
+                    input: this.setInput
+                }}
+            />
 
-                                <Grid item container>
-                                    <Grid item xs={5}></Grid>
-                                    <Grid item xs={2}>
-                                        <Typography className={this.classes.table} variant="h5" gutterBottom>
-                                            Page Faults = {this.state.faultCount}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Paper>
-                            <h1>
-                            </h1>
-                            <Grid item xs={12}>
-                                <form noValidate autoComplete="off">
-                                    <Paper className={this.classes.fields}>
-                                        <Grid container>
-                                            <Grid item xs={1}>
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <TextField id="outlined-size-normal" variant="filled" label="Reference String"
-                                                    onChange={this.setInput}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <FormControl variant="filled" className={this.classes.formControl}>
-                                                    <InputLabel id="demo-simple-select-label">Frames</InputLabel>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        onChange={this.setFrames}
-                                                    >
-                                                        <MenuItem value={1}>1</MenuItem>
-                                                        <MenuItem value={2}>2</MenuItem>
-                                                        <MenuItem value={3}>3</MenuItem>
-                                                        <MenuItem value={4}>4</MenuItem>
-                                                        <MenuItem value={5}>5</MenuItem>
-                                                        <MenuItem value={6}>6</MenuItem>
-                                                        <MenuItem value={7}>7</MenuItem>
-                                                        <MenuItem value={8}>8</MenuItem>
-                                                        <MenuItem value={9}>9</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </form>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </ThemeProvider>
-        </Header>
         );
     }
 }

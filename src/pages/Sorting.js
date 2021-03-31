@@ -1,4 +1,4 @@
-import React, { createRef, useRef, useState, useEffect, Component } from 'react';
+import React, { createRef, useRef, useState, useEffect, Component, Fragment } from 'react';
 import clsx from "clsx";
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, ButtonBase, Modal, Fade, Backdrop, TextField, withStyles } from "@material-ui/core";
@@ -11,6 +11,8 @@ import { generateINIT } from './Shapes/SortingGenerator';
 import { InsertModal } from "../componenets/Resources/InsertModal";
 import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "./Algorithms/Sorting";
 import Cookies from 'universal-cookie';
+import MainPage from "../componenets/layout/Page/MainPage";
+import SortingDisplay from '../componenets/layout/AlgorithmDisplay/Sorting/SortingDisplay';
 
 const SIZE = 15;
 const INIT_VALUES = generateINIT(SIZE);
@@ -142,7 +144,7 @@ class Sorting extends Component{
     insertValue(){
         const regex = /[^0-9]/g;
         if (!regex.test(this.state.input) && this.state.input !== "" && parseInt(this.state.input) > 1 && parseInt(this.state.input) < 100) {
-            let lastPart = this.state.transitionArray;
+            let lastPart = this.state.transitionArray.concat();
             let firstPart = lastPart.splice(0, this.state.selected + 1);
             this.setState({
                 transitionArray: firstPart.concat(parseInt(this.state.input)).concat(lastPart),
@@ -325,14 +327,14 @@ class Sorting extends Component{
             this.state.transitionArray !==  nextState.transitionArray || 
             this.state.selected !== nextState.selected || 
             this.state.open !== nextState.open ||
-            this.state.inputError !== nextState.inputError){
-                console.log(this.state.selected);
-                console.log(nextState.selected);
+            this.state.inputError !== nextState.inputError ||
+            this.state.transitionArray !== nextState.transitionArray){
                 return true;
         }
         return false;
     }
     componentDidUpdate(prevProps, prevState){
+        console.log("updated");
         if(prevState.type !== this.state.type || prevState.transitionArray !== this.state.transitionArray){
             let arrayBundle;
             switch (this.state.type) {
@@ -385,177 +387,59 @@ class Sorting extends Component{
             },
         });
         return (
-            <Header>
-                <ThemeProvider theme={theme}>
-                    <Modal
-                        className={this.classes.modal}
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                    >
-                        <Fade in={this.state.open}>
-                            <div className={this.classes.insertPaper}>
-                                <form>
-                                    <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
-                                        <Grid item>
-                                            <h2 >Insert a value between 1 and 100</h2>
-                                        </Grid>
-                                        <Grid item>
-                                            <TextField error={this.state.inputError} label="value" helperText={this.state.inputError ? "Invalid value" : ""} onChange={this.handleChange} />
-                                        </Grid>
-                                        <Grid item>
-                                            <Button variant="contained" color="primary" onClick={this.insertValue}>Insert</Button>
-                                        </Grid>
+            <Fragment>
+                <Modal
+                    className={this.classes.modal}
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                    <Fade in={this.state.open}>
+                        <div className={this.classes.insertPaper}>
+                            <form>
+                                <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                    <Grid item>
+                                        <h2 >Insert a value between 1 and 100</h2>
                                     </Grid>
-                                </form>
-                            </div>
-                        </Fade>
-                    </Modal>
-                    <Grid container direction="column">
-                        <Grid item></Grid>
-                        <Grid item container spacing={1}>
-                            <Grid item xs={3}>
-                                <Grid container direction="column">
-                                    <Paper className={this.classes.buttons}>
-                                        <Grid container spacing={0}>
-                                            <Grid item xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    className={this.classes.button}
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Insertion" ? "primary" : "secondary"}
-                                                >
-                                                    Insertion
-                          </Button>
-                                            </Grid>
-                                            <Grid item className={this.classes.button} xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Selection" ? "primary" : "secondary"}
-                                                    className={this.classes.button}
-                                                >
-                                                    Selection
-                          </Button>
-                                            </Grid>
-                                            <Grid item item xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    className={this.classes.button}
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Quick" ? "primary" : "secondary"}
-                                                >
-                                                    Quick
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <h1></h1>
-                                            </Grid>
-                                            <Grid item className={this.classes.button} xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    className={this.classes.button}
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Bubble" ? "primary" : "secondary"}
-                                                >
-                                                    Bubble
-                          </Button>
-                                            </Grid>
-                                            <Grid item item xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    className={this.classes.button}
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Heap" ? "primary" : "secondary"}
-                                                >
-                                                    Heap
-                          </Button>
-                                            </Grid>
-                                            <Grid item className={this.classes.button} xs={4}>
-                                                <Button
-                                                    variant="contained"
-                                                    className={this.classes.button}
-                                                    onClick={this.changeAlgorithm}
-                                                    color={this.state.type !== "Shell" ? "primary" : "secondary"}
-                                                >
-                                                    Shell
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <h1></h1>
-                                            </Grid>
-                                            <Grid item xs={7}>
-                                                <Button variant="contained" color="primary" onClick={this.handleOpen}>
-                                                    Insert
-                          </Button>
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Button variant="contained" color="primary" onClick={this.reset}>
-                                                    Reset
-                          </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
+                                    <Grid item>
+                                        <TextField error={this.state.inputError} label="value" helperText={this.state.inputError ? "Invalid value" : ""} onChange={this.handleChange} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant="contained" color="primary" onClick={this.insertValue}>Insert</Button>
+                                    </Grid>
                                 </Grid>
-                                <h2></h2>
-                                <Paper className={this.classes.code}>
-                                    <h3>CODE</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                        do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                        irure dolor in reprehenderit in voluptate velit esse cillum
-                                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                        cupidatat non proident, sunt in culpa qui officia deserunt
-                                        mollit anim id est laborum.
-                    </p>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Paper className={this.classes.paper}>
-                                    <h1>Sorting: {this.state.type}</h1>
-                                    <h1>Step: {this.state.stepCount}</h1>
-                                    <svg ref={this.svgRef} >
-                                        <g className="x-axis" />
-                                        <g className="y-axis" />
-                                    </svg>
-                                </Paper>
-                                <h1></h1>
-                                <Grid item xs={12}>
-                                    <form noValidate autoComplete="off">
-                                        <Paper className={this.classes.fields}>
-                                            <Grid container spacing={1}>
-                                                <Grid item xs={1}></Grid>
-                                                <Grid item xs={3}>
-                                                    <Button variant="contained" color="primary" onClick={this.stepBack}>
-                                                        Step Back
-                            </Button>
-                                                </Grid>
-                                                <Grid item xs={3}>
-                                                    <Button variant="contained" color="primary">
-                                                        Pause
-                            </Button>
-                                                </Grid>
-                                                <Grid item xs={3}>
-                                                    <Button variant="contained" color="primary" onClick={this.stepForward}>
-                                                        Step Forward
-                            </Button>
-                                                </Grid>
-                                                <Grid item xs={2}></Grid>
-                                            </Grid>
-                                        </Paper>
-                                    </form>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <ButtonBase className={this.classes.trashBtn} onClick={this.removeValue}>
-                        <img src={trash} className={this.classes.trashImg} />
-                    </ButtonBase>
-                </ThemeProvider>
-            </Header>
+                            </form>
+                        </div>
+                    </Fade>
+                </Modal>
+                <MainPage
+                    algorithms={[
+                        {name: "Insertion",func: this.changeAlgorithm},
+                        {name: "Selection", func: this.changeAlgorithm},
+                        {name: "Quick", func: this.changeAlgorithm},
+                        {name: "Bubble",func: this.changeAlgorithm},
+                        {name: "Heap", func: this.changeAlgorithm},
+                        {name: "Shell", func: this.changeAlgorithm}
+                    ]}
+                    display = {{
+                        name: "Sorting Algorithms",
+                        type: this.state.type,
+                        step: this.state.stepCount,
+                        display: <SortingDisplay
+                            svgRef = {this.svgRef}
+                        />,
+                        delete: this.removeValue,
+                        insert: this.handleOpen,
+                        reset: this.reset,
+                        extra: null
+                    }}
+                    barFunctions = {{
+                        forward: this.stepForward,
+                        back: this.stepBack
+                    }}
+                />
+            </Fragment>
         );
     }
 }
