@@ -83,23 +83,30 @@ export default function Login() {
     });
 
     function handleSubmit(event) {
-        Axios.post("http://localhost:3001/login", {
-            loginEmail: email,
-            loginPassword: password,
+        if(String(password) === "")
+        {
+            alert("Please enter a password.")
+        }
+        else
+        {
+            Axios.post("http://localhost:3001/login", {
+                loginEmail: email,
+                loginPassword: password,
 
-        }).then((response) => {
-            if (String(response.data) == "true") {
-                console.log("Correct username and password")
+            }).then((response) => {
+                if (String(response.data) == "true") {
+                    console.log("Correct username and password")
 
-                const cookies = new Cookies();
-                cookies.set('cookie', { username: "email" }, { path: '/' });
-                window.location.assign("/");
+                    const cookies = new Cookies();
+                    cookies.set('cookie', { username: "email" }, { path: '/' });
+                    window.location.assign("/");
 
-            } else {
-                // Unvalidated
-                console.log("Incorrect username and password")
-            }
-        })
+                } else {
+                    // Unvalidated
+                    console.log("Incorrect email and password combination.")
+                }
+            })
+        }
     }
 
     return (
