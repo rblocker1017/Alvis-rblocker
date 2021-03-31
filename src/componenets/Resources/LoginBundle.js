@@ -1,7 +1,24 @@
 import React, { Component } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid, Button } from "@material-ui/core";
+import {
+  Collapse,
+  Drawer,
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  List,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Link,
+  ButtonBase,
+  Grid,
+  Button,
+} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -43,7 +60,13 @@ export default class LoginBundle extends Component {
       return (
         <React.Fragment>
           {this.title}
-          <Grid container alignItems={"center"} direction={"row"} justify={"flex-end"} spacing={2}>
+          <Grid
+            container
+            alignItems={"center"}
+            direction={"row"}
+            justify={"flex-end"}
+            spacing={2}
+          >
             <Grid item>
               <ButtonBase component={LinkRoute} to="/Login">
                 <Typography variant="button" noWrap align="center">
@@ -58,7 +81,13 @@ export default class LoginBundle extends Component {
     return (
       <React.Fragment>
         {this.title}
-        <Grid container alignItems={"center"} direction={"row"} justify={"flex-end"} spacing={2}>
+        <Grid
+          container
+          alignItems={"center"}
+          direction={"row"}
+          justify={"flex-end"}
+          spacing={2}
+        >
           <Button
             component={LinkRoute}
             to="/Achievements"
@@ -69,7 +98,7 @@ export default class LoginBundle extends Component {
               textTransform: "none",
             }}
           >
-            <img src={trophy} />
+            <img src={trophy} alt="" />
             <Typography variant="button" noWrap align="center">
               Achievements
             </Typography>

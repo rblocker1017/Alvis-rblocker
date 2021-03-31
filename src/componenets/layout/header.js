@@ -119,7 +119,11 @@ export default function PersistentDrawerLeft(props) {
   };
 
   const CSC130 = [
-    { name: "Binary Tree Traversal", url: "/BinaryTreeTraversal", logo: NatureIcon },
+    {
+      name: "Binary Tree Traversal",
+      url: "/BinaryTreeTraversal",
+      logo: NatureIcon,
+    },
     { name: "Graphing", url: "/GraphingAlgorithm", logo: TrendingUpIcon },
     { name: "Sorting", url: "/sorting", logo: AssessmentIcon },
   ];
@@ -162,12 +166,22 @@ export default function PersistentDrawerLeft(props) {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>{theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
         </div>
         <Divider />
 
         <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
             <Typography className={classes.heading}>CSC 130</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -194,7 +208,11 @@ export default function PersistentDrawerLeft(props) {
 
         <Divider />
         <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id="panel2a-header">
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
             <Typography className={classes.heading}>CSC 139</Typography>
           </AccordionSummary>
           <AccordionDetails>
