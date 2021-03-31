@@ -85,16 +85,32 @@ export default function Register() {
     }
     
     const register = () => {
-        Axios.post("http://localhost:3001/register",{
-            email: registerEmail,
-            password: registerPassword,
-            username: registerName,
+        
+        Axios.post("http://localhost:3001/email", {
+            email: registerEmail
 
-        }).then((response) =>{
-            console.log(response);
+        }).then((response) => {
+            console.log(String(response.data))
+            if (String(response.data) == "false") {
+                Axios.post("http://localhost:3001/register",{
+                    email: registerEmail,
+                    password: registerPassword,
+                    username: registerName,
+        
+                }).then((response) =>{
+                    console.log(response);
+                })
+        
+                window.location.assign("/Login");
+
+            } else {
+                // Unvalidated
+                console.log(String(response.data))
+                alert("This email is already in use.")
+            }
         })
 
-        window.location.assign("/Login");
+
     }
     return (
         <ThemeProvider theme={theme}>
