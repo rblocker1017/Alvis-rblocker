@@ -187,11 +187,9 @@ class BinaryTreeTraversal extends Component{
         });
     }
     resetTree(){
-        this.state.circles.forEach((circle) => (circle.stroke = "black"));
-        this.state.visualArray.forEach((rect) => (rect.value = null));
         this.setState({
-            circles: this.state.circles.concat(),
-            visualArray: this.state.visualArray,
+            circles: this.state.circles.map((circle) => (circle.stroke = "black")).concat(),
+            visualArray: this.state.visualArray.map((rect) => (rect.value = null)),
             num: 0
         });
     }
@@ -258,6 +256,7 @@ class BinaryTreeTraversal extends Component{
                     inOrderTraversal(this.state.circles[0], array, this.state.circles);
                     break;
             }
+            console.log(array);
             this.setState({
                 algorithmArray: array,
                 visualArray: generateArray(array.length, WIDTH, HEIGHT)
@@ -278,9 +277,9 @@ class BinaryTreeTraversal extends Component{
         return (
             <MainPage
             algorithms={[
-                {name: "PreOrder",func: this.changeAlgo},
-                {name: "InOrder", func: this.changeAlgo},
-                {name: "PostOrder", func: this.changeAlgo}
+                {name: "Preorder",func: this.changeAlgo},
+                {name: "Inorder", func: this.changeAlgo},
+                {name: "Postorder", func: this.changeAlgo}
             ]}
             display = {{
                 name: "Binary Tree Traversal",
@@ -303,7 +302,10 @@ class BinaryTreeTraversal extends Component{
                 reset: this.reset,
                 extra: null
             }}
-            barFunctions = {{}}
+            barFunctions = {{
+                forward: this.stepForward,
+                back: this.stepBackward
+            }}
         />
 
         );
