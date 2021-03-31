@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useRef, Component } from 'react'
 
 import { Chart } from "react-google-charts";
-import Header from "../componenets/layout/header"
+import Header from '../componenets/layout/Header/header'
 import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper';
-import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase, Box, withStyles } from '@material-ui/core';
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { GridListTileBar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ButtonBase } from '@material-ui/core';
+import { withStyles, makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -24,12 +24,12 @@ import { useSpring, animated } from 'react-spring/web.cjs';
 
 import { FormControlLabel } from '@material-ui/core';
 import { grey, green } from '@material-ui/core/colors';
-import trash from '../trash.png';
-import * as Algorithms from './Algorithms/CPUScheduling';
-import { ThreeSixty } from '@material-ui/icons';
+
 import CPUSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/CPUScheduling/CPUSchedulingDisplay';
 import MainPage from "../componenets/layout/Page/MainPage";
-
+import * as Algorithms from './Algorithms/CPUScheduling';
+import CPUSchedulingStats from '../componenets/Extras/CPUScheduling/CPUSchedulingStats';
+import { Fragment } from 'react';
 
 
 const styles = (theme) => ({
@@ -176,6 +176,7 @@ class CPUScheduling extends Component{
             priority: 0,
             selected: {},
             displayBoolean: false,
+            turnaroundTime: 0,
             data: [
                 [
                     { type: 'string', label: 'Task ID' },
@@ -250,6 +251,9 @@ class CPUScheduling extends Component{
         });
     }
     clickInput(){
+        if(this.state.type === ""){
+            return
+        }
         let bundle;
         if (!this.state.checked) {
             switch (this.state.type) {
@@ -426,29 +430,113 @@ class CPUScheduling extends Component{
             }
         })
         return (
-            <MainPage
-                algorithms={[
-                    {name: "FCFS",func: this.changeAlgo},
-                    {name: "SJF", func: this.changeAlgo},
-                    {name: "Priority", func: this.changeAlgo},
-                    {name: "RR",func: this.changeAlgo},
-                    {name: "SJF", func: this.changeAlgo}
-                ]}
-                display = {{
-                    name: "CPU Scheduling",
-                    type: this.state.type,
-                    step: null,
-                    display: <CPUSchedulingDisplay 
-                        data = {this.state.data}
-                        displayBoolean = {this.state.displayBoolean}
-                    />,
-                    insert: null,
-                    delete: null,
-                    reset: this.reset,
-                    extra: <h1>Testing</h1>
-                }}
-                barFunctions = {{}}
-            />
+            <Fragment>
+                <MainPage
+                    algorithms={[
+                        {name: "FCFS",func: this.changeAlgo},
+                        {name: "SJF", func: this.changeAlgo},
+                        {name: "Priority", func: this.changeAlgo},
+                        {name: "RR",func: this.changeAlgo},
+                        {name: "SRTF", func: this.changeAlgo}
+                    ]}
+                    extraOption = {{
+                        type: "custom",
+                        component: <FormControlLabel 
+                        labelPlacement={"end"}
+                        control={<Checkbox
+                            onChange={this.handleChangeCheck}
+                            checked={this.state.checked}
+                            name="checkedB"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                            color={"#000000"} />}
+                            label={<Typography variant={"caption"}>
+                                Preemptive Priority
+                            </Typography>} labelPlacement={"bottom"} />
+                    }}
+                    extraDisplay={
+                        <CPUSchedulingStats 
+                            selectRow = {this.selectRow}
+                            type = {this.state.type}
+                            processes = {this.state.processes}
+                            waitingTime = {this.props.waitingTime}
+                            turnaroundTime = {this.props.turnaroundTime}
+                        />
+                    }
+                    display = {{
+                        name: "CPU Scheduling",
+                        type: this.state.type,
+                        step: null,
+                        display: <CPUSchedulingDisplay 
+                            data = {this.state.data}
+                            displayBoolean = {this.state.displayBoolean}
+                        />,
+                        insert: this.handleOpen,
+                        delete: this.deleteRow,
+                        reset: this.reset,
+                    }}
+                    barFunctions = {{
+                        clickInput: this.clickInput
+                    }}
+                />
+                <Modal
+                    justify="center"
+                    alignItems="center"
+                    className={this.classes.modal}
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={this.state.open}>
+                        <Grid >
+                            <Grid item xs={12} container justify="center" alignItems="center">
+                                <Paper className={this.classes.paperOverlay}>
+                                    <h1>CPU Scheduling: {this.state.type} </h1>
+                                    <form noValidate autoComplete="on">
+                                        <Box pt={2}>
+                                            <TextField id="outlined-size-normal" variant="outlined" label="Process" onChange={this.setformProcess} />
+                                        </Box>
+                                        <Box pt={2}>
+                                            <TextField id="outlined-size-normal" variant="outlined" label="Arrival Time" onChange={this.setformArrival} />
+                                        </Box>
+                                        <Box pt={2}>
+                                            <TextField id="outlined-size-normal" variant="outlined" label="Burst Time" onChange={this.setformBurst} />
+                                        </Box>
+
+                                    </form>
+                                    {this.state.type === "RR" ? <form noValidate autoComplete="on">
+                                        <Box pt={2}>
+                                            <TextField id="outlined-size-normal" variant="outlined" label="Time Quantum" defaultValue={this.state.quantum} onChange={this.setQuantum } />
+                                        </Box>
+                                    </form>
+                                        : null}
+                                    {this.state.type === "Priority" ? <form noValidate autoComplete="on">
+                                        <Box pt={2}>
+                                            <TextField id="outlined-size-normal" variant="outlined" label="Priority" onChange={this.setpriority} />
+                                        </Box>
+                                    </form>
+                                        : null}
+                                    <Grid container spacing={1} justify="center">
+                                        <Grid item xs={4}>
+                                            <Box pt={2}>
+                                                <Button variant="contained" color="primary" onClick={this.handleAddProc}>Add Process</Button>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <Box pt={2}>
+                                                <Button variant="contained" color="primary" onClick={this.handleClose} >Close</Button>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Fade>
+                </Modal>
+            </Fragment>
             /*
             <Header>
                 <ThemeProvider theme={theme}>

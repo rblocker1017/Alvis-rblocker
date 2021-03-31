@@ -43,7 +43,7 @@ class MainPage extends Component {
                         <Grid item container direction="column" spacing={5} xs={3}>
                             <Grid item>
                                 <AlgoSuite
-                                    type = {this.props.selectedAlgo}
+                                    type = {this.props.display.type}
                                     algorithms={this.algorithms} 
                                     extra = {this.props.extraOption}
                                     insert={this.props.display.insert}
@@ -54,19 +54,40 @@ class MainPage extends Component {
                                 <Instructions />
                             </Grid>
                         </Grid>
-                        <Grid item container direction="column" spacing={1} xs={9}>
-                            <Grid item>
-                                <AlgorithmDisplay 
-                                    display={this.props.display}
-                                />
+                        {this.props.extraDisplay === undefined ? 
+                            <Grid item container direction="column" spacing={1} xs={9}>
+                                <Grid item>
+                                    <AlgorithmDisplay 
+                                        display={this.props.display}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <ControlBar 
+                                        name={this.props.display.name}
+                                        barFunctions={this.props.barFunctions}
+                                    />
+                                </Grid>
+                            </Grid> :
+                            <Grid item container direction="column" spacing={1} xs={6}>
+                                <Grid item>
+                                    <AlgorithmDisplay 
+                                        display={this.props.display}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <ControlBar 
+                                        name={this.props.display.name}
+                                        barFunctions={this.props.barFunctions}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <ControlBar 
-                                    name={this.props.display.name}
-                                    barFunctions={this.props.barFunctions}
-                                />
+                        }
+                        {this.props.extraDisplay === undefined ? 
+                            null :
+                            <Grid item container direction="column" spacing={1} xs={3}>
+                                {this.props.extraDisplay}
                             </Grid>
-                        </Grid>
+                        }
                     </Grid>
                 </Grid>
                 {

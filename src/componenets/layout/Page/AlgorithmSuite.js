@@ -21,6 +21,7 @@ class AlgoSuite extends Component {
         this.algorithms = this.props.algorithms;
     }
     render(){
+        console.log(this.props.type);
         return(
             <Paper className={this.classes.buttons}>
                 <Grid container direction={"column"} spacing={"3"}>
@@ -50,7 +51,8 @@ class AlgoSuite extends Component {
                                         </Grid>
                                     );
                                 }
-                            ) : null
+                            ) : 
+                            this.props.extra.component
                         }
                     </Grid>
                     <Grid item container spacing={1} justify={"center"}>
