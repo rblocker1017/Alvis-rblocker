@@ -1,79 +1,18 @@
-import React, { createRef, useRef, useState, useEffect, Component, Fragment } from 'react';
-import clsx from "clsx";
-import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase, Modal, Fade, Backdrop, TextField, withStyles } from "@material-ui/core";
-import { makeStyles, ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { grey, green, orange } from "@material-ui/core/colors";
-import { select, axisBottom, axisRight, scaleLinear, scaleBand } from "d3";
-import { Update } from '@material-ui/icons';
-import trash from '../trash.png';
-import { generateINIT } from './Shapes/SortingGenerator';
-import { InsertModal } from "../componenets/Resources/InsertModal";
-import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "./Algorithms/Sorting";
-import Cookies from 'universal-cookie';
-import MainPage from "../componenets/layout/Page/MainPage";
+import { Backdrop, Button, Fade, Grid, Modal, TextField, withStyles } from "@material-ui/core";
+import { green, grey } from "@material-ui/core/colors";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { axisBottom, axisRight, scaleBand, scaleLinear, select } from "d3";
+import React, { Component, createRef, Fragment } from 'react';
 import SortingDisplay from '../componenets/layout/AlgorithmDisplay/Sorting/SortingDisplay';
+import MainPage from "../componenets/layout/Page/MainPage";
+import { bubble, heapSort, insertion, quickSort, selection, shellSort } from "./Algorithms/Sorting";
+import { generateINIT } from './Shapes/SortingGenerator';
 
 const SIZE = 15;
 const INIT_VALUES = generateINIT(SIZE);
 const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
 const styles = (theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "125%",
-        width: "100%",
-    },
-    buttons: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        width: "100%",
-        height: "100%",
-    },
-    button: {
-        width: "90%",
-    },
-    code: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-    },
-    fields: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-    },
-    trashBtn: {
-        position: "fixed",
-        top: "85%",
-        right: "1%",
-        '&:hover': {
-            '& $trashImg': {
-                opacity: 1
-            }
-        }
-    },
-    trashImg: {
-        opacity: 0.55
-    },
-    insertPaper: {
-        position: 'absolute',
-        width: 400,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -376,16 +315,6 @@ class Sorting extends Component{
         this.updateGraph(this.state.newArray, this.state.selected, this.state.swap1, this.state.swap2);
     }
     render(){
-        const theme = createMuiTheme({
-            palette: {
-                primary: {
-                    main: green[900],
-                },
-                secondary: {
-                    main: grey[700],
-                },
-            },
-        });
         return (
             <Fragment>
                 <Modal

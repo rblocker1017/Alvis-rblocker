@@ -1,16 +1,12 @@
-﻿import { Backdrop, Button, ButtonBase, Fade, Grid, Modal, Paper, TextField, withStyles } from "@material-ui/core";
+﻿import { Backdrop, Button, Fade, Grid, Modal, TextField, withStyles } from "@material-ui/core";
 import { green, grey } from '@material-ui/core/colors';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import React, { Component } from 'react';
-import { Circle, Label, Layer, Line, Stage, Tag, Text } from 'react-konva';
-import Header from "../componenets/layout/header";
-import PathNotFound from '../componenets/Messages/PathNotFound';
-import trash from '../trash.png';
+import GraphingDisplay from '../componenets/layout/AlgorithmDisplay/Graphing/GraphingDisplay';
+import MainPage from '../componenets/layout/Page/MainPage';
 import { dijkstrasAlgorithm, kruskalAlgorithm, primAlgorithm } from "./Algorithms/Graphing";
 import * as Functions from './Functionality/GraphingFunctions';
 import { connectNode, generateCirclesGraphing, generateConnectors } from "./Shapes/NodeGenerator";
-import MainPage from '../componenets/layout/Page/MainPage';
-import GraphingDisplay from '../componenets/layout/AlgorithmDisplay/Graphing/GraphingDisplay';
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
 const HEIGHT = 450;

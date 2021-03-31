@@ -1,96 +1,15 @@
-import React, { useState, useEffect, Component } from "react";
-import Header from "../componenets/layout/header";
-import { Button, ButtonBase, Grid, Paper } from "@material-ui/core";
+import { green, grey } from "@material-ui/core/colors";
 import {
-    withStyles,
-    ThemeProvider,
-    createMuiTheme,
+    createMuiTheme, withStyles
 } from "@material-ui/core/styles";
-import { grey, orange, green, amber, red } from "@material-ui/core/colors";
-import {
-    Stage,
-    Layer,
-    Rect,
-    Circle,
-    Text,
-    Line,
-    Label,
-    Tag,
-} from "react-konva";
-import Konva from "konva";
-import {
-    generateBinaryTree,
-    generateConnectorsBTT,
-    connectNode,
-    getPoints,
-    inOrderTraversalHelper,
-    preOrderTraversalHelper,
-    postOrderTraversalHelper,
-    generateArray,
-    createLeft,
-    createRight,
-    connectNodeBTT,
-    newConnectNodeBTT,
-} from "./Shapes/NodeGenerator";
-import {inOrderTraversal, preOrderTraversal, postOrderTraversal} from './Algorithms/BinaryTreeTraversal';
-import trash from "../trash.png";
-import MainPage from "../componenets/layout/Page/MainPage";
+import React, { Component } from "react";
 import BTTDisplay from '../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay';
+import MainPage from "../componenets/layout/Page/MainPage";
+import { inOrderTraversal, postOrderTraversal, preOrderTraversal } from './Algorithms/BinaryTreeTraversal';
+import { createLeft, createRight, generateArray, generateBinaryTree, generateConnectorsBTT, newConnectNodeBTT } from "./Shapes/NodeGenerator";
 
 const WIDTH = 1400;
 const HEIGHT = 450;
-
-const styles = (theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-        width: "125%",
-    },
-    buttons: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        width: "100%",
-        height: "100%",
-    },
-    button: {
-        width: "105%",
-    },
-    code: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "76%",
-    },
-    fields: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-    },
-    /*TRASH BUTTON START*/
-    trashBtn: {
-        position: "fixed",
-        top: "85%",
-        right: "1%",
-        "&:hover": {
-            "& $trashImg": {
-                opacity: 1,
-            },
-        },
-    },
-    trashImg: {
-        opacity: 0.55,
-    },
-    /*TRASH BUTTON END*/
-});
 
 const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
@@ -391,4 +310,4 @@ class BinaryTreeTraversal extends Component{
     }
 }
 
-export default withStyles(styles)(BinaryTreeTraversal);
+export default (BinaryTreeTraversal);
