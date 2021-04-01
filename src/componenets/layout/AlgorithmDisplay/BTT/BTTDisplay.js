@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Stage, Layer, Circle, Text, Line, Label, Tag } from 'react-konva';
+import { Stage, Layer, Circle, Text, Line, Label, Tag, Group } from 'react-konva';
 import ArrayDisplay from './ArrayDisplay';
 import CirclesDisplay from './CirclesDisplay';
 import LinesDisplay from './LinesDisplay';
@@ -36,9 +36,11 @@ class BTTDisplay extends Component{
                         lines={this.props.lines}
                         selectNode={this.props.selectNode}
                     />
-                    <ArrayDisplay 
-                        visualArray = {this.props.visualArray}
-                    />
+                    <Group draggable>
+                        <ArrayDisplay 
+                            visualArray = {this.props.visualArray}
+                        />
+                    </Group>
                 </Layer>
             </Stage>
         );

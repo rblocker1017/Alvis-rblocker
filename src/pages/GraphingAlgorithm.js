@@ -288,6 +288,7 @@ class GraphingAlgorithm extends Component{
 
     // Sets the ending point for the algorithm
     setEnd(e){
+        console.log("test");
         if (this.state.step !== -1 || this.state.selected === null || this.state.selected === this.state.startNode || this.state.selected === this.state.endNode) {
             return;
         }

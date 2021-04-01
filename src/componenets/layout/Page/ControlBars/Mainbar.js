@@ -47,7 +47,10 @@ class Mainbar extends Component{
                     forward={this.props.barFunctions.forward} 
                     back={this.props.barFunctions.back}
                 />);
-                this.bar.push(<ControlBarStartEnd />);
+                this.bar.push(<ControlBarStartEnd 
+                    start={this.props.barFunctions.start}
+                    end={this.props.barFunctions.end}
+                />);
                 break;
             case "Binary Tree Traversal":
             case "Sorting Algorithms":
