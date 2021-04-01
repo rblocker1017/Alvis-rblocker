@@ -4,6 +4,7 @@ import { makeStyles, ThemeProvider, useTheme, createMuiTheme} from '@material-ui
 import LinkRoute from 'react-router-dom/Link';
 import Axios from 'axios'
 import { green } from "@material-ui/core/colors";
+import { Route } from "react-router";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -140,7 +141,6 @@ export default function Register() {
                     }).then((response) =>{
                         console.log(response);
                     })
-            
                     window.location.assign("/Login");
 
                 } else {

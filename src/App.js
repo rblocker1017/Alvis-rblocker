@@ -21,8 +21,8 @@ function App() {
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Route path="/" exact component={Welcome} />
         <Route path="/CpuScheduling" exact component={CPUScheduling} />
-              <Route path="/tree" exact component={Tree} />
-              <Route path="/bubblesort" exact component={BubbleSort} />
+        <Route path="/tree" exact component={Tree} />
+        <Route path="/bubblesort" exact component={BubbleSort} />
         <Route path="/PageReplacement" exact component={PageReplacement} />
         <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
         <Route path="/RoundRobin" exact component={RoundRobin} />
