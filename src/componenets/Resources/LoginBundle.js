@@ -33,7 +33,7 @@ import { Route, Switch } from "react-router-dom";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import trophy from "../../awesome-trophy.png";
+import trophy from "../../resources/trophy.png";
 import Cookies from "universal-cookie";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
