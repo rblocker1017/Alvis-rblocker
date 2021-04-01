@@ -11,6 +11,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import SearchBar from "material-ui-search-bar";
+import Achievement from "./AchievementsClass"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -81,7 +82,13 @@ function createData(name, status, date, details) {
     return { name, status, date, details };
 }
 
+
+let achievementClassTest = new Achievement ("Achievements Class Test");
+achievementClassTest.name = "test achievement"
+achievementClassTest.description = "Description of the Achievement Class Test";
+
 const originalRows = [
+    createData(achievementClassTest.name, achievementClassTest.status),
     createData('Binary Search Traversal', 'Completed', 'Completed on X/X/XXXX', 'view'),
     createData('Graphing', 'Incomplete'),
     createData('Sorting', 'Incomplete'),
@@ -189,7 +196,7 @@ export default function Achievements() {
                                                         </buttons>
                                                         <Modal
                                                             aria-labelledby="View Detailed Achievement"
-                                                            aria-describedby="Achievement will have details here"
+                                                            aria-describedby= "Detailed Descritpion of Ahcievement"
                                                             className={classes.modal}
                                                             open={open}
                                                             onClose={handleClose}
@@ -213,10 +220,10 @@ export default function Achievements() {
                                                                             Sample Icon
                                                                             </Typography>
                                                                         <Typography variant="h5" component="h2">
-                                                                            Name: Sample Achievement
+                                                                            Name: {achievementClassTest.name}
                                                                             </Typography>
                                                                         <Typography className={classes.pos} color="textSecondary">
-                                                                            Description: A sample description of the achievement.
+                                                                            Description: {achievementClassTest.description}
                                                                             </Typography>
                                                                         <Typography variant="body2" component="p">
                                                                             Date: Completed on X/X/XXXX
