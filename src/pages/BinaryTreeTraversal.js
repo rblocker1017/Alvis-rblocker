@@ -36,7 +36,7 @@ import trash from "../trash.png";
 
 const WIDTH = 1400;
 const HEIGHT = 450;
-
+console.log('hello world');
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
