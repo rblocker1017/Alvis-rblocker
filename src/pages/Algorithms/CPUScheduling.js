@@ -28,6 +28,7 @@ export function fcfs(processes) {
         answer.push([procId++, i.name, i.name, new Date(0, 0, 0, 0, 0, timeCounter), new Date(0, 0, 0, 0, 0, timeCounter + i.burstTime), null, 100, null])
         timeCounter = timeCounter + i.burstTime;
     })
+    console.log((totalWaiting / processList.length).toFixed(2))
     return {answer: answer, turnaroundTime: (totalTat / processList.length).toFixed(2), waitingTime: (totalWaiting / processList.length).toFixed(2)};
 }
 export function sjf(processes) {
@@ -315,5 +316,5 @@ export function sjfFuncPreemptive(processes) {
         let randVal = Math.floor(Math.random() * 10000);
         answer.push([randVal, i.name, i.name, new Date(0, 0, 0, 0, 0, i.startTime), new Date(0, 0, 0, 0, 0, i.endingTime), null, 100, null])
     })
-    return {answer: answer, turnaroundTime: totalTat / processList.length, totalWaiting: totalWaiting / processList.length };
+    return {answer: answer, turnaroundTime: totalTat / processList.length, waitingTime: totalWaiting / processList.length };
 }

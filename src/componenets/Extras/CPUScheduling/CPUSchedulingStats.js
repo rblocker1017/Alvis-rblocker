@@ -163,7 +163,7 @@ class CPUSchedulingStats extends Component{
                 </TableContainer>
                 <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
                     <Paper className={this.classes.averages}>
-                        <h4>  Average Waiting Time: {this.props.waitingtime} </h4>
+                        <h4>  Average Waiting Time: {this.props.waitingTime} </h4>
                         <h4> Average Turnaound Time: {this.props.turnaroundTime} </h4>
                     </Paper>
                 </Grid>

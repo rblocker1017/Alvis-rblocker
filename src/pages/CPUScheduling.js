@@ -72,7 +72,7 @@ class CPUScheduling extends Component{
             formProcess: null,
             formArrival: null,
             formBurst: null,
-            waitingTime: null,
+            waitingTime: 0,
             priority: 0,
             selected: {},
             displayBoolean: false,
@@ -197,7 +197,7 @@ class CPUScheduling extends Component{
         }
         this.setState({
             turnaroundTime: bundle.turnaroundTime,
-            waitingtime: bundle.waitingTime,
+            waitingTime: bundle.waitingTime,
             data: bundle.answer,
             displayBoolean: true
         });
@@ -358,8 +358,8 @@ class CPUScheduling extends Component{
                             selectRow = {this.selectRow}
                             type = {this.state.type}
                             processes = {this.state.processes}
-                            waitingTime = {this.props.waitingTime}
-                            turnaroundTime = {this.props.turnaroundTime}
+                            waitingTime = {this.state.waitingTime}
+                            turnaroundTime = {this.state.turnaroundTime}
                         />
                     }
                     display = {{
