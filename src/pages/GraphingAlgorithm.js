@@ -140,9 +140,7 @@ class GraphingAlgorithm extends Component{
         }
     }
     changeAlgo(e){
-        if (this.state.step !== -1) {
-            return;
-        }
+        this.reset();
         this.setState({
             changed: true,
             type: e.target.textContent

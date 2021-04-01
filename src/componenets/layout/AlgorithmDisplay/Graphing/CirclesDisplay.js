@@ -9,7 +9,7 @@ class CirclesDisplay extends Component{
                     <React.Fragment>
                         <Label
                             x={circle.x}
-                            y={circle.y - 50}
+                            y={circle.y - 20}
 
                         >
                             <Tag

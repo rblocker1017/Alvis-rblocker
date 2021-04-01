@@ -46,11 +46,10 @@ class BinaryTreeTraversal extends Component{
         this.insertNode = this.insertNode.bind(this);
     }
     changeAlgo(e){
-        if(this.state.num === 0){
-            this.setState({
-                type: e.target.textContent
-            });
-        }
+        this.resetTree()
+        this.setState({
+            type: e.target.textContent
+        });
     }
     stepForward(){
         if (this.state.num < this.state.algorithmArray.length) {
