@@ -88,8 +88,8 @@ achievementClassTest.name = "test achievement"
 achievementClassTest.description = "Description of the Achievement Class Test";
 
 const originalRows = [
-    createData(achievementClassTest.name, achievementClassTest.status),
-    createData('Binary Search Traversal', 'Completed', 'Completed on X/X/XXXX', 'view'),
+    createData(achievementClassTest.name, achievementClassTest.status, "date placeholder", "View"),
+    createData('Binary Search Traversal', 'Completed', 'Completed on X/X/XXXX'),
     createData('Graphing', 'Incomplete'),
     createData('Sorting', 'Incomplete'),
     createData('CPU Scheduling', 'Incomplete'),
@@ -188,56 +188,10 @@ export default function Achievements() {
                                                 <TableCell className={classes.tc} align="center">{row.date}</TableCell>
                                                 {/* Below is view detailed achievements overlay---------------------------- */}
                                                 <TableCell className={classes.tc} align="center">{
-                                                    <div>
-                                                        <buttons type="button" className={classes.button} onClick={handleOpen}>
-                                                            <MenuList>
-                                                                <MenuItem align="center">View</MenuItem>
-                                                            </MenuList>
-                                                        </buttons>
-                                                        <Modal
-                                                            aria-labelledby="View Detailed Achievement"
-                                                            aria-describedby= "Detailed Descritpion of Ahcievement"
-                                                            className={classes.modal}
-                                                            open={open}
-                                                            onClose={handleClose}
-                                                            closeAfterTransition
-                                                            BackdropComponent={Backdrop}
-                                                            BackdropProps={{
-                                                                classes: {
-                                                                    root: classes.root
-                                                                }
-                                                            }}
-                                                            PaperProps={{
-                                                                classes: {
-                                                                    root: classes.paper
-                                                                }
-                                                            }}
-                                                        >
-                                                            <div className={classes.paperOverlay}>
-                                                                <Card className={classes.root}>
-                                                                    <CardContent>
-                                                                        <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                                                            Sample Icon
-                                                                            </Typography>
-                                                                        <Typography variant="h5" component="h2">
-                                                                            Name: {achievementClassTest.name}
-                                                                            </Typography>
-                                                                        <Typography className={classes.pos} color="textSecondary">
-                                                                            Description: {achievementClassTest.description}
-                                                                            </Typography>
-                                                                        <Typography variant="body2" component="p">
-                                                                            Date: Completed on X/X/XXXX
-                                                                            <br />
-                                                                            {'Category: A Sample Category for the achievement'}
-                                                                        </Typography>
-                                                                    </CardContent>
-                                                                    <CardActions>
-                                                                        <Button size="small">Learn More</Button>
-                                                                    </CardActions>
-                                                                </Card>
-                                                            </div>
-                                                        </Modal>
-                                                    </div>
+                                                  <div>
+                                                     {achievementClassTest.render()}
+                                                  </div>
+                                                   
                                                 }</TableCell>
                                                 {/* END view detailed achievements overlay---------------------------- */}
                                             </TableRow>

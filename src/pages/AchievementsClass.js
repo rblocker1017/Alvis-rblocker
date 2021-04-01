@@ -5,28 +5,29 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, InputLabel, FormControl, Select } from "@material-ui/core"
+import MenuList from '@material-ui/core/MenuList';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        backgroundColor: "transparent",
     },
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        overflow: "hidden",
-        height: "100%",
-        width: "100%"
-    }
+        height: 600,
+        width: "100%",
+        fixed: true
+    },
 }));
 
-export default class Achievement {
+export default class Achievement extends React.Component{
     
-    constructor(name){
-        this.achievementName = name;
+    constructor(props){
+        super(props);
+        this.name = "No Name Given"
         this.completed = false;
         this.achievemenDescription = "No Description Provided";
     }
@@ -66,33 +67,75 @@ export default class Achievement {
         
     }
 
-     
+     render(){
+        const classes = useStyles();
+        const [sort, setSort] = useState('');
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => {
+            setOpen(true);
+        };
+    
+        const handleClose = () => {
+            setOpen(false);
+        };
+    
+        const handleChange = (event) => {
+            setSort(event.target.value);
+        };
 
-    /*get card(){
-        return  <div className={classes.paperOverlay}>
-            <Card className={classes.root}>
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Sample Icon
-                        </Typography>
-                    <Typography variant="h5" component="h2">
-                        Name: {this.name}
-                        </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                        Description: {this.description}
-                        </Typography>
-                    <Typography variant="body2" component="p">
-                        Date: Completed on X/X/XXXX
-                        <br />
-                        {'Category: A Sample Category for the achievement'}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
-            </Card>
+        return  <div>
+                    <buttons type="button" className={classes.button} onClick={handleOpen}>
+                        <MenuList>
+                            <MenuItem align="center">View</MenuItem>
+                        </MenuList>
+                    </buttons>
+                    <Modal
+                        aria-labelledby="View Detailed Achievement"
+                        aria-describedby= "Detailed Descritpion of Ahcievement"
+                        className={classes.modal}
+                        open={open}
+                        onClose={handleClose}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            classes: {
+                                root: classes.root
+                            }
+                        }}
+                        PaperProps={{
+                            classes: {
+                                root: classes.paper
+                            }
+                        }}
+                    > 
+                    <div className={classes.paperOverlay}>
+                        <Card className={classes.root}>
+                            <CardContent>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    Sample Icon
+                                    </Typography>
+                                <Typography variant="h5" component="h2">
+                                    Name: {this.name}
+                                    </Typography>
+                                <Typography className={classes.pos} color="textSecondary">
+                                    Description: {this.description}
+                                    </Typography>
+                                <Typography variant="body2" component="p">
+                                    Date: Completed on X/X/XXXX
+                                    <br />
+                                    {'Category: A Sample Category for the achievement'}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small">Learn More</Button>
+                            </CardActions>
+                     </Card>
+                </div>
+            {/*achievementClassTest.render()*/}
+            </Modal>
         </div>
-    }*/
+       
+     }
 
 
 }
