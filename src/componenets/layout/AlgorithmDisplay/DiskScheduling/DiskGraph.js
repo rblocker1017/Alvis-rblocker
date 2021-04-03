@@ -9,11 +9,10 @@ export default function DiskGraph(props) {
   }, props.data);
 
   return (
-    <div>
-
+    <div style={{height: "450px", width: "1370px", display: "flex", justifyContent: "center", alignItems: "center"}}>
       <Chart
-        width={'700px'}
-        height={'500px'}
+        height={'450px'}
+        width={'800px'}
         chartType="LineChart"
         loader={<div>Loading Chart</div>}
         data={props.data}

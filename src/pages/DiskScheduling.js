@@ -8,49 +8,9 @@ import React, { Component } from 'react';
 import Header from '../componenets/layout/header';
 import '../styles/DiskScheduling.css';
 import * as Algorithms from './Algorithms/DiskScheduling';
-import DiskGraph from "./DiskGraph";
-
-const styles = (theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "115%",
-        width: "100%"
-    },
-    graphingpaper: {
-        padding: theme.spacing(3),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    buttons:
-    {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "100%"
-    },
-    code:
-    {
-
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "75%"
-    },
-    fields:
-    {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "100%"
-    },
-});
+import DiskGraph from "../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskGraph";
+import DiskSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskSchedulingDisplay';
+import MainPage from "../componenets/layout/Page/MainPage";
 
 class FCFSDisk extends Component{
     constructor(props){
@@ -76,7 +36,7 @@ class FCFSDisk extends Component{
             diskSize: false,
             displayBoolean: false,
             type: "scan",
-            outward: true,
+            direction: "Outwards",
             checked: true
         }
         this.theme = createMuiTheme({
@@ -98,21 +58,16 @@ class FCFSDisk extends Component{
         this.renderDiskGraph = this.renderDiskGraph.bind(this);
     }
     changeAlgo(e) {
+        console.log(this.state.type);
         this.setState({
             type: e.target.textContent
         });
     }
     changeDirection(e){
-        if(e.target.textContent === "Outwards"){
-            this.setState({
-                outward: true
-            });
-        }
-        else{
-            this.setState({
-                outward: false
-            });
-        }
+        console.log("direction");
+        this.setState({
+            direction: e.target.textContent
+        });
     }
     setDiskSize(e){
         this.setState({
@@ -144,28 +99,28 @@ class FCFSDisk extends Component{
                 data = Algorithms.fcfsFunction(this.state.starting, this.state.input);
                 break;
             case "scan":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.scanOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
                     data = Algorithms.scanFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "look":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
                     data = Algorithms.lookFunction(this.state.starting, this.state.input);
                 }
                 break;
             case "cscan":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.lookOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
                 } else {
                     data = Algorithms.cscanFunction(this.state.starting, this.state.input, this.state.diskSize);
                 }
                 break;
             case "clook":
-                if (this.state.outward) {
+                if (this.state.direction === "Outwards") {
                     data = Algorithms.clookOutwardsFunction(this.state.starting, this.state.input);
                 } else {
                     data = Algorithms.clookFunction(this.state.starting, this.state.input, this.state.diskSize)
@@ -182,98 +137,47 @@ class FCFSDisk extends Component{
     }
     render(){
         return (
-            <Header>
-                <ThemeProvider theme={this.theme}>
-                    <Grid container direction="column">
-                        <Grid item></Grid>
-                        <Grid item container spacing={1}>
-                            <Grid item xs={3}>
-                                <Grid container direction="column">
-                                    <Paper className={this.classes.buttons}>
-                                        <Grid container spacing={0}>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "scan" ? "secondary" : "primary"} value={'scan'} onClick={this.changeAlgo} >scan</Button>
-                                            </Grid>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "cscan" ? "secondary" : "primary"} value={'cscan'} onClick={this.changeAlgo} >c-scan</Button>
-                                            </Grid>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "look" ? "secondary" : "primary"} value={'look'} onClick={this.changeAlgo} >look</Button>
-                                            </Grid>
-                                            <Grid item xs={12}><h1></h1></Grid>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "clook" ? "secondary" : "primary"} value={'clook'} onClick={this.changeAlgo} >c-look</Button>
-                                            </Grid>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "fcfs" ? "secondary" : "primary"} value={'fcfs'} onClick={this.changeAlgo} >fcfs</Button>
-                                            </Grid>
-                                            <Grid item xs={4}>
-                                                <Button variant="contained" color={this.state.type === "sstf" ? "secondary" : "primary"} value={'sstf'} onClick={this.changeAlgo} >sstf</Button>
-                                            </Grid>
-                                            <Grid item xs={12}><h1></h1></Grid>
-                                            <Grid item xs={6}>
-                                                <Button variant="contained" color={this.state.outward === "inward" ? "secondary" : "primary"} value={'outward'} onClick={this.changeDirection} >Inwards</Button>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Button variant="contained" color={this.state.outward === "outward" ? "secondary" : "primary"} value={'inward'} onClick={this.changeDirection} >Outwards</Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </Grid>
-                                <h2></h2>
-                                <Paper className={this.classes.code}>
-                                    <h3>
-                                        CODE
-                                    </h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                    </p>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Paper className={this.classes.graphingpaper}>
-                                    <h1>
-                                        Disk Scheduling: {this.state.type} { this.state.type !== "fcfs" ? this.state.direction : "" }
-                                    </h1>
-                                        <DiskGraph data={this.state.data} size={this.state.diskSize} > </DiskGraph>
-    
-                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}></div>
-                                </Paper>
-                                <Grid item xs={12}>
-                                    <form noValidate autoComplete="off">
-                                        <Paper className={this.classes.fields}>
-                                            <Grid container>
-                                                <Grid item xs={4}>
-                                                    <TextField id="outlined-size-normal" variant="filled" label="Disk Size" type="text" onChange={this.setDiskSize} />
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    < TextField id="outlined-size-normal" variant="filled" label="Initial Position" color="black" type="text" onChange={this.setStarting} />
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    < TextField id="outlined-size-normal" variant="filled" label="Request Sequence" color="black" type="text" onChange={this.setInput} />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <h1></h1>
-                                                    <Button variant="contained" color="primary" onClick={this.renderDiskGraph}>Run Disk Scheduling</Button>
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <h1></h1>
-                                                    <Button variant="contained" color="primary" onClick={this.reset}>Reset</Button>
-                                                </Grid>
-                                            </Grid>
-                                        </Paper>
-                                    </form>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </ThemeProvider>
-            </Header>
+            <MainPage
+                algorithms={[
+                    {name: "scan",func: this.changeAlgo},
+                    {name: "c-scan", func: this.changeAlgo},
+                    {name: "look", func: this.changeAlgo},
+                    {name: "c-look",func: this.changeAlgo},
+                    {name: "fcfs", func: this.changeAlgo},
+                    {name: "sstf", func: this.changeAlgo}
+                ]}
+                selectedAlgo={this.state.type}
+                extraOption = {{
+                    type: "buttons",
+                    functions: [
+                        {name: "Inwards", func: this.changeDirection},
+                        {name: "Outwards", func: this.changeDirection}
+                    ],
+                    selected: this.state.direction
+                }}
+                display = {{
+                    name: "Disk Scheduling",
+                    type: this.state.type,
+                    step: null,
+                    display: <DiskSchedulingDisplay 
+                        type= {this.state.type}
+                        data = {this.state.data}
+                        diskSize = {this.state.diskSize}
+                    />,
+                    insert: null,
+                    delete: null,
+                    reset: this.resetDiskGraph,
+                    extra: null
+                }}
+                barFunctions = {{
+                    setDiskSize: this.setDiskSize,
+                    setStarting: this.setStarting,
+                    setInput: this.setInput,
+                    renderDiskGraph: this.renderDiskGraph,
+                    reset: this.reset
+                }}
+            />
         );
     }
 }
-export default withStyles(styles)(FCFSDisk);
+export default (FCFSDisk);

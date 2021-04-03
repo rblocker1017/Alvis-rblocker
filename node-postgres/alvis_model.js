@@ -44,16 +44,25 @@ const getUsers = (request, response) => {
     })
   }
 
-const getLogin = (request, response) => {
-  pool.query('SELECT hash FROM login WHERE email = $1', [email], (error, results) => {
+const getLogin = (email) => {
+  return new Promise((resolve, reject) => 
+  pool.query('SELECT * FROM login WHERE email = $1', [email], (error, result) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
-  })
+    else if(result.rows.length > 0)
+    {
+      resolve(true)
+    }
+    else
+    {
+      resolve(false)
+    }
+  }))
 }
 
 const addLogin = (hash, email) => {
+
   pool.query('INSERT INTO login(hash, email) VALUES($1, $2)',[hash, email], (error, results) => {
     if (error) {
       throw error
@@ -73,7 +82,5 @@ const addUser = (name, email) => {
     addLogin,
     addUser,
     validate,
+    getLogin
   }
-
-
-  

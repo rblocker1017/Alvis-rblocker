@@ -13,7 +13,7 @@ class AlgoButton extends Component {
         return(
             <Button
                 variant="contained"
-                color={"primary"}
+                color={this.props.color}
                 onClick={this.props.onClick}
                 className={classes.button}
             >

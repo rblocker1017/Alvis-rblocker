@@ -8,7 +8,7 @@ export function fcfsPageReplacementFunc(pages, frames){
     let filler = []
     for (let i = 0; i < pages.length; i++) {
         //prev struct keeps the order of the numbers correct. Set has unpredictable order.
-        console.log("For Loop");
+        //console.log("For Loop");
         if (s.size < frames) {
             if (!s.has(pages[i])) {
                 s.add(pages[i]);
@@ -27,7 +27,7 @@ export function fcfsPageReplacementFunc(pages, frames){
                     fault: "❌"
 
                 });
-                console.log("Set: " + arr.toString())
+                //console.log("Set: " + arr.toString())
                 indexes.push(pages[i]);
                 continue;
             }
@@ -37,7 +37,7 @@ export function fcfsPageReplacementFunc(pages, frames){
 
                 s.delete(val);
                 s.add(pages[i])
-                console.log(prevStruct)
+                //console.log(prevStruct)
                 const orderedAnswer = prevStruct.map(page => {
                     if (s.has(page)) {
                         return page;
@@ -64,6 +64,7 @@ export function fcfsPageReplacementFunc(pages, frames){
 }
 
 export function lruPageReplacementFunc(pages ,frames){
+    console.log("LRU ran.");
     let s = new Set()
     let answer = []
     let indexes = []
@@ -94,21 +95,21 @@ export function lruPageReplacementFunc(pages ,frames){
                 //if(pages[i] !== lruArr[0])
                 lruArr.unshift(pages[i])
 
-                console.log("Set: " + arr.toString())
+                //console.log("Set: " + arr.toString())
                 indexes.push(pages[i]);
                 continue;
             }
         } else {
-            console.log("Getting val: for " + pages[i] + "---" + lruArr.toString())
+           // console.log("Getting val: for " + pages[i] + "---" + lruArr.toString())
             if (!s.has(pages[i])) {
 
                 lruArr.pop();
 
                 let val = lruArr[2]
                 lruArr.unshift(pages[i])
-                console.log("val: " + val)
+               // console.log("val: " + val)
 
-                console.log("Lru arr Length: " + lruArr.length);
+               // console.log("Lru arr Length: " + lruArr.length);
 
 
                 s.delete(val);
@@ -141,6 +142,7 @@ export function lruPageReplacementFunc(pages ,frames){
 }
 
 export function optPageReplacementFunc(pages, frames){
+    console.log("OPT ran.");
     let s = new Set()
     let answer = []
     let indexes = []
@@ -149,7 +151,7 @@ export function optPageReplacementFunc(pages, frames){
     let filler = [];
     for (let i = 0; i < pages.length; i++) {
         //prev struct keeps the order of the numbers correct. Set has unpredictable order.
-        console.log("For Loop");
+        //console.log("For Loop");
         if (s.size < frames) {
 
             if (!s.has(pages[i])) {
@@ -168,7 +170,7 @@ export function optPageReplacementFunc(pages, frames){
                     column: [...s, ...filler],
                     fault: "❌"
                 });
-                console.log("Set: " + arr.toString())
+                //console.log("Set: " + arr.toString())
                 indexes.push(pages[i]);
                 continue;
             }
@@ -182,17 +184,17 @@ export function optPageReplacementFunc(pages, frames){
                 } else {
                     for (let j = i + 1; j < pages.length; j++) {
                         if (tempSet.has(pages[j])) {
-                            console.log("OPT " + pages[i])
+                            //console.log("OPT " + pages[i])
                             val = pages[j]
                             tempSet.delete(pages[j]);
-                            console.log('Temp set: ', tempSet)
+                            //console.log('Temp set: ', tempSet)
                         }
                     }
                 }
-                console.log("VAL after for: " + val)
+               // console.log("VAL after for: " + val)
                 s.delete(val);
                 s.add(pages[i])
-                console.log(prevStruct)
+                //console.log(prevStruct)
                 const orderedAnswer = prevStruct.map(page => {
                     if (s.has(page)) {
                         return page;

@@ -5,7 +5,8 @@ import ControlBarStep from "./ControlBarStep";
 import { grey} from "@material-ui/core/colors";
 import ControlBarStartEnd from './ControlBarStartEnd';
 import ControlBarPageReplace from './ControlBarPageReplace';
-
+import ControlBarDiskScheduling from './ControlBarDiskScheduling';
+import ControlBarCPUScheduling from './ControlBarCPUScheduling';
 const styles = (theme) => ({
     fields: {
         backgroundColor: grey[300],
@@ -21,10 +22,24 @@ class Mainbar extends Component{
         this.classes = this.props.classes
         this.bar = []
         switch(this.props.name){
+            case "CPU Scheduling":
+                this.bar.push(<ControlBarCPUScheduling 
+                    clickInput={this.props.barFunctions.clickInput}
+                />);
+                break;
             case "Page Replacement":
                 this.bar.push(<ControlBarPageReplace 
                     frames={this.props.barFunctions.frames}
                     input={this.props.barFunctions.input}
+                />);
+                break;
+            case "Disk Scheduling":
+                this.bar.push(<ControlBarDiskScheduling 
+                    setDiskSize = {this.props.barFunctions.setDiskSize}
+                    setStarting = {this.props.barFunctions.setStarting}
+                    setInput = {this.props.barFunctions.setInput}
+                    renderDiskGraph = {this.props.barFunctions.renderDiskGraph}
+                    reset = {this.props.barFunctions.reset}
                 />);
                 break;
             case "Graphing Algorithms":
@@ -32,7 +47,10 @@ class Mainbar extends Component{
                     forward={this.props.barFunctions.forward} 
                     back={this.props.barFunctions.back}
                 />);
-                this.bar.push(<ControlBarStartEnd />);
+                this.bar.push(<ControlBarStartEnd 
+                    start={this.props.barFunctions.start}
+                    end={this.props.barFunctions.end}
+                />);
                 break;
             case "Binary Tree Traversal":
             case "Sorting Algorithms":
