@@ -12,6 +12,7 @@ import ControlBar from "./ControlBars/Mainbar";
 import AlgorithmDisplay from "./AlgorithmDisplay";
 import Instructions from "./Instructions";
 import TrashButton from "./TrashButton";
+import Complexity from "./Complexity";
 
 const styles = (theme) => ({
     root: {
@@ -49,6 +50,9 @@ class MainPage extends Component {
                                     insert={this.props.display.insert}
                                     reset={this.props.display.reset}
                                 />
+                            </Grid>
+                            <Grid item>
+                                <Complexity />
                             </Grid>
                             <Grid item>
                                 <Instructions />
