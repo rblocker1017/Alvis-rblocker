@@ -1,6 +1,10 @@
 import React from 'react';
 import Sorting from '../Algorithms/Sorting';
 import { bubble, insertion, selection, heapSort, quickSort, shellSort } from "../Algorithms/Sorting";
+import { unmountComponentAtNode } from "react-dom";
+import ReactDOM from 'react-dom';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 
 describe('Sorting', () =>{
   it('Bubble Sorting', () =>{
@@ -69,3 +73,27 @@ describe('Sorting', () =>{
     }];
   })
 });
+
+
+let container = null;
+
+beforeEach(() => {
+  container = document.createElement("div");
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
+
+
+describe("<Sorting />", () => {
+  it("Should have initial text",() =>{
+      render(<Sorting />, container);
+    });
+    expect(container.textContent).toBe("Insert a value between 1 and 100");
+  });
+
+
