@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -36,6 +37,32 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LoginBundle from "../Resources/LoginBundle";
 import Cookies from "universal-cookie";
+=======
+import React, { useState } from 'react';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Collapse, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Link, ButtonBase, Grid, Button } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import SaveIcon from '@material-ui/icons/Save';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import NatureIcon from '@material-ui/icons/Nature';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import LinkRoute from 'react-router-dom/Link';
+import trophy from '../../awesome-trophy.png';
+import { Route, Switch } from 'react-router-dom';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
 
 const drawerWidth = 250;
 
@@ -96,9 +123,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   achievementButton: {
+<<<<<<< HEAD
     marginLeft: "auto",
     marginRight: "1%",
     textTransform: "none",
+=======
+    marginLeft: 'auto',
+    textTransform: 'none',
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
   },
 }));
 
@@ -136,6 +168,7 @@ export default function PersistentDrawerLeft(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
+<<<<<<< HEAD
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -153,6 +186,43 @@ export default function PersistentDrawerLeft(props) {
             <MenuIcon />
           </IconButton>
           <LoginBundle cookie={cookies.get("cookie")} />
+=======
+        <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
+            })}
+        >
+            <Toolbar>
+                <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
+                >
+                    <MenuIcon />            
+                </IconButton>
+                <Grid container alignItems={"center"} direction={"row"} justify={"space-between"} spacing={4}>
+                    <Grid item>
+                        <ButtonBase component={ LinkRoute } to="/" >
+                            <Typography variant="h5" noWrap align="center">
+                                Alvis Algorithm Visualizer
+                            </Typography>
+                        </ButtonBase>
+                    </Grid>
+                      <Button component={LinkRoute} to="/Achievements" color="inherit" className={classes.achievementButton}><img src={trophy} /><Typography variant="button" noWrap align="center">Achievements</Typography></Button> 
+                    <Grid item>
+                        <ButtonBase component={ LinkRoute } to="/Login">
+                            <Typography variant="button" noWrap align="center">
+                                  Login
+                            </Typography>
+                        </ButtonBase>
+                    </Grid>
+                </Grid>
+                
+
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
         </Toolbar>
       </AppBar>
       <Drawer

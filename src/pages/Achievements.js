@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import Header from "../componenets/layout/header";
 import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, InputLabel, FormControl, Select } from "@material-ui/core"
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
+=======
+import React, { useState } from 'react'
+import Header from "../componenets/layout/header"
+import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, MenuItem, InputLabel, FormControl, Select } from "@material-ui/core"
+import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { grey, orange } from '@material-ui/core/colors';
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
 import MenuList from '@material-ui/core/MenuList';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -10,8 +18,12 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+<<<<<<< HEAD
 import SearchBar from "material-ui-search-bar";
 import Achievement from "./AchievementsClass"
+=======
+
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,10 +53,13 @@ const useStyles = makeStyles((theme) => ({
     body: {
         width: "40%"
     },
+<<<<<<< HEAD
     formControl: {
         margin: theme.spacing(1),
         minWidth: 180,
     },
+=======
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     table: {
         minWidth: 700,
     },
@@ -116,6 +131,7 @@ export default function Achievements() {
         setSort(event.target.value);
     };
 
+<<<<<<< HEAD
     const requestSearch = (searchedVal) => {
         const filterRows = originalRows.filter((row) => {
             return row.name.toLowerCase().includes(searchedVal.toLowerCase());
@@ -128,14 +144,20 @@ export default function Achievements() {
         requestSearch(searched);
     };
 
+=======
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     const theme = createMuiTheme({
         palette: {
             primary: {
                 main: grey[900],
             }
         }
+<<<<<<< HEAD
     });
 
+=======
+    })
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     return (
         <Header>
             <ThemeProvider theme={theme}>
@@ -201,6 +223,10 @@ export default function Achievements() {
                             </TableContainer>
                         </Grid>
                     </Grid>
+<<<<<<< HEAD
+=======
+
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
                 </Paper>
             </ThemeProvider>
         </Header>

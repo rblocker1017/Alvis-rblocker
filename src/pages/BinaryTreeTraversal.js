@@ -9,6 +9,7 @@ import {
   preOrderTraversal
 } from "./Algorithms/BinaryTreeTraversal";
 import {
+<<<<<<< HEAD
   createLeft,
   createRight,
   generateArray,
@@ -24,6 +25,92 @@ const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
+=======
+  Stage,
+  Layer,
+  Rect,
+  Circle,
+  Text,
+  Line,
+  Label,
+  Tag
+} from "react-konva";
+import Konva from "konva";
+import {
+  generateCircles,
+  generateTree,
+  generateConnectors,
+  connectNode,
+  getPoints
+} from "./Shapes/NodeGenerator";
+
+const WIDTH = 1200;
+const HEIGHT = 400;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    height: "125%",
+    width: "100%"
+  },
+  buttons: {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    width: "100%",
+    height: "100%"
+  },
+  button: {
+    width: "105%"
+  },
+  code: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    height: "115%"
+  },
+  fields: {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    height: "100%"
+  }
+}));
+
+const INIT = generateTree(3, WIDTH, HEIGHT);
+
+const CONNECT = generateConnectors(2, INIT);
+
+export default function BinaryTreeTraversal() {
+  const classes = useStyles();
+  const [type, settype] = useState("Preorder");
+  const [flag1, setFlag1] = useState(true);
+  const [flag2, setFlag2] = useState(true);
+  const [flag3, setFlag3] = useState(true);
+  const [circles, setCircles] = React.useState(INIT);
+  const [lines, setLines] = React.useState(CONNECT);
+  const [connecting, setConnecting] = React.useState(false);
+  const [fromCon, setFromCon] = React.useState({});
+  const [tags, setTags] = React.useState({});
+  const handleClick1 = () => {
+    if (flag1) setFlag1(!flag1);
+    setFlag2(true);
+    setFlag3(true);
+  };
+
+  const handleClick2 = () => {
+    if (flag2) setFlag2(!flag2);
+    setFlag3(true);
+    setFlag1(true);
+  };
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
 
 class BinaryTreeTraversal extends Component {
   constructor(props) {
