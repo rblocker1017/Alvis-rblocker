@@ -18,9 +18,7 @@ class Instructions extends Component {
         return(
             <Paper className={this.classes.code}>
                 <h2>Instructions</h2>
-                <p>
-                    {this.instruct}
-                </p>
+                {this.instruct}
             </Paper>
         );
     }
