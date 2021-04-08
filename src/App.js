@@ -11,7 +11,6 @@ import Welcome from "./pages/Welcome";
 import Login from "./pages/Login";
 import Sorting from "./pages/Sorting";
 import BinaryTreeTraversal from "./pages/BinaryTreeTraversal";
-import Achievements from "./pages/Achievements";
 import Register from "./pages/Register";
 import BubbleSort from "./pages/bubbleSort";
 
@@ -35,8 +34,12 @@ function App() {
           component={BinaryTreeTraversal}
         />
         <Route path="/Achievements" exact component={Achievements} />
+<<<<<<< HEAD
         <Route path="/Register" exact component={Register} />
       </BrowserRouter>
+=======
+    </BrowserRouter>
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     </div>
   );
 }

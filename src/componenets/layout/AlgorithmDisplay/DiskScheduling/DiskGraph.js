@@ -11,8 +11,13 @@ export default function DiskGraph(props) {
   return (
     <div style={{height: "450px", width: "1370px", display: "flex", justifyContent: "center", alignItems: "center"}}>
       <Chart
+<<<<<<< HEAD:src/componenets/layout/AlgorithmDisplay/DiskScheduling/DiskGraph.js
         height={'450px'}
         width={'800px'}
+=======
+        width={'800px'}
+        height={'600px'}
+>>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea:src/pages/DiskGraph.js
         chartType="LineChart"
         loader={<div>Loading Chart</div>}
         data={props.data}
