@@ -9,13 +9,14 @@ export function fcfsPageReplacementFunc(pages, frames){
     for (let i = 0; i < pages.length; i++) {
         //prev struct keeps the order of the numbers correct. Set has unpredictable order.
         //console.log("For Loop");
+        
         if (s.size < frames) {
             if (!s.has(pages[i])) {
                 s.add(pages[i]);
                 prevStruct = [...s]
                 page_faults += 1;
                 filler = [];
-                for (let j = i; j < frames - 1; j++) {
+                for (let j = i; j < frames - 1; j++) {  // Pushes a set amount of blank text to filler, allows columns to become uniform in size
                     filler.push("");
                 }
                 let arr = {

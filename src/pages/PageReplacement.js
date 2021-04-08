@@ -5,13 +5,18 @@ import PageReplacementDisplay from "../componenets/layout/AlgorithmDisplay/PageR
 import MainPage from "../componenets/layout/Page/MainPage";
 import * as Algorithms from './Algorithms/PageReplacement';
 
+var str1 = "Step 1: Enter a string by clicking on the Reference String box with the format 'x, y, z...'   For example, the reference string of 1, 2, 3, 2, 3, 5, 4 is acceptable."
+var str2 = "Step 2: Enter a frame by clicking on the frame button and selecting a number."
+var str3 = "Step 3: Press the FIFO, LRU, or OPT buttons to select the algorithm."
+var str4 = "Step 4: Press the RESET button to remove the current reference string and Frame count."
+
 class PageReplacement extends Component{
     constructor(props){
         super(props);
         this.classes = this.props.classes;
         this.state = {
             answer: [],
-            type: "FIFO",
+            type: "FIFO",   // determines which algorithm we are currently looking at 
             frames: [],
             input: [],
             value: "",
@@ -28,18 +33,18 @@ class PageReplacement extends Component{
             input: e.target.value.split(',').map(Number)
         });
     }
-    setFrames(e){
+    setFrames(e){   // takes in frames count and sets them to value of Frames 
         this.setState({
             frames: e.target.value
         });
     }
-    runAlgorithm(e){
+    runAlgorithm(e){    // takes in algorithm type, changes to it, and then runs algorithm
         this.setState({
             type: e.target.textContent
         });
         this.renderPageReplacement(e.target.textContent);
     }
-    renderPageReplacement(newType) {
+    renderPageReplacement(newType) {    // takes in new Algorithm type, and runs according to current values
         let bundle;
         switch (newType) {
             case "FIFO":
@@ -59,7 +64,7 @@ class PageReplacement extends Component{
             faultCount: bundle.faults,
         });
     }
-    reset() {
+    reset() {   // resets page replacement reference string and frame count, but doesn't remove page fault display
         this.setState({
             value: "",
             input: this.state.value.split(',').map(Number),
@@ -81,7 +86,7 @@ class PageReplacement extends Component{
             return (
                 <td>
                     {ans.column.map((page) => {
-                        if (JSON.stringify(page) !== '""') {
+                        if (JSON.stringify(page) !== '""') {    // changes "" from boxes without a reference string value to blank for better visuals
                             return (
                             <tr>
                                 <td style={{ border: "1px solid black", width: "50px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
@@ -131,6 +136,7 @@ class PageReplacement extends Component{
                     reset: this.reset,
                     extra: null
                 }}
+                instruct = {str1 + str2 + str3 + str4} // Changes str1, str2, str3... to change instructions display
                 barFunctions = {{
                     frames: this.setFrames,
                     input: this.setInput
