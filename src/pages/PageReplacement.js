@@ -22,6 +22,11 @@ class PageReplacement extends Component{
             value: "",
             faultCount: 0
         }
+        this.instructions = [];
+        this.instructions.push(str1);
+        this.instructions.push(str2);
+        this.instructions.push(str3);
+        this.instructions.push(str4);
         this.setInput = this.setInput.bind(this);
         this.setFrames = this.setFrames.bind(this);
         this.runAlgorithm = this.runAlgorithm.bind(this);
@@ -136,7 +141,8 @@ class PageReplacement extends Component{
                     reset: this.reset,
                     extra: null
                 }}
-                instruct = {str1 + str2 + str3 + str4} // Changes str1, str2, str3... to change instructions display
+                instruct = {this.instructions}
+                //instruct = str1 + <br /> + str2 + str3 + str4 // Changes str1, str2, str3... to change instructions display
                 barFunctions = {{
                     frames: this.setFrames,
                     input: this.setInput
