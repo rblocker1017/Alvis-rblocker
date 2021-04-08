@@ -55,7 +55,9 @@ class MainPage extends Component {
                                 <Complexity />
                             </Grid>
                             <Grid item>
-                                <Instructions />
+                                <Instructions
+                                    instruct = {this.props.instruct} 
+                                />
                             </Grid>
                         </Grid>
                         {this.props.extraDisplay === undefined ? 
