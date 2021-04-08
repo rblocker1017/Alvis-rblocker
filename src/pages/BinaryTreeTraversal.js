@@ -1,789 +1,419 @@
-import React, { useState, useEffect } from "react";
-import Header from "../componenets/layout/header";
-import { Button, ButtonBase, Grid, Paper } from "@material-ui/core";
+import { green, grey } from "@material-ui/core/colors";
+import { createMuiTheme, withStyles } from "@material-ui/core/styles";
+import React, { Component } from "react";
+import BTTDisplay from "../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay";
+import MainPage from "../componenets/layout/Page/MainPage";
 import {
-    makeStyles,
-    ThemeProvider,
-    createMuiTheme,
-} from "@material-ui/core/styles";
-import { grey, orange, green, amber, red } from "@material-ui/core/colors";
+  inOrderTraversal,
+  postOrderTraversal,
+  preOrderTraversal
+} from "./Algorithms/BinaryTreeTraversal";
 import {
-    Stage,
-    Layer,
-    Rect,
-    Circle,
-    Text,
-    Line,
-    Label,
-    Tag,
-} from "react-konva";
-import Konva from "konva";
-import {
-    generateBinaryTree,
-    generateConnectorsBTT,
-    connectNode,
-    getPoints,
-    inOrderTraversalHelper,
-    preOrderTraversalHelper,
-    postOrderTraversalHelper,
-    generateArray,
-    createLeft,
-    createRight,
-    connectNodeBTT,
-    newConnectNodeBTT,
+  createLeft,
+  createRight,
+  generateArray,
+  generateBinaryTree,
+  generateConnectorsBTT,
+  newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
-import {inOrderTraversal, preOrderTraversal, postOrderTraversal} from './Algorithms/BinaryTreeTraversal';
-import trash from "../trash.png";
 
 const WIDTH = 1400;
 const HEIGHT = 450;
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-        width: "125%",
-    },
-    buttons: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        width: "100%",
-        height: "100%",
-    },
-    button: {
-        width: "105%",
-    },
-    code: {
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "76%",
-    },
-    fields: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-        height: "100%",
-    },
-    /*TRASH BUTTON START*/
-    trashBtn: {
-        position: "fixed",
-        top: "85%",
-        right: "1%",
-        "&:hover": {
-            "& $trashImg": {
-                opacity: 1,
-            },
-        },
-    },
-    trashImg: {
-        opacity: 0.55,
-    },
-    /*TRASH BUTTON END*/
-}));
 
 const INIT = generateBinaryTree(9, WIDTH, HEIGHT);
 const CON_GEN = generateConnectorsBTT(INIT);
 const CONNECT = CON_GEN[0];
 const CURRENT_CON = CON_GEN[1];
 
-export default function BinaryTreeTraversal() {
-    const classes = useStyles();
-    const [type, settype] = useState("");
-    const [num, changeIteration] = useState(0);
-    const [circles, setCircles] = React.useState(INIT);
-    const [defaultArray, setDefualtArray] = React.useState([])
-    const [visualArray, setVisualArray] = React.useState([]);
-    const [inOrderArray, setInorder] = React.useState([]);
-    const [preOrderArray, setPreorder] = React.useState([]);
-    const [postOrderArray, setPostorder] = React.useState([]);
-    const [lines, setLines] = React.useState(CONNECT);
-    const [connection, setConnections] = React.useState(CURRENT_CON);
-    const [selected, setSelected] = React.useState({ id: -1 });
-    const [selectedRight, setSelectedRight] = React.useState({});
-    const [selectedLeft, setSelectedLeft] = React.useState({});
-    const [connecting, setConnecting] = React.useState(false);
-    const [fromCon, setFromCon] = React.useState({});
-    const [idNum, setIdNum] = useState(INIT.length);
-    
-    useEffect(()=>{
-        switch (type) {
-            case "Preorder":
-                resetTree();
-                preOrderTraversalHelper();
-            case "Postorder":
-                resetTree();
-                postOrderTraversalHelper();
-            case "Inorder":
-                resetTree();
-                inOrderTraversalHelper();
-        }
-    }, [lines]);
-
-    //const [width, setWidth] = React.useState(WIDTH);
-    //const [height, setHeight] = React.useState(HEIGHT);
-    /*
-     *   Inorder Traversal
-     */
-    const inOrderTraversalHelper = () => {
-        let array = [];
-        inOrderTraversal(circles[0], array, circles);
-        setInorder(array);
-        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
+class BinaryTreeTraversal extends Component {
+  constructor(props) {
+    super(props);
+    this.classes = this.props.classes;
+    this.state = {
+      type: "",
+      num: 0,
+      circles: INIT,
+      visualArray: [],
+      algorithmArray: [],
+      lines: CONNECT,
+      connection: CURRENT_CON,
+      selected: { id: -1 },
+      selectedRight: {},
+      selectedLeft: {},
+      fromCon: {},
+      idNum: INIT.length
     };
+    this.changeAlgo = this.changeAlgo.bind(this);
+    this.stepForward = this.stepForward.bind(this);
+    this.stepBackward = this.stepBackward.bind(this);
+    this.selectCircle = this.selectCircle.bind(this);
+    this.deleteBranch = this.deleteBranch.bind(this);
+    this.deleteNode = this.deleteNode.bind(this);
+    this.insertRight = this.insertRight.bind(this);
+    this.insertLeft = this.insertLeft.bind(this);
+    this.resetTree = this.resetTree.bind(this);
+    this.insertNode = this.insertNode.bind(this);
+  }
 
-    /*
-     *   Preorder Traversal
-     */
-    const preOrderTraversalHelper = () => {
-        let array = [];
-        preOrderTraversal(circles[0], array, circles);
-        setPreorder(array);
-        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
-    };
-
-    //useEffect(() => {
-    //    updateDisplay();
-    //}, [circles]);
-
-    /*
-     *   Postorder Traversal
-     */
-
-    const postOrderTraversalHelper = () => {
-        let array = [];
-        postOrderTraversal(circles[0], array, circles);
-        setPostorder(array);
-        setVisualArray(generateArray(array.length, WIDTH, HEIGHT));
-    };
-
-    /*
-     * These 6 step methods handle the different steps being iterated for each algorithm
-     */
-
-    const stepForwardInorder = () => {
-        if (num < inOrderArray.length) {
-            inOrderArray[num].stroke = "red";
-            visualArray[num].value = inOrderArray[num].value;
-            changeIteration(num + 1);
-        }
-        setCircles(circles);
-        setVisualArray(visualArray);
-    };
-
-    const stepBackInorder = () => {
-        if (num - 1 < 0) return;
-        else {
-            inOrderArray[num - 1].stroke = "black";
-            visualArray[num - 1].value = null;
-            setCircles(circles);
-            setVisualArray(visualArray);
-            if (num - 1 >= 0) changeIteration(num - 1);
-        }
-    };
-
-    const stepForwardPreorder = () => {
-        if (num < preOrderArray.length) {
-            preOrderArray[num].stroke = "red";
-            visualArray[num].value = preOrderArray[num].value;
-            changeIteration(num + 1);
-        }
-        setCircles(circles);
-        setVisualArray(visualArray);
-    };
-
-    const stepBackPreorder = () => {
-        if (num - 1 < 0) return;
-        else {
-            preOrderArray[num - 1].stroke = "black";
-            visualArray[num - 1].value = null;
-            setCircles(circles);
-            setVisualArray(visualArray);
-            if (num - 1 >= 0) changeIteration(num - 1);
-        }
-    };
-
-    const stepForwardPostorder = () => {
-        if (num < postOrderArray.length) {
-            postOrderArray[num].stroke = "red";
-            visualArray[num].value = postOrderArray[num].value;
-            changeIteration(num + 1);
-        }
-        setCircles(circles);
-        setVisualArray(visualArray);
-    };
-
-    const stepBackPostorder = () => {
-        if (num - 1 < 0) return;
-        else {
-            postOrderArray[num - 1].stroke = "black";
-            visualArray[num - 1].value = null;
-            setCircles(circles);
-            setVisualArray(visualArray);
-            if (num - 1 >= 0) changeIteration(num - 1);
-        }
-    };
-
-    const sleep = (milliseconds) => {
-        return new Promise((resolve) => setTimeout(resolve, milliseconds));
-    };
-
-    let name = "test";
-
-    const changePreorder = () => {
-        preOrderTraversalHelper();
-        settype("Preorder");
-    };
-    const changeInorder = () => {
-        resetTree();
-        inOrderTraversalHelper();
-        settype("Inorder");
-    };
-    const changePostorder = () => {
-        resetTree();
-        postOrderTraversalHelper();
-        settype("Postorder");
-    };
-
-    const updateDisplay = () => {
-        if (type === "Preorder") {
-            changePreorder();
-        }
-        else if (type === "Inorder") {
-            changeInorder();
-        }
-        else if (type === "Postorder") {
-            changePostorder();
-        }
-    }
-
-    const addCircle = (e) => {
-        const value = Math.floor(Math.random() * 100);
-        const newcircles = circles.concat({
-            id: circles.length,
-            x: Math.random() * (WIDTH - 200) + 100,
-            y: Math.random() * (HEIGHT - 200) + 100,
-            width: 100,
-            height: 100,
-            color: "green",
-            stroke: "black",
-            strokeWidth: 5,
-            selected: false,
-            connect: false,
-            connections: [],
-            value: value,
-        });
-        setCircles(newcircles);
-    };
-
-    const selectCircle = (e) => {
-        if (num !== 0) {
-            return null;
-        }
-        const id = e.target.id();
-        // set connecting state to true
-        setSelectedLeft({});
-        setSelectedRight({});
-        setConnecting(true);
-        setCircles(
-            circles.map((circle) => {
-                if (circle.id == id) {
-                    if (circle.id != selected.id) {
-                        setSelected(circle);
-                        return {
-                            ...circle,
-                            stroke: "blue",
-                            connected: true,
-                        };
-                    }
-                    setSelected({ id: -1 });
-                }
-                return {
-                    ...circle,
-                    stroke: "black",
-                    connected: false,
-                };
-            })
-        );
-        console.log(lines);
-        console.log(circles);
-    };
-    const deleteBranch = (e) => {
-        const id = selected.id;
-        resetTree();
-        let tempBundle;
-        //console.log(lines);
-        if (id != -1 && id != circles[0].id) {
-            let node = circles.find((circle) => circle.id == id);
-            console.log(node);
-            tempBundle = deleteNode(node, circles.filter((circle) => circle.id != id), lines);
-            // ** TODO **
-            // disconnect node from the parent
-            tempBundle[0] = tempBundle[0].map((circle) => {
-                if (circle.leftChild !== null && circle.leftChild === node.id) {
-                    return {
-                        ...circle,
-                        leftChild: null
-                    };
-                }
-                else if (circle.rightChild !== null && circle.rightChild === node.id) {
-                    return {
-                        ...circle,
-                        rightChild: null
-                    };
-                }
-                return circle;
-            });
-            setCircles(tempBundle[0]);
-            setLines(tempBundle[1]);
-            //console.log(tempBundle[0]);
-        }
-    }
-    const deleteNode = (node, nodeArray, nodeConnections) => {
-        console.log(node);
-        console.log(nodeArray);
-        //console.log(nodeArray);
-        let leftNodeArray = nodeArray;
-        let rightNodeArray = nodeArray;
-        let resultNodeArray = nodeArray;
-
-        let newConnections = nodeConnections.filter((line) => {
-            for (let i = 0; i < line.connections.length; i++) {
-                if (line.connections[i] === node.id) {
-                    console.log("test");
-                    return false;
-                }
-            }
-            return true;
-        });
-        console.log(newConnections);
-        let leftNodeConnections = newConnections;
-        let rightNodeConnections = newConnections;
-        //console.log(newConnections);
-        if (node.leftChild != null) {
-            let leftBundle = deleteNode(circles.find((circle) => node.leftChild === circle.id), nodeArray.filter((circle) => circle.id != node.leftChild), newConnections);
-            leftNodeArray = leftBundle[0];
-            leftNodeConnections = leftBundle[1];
-            //console.log(leftNodeArray);
-        }
-        if (node.rightChild != null) {
-            let rightBundle = deleteNode(circles.find((circle) => node.rightChild === circle.id), nodeArray.filter((circle) => circle.id != node.rightChild), newConnections);
-            rightNodeArray = rightBundle[0];
-            rightNodeConnections = rightBundle[1];
-            //console.log(rightNodeArray);
-        }
-        resultNodeArray = leftNodeArray.filter((circle) => rightNodeArray.includes(circle));
-        newConnections = leftNodeConnections.filter((line) => rightNodeConnections.includes(line));
-        console.log(resultNodeArray);
-        return [resultNodeArray, newConnections];
-        //let newArray = ;
-        //if (node.leftChild) {
-        //}
-        /*
-        let tempCircle = circles;
-        resetTree();
-        const id = selected.id;
-        if (id != -1) {
-            tempCircle = tempCircle.map((circle) => {
-                if (circle.leftchild != null) {
-                    if (circle.leftChild.id == id) {
-                        return {
-                            ...circle,
-                            leftChild: null,
-                        };
-                    }
-                }
-                if (circle.rightChild != null) {
-                    if (circle.rightChild.id == id) {
-                        return {
-                            ...circle,
-                            rightChild: null,
-                        };
-                    }
-                }
-                if (circle.parent != null) {
-                    if (circle.parent.id == id) {
-                        return {
-                            ...circle,
-                            parent: null,
-                        };
-                    }
-                }
-                return circle;
-            });
-
-            tempCircle = tempCircle.filter((circle) => circle.id != id);
-            setCircles(tempCircle);
-            setLines(lines.filter((line) => !line.id.includes(JSON.stringify(id))));
-            setSelected({ id: -1 });
-        }*/
-    };
-
-    const insertRight = (e) => {
-        setSelected({ id: -1 });
-        setSelectedLeft({});
-        setSelectedRight(circles.find((circle) => circle.id == e.target.id()));
-    };
-
-    const insertLeft = (e) => {
-
-        setSelected({ id: -1 });
-        setSelectedRight({});
-        setSelectedLeft(circles.find((circle) => circle.id == e.target.id()));
-    };
-
-    const insertNode = (e) => {
-
-        if (Object.keys(selectedLeft).length !== 0) {
-            const child = createLeft(selectedLeft, idNum, WIDTH);
-            if (child.id === -1) {
-                return -1;
-            }
-            const connectionBundle = newConnectNodeBTT(
-                selectedLeft,
-                child,
-                connection,
-                true
-            );
-            setSelectedLeft({});
-            setLines(lines.concat(connectionBundle[0]));
-            setCircles(circles.concat(child));
-            setIdNum(idNum + 1);
-        } else if (Object.keys(selectedRight).length !== 0) {
-            const child = createRight(selectedRight, idNum, WIDTH);
-            if (child.id === -1) {
-                return -1;
-            }
-            const connectionBundle = newConnectNodeBTT(
-                selectedRight,
-                child,
-                connection,
-                false
-            );
-            setSelectedRight({});
-            setLines(lines.concat(connectionBundle[0]));
-            setCircles(circles.concat(child));
-            setIdNum(idNum + 1);
-            console.log(idNum);
-        }
-    };
-    const selectLine = (e) => {
-        const id = e.target.id();
-        // set connecting state to true
-        setLines(
-            lines.map((line) => {
-                return {
-                    ...line,
-                    connected: line.id === id,
-                };
-            })
-        );
-    };
-
-    const initialConnect = (e) => {
-        const id = e.target.id();
-        setConnecting(!connecting);
-        setCircles(
-            circles.map((circle) => {
-                if (circle.id == id) {
-                    setFromCon(circle);
-                }
-                return {
-                    ...circle,
-                    connected: circle.id === id,
-                };
-            })
-        );
-    };
-
-    const stepForward = () => {
-        if (type === "Preorder") stepForwardPreorder();
-        else if (type === "Inorder") stepForwardInorder();
-        else if (type === "Postorder") stepForwardPostorder();
-    };
-
-    const stepBackward = () => {
-        if (type === "Preorder") stepBackPreorder();
-        else if (type === "Inorder") stepBackInorder();
-        else if (type === "Postorder") stepBackPostorder();
-    };
-
-    const resetTree = () => {
-        circles.forEach((circle) => (circle.stroke = "black"));
-        visualArray.forEach((rect) => (rect.value = null));
-        setCircles(circles);
-        //setVisualArray(visualArray);
-        changeIteration(0);
-    };
-    const reset = (e) => {
-        setCircles(INIT);
-        setLines(CONNECT);
-    };
-
-    const finalConnect = (e) => {
-        const id = e.target.id();
-        let toCircle = {};
-        setCircles(
-            circles.map((circle) => {
-                if (circle.connected) {
-                    return {
-                        ...circle,
-                        connected: false,
-                        connections: circle.connections.concat(lines.length),
-                    };
-                }
-                if (circle.id === id) {
-                    toCircle = circle;
-                    return {
-                        ...circle,
-                        connections: circle.connections.concat(lines.length),
-                    };
-                }
-                return circle;
-            })
-        );
-        const newConnect = lines.concat(
-            connectNode(toCircle, fromCon, lines.length)
-        );
-        setLines(newConnect);
-        setConnecting(!connecting);
-        setFromCon({});
-    };
-
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                main: green[900],
-            },
-            secondary: {
-                main: grey[700],
-            },
-        },
+  /* changeAlgo - resets the tree (backend/visual) and switches the algorithm
+   * @param e - the algorithm being switched to
+   */
+  changeAlgo(e) {
+    this.resetTree();
+    this.setState({
+      type: e.target.textContent
     });
+  }
 
-    return (
-        <Header>
-            <ThemeProvider theme={theme}>
-                <Grid container direction="column">
-                    <Grid item></Grid>
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={classes.buttons}>
-                                    <Grid container spacing={1}>
-                                        <Grid item xs={4}>
-                                            <Button
-                                                variant="contained"
-                                                onClick={changePreorder}
-                                                color={type === "Preorder" ? "secondary" : "primary"}
-                                                className={classes.button}
-                                            >
-                                                Preorder
-                      </Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button
-                                                variant="contained"
-                                                //onClick={() => {console.log(CON_GEN) }}
-                                                onClick={changeInorder}
-                                                color={type === "Inorder" ? "secondary" : "primary"}
-                                                className={classes.button}
-                                            >
-                                                Inorder
-                      </Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button
-                                                variant="contained"
-                                                onClick={changePostorder}
-                                                color={type === "Postorder" ? "secondary" : "primary"}
-                                                className={classes.button}
-                                            >
-                                                Postorder
-                      </Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1></h1>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={insertNode}
-                                            >
-                                                Insert
-                      </Button>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={resetTree}
-                                            >
-                                                Reset
-                      </Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <h2></h2>
-                            <Paper className={classes.code}>
-                                <h3>CODE</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum
-                                    dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                    cupidatat non proident, sunt in culpa qui officia deserunt
-                                    mollit anim id est laborum.
-                </p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Paper className={classes.paper}>
-                                <h1>Graphing Algorithm: {type}</h1>
-                                <h1>Step: {num}</h1>
-                                <Stage width={WIDTH} height={HEIGHT} draggable>
-                                    <Layer>
+  /* stepForward - visually steps forward through the tree
+   */
+  stepForward() {
+    // If the current state counter is less than the length of the visual array, step forward
+    if (this.state.num < this.state.algorithmArray.length) {
+      // Set the color of the circumference of the circles to red
+      this.state.algorithmArray[this.state.num].stroke = "red";
+      // Display the current value of the leaf in the visual array
+      this.state.visualArray[this.state.num].value = this.state.algorithmArray[
+        this.state.num
+      ].value;
+      // Increment the value of the state counter by 1
+      this.setState({
+        num: this.state.num + 1,
+        circles: this.state.circles.map(circle => {
+          if (this.state.algorithmArray[this.state.num].id === circle.id) {
+            return {
+              ...circle,
+              stroke: "red"
+            };
+          }
+          return circle;
+        }),
+        visualArray: this.state.visualArray
+      });
+    }
+  }
 
-                                        {circles.map((circle) => (
-                                            <React.Fragment>
-                                                <Circle
-                                                    key={circle.id}
-                                                    id={circle.id}
-                                                    x={circle.x}
-                                                    y={circle.y}
-                                                    width={circle.width}
-                                                    height={circle.height}
-                                                    fill={circle.fill}
-                                                    opacity={0.8}
-                                                    stroke={circle.stroke}
-                                                    shadowColor="black"
-                                                    shadowBlur={10}
-                                                    shadowOpacity={0.6}
-                                                    onClick={selectCircle}
-                                                    onDblClick={
-                                                        connecting ? finalConnect : initialConnect
-                                                    }
-                                                />
-                                                <Text
-                                                    text={circle.value}
-                                                    x={circle.x}
-                                                    y={circle.y}
-                                                    fill="white"
-                                                />
-                                                <Circle
-                                                    x={circle.x + 40}
-                                                    y={circle.y + 40}
-                                                    id={circle.id}
-                                                    stroke={
-                                                        selectedRight.id === circle.id ? "red" : "black"
-                                                    }
-                                                    width={circle.width / 10}
-                                                    height={circle.height / 10}
-                                                    onClick={insertRight}
-                                                />
-                                                <Circle
-                                                    x={circle.x - 40}
-                                                    y={circle.y + 40}
-                                                    id={circle.id}
-                                                    stroke={
-                                                        selectedLeft.id === circle.id ? "red" : "black"
-                                                    }
-                                                    width={circle.width / 10}
-                                                    height={circle.height / 10}
-                                                    onClick={insertLeft}
-                                                />
-                                            </React.Fragment>
-                                        ))}
-                                        {lines.map((line) => (
-                                            <React.Fragment>
-                                                <Line
-                                                    id={line.id}
-                                                    points={line.points}
-                                                    stroke={line.stroke}
-                                                    fill={"black"}
-                                                    onClick={selectLine}
-                                                />
-                                            </React.Fragment>
-                                        ))}
-                                                                                {visualArray.map((rect) => (
-                                            <React.Fragment>
-                                                <Rect
-                                                    x={rect.x}
-                                                    y={rect.y}
-                                                    width={rect.width}
-                                                    height={rect.height}
-                                                    stroke={rect.stroke}
-                                                    strokeWidth={rect.strokeWidth}
-                                                    value={rect.value}
-                                                />
-                                                <Text
-                                                    text={rect.value}
-                                                    fontSize={20}
-                                                    x={rect.x + 40}
-                                                    y={rect.y + 40}
-                                                />
-                                            </React.Fragment>
-                                        ))}
-                                    </Layer>
-                                    
-                                </Stage>
-                                
-                            </Paper>
-                            <h1></h1>
-                            <Grid item xs={12}>
-                                <form noValidate autoComplete="off">
-                                    ``
-                  <Paper className={classes.fields}>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={2}></Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={stepBackward}
-                                                >
-                                                    Step Back
-                        </Button>
-                                            </Grid>
-                                            <Grid item xs={2}></Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary">
-                                                    Pause
-                        </Button>
-                                            </Grid>
-                                            <Grid item xs={2}></Grid>
-                                            <Grid item>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={stepForward}
-                                                >
-                                                    Step Forward
-                        </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </form>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={deleteBranch}>
-                    <img src={trash} className={classes.trashImg} />
-                </ButtonBase>
-            </ThemeProvider>
-        </Header>
+  /* stepBackward - visually steps backward through the tree
+   */
+  stepBackward() {
+    // If the step counter is after a decrement would happen is 0 then return
+    if (this.state.num - 1 < 0) return;
+    else {
+      // Change the value in the visual array to be empty
+      this.state.visualArray[this.state.num - 1].value = null;
+      // Decrement the counter for the step as well as make the circumference of the current circle black
+      this.setState({
+        circles: this.state.circles.map(circle => {
+          if (this.state.algorithmArray[this.state.num - 1].id === circle.id) {
+            return {
+              ...circle,
+              stroke: "black"
+            };
+          }
+          return circle;
+        }),
+        visualArray: this.state.visualArray,
+        num: this.state.num - 1
+      });
+    }
+  }
+  /* selectCircle - selects the circle in the tree and highlights it blue
+   * @param e - the current circle being selected
+   * return null if the step is greater than 0, a blue outlined circle if the
+   *    circle is selected once, or a black outlined circle if it selected twice
+   */
+  selectCircle(e) {
+    if (this.state.num !== 0) {
+      return null;
+    }
+    const id = e.target.id();
+
+    // set connecting state to true
+    this.setState({
+      selectedLeft: {},
+      selectedRight: {},
+      // If the current selected id is equal to the targetted id
+      selected:
+        this.state.selected.id === e.target.id()
+          ? { id: -1 }
+          : this.state.circles.find(circle => circle.id === e.target.id()),
+      circles: this.state.circles.map(circle => {
+        if (circle.id == id) {
+          if (circle.id != this.state.selected.id) {
+            return {
+              ...circle,
+              stroke: "blue",
+              connected: true
+            };
+          }
+        }
+        return {
+          ...circle,
+          stroke: "black",
+          connected: false
+        };
+      })
+    });
+  }
+  /* deleteBranch - Deletes a group of leaves and updates the tree accordingly
+  * @param e - the current circle being selected
+   */
+  deleteBranch(e) {
+    const id = this.state.selected.id;
+    let tempBundle;
+    //console.log(lines);
+    if (id != -1 && id != this.state.circles[0].id) {
+      let node = this.state.circles.find(circle => circle.id == id);
+      tempBundle = this.deleteNode(
+        node,
+        this.state.circles.filter(circle => circle.id != id),
+        this.state.lines
+      );
+      // ** TODO **
+      // disconnect node from the parent
+      tempBundle[0] = tempBundle[0].map(circle => {
+        if (circle.leftChild !== null && circle.leftChild === node.id) {
+          return {
+            ...circle,
+            leftChild: null
+          };
+        } else if (
+          circle.rightChild !== null &&
+          circle.rightChild === node.id
+        ) {
+          return {
+            ...circle,
+            rightChild: null
+          };
+        }
+        return circle;
+      });
+      this.setState({
+        circles: tempBundle[0],
+        lines: tempBundle[1]
+      });
+    }
+  }
+  deleteNode(node, nodeArray, nodeConnections) {
+    let leftNodeArray = nodeArray;
+    let rightNodeArray = nodeArray;
+    let resultNodeArray = nodeArray;
+
+    let newConnections = nodeConnections.filter(line => {
+      for (let i = 0; i < line.connections.length; i++) {
+        if (line.connections[i] === node.id) {
+          console.log("test");
+          return false;
+        }
+      }
+      return true;
+    });
+    let leftNodeConnections = newConnections;
+    let rightNodeConnections = newConnections;
+    //console.log(newConnections);
+    if (node.leftChild != null) {
+      let leftBundle = this.deleteNode(
+        this.state.circles.find(circle => node.leftChild === circle.id),
+        nodeArray.filter(circle => circle.id != node.leftChild),
+        newConnections
+      );
+      leftNodeArray = leftBundle[0];
+      leftNodeConnections = leftBundle[1];
+      //console.log(leftNodeArray);
+    }
+    if (node.rightChild != null) {
+      let rightBundle = this.deleteNode(
+        this.state.circles.find(circle => node.rightChild === circle.id),
+        nodeArray.filter(circle => circle.id != node.rightChild),
+        newConnections
+      );
+      rightNodeArray = rightBundle[0];
+      rightNodeConnections = rightBundle[1];
+      //console.log(rightNodeArray);
+    }
+    resultNodeArray = leftNodeArray.filter(circle =>
+      rightNodeArray.includes(circle)
     );
+    newConnections = leftNodeConnections.filter(line =>
+      rightNodeConnections.includes(line)
+    );
+    console.log(resultNodeArray);
+    return [resultNodeArray, newConnections];
+  }
+  insertRight(e) {
+    this.resetTree();
+    this.setState({
+      selected: { id: -1 },
+      selectedLeft: {},
+      selectedRight: this.state.circles.find(
+        circle => circle.id == e.target.id()
+      )
+    });
+  }
+
+  insertLeft(e) {
+    this.resetTree();
+    this.setState({
+      selected: { id: -1 },
+      selectedRight: {},
+      selectedLeft: this.state.circles.find(
+        circle => circle.id == e.target.id()
+      )
+    });
+  }
+  resetTree() {
+    this.setState({
+      circles: this.state.circles.map(circle => {
+        return {
+          ...circle,
+          stroke: "black"
+        };
+      }),
+      visualArray: this.state.visualArray.map(rect => {
+        return {
+          ...rect,
+          value: null
+        };
+      }),
+      num: 0
+    });
+  }
+  insertNode(e) {
+    if (Object.keys(this.state.selectedLeft).length !== 0) {
+      const child = createLeft(
+        this.state.selectedLeft,
+        this.state.idNum,
+        WIDTH
+      );
+      if (child.id === -1) {
+        return -1;
+      }
+      const connectionBundle = newConnectNodeBTT(
+        this.state.selectedLeft,
+        child,
+        this.state.connection,
+        true
+      );
+      this.setState({
+        selectedLeft: {},
+        lines: this.state.lines.concat(connectionBundle[0]),
+        circles: this.state.circles.concat(child),
+        idNum: this.state.idNum + 1
+      });
+    } else if (Object.keys(this.state.selectedRight).length !== 0) {
+      const child = createRight(
+        this.state.selectedRight,
+        this.state.idNum,
+        WIDTH
+      );
+      if (child.id === -1) {
+        return -1;
+      }
+      const connectionBundle = newConnectNodeBTT(
+        this.state.selectedRight,
+        child,
+        this.state.connection,
+        false
+      );
+      this.setState({
+        selectedRight: {},
+        lines: this.state.lines.concat(connectionBundle[0]),
+        circles: this.state.circles.concat(child),
+        idNum: this.state.idNum + 1
+      });
+    }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.state.lines !== nextState.lines ||
+      this.state.type !== nextState.type ||
+      this.state.circles !== nextState.circles ||
+      this.state.num !== nextState.num ||
+      this.state.selectedLeft !== nextState.selectedLeft ||
+      this.state.selectedRight !== nextState.selectedRight
+    ) {
+      return true;
+    }
+    return false;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.lines !== this.state.lines ||
+      prevState.type !== this.state.type
+    ) {
+      let array = [];
+      //this.resetTree();
+      switch (this.state.type) {
+        case "Preorder":
+          preOrderTraversal(this.state.circles[0], array, this.state.circles);
+          break;
+        case "Postorder":
+          postOrderTraversal(this.state.circles[0], array, this.state.circles);
+          break;
+        case "Inorder":
+          inOrderTraversal(this.state.circles[0], array, this.state.circles);
+          break;
+      }
+      console.log(array);
+      this.setState({
+        algorithmArray: array,
+        visualArray: generateArray(array.length, WIDTH, HEIGHT)
+      });
+    }
+  }
+  render() {
+    const theme = createMuiTheme({
+      palette: {
+        primary: {
+          main: green[900]
+        },
+        secondary: {
+          main: grey[700]
+        }
+      }
+    });
+    return (
+      <MainPage
+        algorithms={[
+          { name: "Preorder", func: this.changeAlgo },
+          { name: "Inorder", func: this.changeAlgo },
+          { name: "Postorder", func: this.changeAlgo }
+        ]}
+        display={{
+          name: "Binary Tree Traversal",
+          type: this.state.type,
+          step: this.state.num,
+          display: (
+            <BTTDisplay
+              circles={this.state.circles}
+              lines={this.state.lines}
+              type={this.state.type}
+              visualArray={this.state.visualArray}
+              insertRight={this.insertRight}
+              insertLeft={this.insertLeft}
+              selectedRight={this.state.selectedRight}
+              selectedLeft={this.state.selectedLeft}
+              connecting={null}
+              selectNode={this.selectCircle}
+              finalConnect={null}
+              handleDragStart={null}
+              handleDragEnd={null}
+              handleMove={null}
+              clearSelected={null}
+            />
+          ),
+          delete: this.deleteBranch,
+          insert: this.insertNode,
+          reset: this.resetTree,
+          extra: null
+        }}
+        barFunctions={{
+          forward: this.stepForward,
+          back: this.stepBackward
+        }}
+      />
+    );
+  }
 }
+
+export default BinaryTreeTraversal;

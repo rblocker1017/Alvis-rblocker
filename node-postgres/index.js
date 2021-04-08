@@ -29,10 +29,18 @@ app.post("/register", (req, res) => {
   const email = req.body.email
   const password = bcrypt.hashSync(String(req.body.password), 10)
   const username = req.body.username
+
   db.addLogin(password, email)
   db.addUser(username, email)  
 })
 
+app.post("/email", (req, res) => {
+  const email = req.body.email
+  
+  db.getLogin(email)
+  .then(valid => res.send(String(valid)))
+  .catch(err => console.error(err));
+})
 
 app.post("/login", (req, res) => {
   const loginEmail = req.body.loginEmail

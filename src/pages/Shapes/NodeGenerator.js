@@ -64,8 +64,8 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
                 id: circles.length,
                 x: canvasWidth / 2,
                 y: 60,
-                width: 100,
-                height: 100,
+                width: 40,
+                height: 40,
                 color: 'white',
                 fill: 'green',
                 stroke: 'black',
@@ -101,8 +101,8 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             id: circles.length,
             x: Parent.x - 150 - (Math.pow(canvasWidth, 1.22 / step)),
             y: Parent.y + 60,
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             color: 'green',
             fill: 'green',
             stroke: 'black',
@@ -122,8 +122,8 @@ export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
             id: circles.length,
             x: Parent.x + 150 + (Math.pow(canvasWidth, 1.22 / step)),
             y: Parent.y + 60,
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             color: 'green',
             fill: 'green',
             stroke: 'black',
@@ -150,8 +150,8 @@ export function createLeft(circle, id, canvasWidth) {
             id: id,
             x: circle.x - 150 - (Math.pow(canvasWidth, 1.22 / step)),
             y: circle.y + 60,
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             color: 'green',
             value: Math.floor(Math.random() * 100),
             fill: 'green',
@@ -175,8 +175,8 @@ export function createRight(circle, id, canvasWidth) {
             id: id,
             x: circle.x + 150 + (Math.pow(canvasWidth, 1.22 / step)),
             y: circle.y + 60,
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             color: 'green',
             value: Math.floor(Math.random() * 100),
             fill: 'green',
@@ -264,7 +264,7 @@ export function connectNodeBTT(circle, circles) {
         lines.push({
             id: id,
             connections: [circle.id, circle.leftChild],
-            points: getPoints({ x: circle.x + 5, y: circle.y + 30 }, leftChild),
+            points: getPoints({ x: circle.x - 5, y: circle.y + 15}, leftChild),
             value: value,
             stroke: "black",
             connected: false
@@ -285,7 +285,7 @@ export function connectNodeBTT(circle, circles) {
         lines.push({
             id: id,
             connections: [circle.id, circle.rightChild],
-            points: getPoints({ x: circle.x - 5, y: circle.y + 30 }, rightChild),
+            points: getPoints({ x: circle.x + 5, y: circle.y + 15}, rightChild),
             value: value,
             stroke: "black",
             connected: false
@@ -316,8 +316,8 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
             id: circles.size,
             x: (Math.random() * (canvasWidth - 200)) + 100,
             y: (Math.random() * (canvasHeight - 200)) + 100,
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             color: 'green',
             stroke: 'black',
             strokeWidth: 5,
@@ -353,7 +353,7 @@ export function getPoints(to, from) {
     const dy = to.y - from.y;
     let angle = Math.atan2(-dy, dx);
 
-    const radius = 50
+    const radius = 20
 
     return [
         from.x + -radius * Math.cos(angle + Math.PI),
@@ -444,15 +444,15 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
     if (isLeft) {
         newTo = {
             ...to,
-            x: to.x + 5,
-            y: to.y + 30
+            x: to.x - 5,
+            y: to.y + 15
         }
     }
     else {
         newTo = {
             ...to,
-            x: to.x - 5,
-            y: to.y + 30
+            x: to.x + 5,
+            y: to.y + 15
         }
     }
     connections.push(id);
