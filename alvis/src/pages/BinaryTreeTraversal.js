@@ -3,6 +3,7 @@ import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import BTTDisplay from "../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
+import Complexity from "../componenets/layout/Page/Complexity";
 import {
   inOrderTraversal,
   postOrderTraversal,
@@ -16,6 +17,26 @@ import {
   generateConnectorsBTT,
   newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
+
+const str1 = <b>Step 1: Click an algorithm of your choice to begin.</b>;
+const str2 = (
+  <b>Step 2: Click Step Forward/Back to traverse the tree in that direction.</b>
+);
+const str3 = (
+  <b>Step 3: Click "RESET" to reset the traversal to the beginning</b>
+);
+const str4 = (
+  <b>
+    Step 4: Click a tiny circle (left/right) attached to a node, and click
+    "INSERT" to insert a new leaf
+  </b>
+);
+const str5 = (
+  <b>
+    Step 5: Click on a big circle until it turns blue, then click the trash icon
+    to delete that node
+  </b>
+);
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -43,6 +64,8 @@ class BinaryTreeTraversal extends Component {
       fromCon: {},
       idNum: INIT.length
     };
+    this.instructions = [str1, str2, str3, str4, str5];
+    this.Complexity = ["hello", "hello"];
     this.changeAlgo = this.changeAlgo.bind(this);
     this.stepForward = this.stepForward.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
@@ -156,7 +179,7 @@ class BinaryTreeTraversal extends Component {
     });
   }
   /* deleteBranch - Deletes a group of leaves and updates the tree accordingly
-  * @param e - the current circle being selected
+   * @param e - the current circle being selected
    */
   deleteBranch(e) {
     const id = this.state.selected.id;
@@ -194,6 +217,11 @@ class BinaryTreeTraversal extends Component {
       });
     }
   }
+  /** deleteNode - Deletes a node and updates the connections
+   * @param node - The current node that's about to be deleted
+   * @param nodeArray - The array filled with all of the nodes
+   * @param nodeConnections - An array with all of the nodes connections
+   */
   deleteNode(node, nodeArray, nodeConnections) {
     let leftNodeArray = nodeArray;
     let rightNodeArray = nodeArray;
@@ -219,7 +247,6 @@ class BinaryTreeTraversal extends Component {
       );
       leftNodeArray = leftBundle[0];
       leftNodeConnections = leftBundle[1];
-      //console.log(leftNodeArray);
     }
     if (node.rightChild != null) {
       let rightBundle = this.deleteNode(
@@ -229,7 +256,6 @@ class BinaryTreeTraversal extends Component {
       );
       rightNodeArray = rightBundle[0];
       rightNodeConnections = rightBundle[1];
-      //console.log(rightNodeArray);
     }
     resultNodeArray = leftNodeArray.filter(circle =>
       rightNodeArray.includes(circle)
@@ -237,9 +263,11 @@ class BinaryTreeTraversal extends Component {
     newConnections = leftNodeConnections.filter(line =>
       rightNodeConnections.includes(line)
     );
-    console.log(resultNodeArray);
     return [resultNodeArray, newConnections];
   }
+  /** insertRight - Inserts a new child on the right side of the parent node
+   * @param e - The current node that's clicked on
+   */
   insertRight(e) {
     this.resetTree();
     this.setState({
@@ -250,7 +278,9 @@ class BinaryTreeTraversal extends Component {
       )
     });
   }
-
+  /** insertLeft - Inserts a new child on the left side of the parent node
+   * @param e - The current node that's clicked on
+   */
   insertLeft(e) {
     this.resetTree();
     this.setState({
@@ -261,6 +291,8 @@ class BinaryTreeTraversal extends Component {
       )
     });
   }
+  /** resetTree - Resets the tree and visual array to the beginning
+   */
   resetTree() {
     this.setState({
       circles: this.state.circles.map(circle => {
@@ -278,6 +310,10 @@ class BinaryTreeTraversal extends Component {
       num: 0
     });
   }
+  /** insertNode - looks for the proper location to insert the node
+   * @param {*} e takes in the current node being selected
+   * @returns -1 if no proper child found
+   */
   insertNode(e) {
     if (Object.keys(this.state.selectedLeft).length !== 0) {
       const child = createLeft(
@@ -323,6 +359,11 @@ class BinaryTreeTraversal extends Component {
       });
     }
   }
+  /** shouldComponentUpdate - determines if the component should update
+   * @param {*} nextProps takes in the component based props
+   * @param {*} nextState takes in the next state to be used
+   * @returns whether the component should update or not based on the states
+   */
   shouldComponentUpdate(nextProps, nextState) {
     if (
       this.state.lines !== nextState.lines ||
@@ -336,13 +377,16 @@ class BinaryTreeTraversal extends Component {
     }
     return false;
   }
+  /** componentDidUpdate - Updates the new traversal
+   * @param {*} prevProps previous props taken
+   * @param {*} prevState the previous state taken in
+   */
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.lines !== this.state.lines ||
       prevState.type !== this.state.type
     ) {
       let array = [];
-      //this.resetTree();
       switch (this.state.type) {
         case "Preorder":
           preOrderTraversal(this.state.circles[0], array, this.state.circles);
@@ -361,6 +405,9 @@ class BinaryTreeTraversal extends Component {
       });
     }
   }
+
+  /** render - Creates a new MUI theme palette for the buttons
+   */
   render() {
     const theme = createMuiTheme({
       palette: {
@@ -372,17 +419,26 @@ class BinaryTreeTraversal extends Component {
         }
       }
     });
+
+    /*
+     * Here is where everything gets returned and displayed
+     */
     return (
+      // Use a "MainPage" component to condense everything
       <MainPage
+        // Display all the alogrithms as well as the switches
         algorithms={[
           { name: "Preorder", func: this.changeAlgo },
           { name: "Inorder", func: this.changeAlgo },
           { name: "Postorder", func: this.changeAlgo }
         ]}
+        // This affects the text of what algorithm is currently being traversed
         display={{
           name: "Binary Tree Traversal",
           type: this.state.type,
           step: this.state.num,
+
+          // We create a "BTTDisplay" component to handle all of the functions
           display: (
             <BTTDisplay
               circles={this.state.circles}
@@ -407,6 +463,24 @@ class BinaryTreeTraversal extends Component {
           reset: this.resetTree,
           extra: null
         }}
+        // This component is for modifying the instructions text
+        instruct={this.instructions}
+        // This component is for modifying the complexity text
+        complexity={{
+          time: (
+            <p>
+              {`O(n)`}
+              <p>{"(n = leaves in the tree)"}</p>
+            </p>
+          ),
+          space: (
+            <p>
+              {"O(h)"}
+              <p>{"(h = height of the tree)"}</p>
+            </p>
+          )
+        }}
+        // This component is for the functionaly of the step functions
         barFunctions={{
           forward: this.stepForward,
           back: this.stepBackward

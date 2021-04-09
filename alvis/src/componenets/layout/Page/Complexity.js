@@ -18,12 +18,16 @@ class Complexity extends Component {
         return(
             <Paper className={this.classes.code}>
                 <h2>Complexity</h2>
-                <h4>
-                    Time: {this.props.time}
-                </h4>
-                <h4>
-                    Space: {this.props.space}
-                </h4>
+                {this.props.complexity === undefined ? null :
+                <div>
+                    <h4>
+                        Time: {this.props.complexity.time}
+                    </h4>
+                    <h4>
+                        Space: {this.props.complexity.space}
+                    </h4>
+                </div>
+                }
             </Paper>
         );
     }

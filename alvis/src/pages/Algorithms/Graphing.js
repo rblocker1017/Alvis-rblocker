@@ -33,15 +33,24 @@ function hasPath(currentNode, end, lines, processedNodes) {
     });
     return exists;
 }
-
+/*
+    ****** DOES NOT WORK ******
+    isCyclical - unimplemented test function. Function that is used to detect if the graphing path is cyclical
+    @param: start - starting node of the current graph
+    @param: processedNodes - nodes waiting to be processed
+    @param: displayLines - nodes that have been processed
+    @return: returns true if the path contains a cyclical path, false if not 
+*/ 
 function isCyclical(start, processedNodes, displayLines) {
-    console.log(displayLines);
-    console.log(processedNodes);
     let cyclical = false;
+    // iterate through processed nodes
     for (let node of processedNodes.values()) {
+        // iterate through each path connected to these nodes
         for (let lines of displayLines) {
             const newProc = new Set(processedNodes);
+            // delete the current node from processed nodes
             newProc.delete(node);
+            // take the OR of cyclcal and result
             cyclical = cyclical || isCyclical(node, newProc, displayLines.filter(disLines => disLines !== lines));
         }
     }
@@ -71,11 +80,23 @@ export function kruskalAlgorithm(start, end, lines) {
     }
     return displayArray;
 }
-
+/**
+ * primHelper - helper function for Prim algorithm. runs recursively
+ * @param {*} start - start node
+ * @param {*} end - end node
+ * @param {*} displayLines - lines to display in a certain order
+ * @param {*} tempLines - full array of lines
+ * @param {*} processedNodes - nodes that the algorithm has already seen
+ * @returns -1 when there are no other paths to process
+ */
 function primHelper(start, end, displayLines, tempLines, processedNodes) {
+    // Enumerate all lines
     for (let line of tempLines) {
+        // enumerate all processed nodes
         for (let node of processedNodes) {
+            // checks if there is a connection, as well as if we have already processed this node
             if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
+                // get next start, push current line to display, and push next node to processed nodes. then run  this function again
                 let nextStart = line.connections.find(id => id !== node);
                 displayLines.push(line.id);
                 processedNodes.push(nextStart);
@@ -85,23 +106,42 @@ function primHelper(start, end, displayLines, tempLines, processedNodes) {
     }
     return -1;
 }
-
+/**
+ * primAlgorithm - algorithm that starts the prim helper
+ * @param {*} start - start node
+ * @param {*} end - end node
+ * @param {*} lines - map of lines
+ * @returns 
+ */
 export function primAlgorithm(start, end, lines) {
+    // set up variables and sort lines
     let displayLines = [];
     const tempLines = Array.from(lines.values());
     let processedNodes = [start];
     tempLines.sort(sortLines);
+    // run recursive algorithm
     primHelper(start, end, displayLines, tempLines, processedNodes);
     return displayLines;
 }
-
+/**
+ * dijkstrasHelper - helper function for dijkstras algorithm
+ * @param {*} start - start node
+ * @param {*} end - end node
+ * @param {*} displayLines - lines to display
+ * @param {*} tempLines -  all of the lines
+ * @param {*} processedNodes - nodes that have been processed
+ * @returns 
+ */
 export function dijkstrasHelper(start, end, displayLines, tempLines, processedNodes) {
+    // if start and end are the same, return immediately
     if (Number(start) === Number(end)) {
-        console.log("test");
         return displayLines
     }
+    // iterate through all lines
     for (let line of tempLines) {
+        // iterate through all processed nodes
         for (let node of processedNodes) {
+            // if it is a connection and not already processed, processes it
             if (line.connections.includes(node) && !processedNodes.includes(line.connections.find(id => id !== node))) {
                 let nextStart = line.connections.find(id => id !== node);
                 displayLines.push(line.id);
@@ -112,123 +152,20 @@ export function dijkstrasHelper(start, end, displayLines, tempLines, processedNo
     }
     return -1;
 }
-
-
+/**
+ * dijkstrasAlgorithm - algorithm that starts the dijkstras helper
+ * @param {*} start - start node
+ * @param {*} end - end node
+ * @param {*} lines - map of lines
+ * @returns 
+ */
 export function dijkstrasAlgorithm(start, end, lines) {
+    // set up variables and sort lines
     let displayLines = [];
     const tempLines = Array.from(lines.values());
     let processedNodes = [start];
     tempLines.sort(sortLines);
+    // run recursion algorithm
     dijkstrasHelper(start, end, displayLines, tempLines, processedNodes);
     return displayLines;
 }
-
-// Graph creates a graph out of the circles and connected lines
-
-export function Graph(circles, lines) {
-    const nodes = [];
-    const list = {};
-
-    // Add a vertex to the array of vertices (nodes)
-    const addNode = (node) => {
-        nodes.push(node);
-        list[node] = [];
-    };
-
-    // Add an edge to the map of edges (lines)
-    const addEdge = (node1, node2, weight) => {
-        list[node1].push({ node: node2, weight: weight });
-        list[node2].push({ node: node1, weight: weight });
-    };
-
-    // Begin adding each circle object to the array
-    circles.forEach((circle) => {
-        addNode(circle.id);
-    });
-
-    // Begin adding each edge to the map
-    let firstNode;
-    let secondNode;
-    lines.forEach((line) => {
-        circles.forEach((circle) => {
-            if (circle.id === line.connections[0]) firstNode = circle; // Find the exact pairing to insert into the map
-            if (circle.id === line.connections[1]) secondNode = circle;
-        });
-        addEdge(firstNode.id, secondNode.id, line.value);
-    });
-
-    // Returns the graph as an array for easy access
-    return [nodes, list];
-}
-/*
-export function dijkstraAlgorithm(circles, lines, start, end) {
-    // Get the graph and parse it into a node array & list map
-    let graph = Graph(circles, lines);
-    let nodes = graph[0];
-    let list = graph[1];
-    console.log(list);
-    // Dijkstra start up arrays & variables
-    let distances = [];
-    let visited = [];
-    let shortestDistance; // current shortest distance
-    let shortestIndex; // current shortest index
-    let startNum;
-
-    // For loop to initialize all the distances to infinity
-    for (let i = 0; i < nodes.length; i++) {
-        distances[i] = Infinity;
-        if (nodes[i] === start.id) startNum = i;
-    }
-
-    // Starting node distance to itself is 0
-    distances[startNum] = 0;
-    // True while the shortestIndex is not -1
-    while (true) {
-        shortestDistance = Infinity;
-        shortestIndex = -1;
-
-        // Discover all of the nodes that are not visited
-
-        for (let i = 0; i < distances.length; i++) {
-            if (distances[i] < shortestDistance && !visited[i]) {
-                shortestDistance = distances[i];
-                shortestIndex = i;
-            }
-        }
-        console.log(shortestDistance);
-        console.log(shortestIndex);
-
-        // No node visitted so quit out
-        if (shortestIndex === -1) {
-            return distances;
-        }
-
-        console.log("after return");
-        // Find the node with the shortestIndex to find its neighbors
-        let curNode;
-        circles.forEach((circle) => {
-            if (circle.id === shortestIndex) curNode = circle;
-        });
-        console.log(curNode);
-        console.log("after assigning current");
-        for (let i = 0; i < list[curNode].length; i++) {
-            // if the path over this edge is shorter
-            if (
-                list[shortestIndex][i] !== 0 &&
-                distances[i] > distances[shortestIndex] + list[shortestIndex][i].weight
-            ) {
-                // Save this path as new shortest path.
-                console.log(distances);
-                console.log(list);
-                distances[i] = distances[shortestIndex] + list[shortestIndex][i].weight;
-            }
-        }
-        console.log("after for loop");
-        // After we visit the node, we mark it as done
-        console.log("after comment");
-        visited[shortestIndex] = true;
-        console.log("Visited nodes: " + visited);
-        console.log("Currently lowest distances: " + distances);
-    }
-}
-*/

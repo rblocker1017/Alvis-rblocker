@@ -142,6 +142,7 @@ class PageReplacement extends Component{
                     extra: null
                 }}
                 instruct = {this.instructions}
+                complexity = {{time: "O(n)", space: "O(n)"}}
                 //instruct = str1 + <br /> + str2 + str3 + str4 // Changes str1, str2, str3... to change instructions display
                 barFunctions = {{
                     frames: this.setFrames,

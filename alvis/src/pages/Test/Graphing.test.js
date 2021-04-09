@@ -1,9 +1,18 @@
+import React from 'react';
 import {
   kruskalAlgorithm,
   primAlgorithm,
   dijkstrasAlgorithm,
 } from "../Algorithms/Graphing";
 import sortConnectors from "../Shapes/NodeGenerator";
+import GraphingAlgorithm from '../../pages/GraphingAlgorithm';
+import { createMount } from '@material-ui/core/test-utils';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import { BrowserRouter, Route } from "react-router-dom";
+
+configure({ adapter: new Adapter() });
 
 let test1 = new Map();
 let test2 = new Map();
@@ -152,3 +161,189 @@ test(currentTest + " 2 Nodes", () => {
 test(currentTest + "Empty Graph", () => {
   expect(dijkstrasAlgorithm(null, null, [])).toEqual([]);
 });
+
+describe('<DOM Test />', () => {
+  let mount;
+
+  function Button() {
+    return (
+      <BrowserRouter basename={"/"}>
+      <ThemeProvider>
+      <Route path="/">
+      <GraphingAlgorithm />
+      </Route>
+       
+      </ThemeProvider>
+      </BrowserRouter>
+    );
+  }
+
+  beforeEach(() => {
+    mount = createMount();
+  });
+
+  
+afterEach(() => {
+    mount.cleanUp();
+  });
+
+  it('should work', () => {
+    const wrapper = shallow(<Button />);
+    expect(wrapper)
+  });
+
+  // Prim Button Test
+  it('check Prim button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const prim = <button class="MuiButtonBase-root-960 
+                                     MuiButton-root-933 
+                                     MuiButton-contained-941 
+                                     AlgoButton-button-932 
+                                     MuiButton-containedSecondary-943" 
+                              tabindex="0" type="button">
+                        <span class="MuiButton-label-934">Prim</span>
+                        <span class="MuiTouchRipple-root-969"></span>
+                      </button>
+    expect(wrapper.contains(prim)).toEqual(false);
+  });
+
+  // Dijkstras Button Test
+  it('check Dijkstras button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const dij = <button class="MuiButtonBase-root-960 
+                                     MuiButton-root-933 
+                                     MuiButton-contained-941 
+                                     AlgoButton-button-932 
+                                     MuiButton-containedPrimary-942" 
+                              tabindex="0" 
+                              type="button">
+                        <span class="MuiButton-label-934">Dijkstras</span>
+                        <span class="MuiTouchRipple-root-969"></span>
+                      </button>
+    expect(wrapper.contains(dij)).toEqual(false);
+  });
+
+  // Kruskal Button Test
+  it('check Kruskal button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const kruskal = <button class="MuiButtonBase-root-960 
+                                 MuiButton-root-933 
+                                 MuiButton-contained-941 
+                                 AlgoButton-button-932 
+                                 MuiButton-containedPrimary-942" 
+                          tabindex="0" 
+                          type="button">
+                    <span class="MuiButton-label-934">Kruskal</span>
+                    <span class="MuiTouchRipple-root-969"></span>
+                  </button>
+    expect(wrapper.contains(kruskal)).toEqual(false);
+  });
+
+  // Insert Button Test
+  it('check insert button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const insert = <button class="MuiButtonBase-root-960 
+                                  MuiButton-root-933 
+                                  MuiButton-contained-941 
+                                  AlgoButton-button-932 
+                                  MuiButton-containedPrimary-942" 
+                            tabindex="0" 
+                            type="button">
+                      <span class="MuiButton-label-934">Insert</span>
+                      <span class="MuiTouchRipple-root-969"></span>
+                    </button>
+    expect(wrapper.contains(insert)).toEqual(false);
+  });
+
+  // Reset Button Test
+  it('check reset button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const reset = <button class="MuiButtonBase-root-960 
+                                 MuiButton-root-933 
+                                 MuiButton-contained-941 
+                                 AlgoButton-button-932 
+                                 MuiButton-containedPrimary-942" 
+                          tabindex="0" 
+                          type="button">
+                    <span class="MuiButton-label-934">Reset</span>
+                    <span class="MuiTouchRipple-root-969"></span>
+                  </button>
+    expect(wrapper.contains(reset)).toEqual(false);
+  });
+
+  //Instruction Test
+  it('check instruction test',() =>{
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const instruct =<h2>Instructions</h2>
+    expect(wrapper.contains(instruct)).toEqual(false);
+  })
+
+  // StepBack Button Test
+  it('check step back button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const stepback = <button class="MuiButtonBase-root-960 
+                                    MuiButton-root-933 
+                                    MuiButton-contained-941 
+                                    AlgoButton-button-932 
+                                    MuiButton-containedPrimary-942" 
+                              tabindex="0" 
+                              type="button">
+                        <span class="MuiButton-label-934">Step Back</span>
+                        <span class="MuiTouchRipple-root-969"></span></button>
+    expect(wrapper.contains(stepback)).toEqual(false);
+  });
+
+  // StepForward Button Test
+  it('check step forward button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const stepforward = <button class="MuiButtonBase-root-960 
+                                    MuiButton-root-933 
+                                    MuiButton-contained-941 
+                                    AlgoButton-button-932 
+                                    MuiButton-containedPrimary-942" 
+                              tabindex="0" 
+                              type="button">
+                        <span class="MuiButton-label-934">Step Back</span>
+                        <span class="MuiTouchRipple-root-969"></span></button>
+    expect(wrapper.contains(stepforward)).toEqual(false);
+  });
+
+  // Set Start Button Test
+  it('check step forward button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const setStart = <button class="MuiButtonBase-root-960 
+                                    MuiButton-root-933 
+                                    MuiButton-contained-941 
+                                    AlgoButton-button-932 
+                                    MuiButton-containedPrimary-942" 
+                              tabindex="0" 
+                              type="button">
+                        <span class="MuiButton-label-934">Set Start</span>
+                        <span class="MuiTouchRipple-root-969"></span>
+                      </button>
+    expect(wrapper.contains(setStart)).toEqual(false);
+  });
+
+  // Set End Button Test
+  it('check step forward button',() => {
+    const wrapper = shallow(<GraphingAlgorithm />);
+    const setEnd = <button class="MuiButtonBase-root-960 
+                                    MuiButton-root-933 
+                                    MuiButton-contained-941 
+                                    AlgoButton-button-932 
+                                    MuiButton-containedPrimary-942" 
+                              tabindex="0" 
+                              type="button">
+                        <span class="MuiButton-label-934">Set End</span>
+                        <span class="MuiTouchRipple-root-969"></span>
+                      </button>
+    expect(wrapper.contains(setEnd)).toEqual(false);
+  });
+
+});
+
+
+
+
+
+
