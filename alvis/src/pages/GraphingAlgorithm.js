@@ -90,6 +90,18 @@ class GraphingAlgorithm extends Component{
         this.setEnd = this.setEnd.bind(this);
         this.finalConnect = this.finalConnect.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
+        this.instructions = [
+            "Select Circle / Line: Click on node (can only select when step is at 0)",
+            "Deselect Circle / Line: Click on already selected node",
+            "Move Circle: Click and drag circle",
+            "Move Canvas: Click and drag canvas",
+            "Add Circle: Click Insert button (can only insert when step is at 0)",
+            "Create Connection: Select a circle, then select a different circle",
+            "Delete Circle / Line: Select node, then click the trashcan",
+            "Select Algorithm: Click on specific algorithm",
+            "Algorithm Display: Use Step Back and Step Forward to navigate algorithms",
+            "Set Start/End: Sets selected node to start/end. End is only displayed on shortest path algorithms"
+        ];
     }
     // handleChange - handles change in textbox for insert input.
     // @param: e - event handler object
@@ -502,6 +514,7 @@ class GraphingAlgorithm extends Component{
                     reset: this.reset,
                     extra: null
                 }}
+                instruct = {this.instructions}
                 barFunctions = {{
                     forward: this.stepForward,
                     back: this.stepBack,
