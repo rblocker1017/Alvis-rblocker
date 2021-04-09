@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // generate regular circle node
 // numberCircles - number of wanted circles to generate
 // width of canvas to put circles in
@@ -91,69 +90,8 @@ export function generateBinaryTree(numberCircles, canvasWidth, canvasHeight) {
         //console.log("Parent value is: " + parent);
         //console.log("Left child value is: " + leftChild);
         //console.log("Right child value is: " + rightChild);
-=======
-import React from "react";
-import { Circle } from "react-konva";
-
-export function generateCircles(numberCircles, canvasWidth, canvasHeight) {
-  let circles = [];
-
-  while (circles.length < numberCircles) {
-    const value = Math.floor(Math.random() * 100);
-    circles.push({
-      id: circles.length,
-      x: Math.random() * (canvasWidth - 200) + 100,
-      y: Math.random() * (canvasHeight - 200) + 100,
-      width: 100,
-      height: 100,
-      color: "green",
-      stroke: "black",
-      strokeWidth: 5,
-      selected: false,
-      connections: [],
-      value: value
-    });
-  }
-  return circles;
-}
-
-export function generateTree(numberCircles, canvasWidth, canvasHeight) {
-  let circles = [];
-
-  while (circles.length < numberCircles) {
-    const value = Math.floor(Math.random() * 100);
-    if (circles.length == 0) {
-      circles.push({
-        id: circles.length,
-        x: canvasWidth/2,
-        y: canvasHeight,
-        width: 100,
-        height: 100,
-        color: "green",
-        stroke: "black",
-        strokeWidth: 5,
-        selected: false,
-        connections: [],
-        value: value
-      });
-    } else {
-      circles.push({
-        id: circles.length,
-        x: 0,
-        y: 0,
-        width: 100,
-        height: 100,
-        color: "green",
-        stroke: "black",
-        strokeWidth: 5,
-        selected: false,
-        connections: [],
-        value: value
-      });
->>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     }
-  }
-  return circles;
+    return circles;
 }
 
 export function NodeCreater(circles, canvasWidth, canvasHeight, Parent, value) {
@@ -411,7 +349,6 @@ export function generateCirclesGraphing(numberCircles, canvasWidth, canvasHeight
 
 // returns points for connectors using math
 export function getPoints(to, from) {
-<<<<<<< HEAD
     const dx = to.x - from.x;
     const dy = to.y - from.y;
     let angle = Math.atan2(-dy, dx);
@@ -424,37 +361,23 @@ export function getPoints(to, from) {
         to.x + -radius * Math.cos(angle),
         to.y + radius * Math.sin(angle)
     ];
-=======
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  let angle = Math.atan2(-dy, dx);
-
-  const radius = 50;
-
-  return [
-    from.x + -radius * Math.cos(angle + Math.PI),
-    from.y + radius * Math.sin(angle + Math.PI),
-    to.x + -radius * Math.cos(angle),
-    to.y + radius * Math.sin(angle)
-  ];
->>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
 }
 
 // sorts connectors by id
 const sortConnectors = (a, b) => {
-  if (a.id < b.id) {
-    return -1;
-  } else if (a.id > b.id) {
-    return 1;
-  }
-  return 0;
-};
+    if (a.id < b.id) {
+        return -1;
+    }
+    else if (a.id > b.id) {
+        return 1;
+    }
+    return 0;
+}
 
 // generates connectors between circles
 // numberConnectors - initial number of connectors
 // circles - array of circles to put connectors
 export function generateConnectors(numberConnectors, circles) {
-<<<<<<< HEAD
     let result = new Map();
     while (result.size < numberConnectors) {
         // get a random value, and two random circles that are different form eachother
@@ -512,51 +435,8 @@ export function connectNode(to, from, setValue, id) {
         value: setValue,
         stroke: "black",
         connected: false
-=======
-  let result = [];
-  while (result.length < numberConnectors) {
-    const value = Math.floor(Math.random() * 100);
-    let fromIndex = Math.floor(Math.random() * circles.length);
-    let toIndex = Math.floor(Math.random() * circles.length);
-    while (toIndex === fromIndex) {
-      toIndex = Math.floor(Math.random() * circles.length);
-    }
-
-    const from = circles[fromIndex];
-    const to = circles[toIndex];
-
-    const newConnection = {
-      id: result.length,
-      connections: [to, from],
-      points: getPoints(to, from),
-      value: value
->>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
     };
-    newConnection.connections.sort(sortConnectors);
-
-    let exists = false;
-
-    result.forEach(oldConnection => {
-      oldConnection.connections.sort(sortConnectors);
-      if (
-        oldConnection.connections[0] === newConnection.connections[0] &&
-        oldConnection.connections[1] === newConnection.connections[1]
-      ) {
-        exists = true;
-        console.log("repeating");
-      }
-    });
-
-    if (exists === true) {
-      continue;
-    }
-    circles[fromIndex].connections.push(result.length);
-    circles[toIndex].connections.push(result.length);
-    result.push(newConnection);
-  }
-  return result;
 }
-<<<<<<< HEAD
 export function newConnectNodeBTT(to, from, connections, isLeft) {
     let id = "";
     let newTo = {};
@@ -585,17 +465,3 @@ export function newConnectNodeBTT(to, from, connections, isLeft) {
     },
         connections];
 }
-=======
-
-export function connectNode(to, from, idNum) {
-  const value = Math.floor(Math.random() * 100);
-  return {
-    id: idNum,
-    connections: [to, from],
-    points: getPoints(to, from),
-    value: value
-  };
-}
-
-export function buildGraph() {}
->>>>>>> ffe38033454a704093dbbe0eaff2709294bdd3ea
