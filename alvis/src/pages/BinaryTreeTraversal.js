@@ -18,13 +18,25 @@ import {
   newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
 
-const str1 = 'Step 1: Click an algorithm of your choice to begin.'
-const str2 = 'Step 2: Click Step Forward/Back to traverse the tree in that direction.'
-const str3 = 'Step 3: Click "RESET" to reset the traversal to the beginning'
-const str4 = 'Step 4: Click a tiny circle (left/right) attached to a node, and click "INSERT" to insert a new leaf'
-const str5 = 'Step 5: Click on a big circle until it turns blue, then click the trash icon to delete that node'
-
-const compl = "Jello World"
+const str1 = <b>Step 1: Click an algorithm of your choice to begin.</b>;
+const str2 = (
+  <b>Step 2: Click Step Forward/Back to traverse the tree in that direction.</b>
+);
+const str3 = (
+  <b>Step 3: Click "RESET" to reset the traversal to the beginning</b>
+);
+const str4 = (
+  <b>
+    Step 4: Click a tiny circle (left/right) attached to a node, and click
+    "INSERT" to insert a new leaf
+  </b>
+);
+const str5 = (
+  <b>
+    Step 5: Click on a big circle until it turns blue, then click the trash icon
+    to delete that node
+  </b>
+);
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -52,8 +64,8 @@ class BinaryTreeTraversal extends Component {
       fromCon: {},
       idNum: INIT.length
     };
-    this.instructions = [str1,str2,str3,str4,str5];
-    this.Complexity=["hello","hello"];
+    this.instructions = [str1, str2, str3, str4, str5];
+    this.Complexity = ["hello", "hello"];
     this.changeAlgo = this.changeAlgo.bind(this);
     this.stepForward = this.stepForward.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
@@ -418,13 +430,25 @@ class BinaryTreeTraversal extends Component {
           reset: this.resetTree,
           extra: null
         }}
-        instruct = {this.instructions}
-        Complexity = {"hi", "hello"}
+        instruct={this.instructions}
+        complexity={{
+          time: (
+            <p>
+              {`O(n)`}
+              <p>{"(n = leaves in the tree)"}</p>
+            </p>
+          ),
+          space: (
+            <p>
+              {"O(h)"}
+              <p>{"(h = height of the tree)"}</p>
+            </p>
+          )
+        }}
         barFunctions={{
           forward: this.stepForward,
           back: this.stepBackward
         }}
-        
       />
     );
   }
