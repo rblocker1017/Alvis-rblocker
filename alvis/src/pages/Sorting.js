@@ -8,10 +8,13 @@ import MainPage from "../componenets/layout/Page/MainPage";
 import { bubble, heapSort, insertion, quickSort, selection, shellSort } from "./Algorithms/Sorting";
 import { generateINIT } from './Shapes/SortingGenerator';
 
+//Define size of the bar graph
+//Generate initial value and array 
 const SIZE = 15;
 const INIT_VALUES = generateINIT(SIZE);
 const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
+//generate styles for React objects
 const styles = (theme) => ({
     modal: {
         display: 'flex',
@@ -20,7 +23,10 @@ const styles = (theme) => ({
     }
 });
 
-class Sorting extends Component{
+//Sorting Algorithm Component
+//displays all of the buttons and displays for the sorting algorithms
+export class Sorting extends Component{
+    //initialize states and binds local methods
     constructor(props){
         super(props);
         this.classes = this.props.classes;
@@ -50,29 +56,43 @@ class Sorting extends Component{
         this.selectBar = this.selectBar.bind(this);
         this.updateGraph = this.updateGraph.bind(this);
     }
+
+    /* changeAlgorithm - change the current algorithm
+     * @param e - the algorithm being switched to
+     */
     changeAlgorithm(e){
         let currentType = e.target.textContent;
         if (this.state.stepCount !== 0) {
             return;
         }
+        //updated type to the new algorithm type
         this.setState({
             type: currentType
         });
     }
+
+    /* handleChange - handles change in textbox for insert input
+     * @param e - the algorithm being switched to
+     */
     handleChange(e){
+        //sets state of the input for the insert modal
         this.setState({
             input: e.target.value
         });
     }
 
+    //handleClose - close the input modal
     handleClose(){
+        //clears the states of insert modal related states
         this.setState({
             inputError: false,
             open: false
         });
     }
 
+    //handleOpen - open the input modal
     handleOpen(){
+        //sets open state to true as long as it is not mid algorithm display
         if (this.state.stepCount === 0) {
             this.setState({
                 open: true
@@ -80,6 +100,7 @@ class Sorting extends Component{
         }
     }
 
+    //insertValue - user can insert value from number 1 to 100
     insertValue(){
         const regex = /[^0-9]/g;
         if (!regex.test(this.state.input) && this.state.input !== "" && parseInt(this.state.input) > 1 && parseInt(this.state.input) < 100) {
@@ -88,15 +109,18 @@ class Sorting extends Component{
             this.setState({
                 transitionArray: firstPart.concat(parseInt(this.state.input)).concat(lastPart),
             });
+            //clear selected states
             this.handleClose();
         }
         else {
+            //otherwise, update input error state to display input error message
             this.setState({
                 inputError: true
             });
         }
     }
 
+    //removeValue - user can remove bar or graph by clicking it and the trash
     removeValue(){
         let tempArray = this.state.transitionArray;
         tempArray.splice(this.state.selected, 1)
@@ -105,7 +129,9 @@ class Sorting extends Component{
         });
     }
 
+    //reset - resets the sorting
     reset() {
+        //declare variable
         let tempStep = 0;
         this.setState({
             stepCount: tempStep,
@@ -115,6 +141,8 @@ class Sorting extends Component{
         });
     }
 
+    /* stepForward - visually steps forward through the sorting
+    */
     stepForward() {
         if (this.state.stepCount === 0) {
             this.setState({
@@ -123,6 +151,7 @@ class Sorting extends Component{
         }
         if (this.state.stepCount < this.state.arraysOfArrays.length - 1) {
             let tempStep = this.state.stepCount + 1;
+            //sets step and swaps forward the bar or graph
             this.setState({
                 stepCount: tempStep,
                 newArray: this.state.arraysOfArrays[tempStep].data.split(',').map(Number),
@@ -132,9 +161,13 @@ class Sorting extends Component{
         }
     }
 
+    /* stepBack - visually steps backward through the sorting
+    */
     stepBack() {
+        // If the step counter is greater than 0
         if (this.state.stepCount > 0) {
             let tempStep = this.state.stepCount - 1;
+            //sets step and swaps back the bar or graph
             this.setState({
                 stepCount: tempStep,
                 newArray: this.state.arraysOfArrays[tempStep].data.split(',').map(Number),
@@ -143,7 +176,10 @@ class Sorting extends Component{
             });
         }
     }
+
+    //selectBar - sets clicked bar or graph to selected
     selectBar(d, i) {
+        //can slect bar or graph on the first step
         if (this.state.stepCount === 0) {
             this.setState({
                 selected: i
@@ -156,6 +192,8 @@ class Sorting extends Component{
             });
         }*/
     }
+
+    // updateGraph - updates the graph with new values after swapping
     updateGraph(newArray, selected, swap1, swap2){
         let x = Math.max(...newArray)
         const svg = select(this.svgRef.current);
@@ -209,8 +247,8 @@ class Sorting extends Component{
             .join("rect")
             .attr("class", "bar")
             .style("transform", "scale(1, -1)")
-            .attr("x", (value, index) => xScale(index))
-            .attr("y", -370)
+            .attr("x", (value, index) => xScale(index)) //set the position in xScale
+            .attr("y", -370) //set the position in yScale
             .attr("id", (value, index) => {
                 return index;
             })
@@ -221,6 +259,10 @@ class Sorting extends Component{
                 }
                 return 1;
             })
+
+            //set the color of char or graph when user clicks it
+            //index - the char or graph
+            //if a char or graph is selected, it is blue color; otherwise it is black color
             .attr("stroke", (value, index) => {
                 if (index === selected) {
                     return "blue";
@@ -243,6 +285,10 @@ class Sorting extends Component{
             .on("click", this.selectBar
             )
             .on("mouseleave", () => svg.select(".tooltip").remove())
+            
+            //set the color of the bar graph
+            //switch the bar graph - if the index is equal swap1 then it is red color 
+            //if the index is equal swap2 then it is red color; otherwise it is green color
             .attr("fill", (value, index) => {
                 if (index == swap1) {
                     return "red"
@@ -255,11 +301,14 @@ class Sorting extends Component{
                 }
             })
 
+            //set the height of char or graph
             .attr("height", value => 370 - yScale(value))
     }
     componentDidMount(){
         this.updateGraph(this.state.newArray, this.state.selected, this.state.swap1, this.state.swap2);
     }
+
+    // shouldComponentUpdate - checks if comment should re-render
     shouldComponentUpdate(nextProps, nextState){
         if(this.state.type !== nextState.type || 
             this.state.stepCount !== nextState.stepCount || 
@@ -272,10 +321,13 @@ class Sorting extends Component{
         }
         return false;
     }
+
+    //componentDidUpdate - updates changed components after re-render
     componentDidUpdate(prevProps, prevState){
         console.log("updated");
         if(prevState.type !== this.state.type || prevState.transitionArray !== this.state.transitionArray){
             let arrayBundle;
+            //check type, and calculate algorithm accordingly
             switch (this.state.type) {
                 case "Bubble":
                     arrayBundle = bubble(this.state.transitionArray.concat());
@@ -314,6 +366,8 @@ class Sorting extends Component{
         }
         this.updateGraph(this.state.newArray, this.state.selected, this.state.swap1, this.state.swap2);
     }
+
+    //render function
     render(){
         return (
             <Fragment>
