@@ -10,11 +10,11 @@ export function fcfsPageReplacementFunc(pages, frames){
         //prev struct keeps the order of the numbers correct. Set has unpredictable order.
         //console.log("For Loop");
         
-        if (s.size < frames) {
-            if (!s.has(pages[i])) {
+        if (s.size < frames) { 
+            if (!s.has(pages[i])) {    
                 s.add(pages[i]);
-                prevStruct = [...s]
-                page_faults += 1;
+                prevStruct = [...s] 
+                page_faults += 1; // for the first x frame, where x is the maximum amount of frames, there will always be a page fault
                 filler = [];
                 for (let j = i; j < frames - 1; j++) {  // Pushes a set amount of blank text to filler, allows columns to become uniform in size
                     filler.push("");
@@ -24,7 +24,7 @@ export function fcfsPageReplacementFunc(pages, frames){
                     fault: "Fault"
                 }
                 answer.push({
-                    column: [...s, ...filler],
+                    column: [...s, ...filler],  // push both the set and the filler frame spaces to answer, along with a fault
                     fault: "❌"
 
                 });
@@ -33,17 +33,18 @@ export function fcfsPageReplacementFunc(pages, frames){
                 continue;
             }
         } else {
-            if (!s.has(pages[i])) {
-                let val = indexes.shift();
+            if (!s.has(pages[i])) {         // enter here if page is not loaded into memory and all frames have already been assigned
+                let val = indexes.shift();  // removes the first element indexes and sets it equal to value
 
-                s.delete(val);
-                s.add(pages[i])
+                s.delete(val);  // remove value from the set
+                s.add(pages[i]) // add in new value to the set
+
                 //console.log(prevStruct)
-                const orderedAnswer = prevStruct.map(page => {
-                    if (s.has(page)) {
+                const orderedAnswer = prevStruct.map(page => {  // orderAnswer is an Array with values from the previous column
+                    if (s.has(page)) {                          // if the previous column is avaliable, grab it
                         return page;
                     } else {
-                        return pages[i];
+                        return pages[i];                        // if previous column is not avaliable, return column at i position
                     }
                 })
                 prevStruct = orderedAnswer;
