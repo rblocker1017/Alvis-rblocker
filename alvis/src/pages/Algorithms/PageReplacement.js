@@ -74,8 +74,6 @@ export function lruPageReplacementFunc(pages ,frames){
     let lruArr = [];    // determines least recently used value
     let prevStruct = []
     let filler = []
-    let lastVal = 0;
-    let currentVal = -1;     // 
 
     for (let i = 0; i < pages.length; i++) {    // loops through maximum amount of frames first, like FCFS and OPT
         if (s.size < frames) {
@@ -132,11 +130,13 @@ export function lruPageReplacementFunc(pages ,frames){
                 indexes.push(pages[i])
                 page_faults += 1;
                 continue;
+
+                
             }
             lruArr.unshift(pages[i]);
         }
-
         //lruArr.pop();
+    
         answer.push({
             column: prevStruct,
             fault: "✔️"
