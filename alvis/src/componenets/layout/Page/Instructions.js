@@ -15,10 +15,20 @@ class Instructions extends Component {
         this.instruct = this.props.instruct;
     }
     render(){
+        console.log(this.instruct);
         return(
             <Paper className={this.classes.code}>
                 <h2>Instructions</h2>
-                {this.instruct}
+                {this.instruct === undefined ? null : this.instruct.map(instruction => {
+                    return(
+                        <div>
+                            <p1>
+                                {instruction}
+                            </p1>
+                            <br />
+                        </div>
+                    );
+                })}
             </Paper>
         );
     }

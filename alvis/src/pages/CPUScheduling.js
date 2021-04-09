@@ -60,6 +60,11 @@ Fade.propTypes = {
     onExited: PropTypes.func,
 };
 
+var str1 = "Step 1: Choose from one of the 6 algorithm types using the buttons above (Use the checkbox to toggle between preemptive and non-premptive priority)."
+var str2 = "Step 2: Click the INSERT button and enter in a name for the prcoess and values for its arrival time, burst time, priority, and time quantum."
+var str3 = "Step 3: Once you have entered all the processes you want, press the run button to generate a GANTT Chart for the data."
+var str4 = "Step 4: Press the RESET button to remove the all the processes from the list and start again."
+
 class CPUScheduling extends Component{
     constructor(props){
         super(props);
@@ -100,6 +105,11 @@ class CPUScheduling extends Component{
                 ],
             ]
         };
+        this.instructions = [];
+        this.instructions.push(str1);
+        this.instructions.push(str2);
+        this.instructions.push(str3);
+        this.instructions.push(str4);
         this.changeAlgo = this.changeAlgo.bind(this);
         this.reset = this.reset.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -374,6 +384,7 @@ class CPUScheduling extends Component{
                         delete: this.deleteRow,
                         reset: this.reset,
                     }}
+                    instruct = {this.instructions}
                     barFunctions = {{
                         clickInput: this.clickInput
                     }}
