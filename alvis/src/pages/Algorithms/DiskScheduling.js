@@ -1,3 +1,9 @@
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
 export function fcfsFunction(starting, input) {
     let answer = [];
     answer.push(['x', 'Path'])
@@ -9,6 +15,12 @@ export function fcfsFunction(starting, input) {
     console.log("answer is: " + answer.toString());
     return answer;
 }
+
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
 
 export function scanFunction(starting, input) {
     let answer = [];
@@ -38,6 +50,13 @@ export function scanFunction(starting, input) {
     }
     return answer;
 }
+
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @param diskSize - size of the disk
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
 
 export function scanOutwardsFunction(starting, input, diskSize) {
     let answer = [];
@@ -69,6 +88,12 @@ export function scanOutwardsFunction(starting, input, diskSize) {
     return answer;
 }
 
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
 export function lookFunction(starting, input) {
     let answer = [];
     answer.push(['x', 'Look path'])
@@ -95,6 +120,12 @@ export function lookFunction(starting, input) {
     return answer;
 }
 
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
 export function lookOutwardsFunction(starting, input) {
     let answer = [];
     answer.push(['x', 'Look outwards path'])
@@ -118,6 +149,13 @@ export function lookOutwardsFunction(starting, input) {
     }
     return answer;
 }
+
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @param diskSize - size of the disk
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
 
 export function cscanFunction(starting, input, diskSize) {
     let answer = [];
@@ -147,6 +185,13 @@ export function cscanFunction(starting, input, diskSize) {
     return answer;
 }
 
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @param diskSize - size of the disk
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
 export function cscanOutwardsFunction(starting, input, diskSize) {
     let answer = [];
     answer.push(['x', 'Cscan outwards path'])
@@ -174,6 +219,13 @@ export function cscanOutwardsFunction(starting, input, diskSize) {
     return answer;
 }
 
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @param diskSize - size of the disk
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
 export function clookFunction(starting, input, diskSize) {
     let answer = [];
     answer.push(['x', 'SCAN path'])
@@ -200,6 +252,12 @@ export function clookFunction(starting, input, diskSize) {
     }
     return answer;
 }
+
+/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
 
 export function clookOutwardsFunction(starting, input) {
     let answer = [];

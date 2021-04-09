@@ -57,33 +57,56 @@ class FCFSDisk extends Component{
         this.reset = this.reset.bind(this);
         this.renderDiskGraph = this.renderDiskGraph.bind(this);
     }
+
+    /* changeAlgo - switches the algorithm
+     * @param e - the algorithm being switched to
+     */
     changeAlgo(e) {
         console.log(this.state.type);
         this.setState({
             type: e.target.textContent
         });
     }
+
+    /* changeDirection - switches direction of scan when applicable
+     * @param e - sets inward/outward direction
+     */
     changeDirection(e){
         console.log("direction");
         this.setState({
             direction: e.target.textContent
         });
     }
+
+    /* setDiskSize - takes input value to set disk size
+     * @param e - value to be stored as disk size
+     */
     setDiskSize(e){
         this.setState({
             diskSize: e.target.value
         });
     }
+
+    /* setStarting - takes input value to set starting position
+     * @param e - value to be stored as initial head position
+     */
     setStarting(e){
         this.setState({
             starting: e.target.value
         });
     }
+
+    /* setInput - takes input string to set head positions
+     * @param e - string value to be stored
+     */
     setInput(e){
         this.setState({
             input: e.target.value.split(',').map(Number)
         });
     }
+
+    /* reset - resets disk graph
+     */
     reset(){
         this.renderDiskGraph();
         this.setState({
@@ -91,6 +114,11 @@ class FCFSDisk extends Component{
             starting: 0,
             input: []
         });
+
+    /* renderDiskGraph - renders the disk graph algorithm visualizer
+     * using data provided by user input to set state
+     * for disk graph display conditions
+     */
     }
     renderDiskGraph() {
         let data;
@@ -135,6 +163,10 @@ class FCFSDisk extends Component{
             displayBoolean: false
         });
     }
+
+    /* render - functionality to show algorithm selection menu
+     *          takes user input and converts to data to be processed into state
+     */
     render(){
         return (
             <MainPage
