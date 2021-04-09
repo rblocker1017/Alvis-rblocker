@@ -4,7 +4,7 @@ export function bubble(a) {
     // declare variables
     let len = a.length - 1;
     let array = a;
-    let answer = [{
+    let answer = [{ 
         data: array.toString(),
         swappedValue1: -1,
         swappedValue2: -1
@@ -57,6 +57,8 @@ export function insertion(b) {
             arrayInsert[j - 1] = swap1;
             j--;
         }
+        // push an object every time a swap happens containing the data (aka the current array to string)
+        // as well as the swapped values
         answer.push({
             data: arrayInsert.toString(),
             swappedValue1: j,
@@ -78,8 +80,8 @@ export function selection(c) {
         swappedValue2: -1
     }];
     let temp = 0;
-    for (let i = 0; i < lenSelect - 1; i++) {
-        let minimum = i;
+    for (let i = 0; i < lenSelect - 1; i++) { 
+        let minimum = i; //set minimum value is equal index value
         for (let j = i + 1; j < lenSelect; j++) {
             if (arraySelect[j] < arraySelect[minimum]) {
                 minimum = j;
@@ -105,17 +107,23 @@ export function selection(c) {
 // Heap Sort fuction
 //sets up maximumum of heap
 function maximumHeap(d, len, i, answer) {
-    let left = i * 2 + 1;
-    let right = left + 1;
+    //declare variables
+    let left = i * 2 + 1; //sets up the left child
+    let right = left + 1; //sets up the right child
     let maximum = i;
-    if (left < len && d[left] > d[maximum]) {
-        maximum = left;
+    //if the left is less than len and the current element on the left is greater than the maximum value
+    if (left < len && d[left] > d[maximum]) { 
+        maximum = left; //set the maximum value is equal the value on the left
     }
+    //if the right is less than len and the current element on the right is greater than the maximum value
     if (right < len && d[right] > d[maximum]) {
-        maximum = right;
+        maximum = right; //set the maximum value is equal the value on the right
     }
+    //if the maximum value is different than index value
     if (maximum !== i) {
         [d[i], d[maximum]] = [d[maximum], d[i]]; //swaps elements
+        // push an object every time a swap happens containing the data (aka the current array to string)
+        // as well as the swapped values
         answer.push({
             data: d.toString(),
             swappedValue1: i,
@@ -131,7 +139,8 @@ function maximumHeap(d, len, i, answer) {
 export function heapSort(d) {
     //declare variables
     let lenHeap = d.length;
-    let a = Math.floor(lenHeap / 2 - 1);
+    //get the middle element
+    let a = Math.floor(lenHeap / 2 - 1); 
     let b = lenHeap - 1;
     let answer = [{
         data: d.toString(),
@@ -142,11 +151,15 @@ export function heapSort(d) {
         maximumHeap(d, lenHeap, a, answer);
         a--;
     }
-    while (b >= 0) {
-        let swap1 = d[0];
-        let swap2 = d[b];
+    //when b value is greater than or equal 0
+    while (b >= 0) { 
+        let swap1 = d[0]; //set swap1 is equal the value at the position 1
+        let swap2 = d[b]; //set swap1 is equal the value at the position b
+        //swap element
         d[0] = swap2;
         d[b] = swap1;
+        // push an object every time a swap happens containing the data (aka the current array to string)
+        // as well as the swapped values
         answer.push({
             data: d.toString(),
             swappedValue1: 0,
@@ -162,12 +175,14 @@ export function heapSort(d) {
  * Quicksort code based off os psudocode from geeksforgeeks.com/quick-sort/
  */
 function partitionQuick(e, left, right, answer) {
-    let pivot = e[right];
-    let i = left - 1;
+    let pivot = e[right]; // take the last element as pivot
+    let i = left - 1; //index of the smaller element
     for (let j = left; j <= right - 1; j++) {
-        if (e[j] < pivot) {
-            i++;
-            e[i] = [e[j], e[j] = e[i]][0];
+        if (e[j] < pivot) { //if the current element is less than pivot
+            i++; //increase the index of smaller element
+            e[i] = [e[j], e[j] = e[i]][0]; //then do swap and return answer
+            // push an object every time a swap happens containing the data (aka the current array to string)
+            // as well as the swapped values
             answer.push({
                 data: e.toString(),
                 swappedValue1: i,
@@ -175,7 +190,9 @@ function partitionQuick(e, left, right, answer) {
             });
         }
     }
-    e[i + 1] = [e[right], e[right] = e[i + 1]][0];
+    e[i + 1] = [e[right], e[right] = e[i + 1]][0]; //then do swap and return answer
+    // push an object every time a swap happens containing the data (aka the current array to string)
+    // as well as the swapped values
     answer.push({
         data: e.toString(),
         swappedValue1: i + 1,
@@ -185,6 +202,9 @@ function partitionQuick(e, left, right, answer) {
 }
 
 // @param e - array of data to be sorted
+//left - starting index
+//right - ending index
+//answer - return answer
 function Quick(e, left, right, answer) {
     if (left < right) {
         let pi = partitionQuick(e, left, right, answer);
@@ -196,6 +216,7 @@ function Quick(e, left, right, answer) {
 }
 
 export function quickSort(e) {
+    //declare variable
     let answer = [{
         data: e.toString(),
         swappedValue1: -1,
@@ -221,12 +242,14 @@ export function shellSort(f) {
             //declare variables
             let j = i;
             let temp = f[i];
-
+            
             while (j >= len && f[j - len] > temp) {
                 f[j] = f[j - len];
                 j = j - len;
             }
             f[j] = temp;
+            // push an object every time a swap happens containing the data (aka the current array to string)
+            // as well as the swapped values
             answer.push({
                 data: f.toString(),
                 swappedValue1: j,
