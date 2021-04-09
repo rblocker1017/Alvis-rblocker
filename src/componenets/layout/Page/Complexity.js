@@ -19,10 +19,10 @@ class Complexity extends Component {
             <Paper className={this.classes.code}>
                 <h2>Complexity</h2>
                 <h4>
-                    Time: {this.props.time}
+                    Time: {this.props.complexity.time}
                 </h4>
                 <h4>
-                    Space: {this.props.space}
+                    Space: {this.props.complexity.space}
                 </h4>
             </Paper>
         );

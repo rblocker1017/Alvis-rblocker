@@ -52,7 +52,9 @@ class MainPage extends Component {
                                 />
                             </Grid>
                             <Grid item>
-                                <Complexity />
+                                <Complexity 
+                                    complexity={this.props.complexity}
+                                />
                             </Grid>
                             <Grid item>
                                 <Instructions
