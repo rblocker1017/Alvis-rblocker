@@ -3,6 +3,7 @@ import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import BTTDisplay from "../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
+import Complexity from "../componenets/layout/Page/Complexity";
 import {
   inOrderTraversal,
   postOrderTraversal,
@@ -16,6 +17,14 @@ import {
   generateConnectorsBTT,
   newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
+
+const str1 = 'Step 1: Click an algorithm of your choice to begin.'
+const str2 = 'Step 2: Click Step Forward/Back to traverse the tree in that direction.'
+const str3 = 'Step 3: Click "RESET" to reset the traversal to the beginning'
+const str4 = 'Step 4: Click a tiny circle (left/right) attached to a node, and click "INSERT" to insert a new leaf'
+const str5 = 'Step 5: Click on a big circle until it turns blue, then click the trash icon to delete that node'
+
+const compl = "Jello World"
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -43,6 +52,8 @@ class BinaryTreeTraversal extends Component {
       fromCon: {},
       idNum: INIT.length
     };
+    this.instructions = [str1,str2,str3,str4,str5];
+    this.Complexity=["hello","hello"];
     this.changeAlgo = this.changeAlgo.bind(this);
     this.stepForward = this.stepForward.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
@@ -156,7 +167,7 @@ class BinaryTreeTraversal extends Component {
     });
   }
   /* deleteBranch - Deletes a group of leaves and updates the tree accordingly
-  * @param e - the current circle being selected
+   * @param e - the current circle being selected
    */
   deleteBranch(e) {
     const id = this.state.selected.id;
@@ -407,10 +418,13 @@ class BinaryTreeTraversal extends Component {
           reset: this.resetTree,
           extra: null
         }}
+        instruct = {this.instructions}
+        Complexity = {"hi", "hello"}
         barFunctions={{
           forward: this.stepForward,
           back: this.stepBackward
         }}
+        
       />
     );
   }
