@@ -71,11 +71,13 @@ export function lruPageReplacementFunc(pages ,frames){
     let answer = []
     let indexes = []
     let page_faults = 0;
-    let lruArr = [];
+    let lruArr = [];    // determines least recently used value
     let prevStruct = []
     let filler = []
+    let lastVal = 0;
+    let currentVal = -1;     // 
 
-    for (let i = 0; i < pages.length; i++) {
+    for (let i = 0; i < pages.length; i++) {    // loops through maximum amount of frames first, like FCFS and OPT
         if (s.size < frames) {
             if (!s.has(pages[i])) {
                 s.add(pages[i]);
@@ -95,24 +97,22 @@ export function lruPageReplacementFunc(pages ,frames){
                 });
 
                 //if(pages[i] !== lruArr[0])
-                lruArr.unshift(pages[i])
+                lruArr.unshift(pages[i])    // adds the value of reference string number to the head of the array
 
                 //console.log("Set: " + arr.toString())
-                indexes.push(pages[i]);
+                indexes.push(pages[i]); 
                 continue;
             }
         } else {
            // console.log("Getting val: for " + pages[i] + "---" + lruArr.toString())
-            if (!s.has(pages[i])) {
+            if (!s.has(pages[i])) { // enter here if page is not loaded into memory and all frames have already been assigned
 
-                lruArr.pop();
-
-                let val = lruArr[2]
+                let val = lruArr.pop();   
+                
+                //let val = lruArr[1]
                 lruArr.unshift(pages[i])
-               // console.log("val: " + val)
 
-               // console.log("Lru arr Length: " + lruArr.length);
-
+                //console.log("The value is " + val)
 
                 s.delete(val);
                 s.add(pages[i])
@@ -135,6 +135,8 @@ export function lruPageReplacementFunc(pages ,frames){
             }
             lruArr.unshift(pages[i]);
         }
+
+        //lruArr.pop();
         answer.push({
             column: prevStruct,
             fault: "✔️"

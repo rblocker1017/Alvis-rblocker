@@ -17,10 +17,10 @@ class PageReplacement extends Component{
         this.state = {
             answer: [],
             type: "FIFO",   // determines which algorithm we are currently looking at 
-            frames: [],
-            input: [],
-            value: "",
-            faultCount: 0
+            frames: [],     // determines amount of page Frames
+            input: [],      // reference string holder
+            value: "",      // 
+            faultCount: 0   
         }
         this.instructions = [];
         this.instructions.push(str1);
