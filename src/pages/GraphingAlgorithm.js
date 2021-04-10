@@ -1,71 +1,22 @@
-﻿import React, { useState, useEffect } from 'react';
-import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, ButtonBase, Select, MenuItem, InputLabel, Modal, Fade, Backdrop, TextField } from "@material-ui/core";
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey, green } from '@material-ui/core/colors';
-import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
-import Konva from "konva";
-import { generateConnectors, connectNode, getPoints, generateCirclesGraphing } from "./Shapes/NodeGenerator"
-import { select } from 'd3';
-import { kruskalAlgorithm, primAlgorithm, dijkstrasAlgorithm } from "./Algorithms/Graphing";
-import trash from '../trash.png';
-import PathNotFound from '../componenets/Messages/PathNotFound'
-
+﻿import { Backdrop, Button, Fade, Grid, Modal, TextField, withStyles } from "@material-ui/core";
+import { green, grey } from '@material-ui/core/colors';
+import { createMuiTheme } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import GraphingDisplay from '../componenets/layout/AlgorithmDisplay/Graphing/GraphingDisplay';
+import MainPage from '../componenets/layout/Page/MainPage';
+import { dijkstrasAlgorithm, kruskalAlgorithm, primAlgorithm } from "./Algorithms/Graphing";
+import * as Functions from './Functionality/GraphingFunctions';
+import { connectNode, generateCirclesGraphing, generateConnectors } from "./Shapes/NodeGenerator";
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
 const HEIGHT = 450;
 
 // Generate styles for React objects
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        width: "100%"
-    },
-    buttons:
-    {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        width: "100%",
-        height: "100%"
-    },
-    button:
-    {
-        width: "90%",
-    },
-    code:
-    {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "76%"
-    },
-    fields:
-    {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        height: "100%"
-    },
-    trashBtn: {
-        position: "fixed",
-        top: "85%",
-        right: "1%",
-        '&:hover': {
-            '& $trashImg': {
-                opacity: 1
-            }
-        }
-    },
-    trashImg: {
-        opacity: 0.55
+const styles = (theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     insertPaper: {
         position: 'absolute',
@@ -74,13 +25,8 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
     }
-}));
+});
 // Generate initial connectors and circles
 const INIT = generateCirclesGraphing(6, WIDTH, HEIGHT);
 const CON_GEN = generateConnectors(6, INIT)
@@ -99,591 +45,400 @@ function pointValues(circle, type) {
     return "";
 }
 
-// Main function that keeps track of, displays and calculates the graphing functions
-export default function GraphingAlgorithm() {
-    // store styles
-    const classes = useStyles();
-
-    // generate function states
-    const [type, setType] = useState("Prim");
-    const [circles, setCircles] = React.useState(INIT);
-    const [lines, setLines] = React.useState(CONNECT);
-    const [connecting, setConnecting] = React.useState(false);
-    const [circleId, setCircleId] = React.useState(INIT.size);
-    const [selected, setSelected] = React.useState(null);
-    const [startNode, setStartNode] = React.useState(0);
-    const [endNode, setEndNode] = React.useState(INIT.size - 1);
-    const [algoArray, setAlgoArray] = React.useState(-1);
-    const [conValue, setConValue] = React.useState(1);
-    const [step, setStep] = React.useState(-1);
-    const [validPath, setValidPath] = React.useState(true);
-    const [changed, setChanged] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [inputError, setInputError] = useState(false);
-    const [input, setInput] = useState("");
-    const [otherInsert, setOtherInsert] = useState(null);
-    useEffect(() => {
-        let tempArray = null;
-        switch (type) {
-            case "Kruskal":
-                tempArray = kruskalAlgorithm(startNode, endNode, lines);
-                break;
-            case "Prim":
-                tempArray = primAlgorithm(startNode, endNode, lines);
-                break;
-            case "Dijkstras":
-                tempArray = dijkstrasAlgorithm(startNode, endNode, lines);
-                break;
-            default:
-                tempArray = kruskalAlgorithm(startNode, endNode, lines);
-                break;
+class GraphingAlgorithm extends Component{
+    constructor(props){
+        super(props);
+        this.classes = this.props.classes;
+        this.state = {
+            type: "Prim",
+            circles: INIT,
+            lines: CONNECT,
+            connecting: false,
+            circleId: INIT.size,
+            selected: null,
+            startNode: 0,
+            endNode: INIT.size - 1,
+            algoArray: kruskalAlgorithm(0, INIT.size - 1, CONNECT),
+            conValue: 1,
+            step: -1,
+            validPath: true,
+            changed: false,
+            open: false,
+            inputError: false,
+            input: "",
+            otherInsert: null
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.insertValue = this.insertValue.bind(this);
+        this.changeAlgo = this.changeAlgo.bind(this);
+        this.addCircle = this.addCircle.bind(this);
+        this.clearSelected = this.clearSelected.bind(this);
+        this.clearSteps = this.clearSteps.bind(this);
+        this.stepForward = this.stepForward.bind(this);
+        this.stepBack = this.stepBack.bind(this);
+        this.reset = this.reset.bind(this);
+        this.handleDragStart = this.handleDragStart.bind(this);
+        this.handleDragEnd = this.handleDragEnd.bind(this);
+        this.handleMove = this.handleMove.bind(this);
+        this.selectNode = this.selectNode.bind(this);
+        this.setStart = this.setStart.bind(this);
+        this.setEnd = this.setEnd.bind(this);
+        this.finalConnect = this.finalConnect.bind(this);
+        this.deleteNode = this.deleteNode.bind(this);
+    }
+    handleChange(e) {
+        this.setState({
+            input: e.target.value
+        });
+    }
+    handleClose(){
+        this.setState({
+            connecting: false,
+            selected: null,
+            changed: true,
+            otherInsert: false,
+            inputError: false,
+            open: false
+        });
+    }
+    handleOpen(){
+        if (this.state.step === -1) {
+            this.setState({
+                open: true
+            });
         }
-        setAlgoArray(tempArray);
-        setChanged(false);
-        console.log(tempArray);
-        tempArray.length === undefined || tempArray < 2 ? setValidPath(false) : setValidPath(true);
-    }, [type, changed, startNode, endNode]);
-
-    const handleChange = (e) => {
-        setInput(e.target.value);
-        console.log(e.target.value);
     }
-
-    const handleClose = () => {
-        setConnecting(false);
-        setSelected(null);
-        setChanged(true);
-        setOtherInsert(false);
-        setInputError(false);
-        setOpen(false);
-    }
-
-    const handleOpen = () => {
-        if (step === -1) {
-            setOpen(true);
-        }
-    }
-
-    const insertValue = () => {
+    insertValue(){
         const regex = /[^0-9]/g;
-        if (!regex.test(input) && input !== "" && parseInt(input) > 1 && parseInt(input) < 100) {
-            const id = otherInsert;
-            let conId = JSON.stringify([Number(selected), Number(id)].sort());
-            let newLines = new Map(lines);
-            let newCircles = new Map(circles);
+        if (!regex.test(this.state.input) && this.state.input !== "" && parseInt(this.state.input) > 1 && parseInt(this.state.input) < 100) {
+            const id = this.state.otherInsert;
+            let conId = JSON.stringify([Number(this.state.selected), Number(id)].sort());
+            let newLines = new Map(this.state.lines);
+            let newCircles = new Map(this.state.circles);
             // creates a temporary circle object
             let toCircle = newCircles.get(id);
-            let fromCircle = newCircles.get(selected);
+            let fromCircle = newCircles.get(this.state.selected);
             // concatinates the connector of the two circle objects to their connections variable
             fromCircle.connected = false;
             toCircle.connections.push(conId);
             fromCircle.connections.push(conId);
             // creates a temporary new line
-            newLines.set(conId, connectNode(toCircle, fromCircle, parseInt(input), conId));
-            setLines(newLines);
+            newLines.set(conId, connectNode(toCircle, fromCircle, parseInt(this.state.input), conId));
+            this.setState({
+                lines: newLines
+            });
             // clear connecting and selected states
-
-            handleClose();
+            this.handleClose();
             return true;
         }
         else {
-            setInputError(true);
+            this.setState({
+                inputError: true
+            });
         }
     }
-
-    // anonymous functions that change header to respective button
-    const changePrim = () => {
-        if (step !== -1) {
-            return;
-        }
-        setType("Prim");
+    changeAlgo(e){
+        this.reset();
+        this.setState({
+            changed: true,
+            type: e.target.textContent
+        });
     }
-    const changeDij = () => {
-        if (step !== -1) {
-            return;
-        }
-        setType("Dijkstras");
-    }
-    const changeKruskal = () => {
-        if (step !== -1) {
-            return;
-        }
-        setType("Kruskal");
-    }
-
-    const stepForward = (e) => {
-        if (step === -1) {
-            clearSelected();
-            setSelected(null);
-            setConnecting(false);
-        }
-        let tempLines = new Map(lines);
-        if (step < algoArray.length - 1) {
-            let tempStep = step + 1;
-            let tempLine = tempLines.get(algoArray[tempStep]);
-            tempLine.connected = true;
-            tempLines.set(algoArray[tempStep], tempLine);
-            setLines(tempLines);
-            setStep(tempStep);
-        }
-    }
-    const stepBack = (e) => {
-        if (step >= 0) {
-            let tempLines = new Map(lines);
-            let tempLine = tempLines.get(algoArray[step]);
-            tempLine.connected = false;
-            tempLines.set(algoArray[step], tempLine);
-            setLines(tempLines);
-            setStep(step - 1);
-        }
-    }
-    const reset = (e) => {
-        clearSteps();
-        setStep(-1);
-    }
-
     // Adds a circle to the canvas. It is not attached to any connectors.
     // e - event listener
-    const addCircle = (e) => {
-        if (step !== -1) {
+    addCircle(e){
+        if (this.state.step !== -1) {
             return;
         }
-        let newCircles = new Map(circles);
-        // calculate value
-        const value = Math.floor(Math.random() * 100);
-        // create a new circle array by concatinating a new circle to it
-        const newcircle = {
-            type: "line",
-            id: circleId,
-            x: (Math.random() * (WIDTH - 200)) + 100,
-            y: (Math.random() * (HEIGHT - 200)) + 100,
-            width: 100,
-            height: 100,
-            color: 'green',
-            stroke: 'black',
-            strokeWidth: 5,
-            selected: false,
-            connect: false,
-            connections: [],
-            value: value
-        };
-        // set circle array state to the new concatinated array
-        newCircles.set(circleId, newcircle);
-        setCircles(newCircles);
-        setCircleId(circleId + 1);
-        setChanged(true);
+        this.setState({
+            circles: Functions.addCircleFunc(this.state.circles, this.state.circleId, HEIGHT, WIDTH),
+            circleId: this.state.circleId + 1,
+            changed: true
+        });
     };
+    clearSelected(){
+        if (this.state.selected === null) {
+            return 0;
+        }
+        let tempNodes = Functions.clearSelectedFunc(this.state.lines, this.state.circles, this.state.selected);
+        typeof this.state.selected === "string" ? this.setState({lines: tempNodes, selected: null}) : this.setState({circles: tempNodes, selected: null, connecting: false});
+    }
+    clearSteps(){
+        this.setState({
+            lines: Functions.clearStepsFunc(this.state.lines, this.state.algoArray, this.state.step),
+            step: -1
+        });
+    }
+    stepForward(){
+        if (this.state.step === -1) {
+            this.clearSelected();
+        }
+        let tempLines = new Map(this.state.lines);
+        let tempStep = this.state.step;
+        if (this.state.step < this.state.algoArray.length - 1 && this.state.startNode !== null) {
+            tempLines = Functions.stepForwardFunc(tempLines, this.state.algoArray, this.state.step);
+            ++tempStep;
+        }
+        this.setState({
+            step: tempStep,
+            lines: tempLines
+        });
+    }
+
+    stepBack(e){
+        if (this.state.step >= 0) {
+            this.setState({
+                lines: Functions.stepBackFunc(this.state.lines, this.state.algoArray, this.state.step),
+                step: this.state.step - 1
+            });
+        }
+    }
+
+    reset(e){
+        this.clearSteps();
+        this.setState({
+            state: -1
+        });
+    }
 
     // circle being dragged has variable isDragging set to true.
     // e - event listener
-    const handleDragStart = (e) => {
-        const id = e.target.id();
-        let tempCircles = circles;
-        let tempCircle = tempCircles.get(id);
-        tempCircle.isDragging = true;
-        tempCircles.set(id, tempCircle);
-        setCircles(tempCircles);
+    handleDragStart(e){
+        this.setState({
+            circles: Functions.handleDragStartFunc(this.state.circles, e.target.id())
+        });
     };
 
     // Once circle is finished being dragged, isDragging is set to false
     // e - event listener
-    const handleDragEnd = (e) => {
-        const id = e.target.id();
-        let tempCircles = circles;
-        let tempCircle = tempCircles.get(id);
-        tempCircle.isDragging = false;
-        tempCircles.set(id, tempCircle);
-        setCircles(tempCircles);
+    handleDragEnd(e){
+        this.setState({
+            circles: Functions.handleDragEndFunc(this.state.circles, e.target.id())
+        });
     };
-
-    const clearSteps = () => {
-        let tempStep = step;
-        let tempLines = new Map(lines);
-        while (tempStep >= 0) {
-            const currentIndex = algoArray[tempStep];
-            let currentLine = tempLines.get(currentIndex);
-            currentLine.connected = false;
-            tempLines.set(currentIndex, currentLine);
-            tempStep--;
-        }
-        setLines(tempLines);
-    }
-
-    // Method to clear all strokes on the lines
-    const clearSelected = () => {
-        if (selected === null) {
-            return 0;
-        }
-        let tempNodes; 
-        let tempNode;
-        const isString = typeof selected === "string";
-        isString ? tempNodes = new Map(lines) : tempNodes = new Map(circles);
-        tempNode = tempNodes.get(selected);
-        tempNode.connected = false;
-        tempNodes.set(selected, tempNode);
-        setSelected(null);
-        isString ? setLines(tempNodes) : setCircles(tempNodes);
-    }
 
     // while being dragged, the circle x and y co-ordinates are updated 
     // and its connectors positions are updated to follow the circle
     // e - event listener
-    const handleMove = (e) => {
-        let tempCircles = new Map(circles);
-        let tempLines = new Map(lines);
-        let tempCircle = tempCircles.get(e.target.id());
-        tempCircle.x = e.target.x();
-        tempCircle.y = e.target.y();
-        tempCircles.set(e.target.id(), tempCircle);
-        for (let line of tempCircle.connections) {
-            let tempLine = tempLines.get(line);
-            let otherCircle = tempCircles.get(tempLine.connections.find(otherCircle => otherCircle !== tempCircle.id));
-            tempLine.points = getPoints(tempCircle, otherCircle); 
-            tempLines.set(tempLine.id, tempLine);
-        }
-        setCircles(tempCircles);
-        setLines(tempLines);
+    handleMove(e){
+        const bundleMove = Functions.handleMoveFunc(this.state.lines, this.state.circles, e);
+        this.setState({
+            circles: bundleMove.circles,
+            lines: bundleMove.lines
+        });
     }
 
     // sets clicked circle to selected
     // @param e - event listener
-    const selectNode = (e) => {
+    selectNode(e){
+        console.log(this.state);
         // Can only select a node on the first step
-        if (step !== -1) {
+        if (this.state.step !== -1) {
             return;
         }
         // Clear preivously selected
-        clearSelected();
-        console.log(circles);
+        this.clearSelected();
         const id = e.target.id();
         // do nothing if the selected and new selected circle are the same.
-        if (id === selected) {
+        if (id === this.state.selected) {
             return;
         }
         // initialize the tempNodes to make new values
         let tempNodes;
-        let tempNode;
         const isString = typeof id === "string";
+        console.log(isString);
+        isString ? tempNodes = new Map(this.state.lines) : tempNodes = new Map(this.state.circles);
+        tempNodes = Functions.selectNodeFunc(tempNodes, id);
         // if it is a circle, then set tempNodes to circles and set connecting to true
         // else set tempNodes to lines and set connecting to false
-        isString ? setConnecting(false) : setConnecting(true);
-        isString ? tempNodes = new Map(lines) : tempNodes = new Map(circles);
-        // retrieve the circle with given id and set its connected value
-        tempNode = tempNodes.get(id);
-        tempNode.connected = true;
-        tempNodes.set(id, tempNode);
-        setSelected(id);
-        // update the respective node
-        isString ? setLines(tempNodes) : setCircles(tempNodes);
+        if(isString){
+            this.setState({
+                selected: id,
+                connecting: isString ? false : true,
+                lines: tempNodes
+            }); 
+        }
+        else{
+            this.setState({
+                selected: id,
+                connecting: isString ? false : true,
+                circles: tempNodes
+            }); 
+        }
     };
 
     // Sets the starting point for the algorithm
-    const setStart = (e) => {
-        if (step !== -1 || selected === null || selected === startNode || selected === endNode) {
+    setStart(e){
+        if (this.state.step !== -1 || this.state.selected === null || this.state.selected === this.state.startNode || this.state.selected === this.state.endNode) {
             return;
         }
-        // create a temporary array to keep track of the array changes
-        let tempCircles = new Map(circles);
-        let oldStart = tempCircles.get(startNode);
-        let newStart = tempCircles.get(selected);
-        oldStart.start = false;
-        tempCircles.set(startNode, oldStart);
-        newStart.start = true;
-        newStart.connected = false;
-        tempCircles.set(selected, newStart);
-        setStartNode(selected);
-        setConnecting(false);
-        setSelected(null);
+        const selected = this.state.selected;
+        this.setState({
+            circles: Functions.setStartFunc(this.state.circles, this.state.startNode, selected),
+            startNode: selected,
+            connecting: false,
+            selected: null,
+            changed: true
+        });
     }
 
     // Sets the ending point for the algorithm
-    const setEnd = (e) => {
-        if (step !== -1 || selected === null || selected === startNode || selected === endNode) {
+    setEnd(e){
+        console.log("test");
+        if (this.state.step !== -1 || this.state.selected === null || this.state.selected === this.state.startNode || this.state.selected === this.state.endNode) {
             return;
         }
-        // create a temporary array to keep track of the array changes
-        let tempCircles = new Map(circles);
-        let oldEnd = tempCircles.get(endNode);
-        let newEnd = tempCircles.get(selected);
-        oldEnd.end = false;
-        tempCircles.set(endNode, oldEnd);
-        newEnd.end = true;
-        newEnd.connected = false;
-        tempCircles.set(selected, newEnd);
-        setEndNode(selected);
-        setConnecting(false);
-        setSelected(null);
+        const selected = this.state.selected;
+        this.setState({
+            circles: Functions.setEndFunc(this.state.circles, this.state.endNode, selected),
+            endNode: selected,
+            connecting: false,
+            selected: null,
+            changed: true
+        });
     }
 
     // makes a connector between the selected node and the next selected node
     // the connecting node's value is randomly generated
-    const finalConnect = (e) => {
+    finalConnect(e){
         const id = e.target.id();
-        let conId = JSON.stringify([Number(selected), Number(id)].sort());
-        if (step !== -1 || lines.has(conId)) {
-            console.log("I exist!");
-            return 0;;
-        }
-        if (id === selected || typeof selected === "string") {
-            setConnecting(false);
-            clearSelected();
+        let conId = JSON.stringify([Number(this.state.selected), Number(id)].sort());
+        if (this.state.step !== -1 || this.state.lines.has(conId)) {
             return 0;
         }
-        setOtherInsert(e.target.id());
-        handleOpen();
+        if (id === this.state.selected || typeof this.state.selected === "string") {
+            this.setState({
+                connecting: false
+            });
+            this.clearSelected();
+            return 0;
+        }
+        this.setState({
+            otherInsert: e.target.id()
+        });
+        this.handleOpen();
     };
 
-    const changeConValue = (e) => {
-        setConValue(e.target.value);
-    }
-
-    const deleteLine = (newLines, newCircles, line) => {
-        let tempLine = newLines.get(line);
-        for (let circle of tempLine.connections) {
-            let tempCircle = newCircles.get(circle);
-            tempCircle.connections = tempCircle.connections.filter(internalLine => line !== internalLine)
-            newCircles.set(circle, tempCircle);
-        }
-        newLines.delete(line);
-    }
-
-    const deleteCircle = (newLines, newCircles, circle) => {
-        let tempCircle = newCircles.get(circle);
-        for (let line of tempCircle.connections) {
-            deleteLine(newLines, newCircles, line);
-        }
-        newCircles.delete(circle);
-    }
-
-    const deleteNode = (e) => {
-        if (selected === null) {
+    deleteNode(e){
+        if (this.state.selected === null) {
             return 0;
         }
-        const isString = typeof selected === "string";
-        let newLines = new Map(lines);
-        let newCircles = new Map(circles);
-        if (isString) {
-            deleteLine(newLines, newCircles, selected);
-        }
-        else {
-            deleteCircle(newLines, newCircles, selected);
-        }
-        setLines(newLines);
-        setCircles(newCircles);
-        setSelected(null);
-        setConnecting(false);
-        setChanged(true);
+        const isString = typeof this.state.selected === "string";
+        const deleteObject = Functions.deleteNodeFunc(this.state.circles, this.state.lines, this.state.selected, isString);
+        this.setState({
+            lines: deleteObject.lines,
+            circles: deleteObject.circles,
+            selected: null,
+            connecting: false,
+            changed: true
+        });
     }
-    const theme = createMuiTheme({
-        palette: {
-            primary: {
-                main: green[900],
+    shouldComponentUpdate(nextProps, nextState){
+        if(nextState.type !== this.state.type || nextState.circles !== this.state.circles || nextState.lines !== this.state.lines || nextState.open !== this.state.open){
+            return true;
+        }
+        return false;
+    }
+    componentDidUpdate(){
+        if(this.state.changed === true){ 
+            let tempArray = null;
+            switch(this.state.type){
+                case "Kruskal":
+                    tempArray = kruskalAlgorithm(this.state.startNode, this.state.endNode, this.state.lines);
+                    break;
+                case "Prim":
+                    tempArray = primAlgorithm(this.state.startNode, this.state.endNode, this.state.lines);
+                    break;
+                case "Dijkstras":
+                    tempArray = dijkstrasAlgorithm(this.state.startNode, this.state.endNode, this.state.lines);
+                    break;
+                default:
+                    tempArray = kruskalAlgorithm(this.state.startNode, this.state.endNode, this.state.lines);
+                    break;
+            }
+            this.setState({
+                algoArray: tempArray,
+                changed: false
+            });
+        }
+    }
+
+    render(){
+        const theme = createMuiTheme({
+            palette: {
+                primary: {
+                    main: green[900],
+                },
+                secondary: {
+                    main: grey[700],
+                },
             },
-            secondary: {
-                main: grey[700],
-            },
-        },
-    });
-    // return object to be rendered
-    return (
-        <Header>
-            <ThemeProvider theme={theme}>
-                <Modal
-                    className={classes.modal}
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                >
-                    <Fade in={open}>
-                        <div className={classes.insertPaper}>
-                            <form>
-                                <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
-                                    <Grid item>
-                                        <h2 >Insert a value between 1 and 100</h2>
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField error={inputError} label="value" helperText={inputError ? "Invalid value" : ""} onChange={handleChange} />
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant="contained" color="primary" onClick={insertValue}>Insert</Button>
-                                    </Grid>
+        });
+        return(
+            <React.Fragment>
+            <Modal
+                className={this.classes.modal}
+                open={this.state.open}
+                onClose={this.handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={this.state.open}>
+                    <div className={this.classes.insertPaper}>
+                        <form>
+                            <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
+                                <Grid item>
+                                    <h2 >Insert a value between 1 and 100</h2>
                                 </Grid>
-                            </form>
-                        </div>
-                    </Fade>
-                </Modal>
-                <Grid container direction="column">
-                    <Grid item></Grid>
-                    <Grid item container spacing={1}>
-                        <Grid item xs={3}>
-                            <Grid container direction="column">
-                                <Paper className={classes.buttons}>
-                                    <Grid container spacing={0}>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type !== "Prim" ? "primary" : "secondary"} className={classes.button} onClick={changePrim}>Prim</Button>
-                                        </Grid>
-                                        <Grid item className={classes.button} xs={4}>
-                                            <Button variant="contained" color={type !== "Dijkstras" ? "primary" : "secondary"} className={classes.button} onClick={changeDij}>Dijkstras</Button>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Button variant="contained" color={type !== "Kruskal" ? "primary" : "secondary"} className={classes.button} onClick={changeKruskal}>Kruskal</Button>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <h1>
-                                            </h1>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <Button variant="contained" color="primary" onClick={addCircle}>Insert</Button>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" onClick={reset} >Reset</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
+                                <Grid item>
+                                    <TextField error={this.state.inputError} label="value" helperText={this.state.inputError ? "Invalid value" : ""} onChange={this.handleChange} />
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={this.insertValue}>Insert</Button>
+                                </Grid>
                             </Grid>
-                            <h2>
-                            </h2>
-                            <Paper className={classes.code}>
-                                <h3>
-                                    CODE
-              </h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Paper className={classes.paper}>
-                                <h1>
-                                    Graphing Algorithm: {type}
-                                </h1>
-                                <PathNotFound display={validPath} step={step + 1} />
-                                <Stage width={WIDTH} height={HEIGHT}>
-                                    <Layer>
-                                        {Array.from(circles.values()).map((circle) => (
-                                            <React.Fragment>
-                                                <Label
-                                                    x={circle.x}
-                                                    y={circle.y - 50}
-
-                                                >
-                                                    <Tag
-                                                        //width={100}
-                                                        pointerDirection="down"
-                                                        fill={circle.start || (circle.end && type !== "Prim" && type !== "Kruskal") ? "green" : ""}
-                                                        pointerWidth={25}
-                                                        pointerHeight={10}
-                                                        stroke={circle.start || (circle.end && type !== "Prim" && type !== "Kruskal") ? "black" : ""}
-                                                    />
-                                                    <Text
-                                                        fontSize={20}
-                                                        align="center"
-                                                        text={pointValues(circle, type)}
-                                                        fill={"white"}
-                                                        width={100}
-                                                    />
-
-                                                </Label>
-                                                <Circle
-
-                                                    key={circle.id}
-                                                    id={circle.id}
-                                                    x={circle.x}
-                                                    y={circle.y}
-                                                    width={circle.width}
-                                                    height={circle.height}
-                                                    fill={'green'}
-                                                    opacity={0.8}
-                                                    stroke={circle.connected ? 'red' : 'black'}
-                                                    shadowColor="black"
-                                                    shadowBlur={10}
-                                                    shadowOpacity={0.6}
-                                                    onClick={connecting ? finalConnect : selectNode}
-                                                    onDragStart={handleDragStart}
-                                                    onDragEnd={handleDragEnd}
-                                                    onDragMove={handleMove}
-                                                    draggable
-                                                />
-                                                <Text
-                                                    fontSize={20}
-                                                    text={circle.id}
-                                                    x={circle.x - 5}
-                                                    y={circle.y - 7}
-                                                    fill="white"
-                                                />
-                                            </React.Fragment>
-                                        ))}
-
-                                        {Array.from(lines.values()).map((line) => (
-                                            <React.Fragment>
-                                                <Line
-                                                    id={line.id}
-                                                    points={line.points}
-                                                    stroke={line.connected ? "red" : "black"}
-                                                    hitStrokeWidth={25}
-                                                    fill={"black"}
-                                                    onClick={selectNode}
-                                                />
-                                                <Label
-                                                    x={(line.points[0] + line.points[2]) / 2}
-                                                    y={(line.points[1] + line.points[3]) / 2}
-                                                >
-                                                    <Tag
-                                                        fill={"white"}
-                                                    />
-                                                    <Text
-                                                        text={line.value}
-                                                        fill="black"
-                                                        fontSize={30}
-                                                    />
-
-                                                </Label>
-                                            </React.Fragment>
-                                        ))}
-                                    </Layer>
-                                </Stage>
-                            </Paper>
-                            <h1>
-                            </h1>
-                            <Grid item xs={12}>
-                                <form noValidate autoComplete="off">
-                                    <Paper className={classes.fields}>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={1}>
-                                            </Grid>
-                                            <Grid item >
-                                                <Button variant="contained" color="primary" onClick={stepBack}>Step Back</Button>
-                                            </Grid>
-                                            <Grid item >
-                                                <Button variant="contained" color="primary" >Pause</Button>
-                                            </Grid>
-                                            <Grid item >
-                                                <Button variant="contained" color="primary" onClick={stepForward}>Step Forward</Button>
-                                            </Grid>
-                                            <Grid item xs={2}>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary" onClick={setStart}>Set Start</Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary" onClick={setEnd}>Set End</Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </form>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <ButtonBase className={classes.trashBtn} onClick={deleteNode}>
-                    <img src={trash} className={classes.trashImg} />
-                </ButtonBase>
-            </ThemeProvider>
-        </Header>
-    );
+                        </form>
+                    </div>
+                </Fade>
+            </Modal>
+            <MainPage 
+                algorithms = {[
+                    {name: "Prim", func: this.changeAlgo},
+                    {name: "Dijkstras", func: this.changeAlgo},
+                    {name: "Kruskal", func: this.changeAlgo}
+                ]}
+                display = {{
+                    name: "Graphing Algorithms",
+                    type: this.state.type,
+                    step: this.state.step + 1,
+                    display: <GraphingDisplay 
+                                circles={this.state.circles} 
+                                lines={this.state.lines} 
+                                type={this.state.type}
+                                connecting={this.state.connecting}
+                                selectNode={this.selectNode}
+                                finalConnect={this.finalConnect}
+                                handleDragStart={this.handleDragStart}
+                                handleDragEnd={this.handleDragEnd}
+                                handleMove={this.handleMove}
+                                clearSelected={this.clearSelected}
+                            />,
+                    delete: this.deleteNode,
+                    insert: this.addCircle,
+                    reset: this.reset,
+                    extra: null
+                }}
+                barFunctions = {{
+                    forward: this.stepForward,
+                    back: this.stepBack,
+                    start: this.setStart,
+                    end: this.setEnd,
+                }}
+            />
+        </React.Fragment>
+        );
+    }
 }
+export default withStyles(styles)(GraphingAlgorithm);

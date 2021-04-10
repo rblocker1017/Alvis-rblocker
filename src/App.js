@@ -18,18 +18,22 @@ import BubbleSort from "./pages/bubbleSort";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter basename={"/"}>
         <Route path="/" exact component={Welcome} />
         <Route path="/CpuScheduling" exact component={CPUScheduling} />
-              <Route path="/tree" exact component={Tree} />
-              <Route path="/bubblesort" exact component={BubbleSort} />
+        <Route path="/tree" exact component={Tree} />
+        <Route path="/bubblesort" exact component={BubbleSort} />
         <Route path="/PageReplacement" exact component={PageReplacement} />
         <Route path="/GraphingAlgorithm" exact component={GraphingAlgorithm} />
         <Route path="/RoundRobin" exact component={RoundRobin} />
         <Route path="/FCFSDisk" exact component={DiskScheduling} />
         <Route path="/Login" exact component={Login} />
         <Route path="/Sorting" exact component={Sorting} />
-        <Route path="/BinaryTreeTraversal" exact component={BinaryTreeTraversal} />
+        <Route
+          path="/BinaryTreeTraversal"
+          exact
+          component={BinaryTreeTraversal}
+        />
         <Route path="/Achievements" exact component={Achievements} />
         <Route path="/Register" exact component={Register} />
       </BrowserRouter>
