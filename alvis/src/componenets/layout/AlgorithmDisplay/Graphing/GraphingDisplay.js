@@ -5,7 +5,7 @@ import LinesDisplay from './LinesDisplay';
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
-const HEIGHT = 450;
+const HEIGHT = 600;
 
 class GraphingDisplay extends Component{
     render(){

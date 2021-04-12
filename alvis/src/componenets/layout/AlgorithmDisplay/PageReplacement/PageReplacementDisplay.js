@@ -20,34 +20,34 @@ class PageReplacementDisplay extends Component{
     }
     render(){
         return(
-                <div style={{height: "450px", width: "1370px"}}>
+                <div style={{height: "650px", width: "1370px"}}>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <table>
                             <tr>{this.props.tableHeader}</tr>
                             {this.props.answer.map((ans) => {
-            return (
-                <td>
-                    {ans.column.map((page) => {
-                        if (JSON.stringify(page) !== '""') {
-                            return (
-                            <tr>
-                                <td style={{ border: "1px solid black", width: "50px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
-                            </tr>
-                            )
-                        }
-                        {
-                            return (
-                                <tr>
-                                    <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
-                                </tr>
-                            )
-                        }
-                    })}
-                    <p>{ans.fault}</p>
-                </td>
-                );
-                })}
-                </table>
+                                return (
+                                    <td>
+                                        {ans.column.map((page) => {
+                                            if (JSON.stringify(page) !== '""') {
+                                                return (
+                                                <tr>
+                                                    <td style={{ border: "1px solid black", width: "50px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} >{JSON.stringify(page)}</td>
+                                                </tr>
+                                                )
+                                            }
+                                            {
+                                                return (
+                                                    <tr>
+                                                        <td style={{ border: "1px solid black", width: "50px", height: "61px", backgroundColor: 'darkgreen', color: 'white', fontSize: "40px", }} ></td>
+                                                    </tr>
+                                                )
+                                            }
+                                        })}
+                                        <p>{ans.fault}</p>
+                                    </td>
+                                );
+                            })}
+                        </table>
                     </div>
                     <Grid item container>
                         <Grid item xs={5}></Grid>

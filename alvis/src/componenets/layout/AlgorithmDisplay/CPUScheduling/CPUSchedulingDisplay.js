@@ -9,7 +9,7 @@ class CPUSchedulingDisplay extends Component{
     render(){
         return(
             this.props.displayBoolean ?
-                <div style={{height: "450px", width: "500px"}}>
+                <div style={{height: "600px", width: "500px"}}>
                     <Chart
                         width={'90%'}
                         height={'400px'}
@@ -43,7 +43,7 @@ class CPUSchedulingDisplay extends Component{
                         rootProps={{ 'data-testid': '1' }}
                     />
                 </div>
-                : <div  style={{height: "450px", width: "500px"}}/>
+                : <div  style={{height: "600px", width: "500px"}}/>
         );
     }
 }

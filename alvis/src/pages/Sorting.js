@@ -111,7 +111,7 @@ export class Sorting extends Component{
     //insertValue - user can insert value from number 1 to 100
     insertValue(){
         const regex = /[^0-9]/g;
-        if (!regex.test(this.state.input) && this.state.input !== "" && parseInt(this.state.input) > 1 && parseInt(this.state.input) < 100) {
+        if (!regex.test(this.state.input) && this.state.input !== "" && parseInt(this.state.input) >= 1 && parseInt(this.state.input) < 100) {
             let lastPart = this.state.transitionArray.concat();
             let firstPart = lastPart.splice(0, this.state.selected + 1);
             this.setState({

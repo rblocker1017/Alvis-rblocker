@@ -7,7 +7,7 @@ import SubCircleDisplay from './SubCircleDisplay';
 
 // Define width and height of the of the webapp canvas
 const WIDTH = 1370;
-const HEIGHT = 450;
+const HEIGHT = 600;
 
 class BTTDisplay extends Component{
     render(){
