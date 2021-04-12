@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Text, Line, Label, Tag, Group } from 'react-konva';
 import {pointValues} from './GraphingDisplayHelper';
 
 class CirclesDisplay extends Component{
@@ -42,14 +42,19 @@ class CirclesDisplay extends Component{
                             shadowOpacity={0.6}
                             onClick={this.props.connecting ? this.props.finalConnect : this.props.selectNode}
                             onDragMove={this.props.handleMove}
+                            hitStrokeWidth={25}
                             draggable
                         />
                         <Text
+                            id={circle.id}
                             fontSize={20}
                             text={circle.id}
                             x={circle.x - 5}
                             y={circle.y - 7}
                             fill="white"
+                            onClick={this.props.connecting ? this.props.finalConnect : this.props.selectNode}
+                            onDragMove={this.props.handleMove}
+                            draggable
                         />
                     </React.Fragment>
                 ))

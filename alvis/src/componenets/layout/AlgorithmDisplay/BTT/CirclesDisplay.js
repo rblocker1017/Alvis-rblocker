@@ -20,8 +20,6 @@ class CirclesDisplay extends Component{
                             shadowBlur={10}
                             shadowOpacity={0.6}
                             onClick={this.props.selectNode}
-                            onDragMove={this.props.handleMove}
-                            draggable
                         />
                         <Text
                             fontSize={20}

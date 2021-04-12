@@ -31,11 +31,8 @@ const theme = createMuiTheme({
 });
 
 class MainPage extends Component {
-    constructor(props){
-        super(props)
-        this.algorithms = this.props.algorithms; 
-    }
     render() {
+        console.log(this.props.algorithms);
         return(
             <Header>
             <ThemeProvider theme={theme}>
@@ -45,7 +42,7 @@ class MainPage extends Component {
                             <Grid item>
                                 <AlgoSuite
                                     type = {this.props.display.type}
-                                    algorithms={this.algorithms} 
+                                    algorithms={this.props.algorithms} 
                                     extra = {this.props.extraOption}
                                     insert={this.props.display.insert}
                                     reset={this.props.display.reset}
@@ -53,7 +50,8 @@ class MainPage extends Component {
                             </Grid>
                             <Grid item>
                                 <Complexity 
-                                    complexity={this.props.complexity}
+                                    algorithms = {this.props.algorithms}
+                                    type = {this.props.display.type}
                                 />
                             </Grid>
                             <Grid item>

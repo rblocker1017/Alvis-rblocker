@@ -281,6 +281,7 @@ class GraphingAlgorithm extends Component{
     // selectNode - sets clicked circle to selected
     // @param: e - event listener
     selectNode(e){
+        console.log(e);
         // Can only select a node on the first step
         if (this.state.step !== -1) {
             return;
@@ -295,7 +296,6 @@ class GraphingAlgorithm extends Component{
         // initialize the tempNodes to make new values
         let tempNodes;
         const isString = typeof id === "string";
-        console.log(isString);
         isString ? tempNodes = new Map(this.state.lines) : tempNodes = new Map(this.state.circles);
         tempNodes = Functions.selectNodeFunc(tempNodes, id);
         // if it is a circle, then set tempNodes to circles and set connecting to true
@@ -489,9 +489,9 @@ class GraphingAlgorithm extends Component{
             </Modal>
             <MainPage 
                 algorithms = {[
-                    {name: "Prim", func: this.changeAlgo},
-                    {name: "Dijkstras", func: this.changeAlgo},
-                    {name: "Kruskal", func: this.changeAlgo}
+                    {name: "Prim", func: this.changeAlgo, time: "O(E log(V)), V = number of vertices", space: "O(V), V = number of vertices"},
+                    {name: "Dijkstras", func: this.changeAlgo, time: "O(V^2), V = number of vertices", space: "O(V), V = number of vertices"},
+                    {name: "Kruskal", func: this.changeAlgo, time: "O(E log(V)), V = number of vertices", space: "O(V), V = number of vertices"}
                 ]}
                 display = {{
                     name: "Graphing Algorithms",

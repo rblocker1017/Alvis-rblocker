@@ -12,23 +12,28 @@ class Complexity extends Component {
     constructor(props){
         super(props);
         this.classes = this.props.classes;
-        this.instruct = this.props.instruct;
+        this.algorithms = this.props.algorithms
     }
     render(){
         return(
-            <Paper className={this.classes.code}>
-                <h2>Complexity</h2>
-                {this.props.complexity === undefined ? null :
-                <div>
-                    <h4>
-                        Time: {this.props.complexity.time}
-                    </h4>
-                    <h4>
-                        Space: {this.props.complexity.space}
-                    </h4>
-                </div>
-                }
-            </Paper>
+                this.props.algorithms.map( algorithm => {
+                    if(algorithm.name === this.props.type && algorithm.time !== undefined && algorithm.space !== undefined){
+                        return(
+                            <Paper className={this.classes.code}>
+                            <div>
+                                <h2>Complexity</h2>
+                                <h4>
+                                    Time: {algorithm.time}
+                                </h4>
+                                <h4>
+                                    Space: {algorithm.space}
+                                </h4>
+                            </div>
+                            </Paper>
+                        );
+
+                    }
+                })
         );
     }
 }

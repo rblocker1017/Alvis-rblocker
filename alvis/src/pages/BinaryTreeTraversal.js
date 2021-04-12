@@ -18,24 +18,18 @@ import {
   newConnectNodeBTT
 } from "./Shapes/NodeGenerator";
 
-const str1 = <b>Step 1: Click an algorithm of your choice to begin.</b>;
+const str1 = "Step 1: Click an algorithm of your choice to begin.";
 const str2 = (
-  <b>Step 2: Click Step Forward/Back to traverse the tree in that direction.</b>
+  "Step 2: Click Step Forward/Back to traverse the tree in that direction."
 );
 const str3 = (
-  <b>Step 3: Click "RESET" to reset the traversal to the beginning</b>
+  "Step 3: Click \"RESET\" to reset the traversal to the beginning"
 );
 const str4 = (
-  <b>
-    Step 4: Click a tiny circle (left/right) attached to a node, and click
-    "INSERT" to insert a new leaf
-  </b>
+  "Step 4: Click a tiny circle (left/right) attached to a node, and click \"INSERT\" to insert a new leaf"
 );
 const str5 = (
-  <b>
-    Step 5: Click on a big circle until it turns blue, then click the trash icon
-    to delete that node
-  </b>
+  "Step 5: Click on a big circle until it turns blue, then click the trash icon to delete that node"
 );
 
 const WIDTH = 1400;
@@ -387,6 +381,7 @@ class BinaryTreeTraversal extends Component {
       prevState.type !== this.state.type
     ) {
       let array = [];
+      console.log("test");
       switch (this.state.type) {
         case "Preorder":
           preOrderTraversal(this.state.circles[0], array, this.state.circles);
@@ -398,7 +393,6 @@ class BinaryTreeTraversal extends Component {
           inOrderTraversal(this.state.circles[0], array, this.state.circles);
           break;
       }
-      console.log(array);
       this.setState({
         algorithmArray: array,
         visualArray: generateArray(array.length, WIDTH, HEIGHT)
@@ -428,9 +422,9 @@ class BinaryTreeTraversal extends Component {
       <MainPage
         // Display all the alogrithms as well as the switches
         algorithms={[
-          { name: "Preorder", func: this.changeAlgo },
-          { name: "Inorder", func: this.changeAlgo },
-          { name: "Postorder", func: this.changeAlgo }
+          { name: "Preorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"},
+          { name: "Inorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"},
+          { name: "Postorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"}
         ]}
         // This affects the text of what algorithm is currently being traversed
         display={{
@@ -444,6 +438,7 @@ class BinaryTreeTraversal extends Component {
               circles={this.state.circles}
               lines={this.state.lines}
               type={this.state.type}
+              step={this.state.num}
               visualArray={this.state.visualArray}
               insertRight={this.insertRight}
               insertLeft={this.insertLeft}
@@ -465,21 +460,6 @@ class BinaryTreeTraversal extends Component {
         }}
         // This component is for modifying the instructions text
         instruct={this.instructions}
-        // This component is for modifying the complexity text
-        complexity={{
-          time: (
-            <p>
-              {`O(n)`}
-              <p>{"(n = leaves in the tree)"}</p>
-            </p>
-          ),
-          space: (
-            <p>
-              {"O(h)"}
-              <p>{"(h = height of the tree)"}</p>
-            </p>
-          )
-        }}
         // This component is for the functionaly of the step functions
         barFunctions={{
           forward: this.stepForward,

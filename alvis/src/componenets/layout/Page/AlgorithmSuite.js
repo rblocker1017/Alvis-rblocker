@@ -37,6 +37,8 @@ class AlgoSuite extends Component {
                                 </Grid>
                             );
                         })}
+                    </Grid>
+                    <Grid item container spacing={1} justify={"center"}>
                         {this.props.extra === undefined ? null : 
                             this.props.extra.type === "buttons" ? 
                             this.props.extra.functions.map(

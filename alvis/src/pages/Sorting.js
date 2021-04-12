@@ -16,6 +16,14 @@ const INIT_ARRAY_BUNDLE = insertion(INIT_VALUES);
 
 //generate styles for React objects
 const styles = (theme) => ({
+    insertPaper: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -308,23 +316,9 @@ export class Sorting extends Component{
         this.updateGraph(this.state.newArray, this.state.selected, this.state.swap1, this.state.swap2);
     }
 
-    // shouldComponentUpdate - checks if comment should re-render
-    shouldComponentUpdate(nextProps, nextState){
-        if(this.state.type !== nextState.type || 
-            this.state.stepCount !== nextState.stepCount || 
-            this.state.transitionArray !==  nextState.transitionArray || 
-            this.state.selected !== nextState.selected || 
-            this.state.open !== nextState.open ||
-            this.state.inputError !== nextState.inputError ||
-            this.state.transitionArray !== nextState.transitionArray){
-                return true;
-        }
-        return false;
-    }
-
     //componentDidUpdate - updates changed components after re-render
     componentDidUpdate(prevProps, prevState){
-        console.log("updated");
+        console.log(this.state.transitionArray);
         if(prevState.type !== this.state.type || prevState.transitionArray !== this.state.transitionArray){
             let arrayBundle;
             //check type, and calculate algorithm accordingly
@@ -398,12 +392,12 @@ export class Sorting extends Component{
                 </Modal>
                 <MainPage
                     algorithms={[
-                        {name: "Insertion",func: this.changeAlgorithm},
-                        {name: "Selection", func: this.changeAlgorithm},
-                        {name: "Quick", func: this.changeAlgorithm},
-                        {name: "Bubble",func: this.changeAlgorithm},
-                        {name: "Heap", func: this.changeAlgorithm},
-                        {name: "Shell", func: this.changeAlgorithm}
+                        {name: "Insertion",func: this.changeAlgorithm, time: "O(n^2)", space: "O(1)"},
+                        {name: "Selection", func: this.changeAlgorithm, time: "O(n^2)", space: "O(1)"},
+                        {name: "Quick", func: this.changeAlgorithm, time: "O(n log(n))", space: "O(1)"},
+                        {name: "Bubble",func: this.changeAlgorithm, time: "O(n^2)", space: "O(1)"},
+                        {name: "Heap", func: this.changeAlgorithm, time: "O(n log(n))", space: "O(1)"},
+                        {name: "Shell", func: this.changeAlgorithm, time: "O(n^2)", space: "O(1)"}
                     ]}
                     display = {{
                         name: "Sorting Algorithms",

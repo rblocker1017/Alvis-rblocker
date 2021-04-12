@@ -12,7 +12,6 @@ class LinesDisplay extends Component{
                         stroke={line.connected ? "red" : "black"}
                         hitStrokeWidth={25}
                         fill={"black"}
-                        onClick={this.props.selectNode}
                     />
                 </React.Fragment>
             ))

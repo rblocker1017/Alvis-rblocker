@@ -285,6 +285,7 @@ class CPUScheduling extends Component{
     }
 
     handleChangeCheck(event){
+        console.log(this.state.checked);
         this.setState({
             checked: !this.state.checked
         });

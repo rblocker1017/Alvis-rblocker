@@ -128,46 +128,48 @@ class CPUSchedulingStats extends Component{
     }
     render(){
         return(
-            <Grid item container direction="column" justify="flex-end" alignItems="stretch" spacing={1}>
-                <TableContainer componenet={Grid}>
-                    <Table className={this.classes.table} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell className={this.classes.th} align="center">Process Name</TableCell>
-                                <TableCell className={this.classes.th} align="center">Arrival Time</TableCell>
-                                <TableCell className={this.classes.th} align="center">Burst Time</TableCell>
-                                {this.props.type === "Priority" ? <TableCell className={this.classes.th} align="center">Priority</TableCell>
-                                    : null}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {this.props.processes.map((row) => (
-                                <TableRow key={row.name} onClick={this.props.selectRow}>
-                                    <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center" component="th" scope="row">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                        {row.arrivalTime}
-                                    </TableCell>
-                                    <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                        {row.burstTime}
-                                    </TableCell>
-                                    {this.props.type === "Priority" ? <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
-                                        {row.burstTime}
-                                    </TableCell>
+            <div style={{height: "450px", width: "500px"}}>
+                <Grid item container direction="column" justify="flex-end" alignItems="stretch" spacing={1}>
+                    <TableContainer componenet={Grid}>
+                        <Table className={this.classes.table} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell className={this.classes.th} align="center">Process Name</TableCell>
+                                    <TableCell className={this.classes.th} align="center">Arrival Time</TableCell>
+                                    <TableCell className={this.classes.th} align="center">Burst Time</TableCell>
+                                    {this.props.type === "Priority" ? <TableCell className={this.classes.th} align="center">Priority</TableCell>
                                         : null}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
-                    <Paper className={this.classes.averages}>
-                        <h4>  Average Waiting Time: {this.props.waitingTime} </h4>
-                        <h4> Average Turnaound Time: {this.props.turnaroundTime} </h4>
-                    </Paper>
+                            </TableHead>
+                            <TableBody>
+                                {this.props.processes.map((row) => (
+                                    <TableRow key={row.name} onClick={this.props.selectRow}>
+                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center" component="th" scope="row">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                            {row.arrivalTime}
+                                        </TableCell>
+                                        <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                            {row.burstTime}
+                                        </TableCell>
+                                        {this.props.type === "Priority" ? <TableCell id={row.name} className={this.classes.tc} style={row.select ? { backgroundColor: "green", color: "white" } : { backgroundColor: "white" }} align="center">
+                                            {row.burstTime}
+                                        </TableCell>
+                                            : null}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Grid item xs={8} container direction="column" justify="flex-end" alignItems="flex-start">
+                        <Paper className={this.classes.averages}>
+                            <h4>  Average Waiting Time: {this.props.waitingTime} </h4>
+                            <h4> Average Turnaound Time: {this.props.turnaroundTime} </h4>
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
         );
     }
 }

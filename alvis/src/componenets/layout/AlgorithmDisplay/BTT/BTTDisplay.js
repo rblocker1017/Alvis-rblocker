@@ -34,10 +34,10 @@ class BTTDisplay extends Component{
                     />
                     <LinesDisplay
                         lines={this.props.lines}
-                        selectNode={this.props.selectNode}
                     />
                     <Group draggable>
                         <ArrayDisplay 
+                            step={this.props.step}
                             visualArray = {this.props.visualArray}
                         />
                     </Group>

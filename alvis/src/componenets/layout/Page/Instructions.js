@@ -22,9 +22,9 @@ class Instructions extends Component {
                 {this.instruct === undefined ? null : this.instruct.map(instruction => {
                     return(
                         <div>
-                            <p1>
+                            <b>
                                 {instruction}
-                            </p1>
+                            </b>
                             <br />
                         </div>
                     );
