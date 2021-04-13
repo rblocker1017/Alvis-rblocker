@@ -99,6 +99,7 @@ export function lruPageReplacementFunc(pages ,frames){
 
                 //console.log("Set: " + arr.toString())
                 indexes.push(pages[i]); 
+                console.log("Getting value for lruArr " + lruArr)
                 continue;
             }
         } else {
@@ -133,10 +134,19 @@ export function lruPageReplacementFunc(pages ,frames){
 
                 
             }
+            let newVal = pages[i]   // get current value in our page array and set it to a temp var
+
+            for(let k = 0; k < lruArr.length; k++){ // loop through the lruArr and see if a duplicate value exists
+                if(newVal == lruArr[k]){            // if duplicate values exists, then remove it
+                    lruArr.splice(k, 1)             // this allows lruArr to not double dip and add multiples values to the front
+                }                                   // previously reference string of 1, 2, 3, 3, 3 would have a lruArr value of [3, 3, 3, 2, 1]
+            }                                       // now lruArr should have the proper value of [3, 2, 1] for that string
             lruArr.unshift(pages[i]);
+            
+            
         }
         //lruArr.pop();
-    
+        console.log("Getting value for lruArr " + lruArr)
         answer.push({
             column: prevStruct,
             fault: "✔️"
