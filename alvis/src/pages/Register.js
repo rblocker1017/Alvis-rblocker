@@ -121,10 +121,10 @@ export default function Register() {
         {
             alert("Passwords should match.")
         }
-        else if(check === false)
+        /*else if(check === false)
         {
             alert("Please agree to the terms and conditions.")
-        }
+        }*/
         else
         {
             Axios.post("http://localhost:3001/email", {
