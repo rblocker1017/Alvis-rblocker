@@ -39,7 +39,6 @@ class Mainbar extends Component{
                     setStarting = {this.props.barFunctions.setStarting}
                     setInput = {this.props.barFunctions.setInput}
                     renderDiskGraph = {this.props.barFunctions.renderDiskGraph}
-                    reset = {this.props.barFunctions.reset}
                 />);
                 break;
             case "Graphing Algorithms":

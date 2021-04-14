@@ -63,6 +63,17 @@ export class Sorting extends Component{
         this.stepBack = this.stepBack.bind(this);
         this.selectBar = this.selectBar.bind(this);
         this.updateGraph = this.updateGraph.bind(this);
+        this.instructions = [
+            "Change Algorithm: Click on an algorithm from the algorithm suite on the top left",
+            "Select: click on a bar",
+            "De-select: click on previously selected bar",
+            "View Bar Value: mouse over the bar",
+            "Insert: Click insert and enter a valid value. The new bar location will be after the selected bar. If none selected, position will be at the start.",
+            "Delete: Select a node, then click on the trash can.",
+            "Step Forward: Clicking on step forward increments step counter, and highlights changes in the next state",
+            "Step Back: Clicking step backwards decrements the counter, and highlights previous change",
+            "Reset: Resets graph to its state at step 0"
+        ];
     }
 
     /* changeAlgorithm - change the current algorithm
@@ -189,9 +200,17 @@ export class Sorting extends Component{
     selectBar(d, i) {
         //can slect bar or graph on the first step
         if (this.state.stepCount === 0) {
-            this.setState({
-                selected: i
-            });
+            if(this.state.selected === i){
+                this.setState({
+                    selected: null
+                });
+            }
+            else{
+                this.setState({
+                    selected: i
+                });
+            }
+            
         }
         /*
         if (this.state.selected === i) {
@@ -415,6 +434,7 @@ export class Sorting extends Component{
                         forward: this.stepForward,
                         back: this.stepBack
                     }}
+                    instruct={this.instructions}
                 />
             </Fragment>
         );

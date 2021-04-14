@@ -140,12 +140,13 @@ export default function Achievements() {
         <Header>
             <ThemeProvider theme={theme}>
                 <Paper className={classes.paper}>
+                    <Grid item><h1>Achievement functionality currently not implemented, this is only a demonstration of what it might look like.</h1></Grid>
                     <Grid container alignItems={"center"} direction={"row"} justify={"center"} spacing={"5"}>
-                        <Grid item><h1>Achievements</h1></Grid>
                         <Grid item><SearchBar value={searched}
                             onChange={(searchVal) => requestSearch(searchVal)}
                             onCancelSearch={() => cancelSearch()}
                         /></Grid>
+                        <Grid item><h1>Achievements</h1></Grid>
                         <Grid item>
                             <FormControl variant="outlined" className={classes.formControl}>
                                 <InputLabel>Sort by</InputLabel>

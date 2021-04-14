@@ -56,6 +56,15 @@ class FCFSDisk extends Component{
         this.setInput = this.setInput.bind(this);
         this.reset = this.reset.bind(this);
         this.renderDiskGraph = this.renderDiskGraph.bind(this);
+        this.instructions = [
+            "Step 1: select the algorithm with one of the buttons on the top left of the screen",
+            "Step 2: select inward or outward",
+            "Step 3: Enter disk size and initial position",
+            "Step 4: Enter the request sequence seperated by commas",
+            "Step 5: click Run Disk Schedueling to update the graph",
+            "Step 6: mouse over parts of the graph to inspect it",
+            "Step 7: click reset graph to zero out the graph."
+        ];
     }
 
     /* changeAlgo - switches the algorithm
@@ -196,9 +205,7 @@ class FCFSDisk extends Component{
                         data = {this.state.data}
                         diskSize = {this.state.diskSize}
                     />,
-                    insert: null,
-                    delete: null,
-                    reset: this.resetDiskGraph,
+                    reset: this.reset,
                     extra: null
                 }}
                 barFunctions = {{
@@ -208,6 +215,7 @@ class FCFSDisk extends Component{
                     renderDiskGraph: this.renderDiskGraph,
                     reset: this.reset
                 }}
+                instruct = {this.instructions}
             />
         );
     }

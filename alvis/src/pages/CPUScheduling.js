@@ -347,7 +347,7 @@ class CPUScheduling extends Component{
                         {name: "FCFS",func: this.changeAlgo},
                         {name: "SJF", func: this.changeAlgo},
                         {name: "Priority", func: this.changeAlgo},
-                        {name: "RR",func: this.changeAlgo},
+                        //{name: "RR",func: this.changeAlgo},
                         {name: "SRTF", func: this.changeAlgo}
                     ]}
                     extraOption = {{

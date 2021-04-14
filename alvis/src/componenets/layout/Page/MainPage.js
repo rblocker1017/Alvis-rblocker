@@ -97,7 +97,7 @@ class MainPage extends Component {
                     </Grid>
                 </Grid>
                 {
-                    this.props.display.delete !== null ?
+                    this.props.display.delete !== null && this.props.display.delete !== undefined ?
                     <TrashButton onClick={this.props.display.delete} /> :
                     null
                 }

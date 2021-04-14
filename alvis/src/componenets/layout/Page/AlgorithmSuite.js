@@ -58,12 +58,15 @@ class AlgoSuite extends Component {
                         }
                     </Grid>
                     <Grid item container spacing={1} justify={"center"}>
+                        {this.props.insert !== undefined ?
                         <Grid item onClick={this.props.insert}>
                             <Button
                                 color={"primary"}
                                 text={"Insert"}
                             />
-                        </Grid>
+                        </Grid>:
+                        null
+                        }
                         <Grid item onClick={this.props.reset}>
                             <Button
                                 color={"primary"}

@@ -24,10 +24,6 @@ class ControlBarDiskScheduling extends Component{
                     <h1></h1>
                     <Button variant="contained" color="primary" onClick={this.props.renderDiskGraph}>Run Disk Scheduling</Button>
                 </Grid>
-                <Grid item xs={12}>
-                    <h1></h1>
-                    <Button variant="contained" color="primary" onClick={this.props.reset}>Reset</Button>
-                </Grid>
             </Grid>
         </form>
         );
