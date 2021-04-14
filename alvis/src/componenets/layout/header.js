@@ -1,41 +1,37 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
-  Collapse,
-  Drawer,
-  CssBaseline,
   AppBar,
-  Toolbar,
-  List,
-  Typography,
+  Collapse,
+  CssBaseline,
   Divider,
+  Drawer,
   IconButton,
+  Link,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Link,
-  ButtonBase,
-  Grid,
-  Button,
+  Toolbar,
+  Typography,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import AssessmentIcon from "@material-ui/icons/Assessment";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ScheduleIcon from "@material-ui/icons/Schedule";
-import SaveIcon from "@material-ui/icons/Save";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import NatureIcon from "@material-ui/icons/Nature";
-import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import LinkRoute from "react-router-dom/Link";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import { Route, Switch } from "react-router-dom";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LoginBundle from "../Resources/LoginBundle";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import MenuIcon from "@material-ui/icons/Menu";
+import NatureIcon from "@material-ui/icons/Nature";
+import SaveIcon from "@material-ui/icons/Save";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import clsx from "clsx";
+import React, { useState } from "react";
+import LinkRoute from "react-router-dom/Link";
 import Cookies from "universal-cookie";
+import LoginBundle from "../Resources/LoginBundle";
 
 const drawerWidth = 250;
 
@@ -107,7 +103,6 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [routes, setRoutes] = useState();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,17 +132,17 @@ export default function PersistentDrawerLeft(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
-        position="fixed"
+        position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
@@ -157,8 +152,8 @@ export default function PersistentDrawerLeft(props) {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
-        anchor="left"
+        variant='persistent'
+        anchor='left'
         open={open}
         classes={{
           paper: classes.drawerPaper,
@@ -178,15 +173,15 @@ export default function PersistentDrawerLeft(props) {
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
+            aria-controls='panel1a-content'
+            id='panel1a-header'
           >
             <Typography className={classes.heading}>CSC 130</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={open} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {CSC130.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>
@@ -209,15 +204,15 @@ export default function PersistentDrawerLeft(props) {
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
+            aria-controls='panel2a-content'
+            id='panel2a-header'
           >
             <Typography className={classes.heading}>CSC 139</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={open} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {CSC139.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>

@@ -1,13 +1,12 @@
 import { green, grey } from "@material-ui/core/colors";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import BTTDisplay from "../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
-import Complexity from "../componenets/layout/Page/Complexity";
 import {
   inOrderTraversal,
   postOrderTraversal,
-  preOrderTraversal
+  preOrderTraversal,
 } from "./Algorithms/BinaryTreeTraversal";
 import {
   createLeft,
@@ -15,22 +14,17 @@ import {
   generateArray,
   generateBinaryTree,
   generateConnectorsBTT,
-  newConnectNodeBTT
+  newConnectNodeBTT,
 } from "./Shapes/NodeGenerator";
 
 const str1 = "Step 1: Click an algorithm of your choice to begin.";
-const str2 = (
-  "Step 2: Click Step Forward/Back to traverse the tree in that direction."
-);
-const str3 = (
-  "Step 3: Click \"RESET\" to reset the traversal to the beginning"
-);
-const str4 = (
-  "Step 4: Click a tiny circle (left/right) attached to a node, and click \"INSERT\" to insert a new leaf"
-);
-const str5 = (
-  "Step 5: Click on a big circle until it turns blue, then click the trash icon to delete that node"
-);
+const str2 =
+  "Step 2: Click Step Forward/Back to traverse the tree in that direction.";
+const str3 = 'Step 3: Click "RESET" to reset the traversal to the beginning';
+const str4 =
+  'Step 4: Click a tiny circle (left/right) attached to a node, and click "INSERT" to insert a new leaf';
+const str5 =
+  "Step 5: Click on a big circle until it turns blue, then click the trash icon to delete that node";
 
 const WIDTH = 1400;
 const HEIGHT = 450;
@@ -56,7 +50,7 @@ class BinaryTreeTraversal extends Component {
       selectedRight: {},
       selectedLeft: {},
       fromCon: {},
-      idNum: INIT.length
+      idNum: INIT.length,
     };
     this.instructions = [str1, str2, str3, str4, str5];
     this.Complexity = ["hello", "hello"];
@@ -78,7 +72,7 @@ class BinaryTreeTraversal extends Component {
   changeAlgo(e) {
     this.resetTree();
     this.setState({
-      type: e.target.textContent
+      type: e.target.textContent,
     });
   }
 
@@ -96,16 +90,16 @@ class BinaryTreeTraversal extends Component {
       // Increment the value of the state counter by 1
       this.setState({
         num: this.state.num + 1,
-        circles: this.state.circles.map(circle => {
+        circles: this.state.circles.map((circle) => {
           if (this.state.algorithmArray[this.state.num].id === circle.id) {
             return {
               ...circle,
-              stroke: "red"
+              stroke: "red",
             };
           }
           return circle;
         }),
-        visualArray: this.state.visualArray
+        visualArray: this.state.visualArray,
       });
     }
   }
@@ -120,17 +114,17 @@ class BinaryTreeTraversal extends Component {
       this.state.visualArray[this.state.num - 1].value = null;
       // Decrement the counter for the step as well as make the circumference of the current circle black
       this.setState({
-        circles: this.state.circles.map(circle => {
+        circles: this.state.circles.map((circle) => {
           if (this.state.algorithmArray[this.state.num - 1].id === circle.id) {
             return {
               ...circle,
-              stroke: "black"
+              stroke: "black",
             };
           }
           return circle;
         }),
         visualArray: this.state.visualArray,
-        num: this.state.num - 1
+        num: this.state.num - 1,
       });
     }
   }
@@ -153,23 +147,23 @@ class BinaryTreeTraversal extends Component {
       selected:
         this.state.selected.id === e.target.id()
           ? { id: -1 }
-          : this.state.circles.find(circle => circle.id === e.target.id()),
-      circles: this.state.circles.map(circle => {
+          : this.state.circles.find((circle) => circle.id === e.target.id()),
+      circles: this.state.circles.map((circle) => {
         if (circle.id == id) {
           if (circle.id != this.state.selected.id) {
             return {
               ...circle,
               stroke: "blue",
-              connected: true
+              connected: true,
             };
           }
         }
         return {
           ...circle,
           stroke: "black",
-          connected: false
+          connected: false,
         };
-      })
+      }),
     });
   }
   /* deleteBranch - Deletes a group of leaves and updates the tree accordingly
@@ -180,19 +174,19 @@ class BinaryTreeTraversal extends Component {
     let tempBundle;
     //console.log(lines);
     if (id != -1 && id != this.state.circles[0].id) {
-      let node = this.state.circles.find(circle => circle.id == id);
+      let node = this.state.circles.find((circle) => circle.id == id);
       tempBundle = this.deleteNode(
         node,
-        this.state.circles.filter(circle => circle.id != id),
+        this.state.circles.filter((circle) => circle.id != id),
         this.state.lines
       );
       // ** TODO **
       // disconnect node from the parent
-      tempBundle[0] = tempBundle[0].map(circle => {
+      tempBundle[0] = tempBundle[0].map((circle) => {
         if (circle.leftChild !== null && circle.leftChild === node.id) {
           return {
             ...circle,
-            leftChild: null
+            leftChild: null,
           };
         } else if (
           circle.rightChild !== null &&
@@ -200,14 +194,14 @@ class BinaryTreeTraversal extends Component {
         ) {
           return {
             ...circle,
-            rightChild: null
+            rightChild: null,
           };
         }
         return circle;
       });
       this.setState({
         circles: tempBundle[0],
-        lines: tempBundle[1]
+        lines: tempBundle[1],
       });
     }
   }
@@ -221,7 +215,7 @@ class BinaryTreeTraversal extends Component {
     let rightNodeArray = nodeArray;
     let resultNodeArray = nodeArray;
 
-    let newConnections = nodeConnections.filter(line => {
+    let newConnections = nodeConnections.filter((line) => {
       for (let i = 0; i < line.connections.length; i++) {
         if (line.connections[i] === node.id) {
           console.log("test");
@@ -235,8 +229,8 @@ class BinaryTreeTraversal extends Component {
     //console.log(newConnections);
     if (node.leftChild != null) {
       let leftBundle = this.deleteNode(
-        this.state.circles.find(circle => node.leftChild === circle.id),
-        nodeArray.filter(circle => circle.id != node.leftChild),
+        this.state.circles.find((circle) => node.leftChild === circle.id),
+        nodeArray.filter((circle) => circle.id != node.leftChild),
         newConnections
       );
       leftNodeArray = leftBundle[0];
@@ -244,17 +238,17 @@ class BinaryTreeTraversal extends Component {
     }
     if (node.rightChild != null) {
       let rightBundle = this.deleteNode(
-        this.state.circles.find(circle => node.rightChild === circle.id),
-        nodeArray.filter(circle => circle.id != node.rightChild),
+        this.state.circles.find((circle) => node.rightChild === circle.id),
+        nodeArray.filter((circle) => circle.id != node.rightChild),
         newConnections
       );
       rightNodeArray = rightBundle[0];
       rightNodeConnections = rightBundle[1];
     }
-    resultNodeArray = leftNodeArray.filter(circle =>
+    resultNodeArray = leftNodeArray.filter((circle) =>
       rightNodeArray.includes(circle)
     );
-    newConnections = leftNodeConnections.filter(line =>
+    newConnections = leftNodeConnections.filter((line) =>
       rightNodeConnections.includes(line)
     );
     return [resultNodeArray, newConnections];
@@ -268,8 +262,8 @@ class BinaryTreeTraversal extends Component {
       selected: { id: -1 },
       selectedLeft: {},
       selectedRight: this.state.circles.find(
-        circle => circle.id == e.target.id()
-      )
+        (circle) => circle.id == e.target.id()
+      ),
     });
   }
   /** insertLeft - Inserts a new child on the left side of the parent node
@@ -281,27 +275,27 @@ class BinaryTreeTraversal extends Component {
       selected: { id: -1 },
       selectedRight: {},
       selectedLeft: this.state.circles.find(
-        circle => circle.id == e.target.id()
-      )
+        (circle) => circle.id == e.target.id()
+      ),
     });
   }
   /** resetTree - Resets the tree and visual array to the beginning
    */
   resetTree() {
     this.setState({
-      circles: this.state.circles.map(circle => {
+      circles: this.state.circles.map((circle) => {
         return {
           ...circle,
-          stroke: "black"
+          stroke: "black",
         };
       }),
-      visualArray: this.state.visualArray.map(rect => {
+      visualArray: this.state.visualArray.map((rect) => {
         return {
           ...rect,
-          value: null
+          value: null,
         };
       }),
-      num: 0
+      num: 0,
     });
   }
   /** insertNode - looks for the proper location to insert the node
@@ -328,7 +322,7 @@ class BinaryTreeTraversal extends Component {
         selectedLeft: {},
         lines: this.state.lines.concat(connectionBundle[0]),
         circles: this.state.circles.concat(child),
-        idNum: this.state.idNum + 1
+        idNum: this.state.idNum + 1,
       });
     } else if (Object.keys(this.state.selectedRight).length !== 0) {
       const child = createRight(
@@ -349,7 +343,7 @@ class BinaryTreeTraversal extends Component {
         selectedRight: {},
         lines: this.state.lines.concat(connectionBundle[0]),
         circles: this.state.circles.concat(child),
-        idNum: this.state.idNum + 1
+        idNum: this.state.idNum + 1,
       });
     }
   }
@@ -395,7 +389,7 @@ class BinaryTreeTraversal extends Component {
       }
       this.setState({
         algorithmArray: array,
-        visualArray: generateArray(array.length, WIDTH, HEIGHT)
+        visualArray: generateArray(array.length, WIDTH, HEIGHT),
       });
     }
   }
@@ -406,12 +400,12 @@ class BinaryTreeTraversal extends Component {
     const theme = createMuiTheme({
       palette: {
         primary: {
-          main: green[900]
+          main: green[900],
         },
         secondary: {
-          main: grey[700]
-        }
-      }
+          main: grey[700],
+        },
+      },
     });
 
     /*
@@ -422,9 +416,24 @@ class BinaryTreeTraversal extends Component {
       <MainPage
         // Display all the alogrithms as well as the switches
         algorithms={[
-          { name: "Preorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"},
-          { name: "Inorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"},
-          { name: "Postorder", func: this.changeAlgo, time: "O(n), n = leaves in the tree", space: "O(h), h = height of the tree"}
+          {
+            name: "Preorder",
+            func: this.changeAlgo,
+            time: "O(n), n = leaves in the tree",
+            space: "O(h), h = height of the tree",
+          },
+          {
+            name: "Inorder",
+            func: this.changeAlgo,
+            time: "O(n), n = leaves in the tree",
+            space: "O(h), h = height of the tree",
+          },
+          {
+            name: "Postorder",
+            func: this.changeAlgo,
+            time: "O(n), n = leaves in the tree",
+            space: "O(h), h = height of the tree",
+          },
         ]}
         // This affects the text of what algorithm is currently being traversed
         display={{
@@ -456,14 +465,14 @@ class BinaryTreeTraversal extends Component {
           delete: this.deleteBranch,
           insert: this.insertNode,
           reset: this.resetTree,
-          extra: null
+          extra: null,
         }}
         // This component is for modifying the instructions text
         instruct={this.instructions}
         // This component is for the functionaly of the step functions
         barFunctions={{
           forward: this.stepForward,
-          back: this.stepBackward
+          back: this.stepBackward,
         }}
       />
     );

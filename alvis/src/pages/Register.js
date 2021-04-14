@@ -1,27 +1,23 @@
-import React, { useState } from "react";
 import {
-  Button,
-  Grid,
   Box,
-  Paper,
-  Typography,
-  Divider,
-  ButtonBase,
-  TextField,
-  FormControlLabel,
+  Button,
   Checkbox,
+  Divider,
+  FormControlLabel,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
 } from "@material-ui/core";
 import {
+  createMuiTheme,
   makeStyles,
   ThemeProvider,
-  useTheme,
-  createMuiTheme,
 } from "@material-ui/core/styles";
-import LinkRoute from "react-router-dom/Link";
 import Axios from "axios";
-import { green } from "@material-ui/core/colors";
-import { Route } from "react-router";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import LinkRoute from "react-router-dom/Link";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -238,7 +234,7 @@ export default function Register() {
                     </Box>
                   </Grid>
                   <Grid item>
-                    <Box pl={3}>
+                    <Box pl={3} pr={3}>
                       <FormControlLabel
                         control={<Checkbox color={"#000000"} />}
                         label={
