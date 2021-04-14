@@ -1,7 +1,7 @@
-import Button from "./Button";
-import React, { Component } from "react";
 import { Grid, Paper, withStyles } from "@material-ui/core";
-import { grey} from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
+import React, { Component } from "react";
+import Button from "./Button";
 
 const styles = (theme) => ({
     buttons: {

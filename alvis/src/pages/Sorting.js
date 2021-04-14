@@ -1,12 +1,25 @@
-import { Backdrop, Button, Fade, Grid, Modal, TextField, withStyles } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core/styles";
+import {
+  Backdrop,
+  Button,
+  Fade,
+  Grid,
+  Modal,
+  TextField,
+  withStyles,
+} from "@material-ui/core";
 import { axisBottom, axisRight, scaleBand, scaleLinear, select } from "d3";
-import React, { Component, createRef, Fragment } from 'react';
-import SortingDisplay from '../componenets/layout/AlgorithmDisplay/Sorting/SortingDisplay';
+import React, { Component, createRef, Fragment } from "react";
+import SortingDisplay from "../componenets/layout/AlgorithmDisplay/Sorting/SortingDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
-import { bubble, heapSort, insertion, quickSort, selection, shellSort } from "./Algorithms/Sorting";
-import { generateINIT } from './Shapes/SortingGenerator';
+import {
+  bubble,
+  heapSort,
+  insertion,
+  quickSort,
+  selection,
+  shellSort,
+} from "./Algorithms/Sorting";
+import { generateINIT } from "./Shapes/SortingGenerator";
 
 //Define size of the bar graph
 //Generate initial value and array 

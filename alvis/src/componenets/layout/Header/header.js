@@ -1,13 +1,17 @@
 import {
-  AppBar, Collapse,
+  AppBar,
+  Collapse,
   CssBaseline,
-  Divider, Drawer,
+  Divider,
+  Drawer,
   IconButton,
-  Link, List,
+  Link,
+  List,
   ListItem,
   ListItemIcon,
-  ListItemText, Toolbar,
-  Typography
+  ListItemText,
+  Toolbar,
+  Typography,
 } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -99,7 +103,6 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [routes, setRoutes] = useState();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,17 +132,17 @@ export default function PersistentDrawerLeft(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
-        position="fixed"
+        position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
@@ -149,8 +152,8 @@ export default function PersistentDrawerLeft(props) {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
-        anchor="left"
+        variant='persistent'
+        anchor='left'
         open={open}
         classes={{
           paper: classes.drawerPaper,
@@ -170,15 +173,15 @@ export default function PersistentDrawerLeft(props) {
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
+            aria-controls='panel1a-content'
+            id='panel1a-header'
           >
             <Typography className={classes.heading}>CSC 130</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={open} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {CSC130.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>
@@ -201,15 +204,15 @@ export default function PersistentDrawerLeft(props) {
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
+            aria-controls='panel2a-content'
+            id='panel2a-header'
           >
             <Typography className={classes.heading}>CSC 139</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={open} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {CSC139.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>

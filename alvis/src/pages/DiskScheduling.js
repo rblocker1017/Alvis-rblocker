@@ -1,16 +1,10 @@
-import Button from "@material-ui/core/Button";
-import { green, grey } from '@material-ui/core/colors';
-import Grid from "@material-ui/core/Grid";
-import Paper from '@material-ui/core/Paper';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import React, { Component } from 'react';
-import Header from '../componenets/layout/header';
-import '../styles/DiskScheduling.css';
-import * as Algorithms from './Algorithms/DiskScheduling';
-import DiskGraph from "../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskGraph";
-import DiskSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskSchedulingDisplay';
+import { green, grey } from "@material-ui/core/colors";
+import { createMuiTheme } from "@material-ui/core/styles";
+import React, { Component } from "react";
+import DiskSchedulingDisplay from "../componenets/layout/AlgorithmDisplay/DiskScheduling/DiskSchedulingDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
+import "../styles/DiskScheduling.css";
+import * as Algorithms from "./Algorithms/DiskScheduling";
 
 class FCFSDisk extends Component{
     constructor(props){

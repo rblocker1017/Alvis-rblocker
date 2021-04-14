@@ -1,81 +1,92 @@
-import React, { useState } from 'react';
-import Header from "../componenets/layout/header";
-import { Button, Grid, Paper, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, InputLabel, FormControl, Select } from "@material-ui/core"
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
-import MenuList from '@material-ui/core/MenuList';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import {
+  Divider,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core/styles";
 import SearchBar from "material-ui-search-bar";
-import Achievement from "./AchievementsClass"
+import React, { useState } from "react";
+import Header from "../componenets/layout/header";
+import Achievement from "./AchievementsClass";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: "transparent",
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        overflow: "hidden",
-        height: "100%",
-        width: "100%"
-    },
-    paperOverlay: {
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-        outline: 0,
-        borderRadius: 1,
-    },
-    divider: {
-        width: "50%"
-    },
-    body: {
-        width: "40%"
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
-    },
-    table: {
-        minWidth: 700,
-    },
-    th: {
-        fontWeight: 'bold'
-    },
-    tc: {
-        border: '1px solid rgba(224, 224, 224, 1)'
-    },
-    buttons: {
-        backgroundColor: grey[200],
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        width: "100%",
-        height: "100%"
-    },
-    button: {
-        width: "90%"
-    },
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
+  root: {
+    flexGrow: 1,
+    backgroundColor: "transparent",
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    backgroundColor: "transparent",
+    boxShadow: "none",
+    overflow: "hidden",
+    height: "100%",
+    width: "100%",
+  },
+  paperOverlay: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    outline: 0,
+    borderRadius: 1,
+  },
+  divider: {
+    width: "50%",
+  },
+  body: {
+    width: "40%",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 180,
+  },
+  table: {
+    minWidth: 700,
+  },
+  th: {
+    fontWeight: "bold",
+  },
+  tc: {
+    border: "1px solid rgba(224, 224, 224, 1)",
+  },
+  buttons: {
+    backgroundColor: grey[200],
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    width: "100%",
+    height: "100%",
+  },
+  button: {
+    width: "90%",
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
 }));
 
 function createData(name, status, date, details) {

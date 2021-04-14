@@ -1,22 +1,22 @@
-import { FormControlLabel } from '@material-ui/core';
-import Backdrop from '@material-ui/core/Backdrop';
-import Box from '@material-ui/core/Box';
+import { FormControlLabel } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import Checkbox from '@material-ui/core/Checkbox';
-import { green, grey } from '@material-ui/core/colors';
+import Checkbox from "@material-ui/core/Checkbox";
+import { green, grey } from "@material-ui/core/colors";
 import Grid from "@material-ui/core/Grid";
-import Modal from '@material-ui/core/Modal';
-import Paper from '@material-ui/core/Paper';
-import { createMuiTheme, withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
-import { animated, useSpring } from 'react-spring/web.cjs';
-import CPUSchedulingStats from '../componenets/Extras/CPUScheduling/CPUSchedulingStats';
-import CPUSchedulingDisplay from '../componenets/layout/AlgorithmDisplay/CPUScheduling/CPUSchedulingDisplay';
+import Modal from "@material-ui/core/Modal";
+import Paper from "@material-ui/core/Paper";
+import { createMuiTheme, withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, { Component, Fragment } from "react";
+import { animated, useSpring } from "react-spring/web.cjs";
+import CPUSchedulingStats from "../componenets/Extras/CPUScheduling/CPUSchedulingStats";
+import CPUSchedulingDisplay from "../componenets/layout/AlgorithmDisplay/CPUScheduling/CPUSchedulingDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
-import * as Algorithms from './Algorithms/CPUScheduling';
+import * as Algorithms from "./Algorithms/CPUScheduling";
 
 const styles = (theme) => ({
     paperOverlay: {

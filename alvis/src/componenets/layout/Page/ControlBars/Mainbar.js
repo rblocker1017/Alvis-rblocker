@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
 import { Grid, Paper, withStyles } from "@material-ui/core";
-import Button from "../Button";
+import { grey } from "@material-ui/core/colors";
+import React, { Component } from "react";
+import ControlBarCPUScheduling from "./ControlBarCPUScheduling";
+import ControlBarDiskScheduling from "./ControlBarDiskScheduling";
+import ControlBarPageReplace from "./ControlBarPageReplace";
+import ControlBarStartEnd from "./ControlBarStartEnd";
 import ControlBarStep from "./ControlBarStep";
-import { grey} from "@material-ui/core/colors";
-import ControlBarStartEnd from './ControlBarStartEnd';
-import ControlBarPageReplace from './ControlBarPageReplace';
-import ControlBarDiskScheduling from './ControlBarDiskScheduling';
-import ControlBarCPUScheduling from './ControlBarCPUScheduling';
 const styles = (theme) => ({
     fields: {
         backgroundColor: grey[300],
