@@ -28,7 +28,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React from "react";
 import LinkRoute from "react-router-dom/Link";
 import Cookies from "universal-cookie";
 import LoginBundle from "../../Resources/LoginBundle";
@@ -179,9 +179,9 @@ export default function PersistentDrawerLeft(props) {
             <Typography className={classes.heading}>CSC 130</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
+            <Typography component={"div"}>
               <Collapse in={open} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
+                <List disablePadding>
                   {CSC130.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>
@@ -210,9 +210,9 @@ export default function PersistentDrawerLeft(props) {
             <Typography className={classes.heading}>CSC 139</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
+            <Typography component={"div"}>
               <Collapse in={open} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
+                <List disablePadding>
                   {CSC139.map((obj, index) => (
                     <Link component={LinkRoute} to={obj.url}>
                       <ListItem button key={obj.name}>

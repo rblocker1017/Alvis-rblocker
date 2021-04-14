@@ -39,8 +39,8 @@ function TreeChart({ data }) {
     // enrich hierarchical data with coordinates
     treeLayout(root);
 
-    console.warn("descendants", root.descendants());
-    console.warn("links", root.links());
+    // console.warn("descendants", root.descendants());
+    // console.warn("links", root.links());
 
     // nodes
     svg

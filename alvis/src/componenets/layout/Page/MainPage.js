@@ -28,7 +28,6 @@ const theme = createMuiTheme({
 
 class MainPage extends Component {
   render() {
-    console.log(this.props.algorithms);
     return (
       <Header>
         <ThemeProvider theme={theme}>

@@ -1,8 +1,8 @@
 import { Paper, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 
-const WIDTH = 1400;
-const HEIGHT = 600;
+// const WIDTH = 1400;
+// const HEIGHT = 600;
 
 const styles = (theme) => ({
   paper: {

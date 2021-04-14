@@ -94,7 +94,7 @@ export default function Login() {
         loginEmail: email,
         loginPassword: password,
       }).then((response) => {
-        if (String(response.data) == "true") {
+        if (String(response.data) === "true") {
           //console.log("Correct username and password");
 
           const cookies = new Cookies();
@@ -145,7 +145,7 @@ export default function Login() {
               <Divider />
             </Box>
             <Box>
-              <Typography variant={"b1"}>
+              <Typography variant={"body1"}>
                 An Interactive Algorithm Visualizer for Computer Science courses
                 making learning more enjoyable and challenging
               </Typography>
@@ -247,7 +247,7 @@ export default function Login() {
                         direction={"row"}
                         alignItems={"center"}
                         justify={"center"}
-                        spacing={"2"}
+                        spacing={2}
                       >
                         <Grid item className={classes.logDivider}>
                           <Divider />

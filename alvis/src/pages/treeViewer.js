@@ -39,7 +39,7 @@ export default function TreeViewer() {
     },
   ]);
   useEffect(() => {
-    console.log("called");
+    // console.log("called");
   }, [treeData]);
 
   return (

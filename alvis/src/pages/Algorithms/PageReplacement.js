@@ -1,5 +1,5 @@
 export function fcfsPageReplacementFunc(pages, frames) {
-  console.log("FCFS ran.");
+  // console.log("FCFS ran.");
   let s = new Set();
   let answer = [];
   let indexes = [];
@@ -20,10 +20,10 @@ export function fcfsPageReplacementFunc(pages, frames) {
           // Pushes a set amount of blank text to filler, allows columns to become uniform in size
           filler.push("");
         }
-        let arr = {
-          column: [...s],
-          fault: "Fault",
-        };
+        // let arr = {
+        //   column: [...s],
+        //   fault: "Fault",
+        // };
         answer.push({
           column: [...s, ...filler], // push both the set and the filler frame spaces to answer, along with a fault
           fault: "❌",
@@ -69,7 +69,7 @@ export function fcfsPageReplacementFunc(pages, frames) {
 }
 
 export function lruPageReplacementFunc(pages, frames) {
-  console.log("LRU ran.");
+  // console.log("LRU ran.");
   let s = new Set();
   let answer = [];
   let indexes = [];
@@ -89,10 +89,10 @@ export function lruPageReplacementFunc(pages, frames) {
         for (let j = i; j < frames - 1; j++) {
           filler.push("");
         }
-        let arr = {
-          column: [...s],
-          fault: "Fault",
-        };
+        // let arr = {
+        //   column: [...s],
+        //   fault: "Fault",
+        // };
         answer.push({
           column: [...s, ...filler],
           fault: "❌",
@@ -149,7 +149,7 @@ export function lruPageReplacementFunc(pages, frames) {
 }
 
 export function optPageReplacementFunc(pages, frames) {
-  console.log("OPT ran.");
+  // console.log("OPT ran.");
   let s = new Set();
   let answer = [];
   let indexes = [];
@@ -168,10 +168,10 @@ export function optPageReplacementFunc(pages, frames) {
         for (let j = i; j < frames - 1; j++) {
           filler.push("");
         }
-        let arr = {
-          column: [...s],
-          fault: "Fault",
-        };
+        // let arr = {
+        //   column: [...s],
+        //   fault: "Fault",
+        // };
         answer.push({
           column: [...s, ...filler],
           fault: "❌",

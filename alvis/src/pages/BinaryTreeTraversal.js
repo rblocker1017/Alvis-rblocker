@@ -1,5 +1,3 @@
-import { green, grey } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import BTTDisplay from "../componenets/layout/AlgorithmDisplay/BTT/BTTDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
@@ -149,8 +147,8 @@ class BinaryTreeTraversal extends Component {
           ? { id: -1 }
           : this.state.circles.find((circle) => circle.id === e.target.id()),
       circles: this.state.circles.map((circle) => {
-        if (circle.id == id) {
-          if (circle.id != this.state.selected.id) {
+        if (circle.id === id) {
+          if (circle.id !== this.state.selected.id) {
             return {
               ...circle,
               stroke: "blue",
@@ -172,12 +170,11 @@ class BinaryTreeTraversal extends Component {
   deleteBranch(e) {
     const id = this.state.selected.id;
     let tempBundle;
-    //console.log(lines);
-    if (id != -1 && id != this.state.circles[0].id) {
-      let node = this.state.circles.find((circle) => circle.id == id);
+    if (id !== -1 && id !== this.state.circles[0].id) {
+      let node = this.state.circles.find((circle) => circle.id === id);
       tempBundle = this.deleteNode(
         node,
-        this.state.circles.filter((circle) => circle.id != id),
+        this.state.circles.filter((circle) => circle.id !== id),
         this.state.lines
       );
       // ** TODO **
@@ -218,7 +215,6 @@ class BinaryTreeTraversal extends Component {
     let newConnections = nodeConnections.filter((line) => {
       for (let i = 0; i < line.connections.length; i++) {
         if (line.connections[i] === node.id) {
-          console.log("test");
           return false;
         }
       }
@@ -226,11 +222,10 @@ class BinaryTreeTraversal extends Component {
     });
     let leftNodeConnections = newConnections;
     let rightNodeConnections = newConnections;
-    //console.log(newConnections);
-    if (node.leftChild != null) {
+    if (node.leftChild !== null) {
       let leftBundle = this.deleteNode(
         this.state.circles.find((circle) => node.leftChild === circle.id),
-        nodeArray.filter((circle) => circle.id != node.leftChild),
+        nodeArray.filter((circle) => circle.id !== node.leftChild),
         newConnections
       );
       leftNodeArray = leftBundle[0];
@@ -239,7 +234,7 @@ class BinaryTreeTraversal extends Component {
     if (node.rightChild != null) {
       let rightBundle = this.deleteNode(
         this.state.circles.find((circle) => node.rightChild === circle.id),
-        nodeArray.filter((circle) => circle.id != node.rightChild),
+        nodeArray.filter((circle) => circle.id !== node.rightChild),
         newConnections
       );
       rightNodeArray = rightBundle[0];
@@ -262,7 +257,7 @@ class BinaryTreeTraversal extends Component {
       selected: { id: -1 },
       selectedLeft: {},
       selectedRight: this.state.circles.find(
-        (circle) => circle.id == e.target.id()
+        (circle) => circle.id === e.target.id()
       ),
     });
   }
@@ -275,7 +270,7 @@ class BinaryTreeTraversal extends Component {
       selected: { id: -1 },
       selectedRight: {},
       selectedLeft: this.state.circles.find(
-        (circle) => circle.id == e.target.id()
+        (circle) => circle.id === e.target.id()
       ),
     });
   }
@@ -375,7 +370,6 @@ class BinaryTreeTraversal extends Component {
       prevState.type !== this.state.type
     ) {
       let array = [];
-      console.log("test");
       switch (this.state.type) {
         case "Preorder":
           preOrderTraversal(this.state.circles[0], array, this.state.circles);
@@ -386,6 +380,8 @@ class BinaryTreeTraversal extends Component {
         case "Inorder":
           inOrderTraversal(this.state.circles[0], array, this.state.circles);
           break;
+        default:
+          break;
       }
       this.setState({
         algorithmArray: array,
@@ -394,20 +390,9 @@ class BinaryTreeTraversal extends Component {
     }
   }
 
-  /** render - Creates a new MUI theme palette for the buttons
+  /** render
    */
   render() {
-    const theme = createMuiTheme({
-      palette: {
-        primary: {
-          main: green[900],
-        },
-        secondary: {
-          main: grey[700],
-        },
-      },
-    });
-
     /*
      * Here is where everything gets returned and displayed
      */

@@ -1,5 +1,3 @@
-import { green, grey } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import PageReplacementDisplay from "../componenets/layout/AlgorithmDisplay/PageReplacement/PageReplacementDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
@@ -113,8 +111,8 @@ class PageReplacement extends Component {
       );
     });
 
-    const displayTable = this.state.answer.map((ans) => {
-      console.log(ans);
+    /* const displayTable = this.state.answer.map((ans) => {
+      // console.log(ans);
       return (
         <td>
           {ans.column.map((page) => {
@@ -136,37 +134,27 @@ class PageReplacement extends Component {
                 </tr>
               );
             }
-            {
-              return (
-                <tr>
-                  <td
-                    style={{
-                      border: "1px solid black",
-                      width: "50px",
-                      height: "61px",
-                      backgroundColor: "darkgreen",
-                      color: "white",
-                      fontSize: "40px",
-                    }}
-                  ></td>
-                </tr>
-              );
-            }
+
+            return (
+              <tr>
+                <td
+                  style={{
+                    border: "1px solid black",
+                    width: "50px",
+                    height: "61px",
+                    backgroundColor: "darkgreen",
+                    color: "white",
+                    fontSize: "40px",
+                  }}
+                ></td>
+              </tr>
+            );
           })}
           <p>{ans.fault}</p>
         </td>
       );
-    });
-    const theme = createMuiTheme({
-      palette: {
-        primary: {
-          main: green[900],
-        },
-        secondary: {
-          main: grey[700],
-        },
-      },
-    });
+    }); */
+
     return (
       <MainPage
         algorithms={[

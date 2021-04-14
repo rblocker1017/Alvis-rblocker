@@ -14,11 +14,8 @@ export default class DrawerSidebar extends Component {
     }
     return true;
   }
-  componentDidMount() {
-    console.log("test");
-  }
+
   render() {
-    console.log("test");
     return (
       <Drawer
         className={this.props.classes.drawer}

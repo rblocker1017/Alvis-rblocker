@@ -11,7 +11,7 @@ export function fcfsFunction(starting, input) {
   for (let i = 0; i < input.length; i++) {
     answer.push([input[i], i + 1]);
   }
-  console.log("answer is: " + answer.toString());
+  //console.log("answer is: " + answer.toString());
   return answer;
 }
 
@@ -26,22 +26,22 @@ export function scanFunction(starting, input) {
   answer.push(["x", "SCAN path"]);
   answer.push([parseInt(starting), 0]);
   let smaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    //console.log("Value is type : " + typeof values);
     return values < starting;
   });
   smaller.sort(function (a, b) {
     return a - b;
   });
-  console.log("Smaller sorted: " + smaller);
+  //console.log("Smaller sorted: " + smaller);
   smaller.reverse();
-  console.log("Smaller reversed :" + smaller);
+  //console.log("Smaller reversed :" + smaller);
   smaller.push(0);
-  console.log("Smaller after all: " + smaller);
+  //console.log("Smaller after all: " + smaller);
   let larger = input.filter((values) => {
     return values >= starting;
   });
   larger = larger.sort();
-  console.table(larger);
+  //console.table(larger);
   for (let i = 0; i < smaller.length; i++) {
     answer.push([smaller[i], i + 1]);
   }
@@ -64,23 +64,23 @@ export function scanOutwardsFunction(starting, input, diskSize) {
   answer.push(["x", "SCAN outwards path"]);
   answer.push([parseInt(starting), 0]);
   let smaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    //console.log("Value is type : " + typeof values);
     return values < starting;
   });
   smaller.sort(function (a, b) {
     return a - b;
   });
-  console.log("Smaller sorted: " + smaller);
+  //console.log("Smaller sorted: " + smaller);
   smaller.reverse();
-  console.log("Smaller reversed :" + smaller);
+  //console.log("Smaller reversed :" + smaller);
 
-  console.log("Smaller after all: " + smaller);
+  //console.log("Smaller after all: " + smaller);
   let larger = input.filter((values) => {
     return values >= starting;
   });
   larger.push(diskSize);
   larger = larger.sort();
-  console.table(larger);
+  // console.table(larger);
 
   for (let i = 0; i < larger.length; i++) {
     answer.push([larger[i], i + 1]);
@@ -102,8 +102,8 @@ export function lookFunction(starting, input) {
   answer.push(["x", "Look path"]);
   answer.push([parseInt(starting), 0]);
   let smaller = input.filter((values) => {
-    console.log("Value: " + values);
-    console.log("Value" + typeof values);
+    // console.log("Value: " + values);
+    // console.log("Value" + typeof values);
 
     return values < starting;
   });
@@ -114,7 +114,7 @@ export function lookFunction(starting, input) {
   larger = larger.sort(function (a, b) {
     return a - b;
   });
-  console.table(larger);
+  // console.table(larger);
   for (let i = 0; i < smaller.length; i++) {
     answer.push([smaller[i], i + 1]);
   }
@@ -136,7 +136,7 @@ export function lookOutwardsFunction(starting, input) {
   answer.push(["x", "Look outwards path"]);
   answer.push([parseInt(starting), 0]);
   let smaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values < starting;
   });
   smaller.sort(function (a, b) {
@@ -147,7 +147,7 @@ export function lookOutwardsFunction(starting, input) {
     return values >= starting;
   });
   larger = larger.sort();
-  console.table(larger);
+  // console.table(larger);
   for (let i = 0; i < larger.length; i++) {
     answer.push([larger[i], i + 1]);
   }
@@ -169,7 +169,7 @@ export function cscanFunction(starting, input, diskSize) {
   answer.push(["x", "SCAN path"]);
   answer.push([parseInt(starting), 0]);
   let firstSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values < starting;
   });
   firstSmaller.sort(function (a, b) {
@@ -182,7 +182,7 @@ export function cscanFunction(starting, input, diskSize) {
   }
 
   let secondSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values < diskSize;
   });
   let difference = secondSmaller.filter((x) => !firstSmaller.includes(x));
@@ -206,7 +206,7 @@ export function cscanOutwardsFunction(starting, input, diskSize) {
   answer.push(["x", "Cscan outwards path"]);
   answer.push([parseInt(starting), 0]);
   let firstSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values > starting;
   });
   firstSmaller.sort(function (a, b) {
@@ -218,7 +218,7 @@ export function cscanOutwardsFunction(starting, input, diskSize) {
     answer.push([firstSmaller[i], i + 1]);
   }
   let secondSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values > 0;
   });
   let difference = secondSmaller.filter((x) => !firstSmaller.includes(x));
@@ -242,7 +242,7 @@ export function clookFunction(starting, input, diskSize) {
   answer.push(["x", "SCAN path"]);
   answer.push([parseInt(starting), 0]);
   let firstSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values < starting;
   });
   firstSmaller.sort(function (a, b) {
@@ -254,7 +254,7 @@ export function clookFunction(starting, input, diskSize) {
   }
 
   let secondSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values < diskSize;
   });
   let difference = secondSmaller.filter((x) => !firstSmaller.includes(x));
@@ -281,7 +281,7 @@ export function clookOutwardsFunction(starting, input) {
   answer.push(["x", "cLook path"]);
   answer.push([parseInt(starting), 0]);
   let firstSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values > starting;
   });
   firstSmaller.sort(function (a, b) {
@@ -292,7 +292,7 @@ export function clookOutwardsFunction(starting, input) {
     answer.push([firstSmaller[i], i + 1]);
   }
   let secondSmaller = input.filter((values) => {
-    console.log("Value is type : " + typeof values);
+    // console.log("Value is type : " + typeof values);
     return values > 0;
   });
   let difference = secondSmaller.filter((x) => !firstSmaller.includes(x));

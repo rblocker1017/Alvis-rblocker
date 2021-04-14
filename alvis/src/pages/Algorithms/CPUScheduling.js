@@ -7,7 +7,7 @@
 export function fcfs(processes) {
   let timeCounter = 0;
   let totalWaiting = 0;
-  let totalResponse = 0;
+  // let totalResponse = 0;
   let totalTat = 0;
   let procId = 0;
   let answer = [
@@ -50,7 +50,7 @@ export function fcfs(processes) {
     //add the the burst time of the current process to the total timeCounter
     timeCounter = timeCounter + i.burstTime;
   });
-  console.log((totalWaiting / processList.length).toFixed(2));
+  //console.log((totalWaiting / processList.length).toFixed(2));
   return {
     answer: answer,
     turnaroundTime: (totalTat / processList.length).toFixed(2),
@@ -128,7 +128,7 @@ export function roundRobin(processes, quantum) {
   let timeCounter = 0;
   let totalWaiting = 0;
   let totalTat = 0;
-  let procId = 0;
+  //let procId = 0;
   let answer = [
     [
       { type: "string", label: "Task ID" },
@@ -178,7 +178,7 @@ export function roundRobin(processes, quantum) {
           //     add the processes's id,name,start and end date, and duration answer array.
         } else if (i.burstTime <= parseInt(quantum) && i.burstTime > 0) {
           breakFlag = false;
-          console.log("Burst time <= quan: " + i.burstTime);
+          //console.log("Burst time <= quan: " + i.burstTime);
           answer.push([
             randVal,
             i.name,
@@ -216,10 +216,10 @@ export function roundRobin(processes, quantum) {
     });
     // check if there are processes in the list that still haven't arrived, if so we must stay in the While loop
     let tempList = [...processes];
-    let checkFuture = false;
+    // let checkFuture = false;
     tempList.forEach((p) => {
       if (p.arrivalTime > timeCounter) {
-        checkFuture = true;
+        // checkFuture = true;
       }
     });
     //If we have completed the burst time for all the processes, we can break from the while loop
@@ -299,43 +299,43 @@ export function priorityFunc(processes) {
  * @return waitingTime - a double value that is the average time that all process spent waiting before first execution
  */
 export function priorityFuncPreemptive(processes) {
-  let timeCounter = 0;
+  // let timeCounter = 0;
   let totalWaiting = 0;
   let totalTat = 0;
-  let procId = 0;
+  // let procId = 0;
   let processList = [...processes];
   //Sort the process list by arrival time
   processList.sort((a, b) => {
     return a.arrivalTime > b.arrivalTime ? 1 : -1;
   });
   let completed = 0;
-  let usedProc = new Set();
-  let startTime = 0;
+  // let usedProc = new Set();
+  // let startTime = 0;
   let trackerArray = [];
   let vizBuild = [];
   //While the number of completed processes is less than the total amount of processes, do the following. The variable 'i' is also used as the Time Counter
-  for (let i = 0; completed != processList.length; i++) {
+  for (let i = 0; completed !== processList.length; i++) {
     //create a filtered list of processes who have arrived and have burst time left
     let filteredList = processList.filter((proc) => {
       return (
         proc.arrivalTime <= i && proc.arrivalTime >= 0 && proc.burstTime > 0
       );
     });
-    console.log("filteredList: ", filteredList);
+    //console.log("filteredList: ", filteredList);
     //create a new list which is the filtered list sorted by priority
     let priorSort = filteredList.sort((proc1, proc2) => {
       return proc1.priority - proc2.priority;
     });
-    console.log("Priority Sort: ", priorSort);
+    //console.log("Priority Sort: ", priorSort);
     //For this time step, lower the burst time of the currently highest priority process by one, then move to the next time step
     if (priorSort.length > 0) {
       //Create a tracker array to keep track of the order in which the processes executued
       trackerArray[i] = priorSort[0].name;
-      let obj = processList.find((o, i) => {
+      processList.find((o, i) => {
         if (o.name === priorSort[0].name && o.burstTime > 0) {
-          console.log("O is : ", o);
+          //console.log("O is : ", o);
           processList[i].burstTime = processList[i].burstTime - 1;
-          if (processList[i].burstTime == 0) {
+          if (processList[i].burstTime === 0) {
             completed++;
           }
           return true; // stop searching
@@ -348,17 +348,17 @@ export function priorityFuncPreemptive(processes) {
   //Using the tracker array, add the process names, starting times, and ending times, in the correct order to vizBuild so it can be returned.
   for (let i = 0; i <= trackerArray.length; i++) {
     //While we have values in the tracker array do the following
-    if (trackerArray[i] != null) {
+    if (trackerArray[i] !== null) {
       //Set starting to the first process in the tracker array
       if (starting === null) {
         starting = trackerArray[i];
         startingTime = i;
       } else {
-        console.log(
-          "current Item: " + trackerArray[i] + " Starting Item: " + starting
-        );
+        //console.log(
+        //"current Item: " + trackerArray[i] + " Starting Item: " + starting
+        //);
         //When the tracker array reaches a new processes, push the old process to vizBuild then change starting to the new process
-        if (trackerArray[i] != starting) {
+        if (trackerArray[i] !== starting) {
           vizBuild.push({
             name: starting,
             startTime: startingTime,
@@ -368,7 +368,7 @@ export function priorityFuncPreemptive(processes) {
           startingTime = i;
         }
         //If we have reached the last value of the tracker array, we are done and push the last process to vizBuild
-        if (trackerArray[i + 1] == null) {
+        if (trackerArray[i + 1] === null) {
           vizBuild.push({
             name: starting,
             startTime: startingTime,
@@ -418,21 +418,21 @@ export function priorityFuncPreemptive(processes) {
  * @return waitingTime - a double value that is the average time that all process spent waiting before first execution
  */
 export function sjfFuncPreemptive(processes) {
-  let timeCounter = 0;
+  // let timeCounter = 0;
   let totalWaiting = 0;
   let totalTat = 0;
-  let procId = 0;
+  //let procId = 0;
   let processList = [...processes];
   processList.sort((a, b) => {
     return a.arrivalTime > b.arrivalTime ? 1 : -1;
   });
   let completed = 0;
-  let usedProc = new Set();
-  let startTime = 0;
+  // let usedProc = new Set();
+  // let startTime = 0;
   let trackerArray = [];
   let vizBuild = [];
   //While the number of completed processes is less than the total amount of processes, do the following. The variable 'i' is also used as the Time Counter
-  for (let i = 0; completed != processList.length; i++) {
+  for (let i = 0; completed !== processList.length; i++) {
     //create a filtered list of processes who have arrived and have burst time left
     let filteredList = processList.filter((proc) => {
       return (
@@ -447,10 +447,10 @@ export function sjfFuncPreemptive(processes) {
     if (priorSort.length > 0) {
       //Create a tracker array to keep track of the order in which the processes executued
       trackerArray[i] = priorSort[0].name;
-      let obj = processList.find((o, i) => {
+      processList.find((o, i) => {
         if (o.name === priorSort[0].name && o.burstTime > 0) {
           processList[i].burstTime = processList[i].burstTime - 1;
-          if (processList[i].burstTime == 0) {
+          if (processList[i].burstTime === 0) {
             completed++;
           }
           return true; // stop searching
@@ -463,14 +463,14 @@ export function sjfFuncPreemptive(processes) {
   //Using the tracker array, add the process names, starting times, and ending times, in the correct order to vizBuild so it can be returned.
   for (let i = 0; i <= trackerArray.length; i++) {
     //While we have values in the tracker array do the following
-    if (trackerArray[i] != null) {
+    if (trackerArray[i] !== null) {
       //Set starting to the first process in the tracker array
       if (starting === null) {
         starting = trackerArray[i];
         startingTime = i;
       } else {
         //When the tracker array reaches a new processes, push the old process to vizBuild then change starting to the new process
-        if (trackerArray[i] != starting) {
+        if (trackerArray[i] !== starting) {
           vizBuild.push({
             name: starting,
             startTime: startingTime,
@@ -480,7 +480,7 @@ export function sjfFuncPreemptive(processes) {
           startingTime = i;
         }
         //If we have reached the last value of the tracker array, we are done and push the last process to vizBuild
-        if (trackerArray[i + 1] == null) {
+        if (trackerArray[i + 1] === null) {
           vizBuild.push({
             name: starting,
             startTime: startingTime,

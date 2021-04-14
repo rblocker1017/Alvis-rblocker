@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 // Define width and height of the of the webapp canvas
-const WIDTH = 1370;
-const HEIGHT = 600;
+// const WIDTH = 1370;
+// const HEIGHT = 600;
 
 class SortingDisplay extends Component {
   render() {

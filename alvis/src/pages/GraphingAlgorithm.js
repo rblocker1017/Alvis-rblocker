@@ -1,4 +1,4 @@
-﻿﻿import {
+import {
   Backdrop,
   Button,
   Fade,
@@ -7,8 +7,6 @@
   TextField,
   withStyles,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import GraphingDisplay from "../componenets/layout/AlgorithmDisplay/Graphing/GraphingDisplay";
 import MainPage from "../componenets/layout/Page/MainPage";
@@ -51,14 +49,14 @@ const CONNECT = CON_GEN;
 // function to return if the circle lable should display START NODE or END NODE on its label
 // circle - the circle you want to label
 // return - label string
-function pointValues(circle, type) {
+/* function pointValues(circle, type) {
   if (circle.start) {
     return "START NODE";
   } else if (circle.end && type !== "Prim" && type !== "Kruskal") {
     return "END NODE";
   }
   return "";
-}
+} */
 
 // Graphing Algorithm component
 // displays all of the buttons and display for the graphing algorithms
@@ -338,7 +336,7 @@ class GraphingAlgorithm extends Component {
   // selectNode - sets clicked circle to selected
   // @param: e - event listener
   selectNode(e) {
-    console.log(e);
+    // console.log(e);
     // Can only select a node on the first step
     if (this.state.step !== -1) {
       return;
@@ -471,8 +469,8 @@ class GraphingAlgorithm extends Component {
         this.state.selected,
         isString
       );
-      console.log(this.state.selected);
-      console.log(this.state.startNode);
+      // console.log(this.state.selected);
+      // console.log(this.state.startNode);
       if (this.state.endNode === this.state.selected) {
         this.setState({
           endNode: null,
@@ -553,16 +551,6 @@ class GraphingAlgorithm extends Component {
   }
   // render function
   render() {
-    const theme = createMuiTheme({
-      palette: {
-        primary: {
-          main: green[900],
-        },
-        secondary: {
-          main: grey[700],
-        },
-      },
-    });
     return (
       <React.Fragment>
         {/* (can maybe modularize the modal since other components use it) */}

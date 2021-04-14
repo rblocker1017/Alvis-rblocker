@@ -11,7 +11,7 @@ export function bubble(a) {
       swappedValue2: -1,
     },
   ];
-  let list = [];
+  // let list = [];
   let temp = 0;
   // repeat the bubble sort for the length of the algorithm
   for (let i = 0; i < len; i++) {
@@ -50,7 +50,7 @@ export function insertion(b) {
   ];
   // repeat the insertion sort for the length of the algorithm
   for (let i = 1; i < lenInsert; i++) {
-    let currentInsert = arrayInsert[i];
+    // let currentInsert = arrayInsert[i];
     let j = i;
     let swap1, swap2;
     //shift larger values to the right
@@ -93,7 +93,7 @@ export function selection(c) {
         minimum = j;
       }
     }
-    if (minimum != i) {
+    if (minimum !== i) {
       // swaps to elements in an array
       temp = arraySelect[i];
       arraySelect[i] = arraySelect[minimum];
@@ -135,7 +135,7 @@ function maximumHeap(d, len, i, answer) {
       swappedValue1: i,
       swappedValue2: maximum,
     });
-    console.log(d[i] + " " + d[maximum]);
+    // console.log(d[i] + " " + d[maximum]);
     maximumHeap(d, len, maximum, answer);
   }
   return answer;
@@ -173,7 +173,7 @@ export function heapSort(d) {
       swappedValue1: 0,
       swappedValue2: b,
     });
-    console.log(swap1 + " " + swap2);
+    // console.log(swap1 + " " + swap2);
     maximumHeap(d, b, 0, answer);
     b--;
   }

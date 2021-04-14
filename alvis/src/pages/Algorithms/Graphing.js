@@ -47,7 +47,7 @@ function hasPath(currentNode, end, lines, processedNodes) {
     @param: displayLines - nodes that have been processed
     @return: returns true if the path contains a cyclical path, false if not 
 */
-function isCyclical(start, processedNodes, displayLines) {
+/* function isCyclical(start, processedNodes, displayLines) {
   let cyclical = false;
   // iterate through processed nodes
   for (let node of processedNodes.values()) {
@@ -68,7 +68,7 @@ function isCyclical(start, processedNodes, displayLines) {
   }
   return false;
   //return cyclical;
-}
+} */
 
 /* kruskalAlgorithm - find the shortest path from start to end with kruskal
  * @param start - start circle

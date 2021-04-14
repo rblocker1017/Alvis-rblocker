@@ -19,7 +19,7 @@ export default function BubbleSort(props) {
   function nextStep() {
     if (stepCount < arraysOfArrays.length - 1) {
       setStepCount(stepCount + 1);
-      console.log("StepCount in Next: " + stepCount);
+      // console.log("StepCount in Next: " + stepCount);
       setData(arraysOfArrays[stepCount].data.split(",").map(Number));
       setswap1(arraysOfArrays[stepCount].swappedValue1);
       setswap2(arraysOfArrays[stepCount].swappedValue2);
@@ -36,7 +36,7 @@ export default function BubbleSort(props) {
   function prevStep() {
     if (stepCount > 1) {
       setStepCount(stepCount - 1);
-      console.log("StepCount in Prev: " + stepCount);
+      // console.log("StepCount in Prev: " + stepCount);
       setData(arraysOfArrays[stepCount].data.split(",").map(Number));
       setswap1(arraysOfArrays[stepCount].swappedValue1);
       setswap2(arraysOfArrays[stepCount].swappedValue2);
@@ -52,7 +52,7 @@ export default function BubbleSort(props) {
   }
   const svgRef = useRef();
 
-  const listCurrent = arraysOfArrays.map((value, index) => (
+  /*   const listCurrent = arraysOfArrays.map((value, index) => (
     <div>
       <p> </p>
       <p>
@@ -62,7 +62,7 @@ export default function BubbleSort(props) {
         Values Swapped: {value.swappedValue1} , {value.swappedValue2}{" "}
       </p>
     </div>
-  ));
+  )); */
 
   useEffect(
     () => {
@@ -75,10 +75,10 @@ export default function BubbleSort(props) {
 
       const yScale = scaleLinear().domain([0, x]).range([150, 0]);
 
-      const colorScale = scaleLinear()
-        .domain([75, 100, 150])
-        .range(["green", "green", "green"])
-        .clamp(true);
+      // const colorScale = scaleLinear()
+      //   .domain([75, 100, 150])
+      //   .range(["green", "green", "green"])
+      //   .clamp(true);
 
       const xAxis = axisBottom(xScale).ticks(data.length);
 
@@ -141,10 +141,10 @@ export default function BubbleSort(props) {
         .on("mouseleave", () => svg.select(".tooltip").remove())
 
         .attr("fill", (value, index) => {
-          if (index == swap1) {
+          if (index === swap1) {
             return "red";
           }
-          if (index == swap2) {
+          if (index === swap2) {
             return "red";
           } else {
             return "green";
@@ -193,7 +193,7 @@ function bubble_Sort(a) {
   let len = a.length - 1;
   let array = a;
   let answer = [];
-  let list = [];
+  // let list = [];
   let temp = 0;
   for (let i = 0; i < len; i++) {
     for (let j = 0; j < len; j++) {

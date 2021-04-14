@@ -38,7 +38,7 @@ class ControlBarDiskScheduling extends Component {
             />
           </Grid>
           <Grid item xs={12}>
-            <h1></h1>
+            <br></br>
             <Button
               variant='contained'
               color='primary'

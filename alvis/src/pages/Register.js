@@ -120,7 +120,7 @@ export default function Register() {
         email: registerEmail,
       }).then((response) => {
         //console.log(String(response.data));
-        if (String(response.data) == "false") {
+        if (String(response.data) === "false") {
           Axios.post("http://localhost:3001/register", {
             email: registerEmail,
             password: registerPassword,
@@ -171,7 +171,7 @@ export default function Register() {
               <Divider />
             </Box>
             <Box>
-              <Typography variant={"b1"} align='baseline'>
+              <Typography variant={"body1"} align='baseline'>
                 An Interactive Algorithm Visualizer for Computer Science courses
                 making learning more enjoyable and challenging
               </Typography>

@@ -26,7 +26,6 @@ export default class ClassAccordian extends Component {
             <Collapse in={true} timeout='auto' unmountOnExit>
               <List component='div' disablePadding>
                 {this.algoObject.data.map((obj) => {
-                  console.log("test");
                   return <AlgorithmItem item={obj} />;
                 })}
               </List>

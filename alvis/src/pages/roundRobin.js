@@ -24,10 +24,10 @@ export default function Fcfs(props) {
   const [quantum, setQuantum] = useState();
 
   function fcfs(processes, Quantum) {
-    let timeCounter = 0;
+    //let timeCounter = 0;
     let totalWaiting = 0;
     let totalTat = 0;
-    let procId = 0;
+    //let procId = 0;
     let answer = [
       [
         { type: "string", label: "Task ID" },
@@ -89,11 +89,11 @@ export default function Fcfs(props) {
     ],
   ]);
 
-  console.log("Data : " + data);
+  // console.log("Data : " + data);
   const clickInput = () => {
     setData(fcfs(processes));
     data.forEach((i) => {
-      console.log("Data stream: " + i);
+      // console.log("Data stream: " + i);
     });
     setDisplayBoolean(true);
   };
@@ -107,7 +107,7 @@ export default function Fcfs(props) {
       burstTime: parseInt(formBurst),
     });
     setprocesses(temp);
-    console.log(temp);
+    // console.log(temp);
     setDisplayBoolean(false);
   };
   const showProceses = processes.map((proc) => {

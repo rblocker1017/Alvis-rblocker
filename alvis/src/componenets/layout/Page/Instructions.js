@@ -15,7 +15,6 @@ class Instructions extends Component {
     this.instruct = this.props.instruct;
   }
   render() {
-    console.log(this.instruct);
     return (
       <Paper className={this.classes.code}>
         <h2>Instructions</h2>

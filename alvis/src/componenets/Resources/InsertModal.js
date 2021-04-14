@@ -17,8 +17,6 @@ export class InsertModal extends Component {
     }
   };
   render() {
-    console.log("test");
-    console.log(this.props);
     return (
       <Modal
         aria-labelledby='transition-modal-title'
