@@ -1,0 +1,84 @@
+import { Button, ButtonBase, Grid, Typography } from "@material-ui/core";
+import React, { Component } from "react";
+import LinkRoute from "react-router-dom/Link";
+import Cookies from "universal-cookie";
+import trophy from "../../resources/trophy.png";
+
+export default class LoginBundle extends Component {
+  constructor(props) {
+    super(props);
+    this.cookie = this.props.cookie;
+    this.title = (
+      <ButtonBase component={LinkRoute} to='/'>
+        <Typography variant='h5' noWrap align='center'>
+          Alvis Algorithm Visualizer
+        </Typography>
+      </ButtonBase>
+    );
+  }
+
+  deleteCookie() {
+    const cookies = new Cookies();
+    cookies.remove("cookie");
+    window.location.reload(false);
+  }
+  render() {
+    if (this.cookie === undefined) {
+      return (
+        <React.Fragment>
+          {this.title}
+          <Grid
+            container
+            alignItems={"center"}
+            direction={"row"}
+            justify={"flex-end"}
+            spacing={2}
+          >
+            <Grid item>
+              <ButtonBase component={LinkRoute} to='/Login'>
+                <Typography variant='button' noWrap align='center'>
+                  Login
+                </Typography>
+              </ButtonBase>
+            </Grid>
+          </Grid>
+        </React.Fragment>
+      );
+    }
+    return (
+      <React.Fragment>
+        {this.title}
+        <Grid
+          container
+          alignItems={"center"}
+          direction={"row"}
+          justify={"flex-end"}
+          spacing={2}
+        >
+          <Button
+            component={LinkRoute}
+            to='/Achievements'
+            color='inherit'
+            className={{
+              marginLeft: "auto",
+              marginRight: "1%",
+              textTransform: "none",
+            }}
+          >
+            <img src={trophy} alt='' />
+            <Typography variant='button' noWrap align='center'>
+              Achievements
+            </Typography>
+          </Button>
+          <Grid item>
+            <ButtonBase onClick={this.deleteCookie}>
+              <Typography variant='button' noWrap align='center'>
+                Logout
+              </Typography>
+            </ButtonBase>
+          </Grid>
+        </Grid>
+      </React.Fragment>
+    );
+  }
+}
