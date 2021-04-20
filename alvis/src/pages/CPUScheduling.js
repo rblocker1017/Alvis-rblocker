@@ -218,6 +218,7 @@ class CPUScheduling extends Component {
   }
   handleAddProc() {
     let temp = this.state.processes.slice();
+    console.log(this.state.priority);
     temp.push({
       name: this.state.formProcess,
       arrivalTime: parseInt(this.state.formArrival),
