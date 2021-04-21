@@ -75,16 +75,9 @@ function validatePassword(password){
     const re = /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/;
     return re.test(String(password));
 }
-function setCheckBox()
+function checkValue()
 {
-    if(check === false)
-    {
-        check = true;
-    }
-    else 
-    {
-        check = false;
-    }
+    
 }
 export default function Register() {
     const classes = useStyles();
@@ -121,10 +114,10 @@ export default function Register() {
         {
             alert("Passwords should match.")
         }
-        /*else if(check === false)
+        else if(document.getElementById("myCheck").checked == false)
         {
             alert("Please agree to the terms and conditions.")
-        }*/
+        }
         else
         {
             Axios.post("http://localhost:3001/email", {
@@ -210,7 +203,7 @@ export default function Register() {
                                         </Box>
                                     </Grid>
                                     <Grid item>
-                                        <FormControlLabel control={<Checkbox color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>}  labelPlacement={"end"}  onClick={() => setCheckBox()}/>
+                                        <FormControlLabel control={<Checkbox id = "myCheck" color={"#000000"} />} label={<Typography variant={"button"}>I agree to all of the statements in the Terms of Service</Typography>}  labelPlacement={"end"}/>
                                     </Grid>
                                     <Grid item>
                                         <Box pt={2}>
