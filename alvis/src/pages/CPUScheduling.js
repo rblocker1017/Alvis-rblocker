@@ -18,6 +18,11 @@ import MainPage from "../componenets/layout/Page/MainPage";
 import * as Algorithms from "./Algorithms/CPUScheduling";
 
 const styles = (theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   paperOverlay: {
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
@@ -78,10 +83,14 @@ class CPUScheduling extends Component {
       type: "",
       checked: false,
       formProcess: null,
+      processError: false,
       formArrival: null,
+      arrivalError: false,
       formBurst: null,
+      burstError: false,
       waitingTime: 0,
       priority: 0,
+      priorityError: false,
       selected: {},
       displayBoolean: false,
       turnaroundTime: 0,
@@ -131,6 +140,9 @@ class CPUScheduling extends Component {
   }
 
   changeAlgo(e) {
+    if(e.target.textContent === "Priority"){
+      this.reset();
+    }
     this.setState({
       type: e.target.textContent,
     });
@@ -155,6 +167,14 @@ class CPUScheduling extends Component {
   handleClose() {
     this.setState({
       open: false,
+      formProcess: null,
+      processError: false,
+      formArrival: null,
+      arrivalError: false,
+      formBurst: null,
+      burstError: false,
+      priority: null,
+      priorityError: false
     });
   }
 
@@ -182,9 +202,6 @@ class CPUScheduling extends Component {
         case "Priority":
           bundle = Algorithms.priorityFunc(this.state.processes);
           break;
-        case "SRTF":
-          bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
-          break;
         default:
           break;
       }
@@ -194,16 +211,13 @@ class CPUScheduling extends Component {
           bundle = Algorithms.fcfs(this.state.processes);
           break;
         case "SJF":
-          bundle = Algorithms.sjf(this.state.processes);
+          bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
           break;
         case "RR":
           bundle = Algorithms.roundRobin(this.state.processes);
           break;
         case "Priority":
           bundle = Algorithms.priorityFuncPreemptive(this.state.processes);
-          break;
-        case "SRTF":
-          bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
           break;
         default:
           break;
@@ -217,49 +231,80 @@ class CPUScheduling extends Component {
     });
   }
   handleAddProc() {
+    let error = false;
+    const regex = /[^0-9]/g;
     let temp = this.state.processes.slice();
     console.log(this.state.priority);
-    temp.push({
-      name: this.state.formProcess,
-      arrivalTime: parseInt(this.state.formArrival),
-      burstTime: parseInt(this.state.formBurst),
-      priority: parseInt(this.state.priority),
-      select: false,
-    });
-    if (this.state.formProcess === null) {
+    if(temp.some(process => process.name === this.state.formProcess)){
       this.setState({
-        formArrival: null,
-        formBurst: null,
+        processError: true
       });
-      alert("Please enter Process name");
-    } else if (this.state.formArrival === null) {
+      error = true;
+    }
+    else{
       this.setState({
-        formProcess: null,
-        setformBurst: null,
-      });
-      alert("Please enter integer for Arrival Time");
-    } else if (this.state.formBurst === null) {
-      this.setState({
-        formProcess: null,
-        formArrival: null,
-      });
-      alert("Please enter integer for Burst Time");
-    } else {
-      this.setState({
-        processes: temp,
-        displayBoolean: false,
+        processError: false
       });
     }
-
-    //Empty the inputs on the pop-up form, then set the values to null
-    Array.from(document.querySelectorAll("input")).forEach(
-      (input) => (input.value = "")
-    );
-    this.setState({
-      formProcess: null,
-      formArrival: null,
-      formBurst: null,
-    });
+    if(regex.test(this.state.formArrival)){
+      this.setState({
+        arrivalError: true
+      });
+      error = true;
+    }
+    else{
+      this.setState({
+        arrivalError: false
+      });
+    }
+    if(regex.test(this.state.formBurst)){
+      this.setState({
+        burstError: true
+      });
+      error = true;
+    }
+    else{
+      this.setState({
+        burstError: false
+      });
+    }
+    if(this.state.type === "Priority" && regex.test(this.state.priority)){
+      this.setState({
+        priorityError: true
+      });
+      error = true;
+    }
+    else{
+      this.setState({
+        priorityError: false
+      });
+    }
+    if(!error){
+      error = false;
+      temp.push({
+        name: this.state.formProcess,
+        arrivalTime: parseInt(this.state.formArrival),
+        burstTime: parseInt(this.state.formBurst),
+        priority: parseInt(this.state.priority),
+        select: false,
+      });
+      //Empty the inputs on the pop-up form, then set the values to null
+      Array.from(document.querySelectorAll("input")).forEach(
+        (input) => (input.value = "")
+      );
+      this.setState({
+        processes: temp,
+        formProcess: null,
+        displayBoolean: false,
+        processError: false,
+        formArrival: null,
+        arrivalError: false,
+        formBurst: null,
+        burstError: false,
+        priority: null,
+        priorityError: false
+      });
+    }
   }
   setformArrival(e) {
     this.setState({
@@ -345,7 +390,7 @@ class CPUScheduling extends Component {
             { name: "SJF", func: this.changeAlgo },
             { name: "Priority", func: this.changeAlgo },
             //{name: "RR",func: this.changeAlgo},
-            { name: "SRTF", func: this.changeAlgo },
+            //{ name: "SRTF", func: this.changeAlgo },
           ]}
           extraOption={{
             type: "custom",
@@ -419,6 +464,8 @@ class CPUScheduling extends Component {
                       <TextField
                         id='outlined-size-normal'
                         variant='outlined'
+                        error={this.state.processError}
+                        helperText={this.state.processError ? "Invalid Process" : ""}
                         label='Process'
                         onChange={this.setformProcess}
                       />
@@ -427,6 +474,8 @@ class CPUScheduling extends Component {
                       <TextField
                         id='outlined-size-normal'
                         variant='outlined'
+                        error={this.state.arrivalError}
+                        helperText={this.state.arrivalError ? "Invalid Arrival Time" : ""}
                         label='Arrival Time'
                         onChange={this.setformArrival}
                       />
@@ -435,6 +484,8 @@ class CPUScheduling extends Component {
                       <TextField
                         id='outlined-size-normal'
                         variant='outlined'
+                        error={this.state.burstError}
+                        helperText={this.state.burstError ? "Invalid Burst Time" : ""}
                         label='Burst Time'
                         onChange={this.setformBurst}
                       />
@@ -459,6 +510,8 @@ class CPUScheduling extends Component {
                         <TextField
                           id='outlined-size-normal'
                           variant='outlined'
+                          error={this.state.priorityError}
+                          helperText={this.state.priorityError ? "Invalid Priority" : ""}
                           label='Priority'
                           onChange={this.setpriority}
                         />
