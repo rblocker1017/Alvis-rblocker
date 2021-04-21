@@ -240,7 +240,7 @@ export default function Register() {
                           </Typography>
                         }
                         labelPlacement={"end"}
-                        onClick={() => handleClick()}
+                        onClick={handleClick}
                       />
                     </Box>
                   </Grid>
