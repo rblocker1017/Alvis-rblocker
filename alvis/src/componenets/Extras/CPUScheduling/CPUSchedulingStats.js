@@ -189,7 +189,7 @@ class CPUSchedulingStats extends Component {
                         }
                         align='center'
                       >
-                        {row.burstTime}
+                        {row.priority}
                       </TableCell>
                     ) : null}
                   </TableRow>
