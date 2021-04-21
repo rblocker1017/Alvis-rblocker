@@ -65,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
     width: "50%",
   },
 }));
-let check = false;
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+$/;
   return re.test(String(email).toLowerCase());
@@ -75,19 +74,14 @@ function validatePassword(password) {
   const re = /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/;
   return re.test(String(password));
 }
-function setCheckBox() {
-  if (check === false) {
-    check = true;
-  } else {
-    check = false;
-  }
-}
+
 export default function Register() {
   const classes = useStyles();
   const [registerEmail, setEmail] = useState([]);
   const [registerPassword, setPassword] = useState([]);
   const [repeatPassword, setRepeatPassword] = useState([]);
   const [registerName, setName] = useState([]);
+  const [check, setChecked] = useState(false);
   const theme = createMuiTheme({
     typography: {
       button: {
@@ -95,6 +89,8 @@ export default function Register() {
       },
     },
   });
+
+  const handleClick = () => setChecked(!check);
 
   function handleSubmit(event) {
     // console.log(registerEmail);
@@ -244,7 +240,7 @@ export default function Register() {
                           </Typography>
                         }
                         labelPlacement={"end"}
-                        onClick={() => setCheckBox()}
+                        onClick={() => handleClick()}
                       />
                     </Box>
                   </Grid>
