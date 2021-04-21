@@ -227,6 +227,7 @@ export function cscanOutwardsFunction(starting, input, diskSize) {
   for (let i = 0; i < difference.length; i++) {
     answer.push([difference[i], i + difference.length + 1]);
   }
+  console.log(answer);
   return answer;
 }
 

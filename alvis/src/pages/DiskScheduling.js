@@ -151,9 +151,9 @@ class FCFSDisk extends Component {
           data = Algorithms.lookFunction(this.state.starting, this.state.input);
         }
         break;
-      case "cscan":
+      case "c-scan":
         if (this.state.direction === "Outwards") {
-          data = Algorithms.lookOutwardsFunction(
+          data = Algorithms.cscanOutwardsFunction(
             this.state.starting,
             this.state.input,
             this.state.diskSize
@@ -166,7 +166,7 @@ class FCFSDisk extends Component {
           );
         }
         break;
-      case "clook":
+      case "c-look":
         if (this.state.direction === "Outwards") {
           data = Algorithms.clookOutwardsFunction(
             this.state.starting,
