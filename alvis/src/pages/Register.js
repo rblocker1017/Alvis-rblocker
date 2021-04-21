@@ -232,7 +232,9 @@ export default function Register() {
                   <Grid item>
                     <Box pl={3} pr={3}>
                       <FormControlLabel
-                        control={<Checkbox color={"#000000"} />}
+                        control={
+                          <Checkbox color={"#000000"} onClick={handleClick} />
+                        }
                         label={
                           <Typography variant={"button"}>
                             I agree to all of the statements in the Terms of
@@ -240,7 +242,6 @@ export default function Register() {
                           </Typography>
                         }
                         labelPlacement={"end"}
-                        onClick={handleClick}
                       />
                     </Box>
                   </Grid>
