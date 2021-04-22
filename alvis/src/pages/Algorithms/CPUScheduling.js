@@ -95,10 +95,12 @@ export function sjf(processes) {
  * @return waitingTime - a double value that is the average time that all process spent waiting before first execution
  */
 export function roundRobin(processes, quantum) {
+    
     let timeCounter = 0;
     let totalWaiting = 0;
     let totalTat = 0;
     let procId = 0;
+    let oldBurst = [];
     let answer = [[
         { type: 'string', label: 'Task ID' },
         { type: 'string', label: 'Task Name' },
@@ -114,6 +116,11 @@ export function roundRobin(processes, quantum) {
     processList.sort((a, b) => {
         return (a.arrivalTime > b.arrivalTime) ? 1 : -1
     });
+    processList.forEach(function (i) {
+        oldBurst[i.name] = i.burstTime 
+    })
+    console.log(oldBurst[0])
+
     while (true) {
         let breakFlag = true;
         let jobSet = new Set();
@@ -136,6 +143,7 @@ export function roundRobin(processes, quantum) {
                 //If the remaining burst time for the process is LESS THAN the time quantum and has time left in the burst time:
                  //     add the processes's id,name,start and end date, and duration answer array.
                 } else if (i.burstTime <= parseInt(quantum) && i.burstTime > 0) {
+                    console.log("the burst time is" + i.burstTime)
                     breakFlag = false;
                     console.log("Burst time <= quan: " + i.burstTime)
                     answer.push([randVal, i.name, i.name, new Date(0, 0, 0, 0, 0, timeCounter), new Date(0, 0, 0, 0, 0, timeCounter + i.burstTime), null, 100, null])
@@ -177,6 +185,12 @@ export function roundRobin(processes, quantum) {
             break;
         }
     }
+    processList.forEach(function (i) {
+         i.burstTime = oldBurst[i.name]
+    })
+    console.log("Proccess length is " + processList.length)
+    console.log("turnaround time is " + totalTat)
+    console.log("waiting time is" + totalWaiting)
     return {answer: answer, turnaroundTime: totalTat / processList.length, waitingTime: totalWaiting / processList.length};
 }
 

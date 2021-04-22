@@ -174,7 +174,7 @@ class CPUScheduling extends Component{
                     bundle = Algorithms.sjf(this.state.processes);
                     break;
                 case 'RR':
-                    bundle = Algorithms.roundRobin(this.state.processes);
+                    bundle = Algorithms.roundRobin(this.state.processes, this.state.quantum);
                     break;
                 case 'Priority':
                     bundle = Algorithms.priorityFunc(this.state.processes);
@@ -194,7 +194,7 @@ class CPUScheduling extends Component{
                     bundle = Algorithms.sjf(this.state.processes);
                     break;
                 case 'RR':
-                    bundle = Algorithms.roundRobin(this.state.processes);
+                    bundle = Algorithms.roundRobin(this.state.processes, this.state.quantum);
                     break;
                 case 'Priority':
                     bundle = Algorithms.priorityFuncPreemptive(this.state.processes);
