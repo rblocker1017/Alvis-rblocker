@@ -1,17 +1,13 @@
 import {
-  AppBar,
-  Collapse,
+  AppBar, Collapse,
   CssBaseline,
-  Divider,
-  Drawer,
+  Divider, Drawer,
   IconButton,
-  Link,
-  List,
+  Link, List,
   ListItem,
   ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
+  ListItemText, Toolbar,
+  Typography
 } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -28,10 +24,12 @@ import SaveIcon from "@material-ui/icons/Save";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import clsx from "clsx";
-import React from "react";
+import React, { useState } from "react";
 import LinkRoute from "react-router-dom/Link";
 import Cookies from "universal-cookie";
 import LoginBundle from "../../Resources/LoginBundle";
+import ClassList from "../../../resources/ClassList";
+import DrawerSidebar from "./Sidebar/DrawerSidebar";
 
 const drawerWidth = 250;
 
@@ -103,8 +101,10 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [routes, setRoutes] = useState();
 
   const handleDrawerOpen = () => {
+    console.log(ClassList);
     setOpen(true);
   };
 
@@ -112,37 +112,21 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-  const CSC130 = [
-    {
-      name: "Binary Tree Traversal",
-      url: "/BinaryTreeTraversal",
-      logo: NatureIcon,
-    },
-    { name: "Graphing", url: "/GraphingAlgorithm", logo: TrendingUpIcon },
-    { name: "Sorting", url: "/sorting", logo: AssessmentIcon },
-  ];
-
-  const CSC139 = [
-    { name: "CPU Scheduling ", url: "/CpuScheduling", logo: ScheduleIcon },
-    { name: "Page Replacement", url: "/PageReplacement", logo: FileCopyIcon },
-    { name: "Disk Scheduling", url: "/FCFSDisk", logo: SaveIcon },
-  ];
-
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
-        position='fixed'
+        position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
           <IconButton
-            color='inherit'
-            aria-label='open drawer'
+            color="inherit"
+            aria-label="open drawer"
             onClick={handleDrawerOpen}
-            edge='start'
+            edge="start"
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
@@ -150,87 +134,11 @@ export default function PersistentDrawerLeft(props) {
           <LoginBundle cookie={cookies.get("cookie")} />
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant='persistent'
-        anchor='left'
+      <DrawerSidebar 
         open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls='panel1a-content'
-            id='panel1a-header'
-          >
-            <Typography className={classes.heading}>CSC 130</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography component={"div"}>
-              <Collapse in={open} timeout='auto' unmountOnExit>
-                <List disablePadding>
-                  {CSC130.map((obj, index) => (
-                    <Link component={LinkRoute} to={obj.url}>
-                      <ListItem button key={obj.name}>
-                        <ListItemIcon>
-                          {" "}
-                          <obj.logo></obj.logo>
-                        </ListItemIcon>
-                        <ListItemText primary={obj.name} />
-                      </ListItem>
-                    </Link>
-                  ))}
-                </List>
-              </Collapse>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Divider />
-
-        <Divider />
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls='panel2a-content'
-            id='panel2a-header'
-          >
-            <Typography className={classes.heading}>CSC 139</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography component={"div"}>
-              <Collapse in={open} timeout='auto' unmountOnExit>
-                <List disablePadding>
-                  {CSC139.map((obj, index) => (
-                    <Link component={LinkRoute} to={obj.url}>
-                      <ListItem button key={obj.name}>
-                        <ListItemIcon>
-                          <obj.logo />
-                        </ListItemIcon>
-                        <ListItemText primary={obj.name} />
-                      </ListItem>{" "}
-                    </Link>
-                  ))}
-                </List>
-              </Collapse>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Divider />
-      </Drawer>
-
+        toggle={handleDrawerClose}
+        theme={theme}
+      />
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

@@ -6,7 +6,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core/styles";
 import React from "react";
-import Header from "../componenets/layout/header";
+import Header from "../componenets/layout/Header/header"
 
 const useStyles = makeStyles((theme) => ({
   root: {

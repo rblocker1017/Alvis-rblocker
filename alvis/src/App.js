@@ -14,6 +14,7 @@ import RoundRobin from "./pages/roundRobin";
 import Sorting from "./pages/Sorting";
 import Tree from "./pages/treeViewer";
 import Welcome from "./pages/Welcome";
+import SingleCircuits from "./pages/SingleCircuits";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           exact
           component={BinaryTreeTraversal}
         />
+        <Route path="/SingleCircuits" exact component={SingleCircuits} />
         <Route path='/Achievements' exact component={Achievements} />
         <Route path='/Register' exact component={Register} />
       </BrowserRouter>

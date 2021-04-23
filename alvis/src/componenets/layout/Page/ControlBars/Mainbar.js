@@ -58,23 +58,25 @@ class Mainbar extends Component{
                 />);
                 break;
             default:
-                this.bar.push(<h1>Un-Implemented Bar</h1>);
+                this.bar = null;
+                //this.bar.push(<h1>Un-Implemented Bar</h1>);
                 break;
         }
     }
     render(){
         return(
-            <Paper className={this.classes.fields}>
-                <Grid container direction="row" justify="space-around">
-                    {this.bar.map(item => {
-                        return (
-                            <Grid item>
-                                {item}
-                            </Grid>
-                        )
-                    })}
-                </Grid>
-            </Paper>
+            this.bar === null ? null :
+                <Paper className={this.classes.fields}>
+                    <Grid container direction="row" justify="space-around">
+                        {this.bar.map(item => {
+                            return (
+                                <Grid item>
+                                    {item}
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+                </Paper>
         );
     }
 }
