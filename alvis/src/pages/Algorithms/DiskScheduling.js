@@ -16,7 +16,31 @@ export function fcfsFunction(starting, input) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* SSTF - performs sstf scheduling algorithm for user inputs
+ * @param starting - specifies initial position of head, this value is provided by user
+ * @param input - a string of values representing head positions to be tracked
+ * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
+ */
+
+export function sstfFunction(starting, input) {
+    let answer = [];
+    let n = input.length;
+    let minDist = (arr, x) => arr.sort((a,b)=> Math.abs(a-x) - Math.abs(b-x))
+    answer.push(['x', 'SSTF path'])
+    answer.push([parseInt(starting), 0])
+
+    minDist(input, answer[0]);
+
+    for (let i = 1; i < n + 1; i++) {
+        minDist(input, answer[i][0]);
+        answer.push([input[0], i]);
+        input.shift();
+    }
+
+    return answer;
+}
+
+/* SCAN - performs SCAN scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
@@ -51,7 +75,7 @@ export function scanFunction(starting, input) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* SCAN Outwards - performs SCAN outwards scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @param diskSize - size of the disk
@@ -88,7 +112,7 @@ export function scanOutwardsFunction(starting, input, diskSize) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* LOOK - performs LOOK scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
@@ -120,7 +144,7 @@ export function lookFunction(starting, input) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* LOOK Outwards - performs LOOK outwards scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
@@ -150,7 +174,7 @@ export function lookOutwardsFunction(starting, input) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* C-SCAN - performs C-SCAN scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @param diskSize - size of the disk
@@ -185,7 +209,7 @@ export function cscanFunction(starting, input, diskSize) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* C-SCAN Outwards - performs C-SCAN outwards scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @param diskSize - size of the disk
@@ -219,7 +243,7 @@ export function cscanOutwardsFunction(starting, input, diskSize) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* C-LOOK - performs C-LOOK scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @param diskSize - size of the disk
@@ -253,7 +277,7 @@ export function clookFunction(starting, input, diskSize) {
     return answer;
 }
 
-/* first-come-first-serve - performs fcfs scheduling algorithm for user inputs
+/* C-LOOK Outwards - performs C-LOOK outward scheduling algorithm for user inputs
  * @param starting - specifies initial position of head, this value is provided by user
  * @param input - a string of values representing head positions to be tracked
  * @return answer - output of algorithm, to be processed into dis scheduling graph visualization
