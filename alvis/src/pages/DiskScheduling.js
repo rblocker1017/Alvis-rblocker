@@ -126,6 +126,9 @@ class FCFSDisk extends Component{
             case "fcfs":
                 data = Algorithms.fcfsFunction(this.state.starting, this.state.input);
                 break;
+            case "sstf":
+                data = Algorithms.sstfFunction(this.state.starting, this.state.input);
+                break;
             case "scan":
                 if (this.state.direction === "Outwards") {
                     data = Algorithms.scanOutwardsFunction(this.state.starting, this.state.input, this.state.diskSize);
