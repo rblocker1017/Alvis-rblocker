@@ -4,6 +4,8 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import NatureIcon from "@material-ui/icons/Nature";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
+import FlashIcon from "@material-ui/icons/FlashOn";
+
 /*
 This is where all of the classes are made for the sidebar
 They are objects that comprise of two elements
@@ -22,6 +24,10 @@ const CSC130 = {
   ],
   name: "CSC 130",
 };
+const CSC137 = {
+  data: [{ name: "Single Circuits", url: "/SingleCircuits", logo: FlashIcon}],
+  name: "CSC 137"
+};
 const CSC139 = {
   data: [
     { name: "CPU Scheduling ", url: "/CpuScheduling", logo: ScheduleIcon },
@@ -32,5 +38,6 @@ const CSC139 = {
 };
 let workingClasses = [];
 workingClasses.push(CSC130);
+workingClasses.push(CSC137);
 workingClasses.push(CSC139);
 export default workingClasses;

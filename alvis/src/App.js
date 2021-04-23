@@ -14,6 +14,7 @@ import RoundRobin from "./pages/roundRobin";
 import Sorting from "./pages/Sorting";
 import Tree from "./pages/treeViewer";
 import Welcome from "./pages/Welcome";
+import SingleCircuits from "./pages/SingleCircuits";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path='/FCFSDisk' exact component={DiskScheduling} />
         <Route path='/Login' exact component={Login} />
         <Route path='/Sorting' exact component={Sorting} />
+        <Route path="/SingleCircuits" exact component={SingleCircuits} />
         <Route
           path='/BinaryTreeTraversal'
           exact

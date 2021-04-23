@@ -197,7 +197,7 @@ class CPUScheduling extends Component {
           bundle = Algorithms.sjf(this.state.processes);
           break;
         case "RR":
-          bundle = Algorithms.roundRobin(this.state.processes);
+          bundle = Algorithms.roundRobin(this.state.processes, this.state.quantum);
           break;
         case "Priority":
           bundle = Algorithms.priorityFunc(this.state.processes);
@@ -214,7 +214,7 @@ class CPUScheduling extends Component {
           bundle = Algorithms.sjfFuncPreemptive(this.state.processes);
           break;
         case "RR":
-          bundle = Algorithms.roundRobin(this.state.processes);
+          bundle = Algorithms.roundRobin(this.state.processes, this.state.quantum);
           break;
         case "Priority":
           bundle = Algorithms.priorityFuncPreemptive(this.state.processes);
@@ -389,7 +389,7 @@ class CPUScheduling extends Component {
             { name: "FCFS", func: this.changeAlgo },
             { name: "SJF", func: this.changeAlgo },
             { name: "Priority", func: this.changeAlgo },
-            //{name: "RR",func: this.changeAlgo},
+            {name: "RR",func: this.changeAlgo},
             //{ name: "SRTF", func: this.changeAlgo },
           ]}
           extraOption={{
