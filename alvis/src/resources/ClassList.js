@@ -24,10 +24,10 @@ const CSC130 = {
   ],
   name: "CSC 130",
 };
-const CSC137 = {
+/*const CSC137 = {
   data: [{ name: "Single Circuits", url: "/SingleCircuits", logo: FlashIcon}],
   name: "CSC 137"
-};
+};*/
 const CSC139 = {
   data: [
     { name: "CPU Scheduling ", url: "/CpuScheduling", logo: ScheduleIcon },
@@ -38,6 +38,6 @@ const CSC139 = {
 };
 let workingClasses = [];
 workingClasses.push(CSC130);
-workingClasses.push(CSC137);
+//workingClasses.push(CSC137);
 workingClasses.push(CSC139);
 export default workingClasses;
