@@ -9,66 +9,66 @@ import {
   Paper,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import {
   createMuiTheme,
   makeStyles,
   ThemeProvider,
-} from "@material-ui/core/styles";
-import Axios from "axios";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import LinkRoute from "react-router-dom/Link";
-import Cookies from "universal-cookie";
-import IncorrectLogin from "../componenets/Messages/IncorrectLogin";
+} from '@material-ui/core/styles';
+import Axios from 'axios';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import LinkRoute from 'react-router-dom/Link';
+import Cookies from 'universal-cookie';
+import IncorrectLogin from '../componenets/Messages/IncorrectLogin';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   back: {
-    backgroundColor: "#215E25",
-    color: "#FFFFFF",
-    "&:hover": {
-      backgroundColor: "#174019",
+    backgroundColor: '#215E25',
+    color: '#FFFFFF',
+    '&:hover': {
+      backgroundColor: '#174019',
     },
     fontSize: 14,
   },
   submit: {
-    backgroundColor: "#215E25",
-    color: "#FFFFFF",
-    width: "50%",
-    "&:hover": {
-      backgroundColor: "#174019",
+    backgroundColor: '#215E25',
+    color: '#FFFFFF',
+    width: '50%',
+    '&:hover': {
+      backgroundColor: '#174019',
     },
   },
   info: {
-    width: "40%",
-    color: "#747474",
+    width: '40%',
+    color: '#747474',
   },
   divider: {
-    width: "100%",
+    width: '100%',
   },
   logDivider: {
-    width: "23%",
-    color: "#FFFFFF",
+    width: '23%',
+    color: '#FFFFFF',
   },
   body: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   login: {
-    width: "200%",
-    height: "100%",
+    width: '200%',
+    height: '100%',
   },
   link: {
-    color: "#03b9ff",
+    color: '#03b9ff',
   },
   input: {
-    width: "50%",
+    width: '50%',
   },
   checkbox: {
-    color: "#000000",
+    color: '#000000',
   },
 }));
 export default function Login() {
@@ -87,19 +87,19 @@ export default function Login() {
   let history = useHistory();
 
   function handleSubmit(event) {
-    if (String(password) === "") {
-      alert("Please enter a password.");
+    if (String(password) === '') {
+      alert('Please enter a password.');
     } else {
-      Axios.post("http://localhost:3001/login", {
+      Axios.post('http://ecs-tw-chengweb.ecs.csus.edu/api/login', {
         loginEmail: email,
         loginPassword: password,
       }).then((response) => {
-        if (String(response.data) === "true") {
+        if (String(response.data) === 'true') {
           //console.log("Correct username and password");
 
           const cookies = new Cookies();
-          cookies.set("cookie", { username: "email" }, { path: "/" });
-          history.push("/");
+          cookies.set('cookie', { username: 'email' }, { path: '/' });
+          history.push('/');
           //window.location.assign("/");
         } else {
           // Unvalidated
@@ -112,7 +112,7 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container direction={"row"} justify={"flex-start"}>
+      <Grid container direction={'row'} justify={'flex-start'}>
         <Grid item>
           <Box m={4}>
             <Button
@@ -129,15 +129,15 @@ export default function Login() {
       </Grid>
       <Grid
         container
-        direction={"row"}
+        direction={'row'}
         spacing={10}
-        alignItems={"baseline"}
+        alignItems={'baseline'}
         className={classes.body}
       >
         <Grid item className={classes.info}>
-          <Box pl={"25%"}>
+          <Box pl={'25%'}>
             <Box>
-              <Typography variant={"h1"} justify='flex-start'>
+              <Typography variant={'h1'} justify='flex-start'>
                 ALVIS
               </Typography>
             </Box>
@@ -145,7 +145,7 @@ export default function Login() {
               <Divider />
             </Box>
             <Box>
-              <Typography variant={"body1"}>
+              <Typography variant={'body1'}>
                 An Interactive Algorithm Visualizer for Computer Science courses
                 making learning more enjoyable and challenging
               </Typography>
@@ -156,10 +156,10 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <Paper elevation={10} className={classes.login}>
               <Box>
-                <Grid container direction={"column"} justify={"center"}>
+                <Grid container direction={'column'} justify={'center'}>
                   <Grid item>
                     <Box pt={5}>
-                      <Typography variant={"h2"}>Log In</Typography>
+                      <Typography variant={'h2'}>Log In</Typography>
                     </Box>
                   </Grid>
                   {badLog ? (
@@ -169,10 +169,10 @@ export default function Login() {
                   ) : null}
                   <Grid item>
                     <Box pt={2}>
-                      <Typography variant={"h6"}>
-                        {"New User? "}
+                      <Typography variant={'h6'}>
+                        {'New User? '}
                         <ButtonBase component={LinkRoute} to='/Register'>
-                          <Typography variant={"h6"} className={classes.link}>
+                          <Typography variant={'h6'} className={classes.link}>
                             Create an account!
                           </Typography>
                         </ButtonBase>
@@ -206,24 +206,24 @@ export default function Login() {
                     <Box>
                       <Grid
                         container
-                        direction={"row"}
-                        justify={"center"}
-                        alignItems={"center"}
+                        direction={'row'}
+                        justify={'center'}
+                        alignItems={'center'}
                       >
                         <Grid item>
                           <FormControlLabel
                             control={<Checkbox className={classes.checkbox} />}
                             label={
-                              <Typography variant={"button"}>
+                              <Typography variant={'button'}>
                                 Remember Me
                               </Typography>
                             }
-                            labelPlacement={"end"}
+                            labelPlacement={'end'}
                           />
                         </Grid>
                         <Grid item>
                           <ButtonBase>
-                            <Typography variant={"button"}>
+                            <Typography variant={'button'}>
                               Forgot Password?
                             </Typography>
                           </ButtonBase>
@@ -234,26 +234,26 @@ export default function Login() {
                   <Grid item>
                     <Box>
                       <Button
-                        variant={"contained"}
+                        variant={'contained'}
                         className={classes.submit}
                         onClick={() => handleSubmit()}
                       >
-                        <Typography variant={"h6"}>Log In</Typography>
+                        <Typography variant={'h6'}>Log In</Typography>
                       </Button>
                     </Box>
                     <Box p={1}>
                       <Grid
                         container
-                        direction={"row"}
-                        alignItems={"center"}
-                        justify={"center"}
+                        direction={'row'}
+                        alignItems={'center'}
+                        justify={'center'}
                         spacing={2}
                       >
                         <Grid item className={classes.logDivider}>
                           <Divider />
                         </Grid>
                         <Grid item>
-                          <Typography variant={"subtitle1"}>Or</Typography>
+                          <Typography variant={'subtitle1'}>Or</Typography>
                         </Grid>
                         <Grid item className={classes.logDivider}>
                           <Divider />
@@ -262,22 +262,22 @@ export default function Login() {
                     </Box>
                     <Box>
                       <Button
-                        variant={"contained"}
-                        type={"submit"}
+                        variant={'contained'}
+                        type={'submit'}
                         className={classes.submit}
                       >
-                        <Typography variant={"h6"}>
+                        <Typography variant={'h6'}>
                           Continue with Google
                         </Typography>
                       </Button>
                     </Box>
                     <Box pt={1}>
                       <Button
-                        variant={"contained"}
-                        type={"submit"}
+                        variant={'contained'}
+                        type={'submit'}
                         className={classes.submit}
                       >
-                        <Typography variant={"h6"}>
+                        <Typography variant={'h6'}>
                           Continue with MySacState
                         </Typography>
                       </Button>

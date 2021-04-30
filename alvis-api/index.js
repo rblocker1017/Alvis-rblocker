@@ -1,21 +1,21 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const cors = require("cors");
+const express = require('express');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
-const db = require("./alvis_model");
-const { wait } = require("@testing-library/dom");
+const db = require('./alvis_model');
+const { wait } = require('@testing-library/dom');
 
 const app = express();
-const port = 3001;
+const port = 5000;
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.status(200).send("Hello World!");
+app.get('/', (req, res) => {
+  res.status(200).send('Hello World!');
 });
 
-app.get("/users", db.getUsers);
+app.get('/users', db.getUsers);
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) =>
@@ -26,7 +26,7 @@ const hashPassword = (password) => {
 };
 
 // Whenever sign up is clicked, this function is called
-app.post("/register", (req, res) => {
+app.post('/register', (req, res) => {
   const email = req.body.email;
   const password = bcrypt.hashSync(String(req.body.password), 10);
   const username = req.body.username;
@@ -35,7 +35,7 @@ app.post("/register", (req, res) => {
   db.addUser(username, email);
 });
 
-app.post("/email", (req, res) => {
+app.post('/email', (req, res) => {
   const email = req.body.email;
 
   db.getLogin(email)
@@ -43,7 +43,7 @@ app.post("/email", (req, res) => {
     .catch((err) => console.error(err));
 });
 
-app.post("/login", (req, res) => {
+app.post('/login', (req, res) => {
   const loginEmail = req.body.loginEmail;
   const loginPassword = req.body.loginPassword;
   db.validate(loginEmail, loginPassword)

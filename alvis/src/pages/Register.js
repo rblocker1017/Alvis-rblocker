@@ -8,61 +8,61 @@ import {
   Paper,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import {
   createMuiTheme,
   makeStyles,
   ThemeProvider,
-} from "@material-ui/core/styles";
-import Axios from "axios";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import LinkRoute from "react-router-dom/Link";
+} from '@material-ui/core/styles';
+import Axios from 'axios';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import LinkRoute from 'react-router-dom/Link';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   back: {
-    backgroundColor: "#215E25",
-    color: "#FFFFFF",
-    "&:hover": {
-      backgroundColor: "#174019",
+    backgroundColor: '#215E25',
+    color: '#FFFFFF',
+    '&:hover': {
+      backgroundColor: '#174019',
     },
     fontSize: 14,
   },
   submit: {
-    backgroundColor: "#215E25",
-    color: "#FFFFFF",
-    width: "50%",
-    "&:hover": {
-      backgroundColor: "#174019",
+    backgroundColor: '#215E25',
+    color: '#FFFFFF',
+    width: '50%',
+    '&:hover': {
+      backgroundColor: '#174019',
     },
   },
   info: {
-    width: "40%",
-    color: "#747474",
+    width: '40%',
+    color: '#747474',
   },
   divider: {
-    width: "100%",
+    width: '100%',
   },
   logDivider: {
-    width: "30%",
-    color: "#FFFFFF",
+    width: '30%',
+    color: '#FFFFFF',
   },
   body: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   Register: {
-    width: "175%",
-    height: "100%",
+    width: '175%',
+    height: '100%',
   },
   link: {
-    color: "#03b9ff",
+    color: '#03b9ff',
   },
   input: {
-    width: "50%",
+    width: '50%',
   },
 }));
 function validateEmail(email) {
@@ -102,40 +102,40 @@ export default function Register() {
 
   const register = () => {
     if (validateEmail(registerEmail) === false) {
-      alert("Please enter a valid email address.");
+      alert('Please enter a valid email address.');
     } else if (validatePassword(registerPassword) === false) {
       alert(
-        "Passwords must contain at least one uppercase letter, one lowercase letter, and need to be at least 8 characters long."
+        'Passwords must contain at least one uppercase letter, one lowercase letter, and need to be at least 8 characters long.'
       );
     } else if (registerPassword.localeCompare(repeatPassword) !== 0) {
-      alert("Passwords should match.");
+      alert('Passwords should match.');
     } else if (check === false) {
-      alert("Please agree to the terms and conditions.");
+      alert('Please agree to the terms and conditions.');
     } else {
-      Axios.post("http://localhost:3001/email", {
+      Axios.post('http://ecs-tw-chengweb.ecs.csus.edu/api/email', {
         email: registerEmail,
       }).then((response) => {
         //console.log(String(response.data));
-        if (String(response.data) === "false") {
-          Axios.post("http://localhost:3001/register", {
+        if (String(response.data) === 'false') {
+          Axios.post('http://ecs-tw-chengweb.ecs.csus.edu/api/register', {
             email: registerEmail,
             password: registerPassword,
             username: registerName,
           }).then((response) => {
             //console.log(response);
           });
-          history.push("/Login");
+          history.push('/Login');
           //window.location.assign("/Login");
         } else {
           //console.log(String(response.data));
-          alert("This email is already in use.");
+          alert('This email is already in use.');
         }
       });
     }
   };
   return (
     <ThemeProvider theme={theme}>
-      <Grid container direction={"row"} justify={"flex-start"}>
+      <Grid container direction={'row'} justify={'flex-start'}>
         <Grid item>
           <Box m={4}>
             <Button
@@ -151,15 +151,15 @@ export default function Register() {
       </Grid>
       <Grid
         container
-        direction={"row"}
+        direction={'row'}
         spacing={10}
-        alignItems={"baseline"}
+        alignItems={'baseline'}
         className={classes.body}
       >
         <Grid item className={classes.info}>
-          <Box pl={"25%"}>
+          <Box pl={'25%'}>
             <Box>
-              <Typography variant={"h1"} justify='flex-start'>
+              <Typography variant={'h1'} justify='flex-start'>
                 ALVIS
               </Typography>
             </Box>
@@ -167,7 +167,7 @@ export default function Register() {
               <Divider />
             </Box>
             <Box>
-              <Typography variant={"body1"} align='baseline'>
+              <Typography variant={'body1'} align='baseline'>
                 An Interactive Algorithm Visualizer for Computer Science courses
                 making learning more enjoyable and challenging
               </Typography>
@@ -178,10 +178,10 @@ export default function Register() {
           <form onSubmit={handleSubmit}>
             <Paper elevation={10} className={classes.Register}>
               <Box>
-                <Grid container direction={"column"} justify={"center"}>
+                <Grid container direction={'column'} justify={'center'}>
                   <Grid item>
                     <Box pt={5}>
-                      <Typography variant={"h2"}>New Account</Typography>
+                      <Typography variant={'h2'}>New Account</Typography>
                     </Box>
                   </Grid>
 
@@ -232,14 +232,14 @@ export default function Register() {
                   <Grid item>
                     <Box pl={3} pr={3}>
                       <FormControlLabel
-                        control={<Checkbox color={"#000000"} />}
+                        control={<Checkbox color={'#000000'} />}
                         label={
-                          <Typography variant={"button"}>
+                          <Typography variant={'button'}>
                             I agree to all of the statements in the Terms of
                             Service
                           </Typography>
                         }
-                        labelPlacement={"end"}
+                        labelPlacement={'end'}
                         onClick={handleClick}
                       />
                     </Box>
@@ -247,11 +247,11 @@ export default function Register() {
                   <Grid item>
                     <Box pt={1} pb={10}>
                       <Button
-                        variant={"contained"}
+                        variant={'contained'}
                         className={classes.submit}
                         onClick={() => register()}
                       >
-                        <Typography variant={"h6"}>Sign up</Typography>
+                        <Typography variant={'h6'}>Sign up</Typography>
                       </Button>
                     </Box>
                   </Grid>
