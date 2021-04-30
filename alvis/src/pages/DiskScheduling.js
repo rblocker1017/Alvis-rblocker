@@ -209,7 +209,7 @@ class FCFSDisk extends Component{
                         diskSize = {this.state.diskSize}
                     />,
                     delete: null,
-                    reset: this.resetDiskGraph,
+                    reset: this.reset,
                     extra: null
                 }}
                 barFunctions = {{
