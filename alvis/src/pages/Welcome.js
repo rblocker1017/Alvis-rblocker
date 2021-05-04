@@ -41,46 +41,54 @@ export default function Welcome() {
     <Header>
       <ThemeProvider theme={theme}>
         <Paper className={classes.paper}>
-          <Grid container alignItems={"flex-start"} direction={"column"}>
+          <Grid container alignItems={"center"} direction={"column"}>
             <Grid item>
               <h1>ALVIS</h1>
+            </Grid>
+            <Grid item>
+              <h2>Algorithm Visualizer</h2>
             </Grid>
             <Grid item className={classes.divider}>
               <Divider />
             </Grid>
-            <Grid item>
-              <h1>Algorithm Visualizer</h1>
+            <Grid item className={classes.divider}>
+              <br />
             </Grid>
             <Grid item className={classes.body}>
               <b>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget
-                duis at tellus at urna. Suspendisse sed nisi lacus sed viverra
-                tellus in hac habitasse. At augue eget arcu dictum varius duis
-                at consectetur. Sed sed risus pretium quam vulputate. Elit sed
-                vulputate mi sit. Blandit aliquam etiam erat velit scelerisque
-                in dictum non consectetur. Sagittis nisl rhoncus mattis rhoncus
-                urna neque viverra. Vitae congue mauris rhoncus aenean vel elit.
-                Vehicula ipsum a arcu cursus. Habitant morbi tristique senectus
-                et. Cursus risus at ultrices mi tempus imperdiet nulla malesuada
-                pellentesque. Mi in nulla posuere sollicitudin aliquam ultrices
-                sagittis orci.
+              ALVIS aims to enhance the undergraduate curriculum by using user-controlled animated visualizers. 
+              These interactive animations will be for topics taught in Sac State upper-division Computer Science classes. 
+              Students will be able to change parameters of the animations to help enhance their understanding of the concepts 
+              and make learning them more enjoyable.
               </b>
               <br />
               <br />
               <b>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget
-                duis at tellus at urna. Suspendisse sed nisi lacus sed viverra
-                tellus in hac habitasse. At augue eget arcu dictum varius duis
-                at consectetur. Sed sed risus pretium quam vulputate. Elit sed
-                vulputate mi sit. Blandit aliquam etiam erat velit scelerisque
-                in dictum non consectetur. Sagittis nisl rhoncus mattis rhoncus
-                urna neque viverra. Vitae congue mauris rhoncus aenean vel elit.
-                Vehicula ipsum a arcu cursus. Habitant morbi tristique senectus
-                et. Cursus risus at ultrices mi tempus imperdiet nulla malesuada
-                pellentesque. Mi in nulla posuere sollicitudin aliquam ultrices
-                sagittis orci.
+                For now, the following classes ALVIS supports are:
+              </b>
+              <br />
+              <b>
+                * CSC 130
+              </b>
+              <br />
+              <b>
+                * CSC 139
+              </b>
+              <br />
+              <b>
+                There are plans to implement features/classes such as: 
+              </b>
+              <br />
+              <b>
+                * CSC 137 Algorithms
+              </b>
+              <br />
+              <b>
+                * Achievement System
+              </b>
+              <br />
+              <b>
+                * SSO for both google and sac state
               </b>
             </Grid>
           </Grid>
