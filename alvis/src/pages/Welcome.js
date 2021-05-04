@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: "left",
     color: theme.palette.text.secondary,
     height: "100%",
     width: "100%",
   },
   divider: {
-    width: "50%",
+    width: "25%",
   },
   body: {
     width: "40%",
@@ -41,7 +41,7 @@ export default function Welcome() {
     <Header>
       <ThemeProvider theme={theme}>
         <Paper className={classes.paper}>
-          <Grid container alignItems={"center"} direction={"column"}>
+          <Grid container alignItems={"flex-start"} direction={"column"}>
             <Grid item>
               <h1>ALVIS</h1>
             </Grid>

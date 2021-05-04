@@ -3,7 +3,7 @@ import React, { Component } from "react";
 const styles = (theme) => ({
   code: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: "left",
     color: theme.palette.text.secondary,
     height: "100",
   },
