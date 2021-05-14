@@ -92,12 +92,6 @@ export default function Register() {
 
   const handleClick = () => setChecked(!check);
 
-  function handleSubmit(event) {
-    // console.log(registerEmail);
-    // console.log(registerPassword);
-    // console.log(registerName);
-  }
-
   let history = useHistory();
 
   const register = () => {
@@ -175,7 +169,7 @@ export default function Register() {
           </Box>
         </Grid>
         <Grid item>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Paper elevation={10} className={classes.Register}>
               <Box>
                 <Grid container direction={'column'} justify={'center'}>
@@ -232,7 +226,9 @@ export default function Register() {
                   <Grid item>
                     <Box pl={3} pr={3}>
                       <FormControlLabel
-                        control={<Checkbox color={'#000000'} />}
+                        control={
+                          <Checkbox color={'#000000'} onClick={handleClick} />
+                        }
                         label={
                           <Typography variant={'button'}>
                             I agree to all of the statements in the Terms of
@@ -240,7 +236,6 @@ export default function Register() {
                           </Typography>
                         }
                         labelPlacement={'end'}
-                        onClick={handleClick}
                       />
                     </Box>
                   </Grid>
